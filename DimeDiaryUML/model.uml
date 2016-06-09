@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_Y950AC5gEeasma3FSKRntg" name="DimeDiary">
+  <packagedElement xmi:type="uml:Package" xmi:id="_Q8NZAC5hEeasma3FSKRntg" name="View">
+    <packagedElement xmi:type="uml:Usage" xmi:id="_vXxjkC5hEeasma3FSKRntg" client="_Q8NZAC5hEeasma3FSKRntg" supplier="_eGzyEC5hEeasma3FSKRntg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_eGzyEC5hEeasma3FSKRntg" name="Controller">
+    <packagedElement xmi:type="uml:Usage" xmi:id="_nKxF4C5hEeasma3FSKRntg" client="_eGzyEC5hEeasma3FSKRntg" supplier="_hW_JYC5hEeasma3FSKRntg"/>
+  </packagedElement>
+  <packagedElement xmi:type="uml:Package" xmi:id="_hW_JYC5hEeasma3FSKRntg" name="Modell">
+    <packagedElement xmi:type="uml:Package" xmi:id="_1UknQC5jEeasma3FSKRntg" name="Transaction">
+      <packagedElement xmi:type="uml:Interface" xmi:id="_V6iewC5iEeasma3FSKRntg" name="ITransaction">
+        <ownedOperation xmi:id="_n8Rl4C5iEeasma3FSKRntg" name="getDate"/>
+        <ownedOperation xmi:id="_sBAmoC5iEeasma3FSKRntg" name="getAmount"/>
+        <ownedOperation xmi:id="_ug5JcC5iEeasma3FSKRntg" name="getCategory"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_C3nK8C5jEeasma3FSKRntg" name="BankTransaction">
+        <generalization xmi:id="_VwD3oC5jEeasma3FSKRntg" general="_KSqnQC5jEeasma3FSKRntg"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_FjsWsC5jEeasma3FSKRntg" name="CashTransaction">
+        <generalization xmi:id="_WL9wgC5jEeasma3FSKRntg" general="_KSqnQC5jEeasma3FSKRntg"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_KSqnQC5jEeasma3FSKRntg" name="Transaction" isAbstract="true">
+        <ownedAttribute xmi:id="_cUQkcC5jEeasma3FSKRntg" name="date" visibility="protected"/>
+        <ownedAttribute xmi:id="_eNtZYC5jEeasma3FSKRntg" name="amount" visibility="protected"/>
+        <ownedAttribute xmi:id="_hCJ28C5jEeasma3FSKRntg" name="category" visibility="protected"/>
+        <interfaceRealization xmi:id="_SOvtAC5jEeasma3FSKRntg" client="_KSqnQC5jEeasma3FSKRntg" supplier="_V6iewC5iEeasma3FSKRntg" contract="_V6iewC5iEeasma3FSKRntg"/>
+      </packagedElement>
+    </packagedElement>
+  </packagedElement>
+</uml:Model>
