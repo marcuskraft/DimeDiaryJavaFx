@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_Y950AC5gEeasma3FSKRntg" name="DimeDiary">
+<uml:Model xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xmi:id="_Y950AC5gEeasma3FSKRntg" name="DimeDiary">
   <packagedElement xmi:type="uml:Package" xmi:id="_Q8NZAC5hEeasma3FSKRntg" name="View">
     <packagedElement xmi:type="uml:Usage" xmi:id="_vXxjkC5hEeasma3FSKRntg" client="_Q8NZAC5hEeasma3FSKRntg" supplier="_eGzyEC5hEeasma3FSKRntg"/>
   </packagedElement>
@@ -25,6 +25,41 @@
         <ownedAttribute xmi:id="_hCJ28C5jEeasma3FSKRntg" name="category" visibility="protected"/>
         <interfaceRealization xmi:id="_SOvtAC5jEeasma3FSKRntg" client="_KSqnQC5jEeasma3FSKRntg" supplier="_V6iewC5iEeasma3FSKRntg" contract="_V6iewC5iEeasma3FSKRntg"/>
       </packagedElement>
+      <packagedElement xmi:type="uml:Association" xmi:id="_p99dwC_3Eeac1vx2ijZPxw" name="iTransactionsToBankAccounts" memberEnd="_p9-E0C_3Eeac1vx2ijZPxw _p9_S8C_3Eeac1vx2ijZPxw" navigableOwnedEnd="_p9_S8C_3Eeac1vx2ijZPxw">
+        <ownedEnd xmi:id="_p9-E0C_3Eeac1vx2ijZPxw" name="iTransactions" type="_V6iewC5iEeasma3FSKRntg" aggregation="shared" association="_p99dwC_3Eeac1vx2ijZPxw">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_p9-r4C_3Eeac1vx2ijZPxw"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_p9-r4S_3Eeac1vx2ijZPxw" value="*"/>
+        </ownedEnd>
+        <ownedEnd xmi:id="_p9_S8C_3Eeac1vx2ijZPxw" name="bankAccounts" type="_3wlngC_0Eeac1vx2ijZPxw" association="_p99dwC_3Eeac1vx2ijZPxw">
+          <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_p9_S8S_3Eeac1vx2ijZPxw"/>
+          <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_p9_6AC_3Eeac1vx2ijZPxw" value="1"/>
+        </ownedEnd>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_BzPqIC_zEeac1vx2ijZPxw" name="BankAccounts">
+      <packagedElement xmi:type="uml:Interface" xmi:id="_LHWSwC_zEeac1vx2ijZPxw" name="IBankAccount">
+        <ownedOperation xmi:id="_Pim9IC_zEeac1vx2ijZPxw" name="getIBAN"/>
+        <ownedOperation xmi:id="_Tg4JgC_zEeac1vx2ijZPxw" name="getBIC"/>
+        <ownedOperation xmi:id="_BrGlUC_0Eeac1vx2ijZPxw" name="getAccountBalance"/>
+        <ownedOperation xmi:id="_a2nLgC_0Eeac1vx2ijZPxw" name="getName"/>
+        <ownedOperation xmi:id="_gG1vAC_0Eeac1vx2ijZPxw" name="getOwner"/>
+        <ownedOperation xmi:id="_t4ObQC_0Eeac1vx2ijZPxw">
+          <name xsi:nil="true"/>
+        </ownedOperation>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_3wlngC_0Eeac1vx2ijZPxw" name="BankAccount" isAbstract="true">
+        <interfaceRealization xmi:id="_HkPtgC_1Eeac1vx2ijZPxw" client="_3wlngC_0Eeac1vx2ijZPxw" supplier="_LHWSwC_zEeac1vx2ijZPxw" contract="_LHWSwC_zEeac1vx2ijZPxw"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_B3VOAC_1Eeac1vx2ijZPxw" name="GiroAccount">
+        <generalization xmi:id="_Ok8JEC_1Eeac1vx2ijZPxw" general="_3wlngC_0Eeac1vx2ijZPxw"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_X9SYgC_1Eeac1vx2ijZPxw" name="SavingsAccount">
+        <generalization xmi:id="_hXdM4C_1Eeac1vx2ijZPxw" general="_3wlngC_0Eeac1vx2ijZPxw"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_msOSIC_1Eeac1vx2ijZPxw" name="VirtualAccount" isAbstract="true">
+        <interfaceRealization xmi:id="_ciEV0C_2Eeac1vx2ijZPxw" client="_msOSIC_1Eeac1vx2ijZPxw" supplier="_YEwdAC_2Eeac1vx2ijZPxw" contract="_YEwdAC_2Eeac1vx2ijZPxw"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Interface" xmi:id="_YEwdAC_2Eeac1vx2ijZPxw" name="IVirtualAccount"/>
     </packagedElement>
   </packagedElement>
 </uml:Model>
