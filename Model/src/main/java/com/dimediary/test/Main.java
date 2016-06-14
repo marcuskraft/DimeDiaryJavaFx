@@ -1,4 +1,4 @@
-package com.dimediary.test.main;
+package com.dimediary.test;
 
 import java.util.ArrayList;
 
