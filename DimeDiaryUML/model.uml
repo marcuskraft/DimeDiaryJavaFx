@@ -22,7 +22,7 @@
       <packagedElement xmi:type="uml:Class" xmi:id="_KSqnQC5jEeasma3FSKRntg" name="Transaction" isAbstract="true">
         <ownedAttribute xmi:id="_cUQkcC5jEeasma3FSKRntg" name="date" visibility="protected"/>
         <ownedAttribute xmi:id="_eNtZYC5jEeasma3FSKRntg" name="amount" visibility="protected"/>
-        <ownedAttribute xmi:id="_hCJ28C5jEeasma3FSKRntg" name="category" visibility="protected"/>
+        <ownedAttribute xmi:id="_hCJ28C5jEeasma3FSKRntg" name="category" visibility="protected" type="_XXNCADceEeaKAf0dm3G4Bg"/>
         <interfaceRealization xmi:id="_SOvtAC5jEeasma3FSKRntg" client="_KSqnQC5jEeasma3FSKRntg" supplier="_V6iewC5iEeasma3FSKRntg" contract="_V6iewC5iEeasma3FSKRntg"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Association" xmi:id="_p99dwC_3Eeac1vx2ijZPxw" name="iTransactionsToBankAccounts" memberEnd="_p9-E0C_3Eeac1vx2ijZPxw _p9_S8C_3Eeac1vx2ijZPxw" navigableOwnedEnd="_p9_S8C_3Eeac1vx2ijZPxw">
@@ -60,6 +60,25 @@
         <interfaceRealization xmi:id="_ciEV0C_2Eeac1vx2ijZPxw" client="_msOSIC_1Eeac1vx2ijZPxw" supplier="_YEwdAC_2Eeac1vx2ijZPxw" contract="_YEwdAC_2Eeac1vx2ijZPxw"/>
       </packagedElement>
       <packagedElement xmi:type="uml:Interface" xmi:id="_YEwdAC_2Eeac1vx2ijZPxw" name="IVirtualAccount"/>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_x3k-0DcdEeaKAf0dm3G4Bg" name="Category">
+      <packagedElement xmi:type="uml:Interface" xmi:id="_XXNCADceEeaKAf0dm3G4Bg" name="ICategory">
+        <ownedOperation xmi:id="_d7RzADceEeaKAf0dm3G4Bg" name="getName"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_bkF5MDceEeaKAf0dm3G4Bg" name="Category">
+        <ownedAttribute xmi:id="_rr8tkDceEeaKAf0dm3G4Bg" name="name" visibility="private"/>
+        <interfaceRealization xmi:id="__E--0DceEeaKAf0dm3G4Bg" client="_bkF5MDceEeaKAf0dm3G4Bg" supplier="_XXNCADceEeaKAf0dm3G4Bg" contract="_XXNCADceEeaKAf0dm3G4Bg"/>
+        <ownedOperation xmi:id="_w6hEMDceEeaKAf0dm3G4Bg" name="getName"/>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_8QsHsDcdEeaKAf0dm3G4Bg" name="User">
+      <packagedElement xmi:type="uml:Interface" xmi:id="_otmQoDcfEeaKAf0dm3G4Bg" name="IUser">
+        <ownedOperation xmi:id="_uoycsDcfEeaKAf0dm3G4Bg" name="getLastName"/>
+        <ownedOperation xmi:id="_y8g7sDcfEeaKAf0dm3G4Bg" name="getFirstName"/>
+      </packagedElement>
+      <packagedElement xmi:type="uml:Class" xmi:id="_2yfuwDcfEeaKAf0dm3G4Bg" name="User">
+        <interfaceRealization xmi:id="_32ilsDcfEeaKAf0dm3G4Bg" client="_2yfuwDcfEeaKAf0dm3G4Bg" supplier="_otmQoDcfEeaKAf0dm3G4Bg" contract="_otmQoDcfEeaKAf0dm3G4Bg"/>
+      </packagedElement>
     </packagedElement>
   </packagedElement>
 </uml:Model>
