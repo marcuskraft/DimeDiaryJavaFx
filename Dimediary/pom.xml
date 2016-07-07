@@ -8,5 +8,6 @@
   	<module>../Controller</module>
   	<module>../Model</module>
   	<module>../Build</module>
+  	<module>../View</module>
   </modules>
 </project>
