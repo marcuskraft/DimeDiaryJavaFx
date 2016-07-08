@@ -10,14 +10,15 @@
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   	<dependency>
-  		<groupId>com.dimediary</groupId>
-  		<artifactId>model</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
   		<groupId>com.dimediary.view</groupId>
   		<artifactId>View</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.dimediary.model</groupId>
+  		<artifactId>Model</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  		<type>pom</type>
   	</dependency>
   </dependencies>
   <parent>

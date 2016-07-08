@@ -3,13 +3,6 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.dimediary.controller</groupId>
 	<artifactId>Controller</artifactId>
-	<dependencies>
-		<dependency>
-			<groupId>com.dimediary</groupId>
-			<artifactId>model</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
 	<parent>
 		<groupId>com.dimediary</groupId>
 		<artifactId>Dimediary</artifactId>
@@ -30,4 +23,12 @@
 			</plugin>
 		</plugins>
 	</build>
+	<dependencies>
+		<dependency>
+			<groupId>com.dimediary.model</groupId>
+			<artifactId>Model</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<type>pom</type>
+		</dependency>
+	</dependencies>
 </project>

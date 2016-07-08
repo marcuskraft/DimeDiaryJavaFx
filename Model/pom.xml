@@ -2,8 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>model</artifactId>
-	<packaging>jar</packaging>
+	<artifactId>Model</artifactId>
 
 	<name>model</name>
 	<url>http://maven.apache.org</url>
@@ -43,4 +42,5 @@
 		</plugins>
 	</build>
 
+	<groupId>com.dimediary.model</groupId>
 </project>
