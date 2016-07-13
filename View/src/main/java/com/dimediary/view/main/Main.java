@@ -1,18 +1,31 @@
 package com.dimediary.view.main;
 
+import com.trolltech.qt.gui.QApplication;
+import com.trolltech.qt.gui.QPushButton;
+import com.trolltech.qt.gui.QVBoxLayout;
+import com.trolltech.qt.gui.QWidget;
+
 public class Main {
 
 	public static void main(String[] args) {
 		
-		System.out.println("test");
+		QApplication application = new QApplication(args);
 		
-		try {
-			Thread.sleep(20000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		QWidget window = new QWidget();
+		
+		QPushButton button = new QPushButton("Ende");
+		
+		
+		button.clicked.connect(application, "exit()");
+		
+		window.setWindowTitle("Hallo QT");
+		QVBoxLayout layout = new QVBoxLayout();
+		layout.addWidget(button);
+		window.setLayout(layout);
+		window.show();
+		
+		application.exec();
+		
 	}
 
 }
