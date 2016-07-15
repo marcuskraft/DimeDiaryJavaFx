@@ -1,5 +1,5 @@
 /********************************************************************************
- ** Form generated from reading ui file 'design.jui'
+ ** Form generated from reading ui file 'mainwindow.jui'
  **
  ** Created by: Qt User Interface Compiler version 4.8.7
  **
@@ -12,14 +12,11 @@ import com.trolltech.qt.gui.*;
 
 public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
 {
-    public QAction actionTest;
     public QWidget centralwidget;
-    public QTableWidget tableWidget;
-    public QTextEdit textEdit;
-    public QDateEdit dateEdit;
-    public QDateTimeEdit dateTimeEdit;
+    public QPushButton pushButton;
+    public QRadioButton radioButton;
+    public QComboBox comboBox;
     public QMenuBar menubar;
-    public QMenu menuDatei;
     public QStatusBar statusbar;
 
     public UiMainWindow() { super(); }
@@ -27,36 +24,26 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public void setupUi(QMainWindow MainWindow)
     {
         MainWindow.setObjectName("MainWindow");
-        MainWindow.resize(new QSize(1070, 846).expandedTo(MainWindow.minimumSizeHint()));
-        actionTest = new QAction(MainWindow);
-        actionTest.setObjectName("actionTest");
+        MainWindow.resize(new QSize(800, 600).expandedTo(MainWindow.minimumSizeHint()));
         centralwidget = new QWidget(MainWindow);
         centralwidget.setObjectName("centralwidget");
-        tableWidget = new QTableWidget(centralwidget);
-        tableWidget.setObjectName("tableWidget");
-        tableWidget.setGeometry(new QRect(380, 20, 481, 251));
-        textEdit = new QTextEdit(centralwidget);
-        textEdit.setObjectName("textEdit");
-        textEdit.setGeometry(new QRect(710, 280, 151, 41));
-        dateEdit = new QDateEdit(centralwidget);
-        dateEdit.setObjectName("dateEdit");
-        dateEdit.setGeometry(new QRect(400, 300, 110, 22));
-        dateTimeEdit = new QDateTimeEdit(centralwidget);
-        dateTimeEdit.setObjectName("dateTimeEdit");
-        dateTimeEdit.setGeometry(new QRect(440, 340, 194, 22));
+        pushButton = new QPushButton(centralwidget);
+        pushButton.setObjectName("pushButton");
+        pushButton.setGeometry(new QRect(50, 50, 75, 23));
+        radioButton = new QRadioButton(centralwidget);
+        radioButton.setObjectName("radioButton");
+        radioButton.setGeometry(new QRect(40, 110, 82, 17));
+        comboBox = new QComboBox(centralwidget);
+        comboBox.setObjectName("comboBox");
+        comboBox.setGeometry(new QRect(90, 220, 161, 111));
         MainWindow.setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar.setObjectName("menubar");
-        menubar.setGeometry(new QRect(0, 0, 1070, 21));
-        menuDatei = new QMenu(menubar);
-        menuDatei.setObjectName("menuDatei");
+        menubar.setGeometry(new QRect(0, 0, 800, 21));
         MainWindow.setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar.setObjectName("statusbar");
         MainWindow.setStatusBar(statusbar);
-
-        menubar.addAction(menuDatei.menuAction());
-        menuDatei.addAction(actionTest);
         retranslateUi(MainWindow);
 
         MainWindow.connectSlotsByName();
@@ -65,23 +52,8 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     void retranslateUi(QMainWindow MainWindow)
     {
         MainWindow.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "MainWindow", null));
-        actionTest.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Test", null));
-        tableWidget.clear();
-        tableWidget.setColumnCount(3);
-
-        QTableWidgetItem __colItem = new QTableWidgetItem();
-        __colItem.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Datum", null));
-        tableWidget.setHorizontalHeaderItem(0, __colItem);
-
-        QTableWidgetItem __colItem1 = new QTableWidgetItem();
-        __colItem1.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kontostand", null));
-        tableWidget.setHorizontalHeaderItem(1, __colItem1);
-
-        QTableWidgetItem __colItem2 = new QTableWidgetItem();
-        __colItem2.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion", null));
-        tableWidget.setHorizontalHeaderItem(2, __colItem2);
-        tableWidget.setRowCount(0);
-        menuDatei.setTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Datei", null));
+        pushButton.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "PushButton", null));
+        radioButton.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "RadioButton", null));
     } // retranslateUi
 
 }

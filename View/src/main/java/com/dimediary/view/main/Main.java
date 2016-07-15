@@ -1,9 +1,8 @@
 package com.dimediary.view.main;
 
+import com.dimediary.view.design.UiMainWindow;
 import com.trolltech.qt.gui.QApplication;
-import com.trolltech.qt.gui.QPushButton;
-import com.trolltech.qt.gui.QVBoxLayout;
-import com.trolltech.qt.gui.QWidget;
+import com.trolltech.qt.gui.QMainWindow;
 
 public class Main {
 
@@ -11,18 +10,16 @@ public class Main {
 		
 		QApplication application = new QApplication(args);
 		
-		QWidget window = new QWidget();
+		UiMainWindow uiWindow = new UiMainWindow();
 		
-		QPushButton button = new QPushButton("Ende");
+		QMainWindow window = new QMainWindow();
 		
-		
-		button.clicked.connect(application, "exit()");
-		
-		window.setWindowTitle("Hallo QT");
-		QVBoxLayout layout = new QVBoxLayout();
-		layout.addWidget(button);
-		window.setLayout(layout);
+		uiWindow.setupUi(window);
+
 		window.show();
+		
+		QApplication.setActiveWindow(window);
+		
 		
 		application.exec();
 		
