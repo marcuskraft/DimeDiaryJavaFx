@@ -8,15 +8,17 @@
 package com.dimediary.view.design;
 
 import com.trolltech.qt.core.*;
+import com.trolltech.qt.core.Qt.LayoutDirection;
 import com.trolltech.qt.gui.*;
+import com.trolltech.qt.gui.QAbstractItemView.SelectionBehavior;
 
 public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
 {
+    public QAction actionBeenden;
     public QWidget centralwidget;
-    public QPushButton pushButton;
-    public QRadioButton radioButton;
-    public QComboBox comboBox;
+    public QTableWidget QTableFinanceOverview;
     public QMenuBar menubar;
+    public QMenu menuDatei;
     public QStatusBar statusbar;
 
     public UiMainWindow() { super(); }
@@ -24,26 +26,32 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public void setupUi(QMainWindow MainWindow)
     {
         MainWindow.setObjectName("MainWindow");
-        MainWindow.resize(new QSize(800, 600).expandedTo(MainWindow.minimumSizeHint()));
+        MainWindow.resize(new QSize(911, 845).expandedTo(MainWindow.minimumSizeHint()));
+        actionBeenden = new QAction(MainWindow);
+        actionBeenden.setObjectName("actionBeenden");
         centralwidget = new QWidget(MainWindow);
         centralwidget.setObjectName("centralwidget");
-        pushButton = new QPushButton(centralwidget);
-        pushButton.setObjectName("pushButton");
-        pushButton.setGeometry(new QRect(50, 50, 75, 23));
-        radioButton = new QRadioButton(centralwidget);
-        radioButton.setObjectName("radioButton");
-        radioButton.setGeometry(new QRect(40, 110, 82, 17));
-        comboBox = new QComboBox(centralwidget);
-        comboBox.setObjectName("comboBox");
-        comboBox.setGeometry(new QRect(90, 220, 161, 111));
+        QTableFinanceOverview = new QTableWidget(centralwidget);
+        QTableFinanceOverview.setObjectName("QTableFinanceOverview");
+        QTableFinanceOverview.setGeometry(new QRect(0, 0, 911, 811));
+        QTableFinanceOverview.setAcceptDrops(false);
+        QTableFinanceOverview.setLayoutDirection(LayoutDirection.LeftToRight);
+        QTableFinanceOverview.setAlternatingRowColors(true);
+        QTableFinanceOverview.setSelectionBehavior(SelectionBehavior.SelectItems);
+        QTableFinanceOverview.setSortingEnabled(true);
         MainWindow.setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar.setObjectName("menubar");
-        menubar.setGeometry(new QRect(0, 0, 800, 21));
+        menubar.setGeometry(new QRect(0, 0, 911, 21));
+        menuDatei = new QMenu(menubar);
+        menuDatei.setObjectName("menuDatei");
         MainWindow.setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar.setObjectName("statusbar");
         MainWindow.setStatusBar(statusbar);
+
+        menubar.addAction(menuDatei.menuAction());
+        menuDatei.addAction(actionBeenden);
         retranslateUi(MainWindow);
 
         MainWindow.connectSlotsByName();
@@ -52,8 +60,27 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     void retranslateUi(QMainWindow MainWindow)
     {
         MainWindow.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "MainWindow", null));
-        pushButton.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "PushButton", null));
-        radioButton.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "RadioButton", null));
+        actionBeenden.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Beenden", null));
+        QTableFinanceOverview.clear();
+        QTableFinanceOverview.setColumnCount(4);
+
+        QTableWidgetItem __colItem = new QTableWidgetItem();
+        __colItem.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Datum", null));
+        QTableFinanceOverview.setHorizontalHeaderItem(0, __colItem);
+
+        QTableWidgetItem __colItem1 = new QTableWidgetItem();
+        __colItem1.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Wochentag", null));
+        QTableFinanceOverview.setHorizontalHeaderItem(1, __colItem1);
+
+        QTableWidgetItem __colItem2 = new QTableWidgetItem();
+        __colItem2.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kontostand", null));
+        QTableFinanceOverview.setHorizontalHeaderItem(2, __colItem2);
+
+        QTableWidgetItem __colItem3 = new QTableWidgetItem();
+        __colItem3.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Ums\u00e4tze", null));
+        QTableFinanceOverview.setHorizontalHeaderItem(3, __colItem3);
+        QTableFinanceOverview.setRowCount(0);
+        menuDatei.setTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Datei", null));
     } // retranslateUi
 
 }

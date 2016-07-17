@@ -5,49 +5,58 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>911</width>
+    <height>845</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QTableWidget" name="QTableFinanceOverview">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>50</y>
-      <width>75</width>
-      <height>23</height>
+      <x>0</x>
+      <y>0</y>
+      <width>911</width>
+      <height>811</height>
      </rect>
     </property>
-    <property name="text">
-     <string>PushButton</string>
+    <property name="acceptDrops">
+     <bool>false</bool>
     </property>
-   </widget>
-   <widget class="QRadioButton" name="radioButton">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>110</y>
-      <width>82</width>
-      <height>17</height>
-     </rect>
+    <property name="layoutDirection">
+     <enum>LayoutDirection.LeftToRight</enum>
     </property>
-    <property name="text">
-     <string>RadioButton</string>
+    <property name="alternatingRowColors">
+     <bool>true</bool>
     </property>
-   </widget>
-   <widget class="QComboBox" name="comboBox">
-    <property name="geometry">
-     <rect>
-      <x>90</x>
-      <y>220</y>
-      <width>161</width>
-      <height>111</height>
-     </rect>
+    <property name="selectionBehavior">
+     <enum>SelectionBehavior.SelectItems</enum>
     </property>
+    <property name="sortingEnabled">
+     <bool>true</bool>
+    </property>
+    <column>
+     <property name="text">
+      <string>Datum</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Wochentag</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Kontostand</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Umsätze</string>
+     </property>
+    </column>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -55,12 +64,24 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>911</width>
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuDatei">
+    <property name="title">
+     <string>Datei</string>
+    </property>
+    <addaction name="actionBeenden"/>
+   </widget>
+   <addaction name="menuDatei"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionBeenden">
+   <property name="text">
+    <string>Beenden</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
