@@ -1,0 +1,95 @@
+package com.dimediary.ui2jui;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+
+import javax.xml.bind.JAXB;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.stream.XMLStreamException;
+
+import org.xml.sax.SAXException;
+
+import com.dimediary.ui2jui.options.Options;
+import com.dimediary.ui2jui.util.Mapping;
+import com.dimediary.ui2jui.util.Mapping_List;
+
+public class Converter {
+
+	public void convert(final Options options)
+			throws ParserConfigurationException, SAXException, IOException, JAXBException, XMLStreamException {
+		final Mapping_List mapping_List = this.createMappingList(options);
+
+		final String uiFileText = this.getUiFileText(options);
+
+		String juiFileText = uiFileText;
+
+		juiFileText = this.replaceAll(mapping_List.getMappings(), juiFileText);
+
+		this.writeOutput(options, juiFileText);
+
+	}
+
+	private Mapping_List createMappingList(final Options options)
+			throws FileNotFoundException, JAXBException, XMLStreamException {
+		final File file = new File(this.getPathname(options.getMappingXmlPath(), options.getMappingXmlFile()));
+		final Mapping_List mapping_List;
+		mapping_List = JAXB.unmarshal(file, Mapping_List.class);
+		return mapping_List;
+	}
+
+	private String getPathname(final String path, final String file) {
+
+		if (path == null) {
+			return file;
+		} else {
+			return path + file;
+		}
+
+	}
+
+	private String getUiFileText(final Options options) throws IOException {
+		String uiFileText = "";
+		final String pathname = this.getPathname(options.getInputPath(), options.getUiFile());
+
+		FileReader fr;
+		fr = new FileReader(new File(pathname));
+		final BufferedReader br = new BufferedReader(fr);
+
+		String zeile = "";
+
+		do {
+			zeile = br.readLine();
+			uiFileText = uiFileText + "\n" + zeile;
+		} while (zeile != null);
+
+		br.close();
+
+		return uiFileText;
+	}
+
+	private String replaceAll(final List<Mapping> mappings, String juiFileText) {
+		for (final Mapping mapping : mappings) {
+			juiFileText = juiFileText.replaceAll(mapping.getCpp(), mapping.getJava());
+		}
+		juiFileText = juiFileText.replaceAll("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
+		juiFileText = juiFileText.replaceAll("<ui version=\"4.0\">", "<ui version=\"4.0\" language=\"jambi\">");
+		return juiFileText;
+	}
+
+	private void writeOutput(final Options options, final String juiFileText) throws IOException {
+		final String pathname = this.getPathname(options.getOutputPath(),
+				options.getUiFile().replaceAll(".ui", ".jui"));
+		final FileWriter fileWriter = new FileWriter(new File(pathname));
+		final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+		bufferedWriter.write(juiFileText);
+		bufferedWriter.close();
+	}
+
+}
