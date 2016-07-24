@@ -1,9 +1,8 @@
-
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0" language="jambi">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
-  <property name="geometry">
+  <property name="marcus">
    <rect>
     <x>0</x>
     <y>0</y>
@@ -16,7 +15,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTableWidget" name="QTableFinanceOverview">
-    <property name="geometry">
+    <property name="marcus">
      <rect>
       <x>0</x>
       <y>0</y>
@@ -61,7 +60,7 @@
     </column>
    </widget>
    <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
+    <property name="marcus">
      <rect>
       <x>600</x>
       <y>120</y>
@@ -74,7 +73,7 @@
     </property>
    </widget>
    <widget class="QDialogButtonBox" name="buttonBox">
-    <property name="geometry">
+    <property name="marcus">
      <rect>
       <x>370</x>
       <y>360</y>
@@ -88,7 +87,7 @@
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
+   <property name="marcus">
     <rect>
      <x>0</x>
      <y>0</y>
@@ -114,4 +113,3 @@
  <resources/>
  <connections/>
 </ui>
-null

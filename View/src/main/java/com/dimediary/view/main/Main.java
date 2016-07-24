@@ -9,6 +9,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		
+		
 		QApplication application = new QApplication(args);
 		
 		UiMainWindow uiWindow = new UiMainWindow();

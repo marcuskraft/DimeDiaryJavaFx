@@ -64,10 +64,20 @@ public class Converter {
 
 		String zeile = "";
 
-		do {
+		int i=0;
+		while(true) {
 			zeile = br.readLine();
-			uiFileText = uiFileText + "\n" + zeile;
-		} while (zeile != null);
+			if (zeile == null) {
+				break;
+			}
+			if (i == 0) {
+				uiFileText = uiFileText + zeile;
+			}
+			else {
+				uiFileText = uiFileText + "\n" + zeile;
+			}
+			i += 1;
+		} 
 
 		br.close();
 
@@ -78,14 +88,12 @@ public class Converter {
 		for (final Mapping mapping : mappings) {
 			juiFileText = juiFileText.replaceAll(mapping.getCpp(), mapping.getJava());
 		}
-		juiFileText = juiFileText.replaceAll("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
-		juiFileText = juiFileText.replaceAll("<ui version=\"4.0\">", "<ui version=\"4.0\" language=\"jambi\">");
 		return juiFileText;
 	}
 
 	private void writeOutput(final Options options, final String juiFileText) throws IOException {
 		final String pathname = this.getPathname(options.getOutputPath(),
-				options.getUiFile().replaceAll(".ui", ".jui"));
+				options.getUiFile());
 		final FileWriter fileWriter = new FileWriter(new File(pathname));
 		final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 		bufferedWriter.write(juiFileText);

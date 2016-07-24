@@ -26,13 +26,13 @@
      <bool>false</bool>
     </property>
     <property name="layoutDirection">
-     <enum>Qt::LeftToRight</enum>
+     <enum>LayoutDirection.LeftToRight</enum>
     </property>
     <property name="alternatingRowColors">
      <bool>true</bool>
     </property>
     <property name="selectionBehavior">
-     <enum>QAbstractItemView::SelectItems</enum>
+     <enum>SelectionBehavior.SelectItems</enum>
     </property>
     <property name="sortingEnabled">
      <bool>true</bool>
@@ -81,7 +81,7 @@
      </rect>
     </property>
     <property name="standardButtons">
-     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     <set>StandardButton.Cancel|StandardButton.Ok</set>
     </property>
    </widget>
   </widget>
