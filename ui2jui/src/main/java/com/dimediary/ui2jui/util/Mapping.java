@@ -8,6 +8,16 @@ public class Mapping {
 
 	private String cpp;
 	private String java;
+	private String importString;
+
+	@XmlElement
+	public String getImportString() {
+		return this.importString;
+	}
+
+	public void setImportString(final String importString) {
+		this.importString = importString;
+	}
 
 	@XmlElement
 	public String getCpp() {

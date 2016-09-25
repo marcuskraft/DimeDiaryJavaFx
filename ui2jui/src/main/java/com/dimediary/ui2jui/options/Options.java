@@ -7,6 +7,9 @@ public class Options {
 	@Parameter(names = "--help", help = true)
 	private boolean help;
 
+	@Parameter(names = { "--imports" }, description = "modus to manage imports")
+	private boolean imports;
+
 	@Parameter(names = { "--input-path", "-i" }, description = "path where the ui input file exists")
 	private String inputPath;
 
@@ -21,6 +24,20 @@ public class Options {
 
 	@Parameter(names = { "--file", "-f" }, description = "file to convert", required = true)
 	private String uiFile;
+
+	@Parameter(names = { "--java-path" }, description = "path to the java files", required = false)
+	private String javaPath;
+
+	@Parameter(names = { "--java-file" }, description = "name of the java file", required = false)
+	private String javaFile;
+
+	public String getJavaFile() {
+		return this.javaFile;
+	}
+
+	public String getJavaPath() {
+		return this.javaPath;
+	}
 
 	public String getInputPath() {
 		return this.inputPath;
@@ -44,6 +61,10 @@ public class Options {
 
 	public Boolean isHelp() {
 		return this.help;
+	}
+
+	public boolean isImports() {
+		return this.imports;
 	}
 
 }

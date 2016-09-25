@@ -21,7 +21,10 @@ public class Ui2Jui {
 			jCommander.usage();
 		}
 
-		if (options.getUiFile() != null) {
+		if (options.getJavaFile() != null && options.getJavaPath() != null) {
+			final ImportManager manager = new ImportManager();
+			manager.manageImports(options);
+		} else if (options.getUiFile() != null) {
 			final Converter converter = new Converter();
 			converter.convert(options);
 		}

@@ -30,7 +30,7 @@ public class Converter {
 
 		String juiFileText = uiFileText;
 
-		juiFileText = this.replaceAll(mapping_List.getMappings(), juiFileText);
+		juiFileText = this.replaceAll(mapping_List.getMappings(), juiFileText, options);
 
 		this.writeOutput(options, juiFileText);
 
@@ -38,13 +38,13 @@ public class Converter {
 
 	private Mapping_List createMappingList(final Options options)
 			throws FileNotFoundException, JAXBException, XMLStreamException {
-		final File file = new File(this.getPathname(options.getMappingXmlPath(), options.getMappingXmlFile()));
+		final File file = new File(Converter.getPathname(options.getMappingXmlPath(), options.getMappingXmlFile()));
 		final Mapping_List mapping_List;
 		mapping_List = JAXB.unmarshal(file, Mapping_List.class);
 		return mapping_List;
 	}
 
-	private String getPathname(final String path, final String file) {
+	static String getPathname(final String path, final String file) {
 
 		if (path == null) {
 			return file;
@@ -56,7 +56,7 @@ public class Converter {
 
 	private String getUiFileText(final Options options) throws IOException {
 		String uiFileText = "";
-		final String pathname = this.getPathname(options.getInputPath(), options.getUiFile());
+		final String pathname = Converter.getPathname(options.getInputPath(), options.getUiFile());
 
 		FileReader fr;
 		fr = new FileReader(new File(pathname));
@@ -64,36 +64,45 @@ public class Converter {
 
 		String zeile = "";
 
-		int i=0;
-		while(true) {
+		int i = 0;
+		while (true) {
 			zeile = br.readLine();
 			if (zeile == null) {
 				break;
 			}
 			if (i == 0) {
 				uiFileText = uiFileText + zeile;
-			}
-			else {
+			} else {
 				uiFileText = uiFileText + "\n" + zeile;
 			}
 			i += 1;
-		} 
+		}
 
 		br.close();
 
 		return uiFileText;
 	}
 
-	private String replaceAll(final List<Mapping> mappings, String juiFileText) {
+	private String replaceAll(final List<Mapping> mappings, String juiFileText, final Options options)
+			throws IOException {
+		final String pathname = Converter.getPathname("imports/", "Ui" + options.getUiFile().replace("jui", "txt"));
+		final FileWriter fileWriter = new FileWriter(new File(pathname));
+		final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
 		for (final Mapping mapping : mappings) {
-			juiFileText = juiFileText.replaceAll(mapping.getCpp(), mapping.getJava());
+			if (juiFileText.contains(mapping.getCpp())) {
+				juiFileText = juiFileText.replaceAll(mapping.getCpp(), mapping.getJava());
+				if (mapping.getImportString() != null) {
+					bufferedWriter.write(mapping.getImportString());
+				}
+			}
 		}
+		bufferedWriter.close();
 		return juiFileText;
 	}
 
 	private void writeOutput(final Options options, final String juiFileText) throws IOException {
-		final String pathname = this.getPathname(options.getOutputPath(),
-				options.getUiFile());
+		final String pathname = Converter.getPathname(options.getOutputPath(), options.getUiFile());
 		final FileWriter fileWriter = new FileWriter(new File(pathname));
 		final BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
 		bufferedWriter.write(juiFileText);
