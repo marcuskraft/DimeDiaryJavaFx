@@ -93,7 +93,7 @@ public class Converter {
 			if (juiFileText.contains(mapping.getCpp())) {
 				juiFileText = juiFileText.replaceAll(mapping.getCpp(), mapping.getJava());
 				if (mapping.getImportString() != null) {
-					bufferedWriter.write(mapping.getImportString());
+					bufferedWriter.write(mapping.getImportString() + "\n");
 				}
 			}
 		}
