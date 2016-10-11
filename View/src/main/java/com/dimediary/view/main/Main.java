@@ -3,6 +3,7 @@ package com.dimediary.view.main;
 import com.dimediary.view.design.UiMainWindow;
 import com.trolltech.qt.gui.QApplication;
 import com.trolltech.qt.gui.QMainWindow;
+import com.trolltech.qt.gui.QPushButton;
 import com.trolltech.qt.gui.QTableWidgetItem;
 
 public class Main {
@@ -15,6 +16,8 @@ public class Main {
 		UiMainWindow uiWindow = new UiMainWindow();
 		
 		QTableWidgetItem item = new QTableWidgetItem("test");
+		QPushButton button = new QPushButton("testButton");
+		QPushButton button2 = new QPushButton("testButton2");
 		
 		//uiWindow.QTableFinanceOverview.row(item);
 		
@@ -22,9 +25,23 @@ public class Main {
 		
 		uiWindow.setupUi(window);
 
-		uiWindow.QTableFinanceOverview.setRowCount(5);
+		uiWindow.tableWidget.setRowCount(5);
 		
-		uiWindow.QTableFinanceOverview.setItem(1, 1, item);
+		
+		uiWindow.tableWidget.setColumnCount(5);
+		
+		
+		
+		uiWindow.tableWidget.setItem(1, 1, item);
+		uiWindow.tableWidget.setIndexWidget(uiWindow.tableWidget.model().index(2, 3), button);
+		uiWindow.tableWidget.setIndexWidget(uiWindow.tableWidget.model().index(2, 4), button2);
+		
+		
+		QTableWidgetItem __colItem3 = new QTableWidgetItem();
+        __colItem3.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "", null));
+        uiWindow.tableWidget.setHorizontalHeaderItem(4, __colItem3);
+		
+		uiWindow.actionBeenden.triggered.connect(application, "exit()");
 		
 		window.show();
 		

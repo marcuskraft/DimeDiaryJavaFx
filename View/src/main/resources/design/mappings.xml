@@ -20,4 +20,8 @@
 		<java>LayoutDirection.LeftToRight</java>
 		<importString>import com.trolltech.qt.core.Qt.LayoutDirection;</importString>
 	</Mapping>
+	<Mapping>
+		<cpp>Qt::Monday</cpp>
+		<java>Qt.DayOfWeek.Monday</java>
+	</Mapping>
 </Mapping_List>
