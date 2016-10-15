@@ -5,58 +5,92 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>911</width>
-    <height>845</height>
+    <width>949</width>
+    <height>800</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTableWidget" name="QTableFinanceOverview">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>2</width>
+      <height>2</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout"/>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
       <width>911</width>
-      <height>811</height>
+      <height>741</height>
      </rect>
     </property>
-    <property name="acceptDrops">
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <property name="tabsClosable">
      <bool>false</bool>
     </property>
-    <property name="layoutDirection">
-     <enum>LayoutDirection.LeftToRight</enum>
+    <property name="movable">
+     <bool>false</bool>
     </property>
-    <property name="alternatingRowColors">
-     <bool>true</bool>
-    </property>
-    <property name="selectionBehavior">
-     <enum>SelectionBehavior.SelectItems</enum>
-    </property>
-    <property name="sortingEnabled">
-     <bool>true</bool>
-    </property>
-    <column>
-     <property name="text">
-      <string>Datum</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Wochentag</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Kontostand</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Umsätze</string>
-     </property>
-    </column>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>Tab 1</string>
+     </attribute>
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>901</width>
+        <height>711</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>LayoutDirection.LeftToRight</enum>
+      </property>
+      <property name="rowCount">
+       <number>0</number>
+      </property>
+      <property name="columnCount">
+       <number>4</number>
+      </property>
+      <column>
+       <property name="text">
+        <string>Datum</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Wochentag</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Kontostand</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Umsätze</string>
+       </property>
+      </column>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Tab 2</string>
+     </attribute>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -64,7 +98,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>911</width>
+     <width>949</width>
      <height>21</height>
     </rect>
    </property>
@@ -72,6 +106,7 @@
     <property name="title">
      <string>Datei</string>
     </property>
+    <addaction name="actionEinstellungen"/>
     <addaction name="actionBeenden"/>
    </widget>
    <addaction name="menuDatei"/>
@@ -82,7 +117,29 @@
     <string>Beenden</string>
    </property>
   </action>
+  <action name="actionEinstellungen">
+   <property name="text">
+    <string>Einstellungen</string>
+   </property>
+  </action>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionBeenden</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>547</x>
+     <y>434</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

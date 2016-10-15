@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Mapping_List>
+	<Mapping>
+		<cpp>QAbstractItemView::SelectItems</cpp> 
+		<java>SelectionBehavior.SelectItems</java>
+		<importString>import com.trolltech.qt.gui.QAbstractItemView.SelectionBehavior;</importString>
+	</Mapping>
+	<Mapping>
+		<cpp>QDialogButtonBox::Cancel</cpp> 
+		<java>StandardButton.Cancel</java>
+		<importString>import com.trolltech.qt.gui.QDialogButtonBox.StandardButton;</importString>
+	</Mapping>
+	<Mapping>
+		<cpp>QDialogButtonBox::Ok</cpp> 
+		<java>StandardButton.Ok</java>
+		<importString>import com.trolltech.qt.gui.QDialogButtonBox.StandardButton;</importString>
+	</Mapping>
+	<Mapping>
+		<cpp>Qt::LeftToRight</cpp> 
+		<java>LayoutDirection.LeftToRight</java>
+		<importString>import com.trolltech.qt.core.Qt.LayoutDirection;</importString>
+	</Mapping>
+	<Mapping>
+		<cpp>Qt::Monday</cpp>
+		<java>Qt.DayOfWeek.Monday</java>
+	</Mapping>
+</Mapping_List>

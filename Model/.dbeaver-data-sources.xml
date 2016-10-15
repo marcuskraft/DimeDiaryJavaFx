@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data-sources>
+	<data-source id="hsqldb_embedded-157af6d0d53-3072cea069cb1b84" provider="generic" driver="hsqldb_embedded" name="HSQLDB - DimeDiary" create-date="1476117007053" save-password="true" show-system-objects="true" read-only="false">
+		<connection server="" database="C:\Users\eyota\Documents\DimeDiary\Model\DB\DimeDiary" url="jdbc:hsqldb:file:C:\Users\eyota\Documents\DimeDiary\Model\DB\DimeDiary" user="" type="dev">
+			<bootstrap/>
+		</connection>
+	</data-source>
+</data-sources>

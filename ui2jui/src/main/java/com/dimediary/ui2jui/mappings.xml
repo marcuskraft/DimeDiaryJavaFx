@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Mapping_List>
+	<Mapping>
+		<cpp>geometry</cpp> 
+		<java>marcus</java>
+	</Mapping>
+	<Mapping>
+		<cpp>vbg</cpp> 
+		<java>g4g4</java>
+	</Mapping>
+	<Mapping>
+		<cpp>k8ke</cpp> 
+		<java>jrehd</java>
+	</Mapping>
+</Mapping_List>
