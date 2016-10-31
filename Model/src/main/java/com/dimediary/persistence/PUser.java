@@ -2,6 +2,8 @@ package com.dimediary.persistence;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -15,7 +17,14 @@ public class PUser {
 	public PUser() {
 	}
 
+	public PUser(final String name, final String surname) {
+		super();
+		this.name = name;
+		this.surname = surname;
+	}
+
 	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
 	private Integer id;
 
