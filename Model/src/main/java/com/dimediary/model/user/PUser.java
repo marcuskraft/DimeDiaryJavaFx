@@ -1,4 +1,4 @@
-package com.dimediary.model.persistence;
+package com.dimediary.model.user;
 
 import java.io.Serializable;
 

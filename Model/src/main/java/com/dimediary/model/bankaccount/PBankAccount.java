@@ -1,4 +1,4 @@
-package com.dimediary.model.persistence;
+package com.dimediary.model.bankaccount;
 
 import java.io.Serializable;
 
@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.dimediary.model.bankaccountcategory.PBankAccountCategory;
+import com.dimediary.model.user.PUser;
 
 @Entity
 @Table(name = "BANKACCOUNT")

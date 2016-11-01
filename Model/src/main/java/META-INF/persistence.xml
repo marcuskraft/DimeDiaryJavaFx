@@ -6,12 +6,12 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
   <persistence-unit name="PersistenceHSQLDB" transaction-type="RESOURCE_LOCAL">
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
     
-    <class>com.dimediary.model.persistence.PUser</class>
-    <class>com.dimediary.model.persistence.PTransaction</class>
-    <class>com.dimediary.model.persistence.PCategory</class>
-    <class>com.dimediary.model.persistence.PBankAccount</class>
-    <class>com.dimediary.model.persistence.PBankAccountCategory</class>
-    <class>com.dimediary.model.persistence.PBalanceHistory</class>
+    <class>com.dimediary.model.user.PUser</class>
+    <class>com.dimediary.model.transaction.PTransaction</class>
+    <class>com.dimediary.model.category.PCategory</class>
+    <class>com.dimediary.model.bankaccount.PBankAccount</class>
+    <class>com.dimediary.model.bankaccountcategory.PBankAccountCategory</class>
+    <class>com.dimediary.model.balancehistory.PBalanceHistory</class>
     
     
     <properties>

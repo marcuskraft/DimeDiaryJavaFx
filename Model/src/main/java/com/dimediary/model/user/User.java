@@ -3,8 +3,6 @@ package com.dimediary.model.user;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
-import com.dimediary.model.persistence.PUser;
-
 public class User implements IUser {
 
 	private final PUser pUser;

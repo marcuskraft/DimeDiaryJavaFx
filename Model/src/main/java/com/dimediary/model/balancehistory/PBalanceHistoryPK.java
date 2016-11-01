@@ -1,7 +1,9 @@
-package com.dimediary.model.persistence;
+package com.dimediary.model.balancehistory;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.dimediary.model.bankaccount.PBankAccount;
 
 public class PBalanceHistoryPK implements Serializable {
 

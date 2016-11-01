@@ -1,4 +1,4 @@
-package com.dimediary.model;
+package com.dimediary.model.interfaces;
 
 import javax.persistence.EntityManager;
 

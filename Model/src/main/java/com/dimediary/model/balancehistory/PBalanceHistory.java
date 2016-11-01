@@ -1,4 +1,4 @@
-package com.dimediary.model.persistence;
+package com.dimediary.model.balancehistory;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import com.dimediary.model.bankaccount.PBankAccount;
 
 @Entity
 @Table(name = "BALANCE_HISTORY")

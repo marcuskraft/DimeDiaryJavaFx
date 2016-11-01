@@ -1,6 +1,6 @@
 package com.dimediary.model.user;
 
-import com.dimediary.model.IPersistable;
+import com.dimediary.model.interfaces.IPersistable;
 
 public interface IUser extends IPersistable {
 

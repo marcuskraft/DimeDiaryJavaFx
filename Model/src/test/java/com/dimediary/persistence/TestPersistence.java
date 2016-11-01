@@ -12,8 +12,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.dimediary.model.persistence.PTransaction;
-import com.dimediary.model.persistence.PUser;
+import com.dimediary.model.transaction.PTransaction;
+import com.dimediary.model.user.PUser;
 
 public class TestPersistence {
 
