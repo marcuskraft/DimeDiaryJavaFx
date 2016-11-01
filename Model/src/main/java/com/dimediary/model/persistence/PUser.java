@@ -1,4 +1,6 @@
-package com.dimediary.persistence;
+package com.dimediary.model.persistence;
+
+import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,7 +14,12 @@ import javax.persistence.Table;
 @NamedQueries({ @NamedQuery(name = "allUsers", query = "from PUser") })
 @Entity
 @Table(name = "USERS")
-public class PUser {
+public class PUser implements Serializable {
+
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = -5847904277566539271L;
 
 	public PUser() {
 	}

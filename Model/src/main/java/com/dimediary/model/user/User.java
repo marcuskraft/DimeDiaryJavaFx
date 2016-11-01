@@ -1,26 +1,43 @@
 package com.dimediary.model.user;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
+
+import com.dimediary.model.persistence.PUser;
+
 public class User implements IUser {
 
-	private String lastName;
-	private String firstName;
-	
-	public User(String firstName, String lastName) {
-		this.firstName = firstName;
-		this.lastName = lastName;
+	private final PUser pUser;
+
+	public User(final String firstName, final String lastName) {
+		this.pUser = new PUser(lastName, firstName);
 	}
-	
+
+	@Override
 	public String getLastName() {
-		return lastName;
+		return this.pUser.getName();
 	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+
+	public void setLastName(final String lastName) {
+		this.pUser.setName(lastName);
 	}
+
+	@Override
 	public String getFirstName() {
-		return firstName;
+		return this.pUser.getSurname();
 	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+
+	public void setFirstName(final String firstName) {
+		this.pUser.setSurname(firstName);
+	}
+
+	@Override
+	public void persist(final EntityManager em) {
+		try {
+			em.persist(this.pUser);
+		} catch (final Exception e) {
+			throw new PersistenceException(e);
+		}
 	}
 
 }

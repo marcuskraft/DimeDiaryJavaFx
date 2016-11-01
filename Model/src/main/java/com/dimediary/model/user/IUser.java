@@ -1,8 +1,11 @@
 package com.dimediary.model.user;
 
-public interface IUser {
-	
+import com.dimediary.model.IPersistable;
+
+public interface IUser extends IPersistable {
+
 	public String getLastName();
+
 	public String getFirstName();
 
 }
