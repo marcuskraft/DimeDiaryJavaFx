@@ -12,8 +12,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.dimediary.model.transaction.PTransaction;
-import com.dimediary.model.user.PUser;
+import com.dimediary.model.entities.Transaction;
+import com.dimediary.model.entities.User;
 
 public class TestPersistence {
 
@@ -32,10 +32,10 @@ public class TestPersistence {
 		this.emf.close();
 	}
 
-	public void readUsers(final EntityManager em, final PUser user) {
+	public void readUsers(final EntityManager em, final User user) {
 
-		final TypedQuery<PUser> query = em.createNamedQuery("allUsers", PUser.class);
-		final List<PUser> users = query.getResultList();
+		final TypedQuery<User> query = em.createNamedQuery("allUsers", User.class);
+		final List<User> users = query.getResultList();
 
 		Assert.assertTrue("User not persisted!", users.contains(user));
 
@@ -44,7 +44,7 @@ public class TestPersistence {
 	@Test
 	public void addUser() {
 
-		final PUser user = new PUser("Vogel", "Hans");
+		final User user = new User("Vogel", "Hans");
 
 		this.em.getTransaction().begin();
 		this.em.persist(user);
@@ -61,7 +61,7 @@ public class TestPersistence {
 	@Test
 	public void readTransaction() {
 
-		final PTransaction transaction = this.em.find(PTransaction.class, 0);
+		final Transaction transaction = this.em.find(Transaction.class, 0);
 
 		System.out.println(transaction.getName());
 		System.out.println(transaction.getBankAccount().getBic());

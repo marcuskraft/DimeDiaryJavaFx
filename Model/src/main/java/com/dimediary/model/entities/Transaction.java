@@ -1,4 +1,4 @@
-package com.dimediary.model.transaction;
+package com.dimediary.model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,13 +12,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.dimediary.model.bankaccount.PBankAccount;
-import com.dimediary.model.category.PCategory;
-import com.dimediary.model.user.PUser;
-
 @Entity
 @Table(name = "TRANSACTIONS")
-public class PTransaction implements Serializable {
+public class Transaction implements Serializable {
 
 	/**
 	 *
@@ -37,15 +33,15 @@ public class PTransaction implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "BANKACCOUNT_ID")
-	private PBankAccount bankAccount;
+	private BankAccount bankAccount;
 
 	@ManyToOne
 	@JoinColumn(name = "USER_ID")
-	private PUser user;
+	private User user;
 
 	@ManyToOne
 	@JoinColumn(name = "CATEGORY_ID")
-	private PCategory category;
+	private Category category;
 
 	@Temporal(TemporalType.DATE)
 	@Column(name = "DATE")
@@ -79,27 +75,27 @@ public class PTransaction implements Serializable {
 		this.amount = amount;
 	}
 
-	public PBankAccount getBankAccount() {
+	public BankAccount getBankAccount() {
 		return this.bankAccount;
 	}
 
-	public void setBankAccount(final PBankAccount bankAccount) {
+	public void setBankAccount(final BankAccount bankAccount) {
 		this.bankAccount = bankAccount;
 	}
 
-	public PUser getUser() {
+	public User getUser() {
 		return this.user;
 	}
 
-	public void setUser(final PUser user) {
+	public void setUser(final User user) {
 		this.user = user;
 	}
 
-	public PCategory getCategory() {
+	public Category getCategory() {
 		return this.category;
 	}
 
-	public void setCategory(final PCategory category) {
+	public void setCategory(final Category category) {
 		this.category = category;
 	}
 

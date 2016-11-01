@@ -1,4 +1,4 @@
-package com.dimediary.model.category;
+package com.dimediary.model.entities;
 
 import java.io.Serializable;
 
@@ -8,13 +8,13 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "CATEGORY")
-public class PCategory implements Serializable {
+@Table(name = "BANKACCOUNT_CATEGORY")
+public class BankAccountCategory implements Serializable {
 
 	/**
 	 *
 	 */
-	private static final long serialVersionUID = -8922036259983542096L;
+	private static final long serialVersionUID = -6934027507205045824L;
 
 	@Id
 	@Column(name = "ID")

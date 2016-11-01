@@ -1,4 +1,4 @@
-package com.dimediary.model.bankaccount;
+package com.dimediary.model.entities;
 
 import java.io.Serializable;
 
@@ -11,12 +11,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.dimediary.model.bankaccountcategory.PBankAccountCategory;
-import com.dimediary.model.user.PUser;
-
 @Entity
 @Table(name = "BANKACCOUNT")
-public class PBankAccount implements Serializable {
+public class BankAccount implements Serializable {
 
 	/**
 	 *
@@ -42,17 +39,17 @@ public class PBankAccount implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "USER_ID")
-	private PUser user;
+	private User user;
 
 	@ManyToOne
 	@JoinColumn(name = "BANKACCOUNT_CATEGORY_ID")
-	private PBankAccountCategory bankAccountCategory;
+	private BankAccountCategory bankAccountCategory;
 
-	public PBankAccountCategory getBankAccountCategory() {
+	public BankAccountCategory getBankAccountCategory() {
 		return this.bankAccountCategory;
 	}
 
-	public void setBankAccountCategory(final PBankAccountCategory bankAccountCategory) {
+	public void setBankAccountCategory(final BankAccountCategory bankAccountCategory) {
 		this.bankAccountCategory = bankAccountCategory;
 	}
 
@@ -96,11 +93,11 @@ public class PBankAccount implements Serializable {
 		this.bic = bic;
 	}
 
-	public PUser getUser() {
+	public User getUser() {
 		return this.user;
 	}
 
-	public void setUser(final PUser user) {
+	public void setUser(final User user) {
 		this.user = user;
 	}
 

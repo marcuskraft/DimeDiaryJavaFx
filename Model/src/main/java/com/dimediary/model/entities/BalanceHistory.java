@@ -1,4 +1,4 @@
-package com.dimediary.model.balancehistory;
+package com.dimediary.model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,12 +13,10 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.dimediary.model.bankaccount.PBankAccount;
-
 @Entity
 @Table(name = "BALANCE_HISTORY")
-@IdClass(PBalanceHistoryPK.class)
-public class PBalanceHistory implements Serializable {
+@IdClass(BalanceHistoryPK.class)
+public class BalanceHistory implements Serializable {
 
 	/**
 	 *
@@ -33,7 +31,7 @@ public class PBalanceHistory implements Serializable {
 	@Id
 	@ManyToOne
 	@JoinColumn(name = "BANKACCOUNT_ID")
-	private PBankAccount bankAccount;
+	private BankAccount bankAccount;
 
 	@Column(name = "AMOUNT")
 	private Double amount;
@@ -46,11 +44,11 @@ public class PBalanceHistory implements Serializable {
 		this.date = date;
 	}
 
-	public PBankAccount getBankAccount() {
+	public BankAccount getBankAccount() {
 		return this.bankAccount;
 	}
 
-	public void setBankAccount(final PBankAccount bankAccount) {
+	public void setBankAccount(final BankAccount bankAccount) {
 		this.bankAccount = bankAccount;
 	}
 

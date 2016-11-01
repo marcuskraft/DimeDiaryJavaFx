@@ -1,18 +1,16 @@
-package com.dimediary.model.balancehistory;
+package com.dimediary.model.entities;
 
 import java.io.Serializable;
 import java.util.Date;
 
-import com.dimediary.model.bankaccount.PBankAccount;
-
-public class PBalanceHistoryPK implements Serializable {
+public class BalanceHistoryPK implements Serializable {
 
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = -4539881778212051537L;
 	private Date date;
-	private PBankAccount bankAccount;
+	private BankAccount bankAccount;
 
 	public Date getDate() {
 		return this.date;
@@ -22,11 +20,11 @@ public class PBalanceHistoryPK implements Serializable {
 		this.date = date;
 	}
 
-	public PBankAccount getBankAccount() {
+	public BankAccount getBankAccount() {
 		return this.bankAccount;
 	}
 
-	public void setBankAccount(final PBankAccount bankAccount) {
+	public void setBankAccount(final BankAccount bankAccount) {
 		this.bankAccount = bankAccount;
 	}
 
@@ -46,7 +44,7 @@ public class PBalanceHistoryPK implements Serializable {
 		if (this.getClass() != obj.getClass()) {
 			return false;
 		}
-		final PBalanceHistoryPK balanceHistory = (PBalanceHistoryPK) obj;
+		final BalanceHistoryPK balanceHistory = (BalanceHistoryPK) obj;
 		if (!this.date.equals(balanceHistory.getDate())) {
 			return false;
 		}

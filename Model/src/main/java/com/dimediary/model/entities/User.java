@@ -1,4 +1,4 @@
-package com.dimediary.model.user;
+package com.dimediary.model.entities;
 
 import java.io.Serializable;
 
@@ -11,20 +11,20 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-@NamedQueries({ @NamedQuery(name = "allUsers", query = "from PUser") })
+@NamedQueries({ @NamedQuery(name = "allUsers", query = "from User") })
 @Entity
 @Table(name = "USERS")
-public class PUser implements Serializable {
+public class User implements Serializable {
 
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = -5847904277566539271L;
 
-	public PUser() {
+	public User() {
 	}
 
-	public PUser(final String name, final String surname) {
+	public User(final String name, final String surname) {
 		super();
 		this.name = name;
 		this.surname = surname;
