@@ -22,8 +22,8 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public QGridLayout gridLayout;
     public QTabWidget tabWidget;
     public QWidget transactions;
-    public QTableWidget tableWidget;
-    public QComboBox cBBankaccount;
+    public QTableWidget tableTransactions;
+    public QComboBox comboBoxBankaccount;
     public QLabel label;
     public QDateEdit dateUntil;
     public QDateEdit dateFrom;
@@ -39,7 +39,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public void setupUi(QMainWindow MainWindow)
     {
         MainWindow.setObjectName("MainWindow");
-        MainWindow.resize(new QSize(949, 800).expandedTo(MainWindow.minimumSizeHint()));
+        MainWindow.resize(new QSize(941, 811).expandedTo(MainWindow.minimumSizeHint()));
         actionBeenden = new QAction(MainWindow);
         actionBeenden.setObjectName("actionBeenden");
         actionEinstellungen = new QAction(MainWindow);
@@ -53,20 +53,23 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         gridLayout.setObjectName("gridLayout");
         tabWidget = new QTabWidget(centralwidget);
         tabWidget.setObjectName("tabWidget");
-        tabWidget.setGeometry(new QRect(0, 0, 911, 741));
+        tabWidget.setGeometry(new QRect(0, 0, 941, 771));
         tabWidget.setTabsClosable(false);
         tabWidget.setMovable(false);
         transactions = new QWidget();
         transactions.setObjectName("transactions");
-        tableWidget = new QTableWidget(transactions);
-        tableWidget.setObjectName("tableWidget");
-        tableWidget.setGeometry(new QRect(0, 40, 901, 671));
-        tableWidget.setLayoutDirection(LayoutDirection.LeftToRight);
-        tableWidget.setRowCount(0);
-        tableWidget.setColumnCount(6);
-        cBBankaccount = new QComboBox(transactions);
-        cBBankaccount.setObjectName("cBBankaccount");
-        cBBankaccount.setGeometry(new QRect(40, 10, 91, 22));
+        tableTransactions = new QTableWidget(transactions);
+        tableTransactions.setObjectName("tableTransactions");
+        tableTransactions.setGeometry(new QRect(0, 40, 941, 711));
+        tableTransactions.setLayoutDirection(LayoutDirection.LeftToRight);
+        tableTransactions.setAutoFillBackground(false);
+        tableTransactions.setAlternatingRowColors(true);
+        tableTransactions.setSortingEnabled(true);
+        tableTransactions.setRowCount(0);
+        tableTransactions.setColumnCount(6);
+        comboBoxBankaccount = new QComboBox(transactions);
+        comboBoxBankaccount.setObjectName("comboBoxBankaccount");
+        comboBoxBankaccount.setGeometry(new QRect(40, 10, 91, 22));
         label = new QLabel(transactions);
         label.setObjectName("label");
         label.setGeometry(new QRect(10, 10, 31, 16));
@@ -91,7 +94,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         MainWindow.setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar.setObjectName("menubar");
-        menubar.setGeometry(new QRect(0, 0, 949, 21));
+        menubar.setGeometry(new QRect(0, 0, 941, 21));
         menuDatei = new QMenu(menubar);
         menuDatei.setObjectName("menuDatei");
         MainWindow.setMenuBar(menubar);
@@ -116,33 +119,33 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         MainWindow.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "MainWindow", null));
         actionBeenden.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Beenden", null));
         actionEinstellungen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Einstellungen", null));
-        tableWidget.clear();
-        tableWidget.setColumnCount(6);
+        tableTransactions.clear();
+        tableTransactions.setColumnCount(6);
 
         QTableWidgetItem __colItem = new QTableWidgetItem();
         __colItem.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Datum", null));
-        tableWidget.setHorizontalHeaderItem(0, __colItem);
+        tableTransactions.setHorizontalHeaderItem(0, __colItem);
 
         QTableWidgetItem __colItem1 = new QTableWidgetItem();
         __colItem1.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Wochentag", null));
-        tableWidget.setHorizontalHeaderItem(1, __colItem1);
+        tableTransactions.setHorizontalHeaderItem(1, __colItem1);
 
         QTableWidgetItem __colItem2 = new QTableWidgetItem();
         __colItem2.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Umsatz", null));
-        tableWidget.setHorizontalHeaderItem(2, __colItem2);
+        tableTransactions.setHorizontalHeaderItem(2, __colItem2);
 
         QTableWidgetItem __colItem3 = new QTableWidgetItem();
         __colItem3.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Betreff", null));
-        tableWidget.setHorizontalHeaderItem(3, __colItem3);
+        tableTransactions.setHorizontalHeaderItem(3, __colItem3);
 
         QTableWidgetItem __colItem4 = new QTableWidgetItem();
         __colItem4.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kategorie", null));
-        tableWidget.setHorizontalHeaderItem(4, __colItem4);
+        tableTransactions.setHorizontalHeaderItem(4, __colItem4);
 
         QTableWidgetItem __colItem5 = new QTableWidgetItem();
         __colItem5.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kontostand", null));
-        tableWidget.setHorizontalHeaderItem(5, __colItem5);
-        tableWidget.setRowCount(0);
+        tableTransactions.setHorizontalHeaderItem(5, __colItem5);
+        tableTransactions.setRowCount(0);
         label.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto", null));
         label_2.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "von", null));
         label_3.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "bis", null));

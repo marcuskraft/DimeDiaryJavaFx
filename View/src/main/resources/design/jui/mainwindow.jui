@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>949</width>
-    <height>800</height>
+    <width>941</width>
+    <height>811</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,8 +29,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>911</width>
-      <height>741</height>
+      <width>941</width>
+      <height>771</height>
      </rect>
     </property>
     <property name="currentIndex">
@@ -46,17 +46,26 @@
      <attribute name="title">
       <string>Umsätze</string>
      </attribute>
-     <widget class="QTableWidget" name="tableWidget">
+     <widget class="QTableWidget" name="tableTransactions">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>40</y>
-        <width>901</width>
-        <height>671</height>
+        <width>941</width>
+        <height>711</height>
        </rect>
       </property>
       <property name="layoutDirection">
        <enum>LayoutDirection.LeftToRight</enum>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="alternatingRowColors">
+       <bool>true</bool>
+      </property>
+      <property name="sortingEnabled">
+       <bool>true</bool>
       </property>
       <property name="rowCount">
        <number>0</number>
@@ -95,7 +104,7 @@
        </property>
       </column>
      </widget>
-     <widget class="QComboBox" name="cBBankaccount">
+     <widget class="QComboBox" name="comboBoxBankaccount">
       <property name="geometry">
        <rect>
         <x>40</x>
@@ -183,7 +192,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>949</width>
+     <width>941</width>
      <height>21</height>
     </rect>
    </property>

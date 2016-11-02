@@ -14,7 +14,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-@NamedQueries({ @NamedQuery(name = "allTransactions", query = "from Transaction") })
+@NamedQueries({ @NamedQuery(name = "allTransactions", query = "from Transaction"),
+		@NamedQuery(name = "TransactionsBetween", query = "from Transaction t WHERE t.bankAccount = :bankAccount"
+				+ " AND t.date BETWEEN :dateFrom AND :dateUntil ORDER BY t.date") })
 @Entity
 @Table(name = "TRANSACTIONS")
 public class Transaction implements Serializable {
