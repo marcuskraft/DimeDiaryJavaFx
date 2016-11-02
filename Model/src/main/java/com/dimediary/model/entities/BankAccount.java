@@ -4,13 +4,14 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+@NamedQueries({ @NamedQuery(name = "allBankAccounts", query = "from BankAccount") })
 @Entity
 @Table(name = "BANKACCOUNT")
 public class BankAccount implements Serializable {
@@ -21,10 +22,6 @@ public class BankAccount implements Serializable {
 	private static final long serialVersionUID = 7788504506056118005L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ID")
-	private Integer id;
-
 	@Column(name = "NAME")
 	private String name;
 
@@ -51,14 +48,6 @@ public class BankAccount implements Serializable {
 
 	public void setBankAccountCategory(final BankAccountCategory bankAccountCategory) {
 		this.bankAccountCategory = bankAccountCategory;
-	}
-
-	public Integer getId() {
-		return this.id;
-	}
-
-	public void setId(final Integer id) {
-		this.id = id;
 	}
 
 	public String getName() {
