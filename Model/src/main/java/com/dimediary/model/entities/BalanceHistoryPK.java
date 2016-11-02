@@ -48,7 +48,7 @@ public class BalanceHistoryPK implements Serializable {
 		if (!this.date.equals(balanceHistory.getDate())) {
 			return false;
 		}
-		if (!this.bankAccount.getId().equals(balanceHistory.getBankAccount().getId())) {
+		if (!this.bankAccount.getName().equals(balanceHistory.getBankAccount().getName())) {
 			return false;
 		}
 		return true;

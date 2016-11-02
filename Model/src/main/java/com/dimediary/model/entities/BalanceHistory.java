@@ -30,7 +30,7 @@ public class BalanceHistory implements Serializable {
 
 	@Id
 	@ManyToOne
-	@JoinColumn(name = "BANKACCOUNT_ID")
+	@JoinColumn(name = "BANKACCOUNT_NAME")
 	private BankAccount bankAccount;
 
 	@Column(name = "AMOUNT")

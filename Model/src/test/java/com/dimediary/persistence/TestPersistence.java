@@ -3,8 +3,6 @@ package com.dimediary.persistence;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 
 import org.junit.After;
@@ -12,24 +10,30 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.dimediary.model.EntityManagerHolder;
+import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.entities.User;
 
 public class TestPersistence {
 
 	private EntityManager em;
-	private EntityManagerFactory emf;
+	private EntityManagerHolder emH;
+	// private EntityManagerFactory emf;
 
 	@Before
 	public void Initiate() {
-		this.emf = Persistence.createEntityManagerFactory("PersistenceHSQLDB");
-		this.em = this.emf.createEntityManager();
+		// this.emf =
+		// Persistence.createEntityManagerFactory("PersistenceHSQLDB");
+		this.emH = EntityManagerHolder.getInstance();
+		this.em = this.emH.getEntityManager(); // this.emf.createEntityManager();
 	}
 
 	@After
 	public void Close() {
-		this.em.close();
-		this.emf.close();
+		this.emH.close();
+		// this.em.close();
+		// this.emf.close();
 	}
 
 	public void readUsers(final EntityManager em, final User user) {
@@ -61,13 +65,31 @@ public class TestPersistence {
 	@Test
 	public void readTransaction() {
 
-		final Transaction transaction = this.em.find(Transaction.class, 0);
+		final TypedQuery<Transaction> query = this.em.createNamedQuery("allTransactions", Transaction.class);
+		final List<Transaction> transactions = query.getResultList();
 
-		System.out.println(transaction.getName());
-		System.out.println(transaction.getBankAccount().getBic());
-		System.out.println(transaction.getBankAccount().getUser().getSurname());
-		System.out.println(transaction.getCategory().getName());
-		System.out.println(transaction.getTimestamp());
+		Assert.assertTrue("Table transactions is empty!", !transactions.isEmpty());
+
+		for (final Transaction transaction : transactions) {
+			System.out.println(transaction.getName());
+			System.out.println(transaction.getBankAccount().getBic());
+			System.out.println(transaction.getBankAccount().getUser().getSurname());
+			System.out.println(transaction.getCategory().getName());
+			System.out.println(transaction.getTimestamp());
+		}
+
+	}
+
+	@Test
+	public void readBankAccounts() {
+
+		final TypedQuery<BankAccount> query = this.em.createNamedQuery("allBankAccounts", BankAccount.class);
+		final List<BankAccount> bankAccounts = query.getResultList();
+
+		for (final BankAccount bankAccount : bankAccounts) {
+			System.out.println(bankAccount.getBankName());
+			System.out.println(bankAccount.getIban());
+		}
 
 	}
 

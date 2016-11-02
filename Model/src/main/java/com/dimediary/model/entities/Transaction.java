@@ -8,10 +8,13 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+@NamedQueries({ @NamedQuery(name = "allTransactions", query = "from Transaction") })
 @Entity
 @Table(name = "TRANSACTIONS")
 public class Transaction implements Serializable {
@@ -32,7 +35,7 @@ public class Transaction implements Serializable {
 	private Double amount;
 
 	@ManyToOne
-	@JoinColumn(name = "BANKACCOUNT_ID")
+	@JoinColumn(name = "BANKACCOUNT_NAME")
 	private BankAccount bankAccount;
 
 	@ManyToOne
