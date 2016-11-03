@@ -5,13 +5,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.dimediary.controller.DBUtils;
+import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.view.design.UiMainWindow;
+import com.dimediary.view.utils.QTUtils;
 import com.trolltech.qt.core.QDate;
-import com.trolltech.qt.core.QDateTime;
 import com.trolltech.qt.gui.QApplication;
 import com.trolltech.qt.gui.QMainWindow;
+import com.trolltech.qt.gui.QTableWidget;
 import com.trolltech.qt.gui.QTableWidgetItem;
 
 public class Initializer {
@@ -38,22 +39,29 @@ public class Initializer {
 
 		// fill the table with the transactions between the two dates for the
 		// selected bank account
-		QDateTime dateTime = new QDateTime(qdateFrom);
-		final Date dateFrom = new Date(dateTime.toMSecsSinceEpoch());
-
-		dateTime = new QDateTime(qdateUntil);
-		final Date dateUntil = new Date(dateTime.toMSecsSinceEpoch());
+		final Date dateFrom = QTUtils.qDateToDate(qdateFrom);
+		final Date dateUntil = QTUtils.qDateToDate(qdateUntil);
 
 		final List<Transaction> transactions = DBUtils.geTransactions(dateFrom, dateUntil, bankAccountNames.get(0));
 
-		mainWindow.tableTransactions.setRowCount(transactions.size());
+		final QTableWidget table = mainWindow.tableTransactions;
+		table.setRowCount(transactions.size());
 		for (int i = 0; i < transactions.size(); i++) {
 			final Transaction transaction = transactions.get(i);
 
-			final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 			final String date = simpleDateFormat.format(transaction.getDate());
+			simpleDateFormat = new SimpleDateFormat("E");
+			final String weekDay = simpleDateFormat.format(transaction.getDate());
+			final String amount = transaction.getAmount().toString().replace(".", ",");
+			final String name = transaction.getName();
+			final String category = transaction.getCategory().getName();
 
-			mainWindow.tableTransactions.setItem(i, 0, new QTableWidgetItem(date));
+			table.setItem(i, 0, new QTableWidgetItem(date));
+			table.setItem(i, 1, new QTableWidgetItem(weekDay));
+			table.setItem(i, 2, new QTableWidgetItem(amount));
+			table.setItem(i, 3, new QTableWidgetItem(name));
+			table.setItem(i, 4, new QTableWidgetItem(category));
 		}
 
 		window.show();

@@ -1,4 +1,4 @@
-package com.dimediary.controller;
+package com.dimediary.controller.utils;
 
 import java.util.ArrayList;
 import java.util.Date;
