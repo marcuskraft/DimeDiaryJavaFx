@@ -179,6 +179,19 @@
        <string>bis</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="buttonAddTransaction">
+      <property name="geometry">
+       <rect>
+        <x>814</x>
+        <y>10</y>
+        <width>111</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Transaktion erstellen</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">

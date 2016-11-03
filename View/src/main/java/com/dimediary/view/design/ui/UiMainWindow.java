@@ -29,6 +29,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public QDateEdit dateFrom;
     public QLabel label_2;
     public QLabel label_3;
+    public QPushButton buttonAddTransaction;
     public QWidget tab_2;
     public QMenuBar menubar;
     public QMenu menuDatei;
@@ -87,6 +88,9 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         label_3 = new QLabel(transactions);
         label_3.setObjectName("label_3");
         label_3.setGeometry(new QRect(290, 10, 46, 20));
+        buttonAddTransaction = new QPushButton(transactions);
+        buttonAddTransaction.setObjectName("buttonAddTransaction");
+        buttonAddTransaction.setGeometry(new QRect(814, 10, 111, 23));
         tabWidget.addTab(transactions, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Ums\u00e4tze", null));
         tab_2 = new QWidget();
         tab_2.setObjectName("tab_2");
@@ -149,6 +153,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         label.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto", null));
         label_2.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "von", null));
         label_3.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "bis", null));
+        buttonAddTransaction.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion erstellen", null));
         tabWidget.setTabText(tabWidget.indexOf(transactions), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Ums\u00e4tze", null));
         tabWidget.setTabText(tabWidget.indexOf(tab_2), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Tab 2", null));
         menuDatei.setTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Datei", null));

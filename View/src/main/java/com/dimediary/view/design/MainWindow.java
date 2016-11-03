@@ -19,9 +19,11 @@ import com.trolltech.qt.gui.QTableWidgetItem;
 
 public class MainWindow extends UiMainWindow {
 
+	private QMainWindow window;
+
 	public void initialize() {
-		final QMainWindow window = new QMainWindow();
-		this.setupUi(window);
+		this.window = new QMainWindow();
+		this.setupUi(this.window);
 
 		this.initTrigger();
 
@@ -44,9 +46,9 @@ public class MainWindow extends UiMainWindow {
 		// selected bank account
 		this.updateTransactionsTable();
 
-		window.show();
+		this.window.show();
 
-		QApplication.setActiveWindow(window);
+		QApplication.setActiveWindow(this.window);
 	}
 
 	public void updateTransactionsTable() {
@@ -85,6 +87,7 @@ public class MainWindow extends UiMainWindow {
 		this.dateFrom.dateChanged.connect(this, "updateTransactionsTable()");
 		this.dateUntil.dateChanged.connect(this, "updateTransactionsTable()");
 
+		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "exec()");
 	}
 
 }
