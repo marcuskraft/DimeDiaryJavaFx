@@ -23,8 +23,7 @@ public class MainWindow extends UiMainWindow {
 		final QMainWindow window = new QMainWindow();
 		this.setupUi(window);
 
-		// set Trigger
-		this.actionBeenden.triggered.connect(Main.getApplication(), "exit()");
+		this.initTrigger();
 
 		// set date range for the shown transactions
 		QDate today = new QDate();
@@ -78,6 +77,14 @@ public class MainWindow extends UiMainWindow {
 			this.tableTransactions.setItem(i, 3, new QTableWidgetItem(name));
 			this.tableTransactions.setItem(i, 4, new QTableWidgetItem(category));
 		}
+	}
+
+	private void initTrigger() {
+		this.actionBeenden.triggered.connect(Main.getApplication(), "exit()");
+		this.comboBoxBankaccount.currentIndexChanged.connect(this, "updateTransactionsTable()");
+		this.dateFrom.dateChanged.connect(this, "updateTransactionsTable()");
+		this.dateUntil.dateChanged.connect(this, "updateTransactionsTable()");
+
 	}
 
 }
