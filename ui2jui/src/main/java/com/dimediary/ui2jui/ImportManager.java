@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.dimediary.ui2jui.options.Options;
 
@@ -75,22 +76,36 @@ public class ImportManager {
 		final File[] files = dir.listFiles();
 
 		for (final File file : files) {
-			if (file.getName().equalsIgnoreCase(fileName)) {
+			final String actualName = file.getName();
+			if (actualName.equalsIgnoreCase(fileName)) {
 				fr = new FileReader(file);
 				final BufferedReader br = new BufferedReader(fr);
-				String zeile = "";
+				String line = "";
 
+				final ArrayList<String> lines = new ArrayList<>();
 				int i = 0;
 				while (true) {
-					zeile = br.readLine();
-					if (zeile == null) {
+					line = br.readLine();
+					if (line == null) {
 						break;
 					}
-					if (i == 0) {
-						text = text + zeile;
-					} else {
-						text = text + "\n" + zeile;
+
+					boolean included = false;
+					for (final String string : lines) {
+						if (string.equals(line)) {
+							included = true;
+						}
 					}
+					if (included) {
+						continue;
+					}
+
+					if (i == 0) {
+						text = text + line;
+					} else {
+						text = text + "\n" + line;
+					}
+					lines.add(line);
 					i += 1;
 				}
 				text = text + "\n";

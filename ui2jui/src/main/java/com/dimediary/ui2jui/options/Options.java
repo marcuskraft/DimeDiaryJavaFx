@@ -22,7 +22,7 @@ public class Options {
 	@Parameter(names = { "--output-path", "-o" }, description = "path to put the jui output file")
 	private String outputPath;
 
-	@Parameter(names = { "--file", "-f" }, description = "file to convert", required = true)
+	@Parameter(names = { "--file", "-f" }, description = "file to convert", required = false)
 	private String uiFile;
 
 	@Parameter(names = { "--java-path" }, description = "path to the java files", required = false)

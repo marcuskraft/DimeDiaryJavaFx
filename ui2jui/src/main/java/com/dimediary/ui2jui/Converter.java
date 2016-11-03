@@ -49,7 +49,7 @@ public class Converter {
 		if (path == null) {
 			return file;
 		} else {
-			return path + file;
+			return path + "\\" + file;
 		}
 
 	}

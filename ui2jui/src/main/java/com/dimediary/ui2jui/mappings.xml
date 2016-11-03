@@ -1,15 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Mapping_List>
 	<Mapping>
-		<cpp>geometry</cpp> 
-		<java>marcus</java>
+		<cpp>QAbstractItemView::SelectItems</cpp> 
+		<java>SelectionBehavior.SelectItems</java>
+		<importString>import com.trolltech.qt.gui.QAbstractItemView.SelectionBehavior;</importString>
 	</Mapping>
 	<Mapping>
-		<cpp>vbg</cpp> 
-		<java>g4g4</java>
+		<cpp>QDialogButtonBox::Cancel</cpp> 
+		<java>StandardButton.Cancel</java>
+		<importString>import com.trolltech.qt.gui.QDialogButtonBox.StandardButton;</importString>
 	</Mapping>
 	<Mapping>
-		<cpp>k8ke</cpp> 
-		<java>jrehd</java>
+		<cpp>QDialogButtonBox::Ok</cpp> 
+		<java>StandardButton.Ok</java>
+		<importString>import com.trolltech.qt.gui.QDialogButtonBox.StandardButton;</importString>
+	</Mapping>
+	<Mapping>
+		<cpp>Qt::LeftToRight</cpp> 
+		<java>LayoutDirection.LeftToRight</java>
+		<importString>import com.trolltech.qt.core.Qt.LayoutDirection;</importString>
+	</Mapping>
+	<Mapping>
+		<cpp>Qt::Monday</cpp>
+		<java>Qt.DayOfWeek.Monday</java>
+	</Mapping>
+	<Mapping>
+		<cpp>Qt::Horizontal</cpp> 
+		<java>Orientation.Horizontal</java>
+		<importString>import com.trolltech.qt.core.Qt.Orientation;</importString>
 	</Mapping>
 </Mapping_List>

@@ -39,7 +39,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public void setupUi(QMainWindow MainWindow)
     {
         MainWindow.setObjectName("MainWindow");
-        MainWindow.resize(new QSize(941, 811).expandedTo(MainWindow.minimumSizeHint()));
+        MainWindow.resize(new QSize(941, 775).expandedTo(MainWindow.minimumSizeHint()));
         actionBeenden = new QAction(MainWindow);
         actionBeenden.setObjectName("actionBeenden");
         actionEinstellungen = new QAction(MainWindow);
@@ -131,7 +131,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         tableTransactions.setHorizontalHeaderItem(1, __colItem1);
 
         QTableWidgetItem __colItem2 = new QTableWidgetItem();
-        __colItem2.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Umsatz", null));
+        __colItem2.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Betrag", null));
         tableTransactions.setHorizontalHeaderItem(2, __colItem2);
 
         QTableWidgetItem __colItem3 = new QTableWidgetItem();

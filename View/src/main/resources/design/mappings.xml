@@ -24,4 +24,9 @@
 		<cpp>Qt::Monday</cpp>
 		<java>Qt.DayOfWeek.Monday</java>
 	</Mapping>
+	<Mapping>
+		<cpp>Qt::Horizontal</cpp> 
+		<java>Orientation.Horizontal</java>
+		<importString>import com.trolltech.qt.core.Qt.Orientation;</importString>
+	</Mapping>
 </Mapping_List>
