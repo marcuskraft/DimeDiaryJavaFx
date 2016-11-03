@@ -5,7 +5,7 @@
  **
  ** WARNING! All changes made in this file will be lost when recompiling ui file!
  ********************************************************************************/
-package com.dimediary.view.design;
+package com.dimediary.view.design.ui;
 import com.trolltech.qt.core.Qt.LayoutDirection;
 
 

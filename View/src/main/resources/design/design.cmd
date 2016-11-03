@@ -1,8 +1,8 @@
 SET jui=jui/
 SET ui=ui/
 SET relativePath=../../java/
-SET output=%relativePath%com/dimediary/view/design/
-SET package=com.dimediary.view.design
+SET output=%relativePath%com/dimediary/view/design/ui/
+SET package=com.dimediary.view.design.ui
 SET praefix=Ui
 SET mappingsXML=mappings.xml
 
