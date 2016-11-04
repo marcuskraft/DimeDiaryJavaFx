@@ -10,7 +10,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.dimediary.model.EntityManagerHolder;
+import com.dimediary.model.EntityManagerHelper;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.entities.User;
@@ -18,22 +18,15 @@ import com.dimediary.model.entities.User;
 public class TestPersistence {
 
 	private EntityManager em;
-	private EntityManagerHolder emH;
-	// private EntityManagerFactory emf;
 
 	@Before
 	public void Initiate() {
-		// this.emf =
-		// Persistence.createEntityManagerFactory("PersistenceHSQLDB");
-		this.emH = EntityManagerHolder.getInstance();
-		this.em = this.emH.getEntityManager(); // this.emf.createEntityManager();
+		this.em = EntityManagerHelper.getEntityManager(); // this.emf.createEntityManager();
 	}
 
 	@After
 	public void Close() {
-		this.emH.close();
-		// this.em.close();
-		// this.emf.close();
+		EntityManagerHelper.closeEntityManager();
 	}
 
 	public void readUsers(final EntityManager em, final User user) {
