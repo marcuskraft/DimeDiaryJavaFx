@@ -87,6 +87,7 @@ public class MainWindow extends UiMainWindow {
 		this.dateFrom.dateChanged.connect(this, "updateTransactionsTable()");
 		this.dateUntil.dateChanged.connect(this, "updateTransactionsTable()");
 
+		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "initialize()");
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "exec()");
 	}
 

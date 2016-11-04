@@ -9,6 +9,7 @@ import javax.persistence.TypedQuery;
 
 import com.dimediary.model.EntityManagerHolder;
 import com.dimediary.model.entities.BankAccount;
+import com.dimediary.model.entities.Category;
 import com.dimediary.model.entities.Transaction;
 
 public class DBUtils {
@@ -54,7 +55,7 @@ public class DBUtils {
 		return transactions;
 	}
 
-	private static BankAccount getBankAccount(final String bankAccountName) {
+	public static BankAccount getBankAccount(final String bankAccountName) {
 		final EntityManagerHolder entityManagerHolder = EntityManagerHolder.getInstance();
 		final EntityManager entityManager = entityManagerHolder.getEntityManager();
 
@@ -62,6 +63,46 @@ public class DBUtils {
 
 		entityManagerHolder.close();
 		return bankAccount;
+	}
+
+	public static Category getCategory(final String categoryName) {
+		final EntityManagerHolder entityManagerHolder = EntityManagerHolder.getInstance();
+		final EntityManager entityManager = entityManagerHolder.getEntityManager();
+
+		final Category category = entityManager.createNamedQuery("findCategory", Category.class)
+				.setParameter("name", categoryName).getSingleResult();
+
+		entityManagerHolder.close();
+		return category;
+	}
+
+	public static ArrayList<String> getCategoryNames() {
+		final ArrayList<String> categoryNames = new ArrayList<>();
+
+		final EntityManagerHolder entityManagerHolder = EntityManagerHolder.getInstance();
+		final EntityManager entityManager = entityManagerHolder.getEntityManager();
+
+		final List<Category> categories = entityManager.createNamedQuery("allCategories", Category.class)
+				.getResultList();
+
+		for (final Category category : categories) {
+			categoryNames.add(category.getName());
+		}
+
+		entityManagerHolder.close();
+
+		return categoryNames;
+	}
+
+	public static void persist(final Transaction transaction) {
+		final EntityManagerHolder entityManagerHolder = EntityManagerHolder.getInstance();
+		final EntityManager entityManager = entityManagerHolder.getEntityManager();
+
+		entityManager.getTransaction().begin();
+		entityManager.persist(transaction);
+		entityManager.getTransaction().commit();
+
+		entityManagerHolder.close();
 	}
 
 }
