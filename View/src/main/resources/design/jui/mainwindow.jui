@@ -67,8 +67,14 @@
       <property name="autoFillBackground">
        <bool>false</bool>
       </property>
+      <property name="editTriggers">
+       <set>EditTrigger.NoEditTriggers</set>
+      </property>
       <property name="alternatingRowColors">
        <bool>true</bool>
+      </property>
+      <property name="selectionBehavior">
+       <enum>SelectionBehavior.SelectRows</enum>
       </property>
       <property name="sortingEnabled">
        <bool>true</bool>

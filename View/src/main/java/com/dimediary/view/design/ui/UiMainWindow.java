@@ -6,7 +6,9 @@
  ** WARNING! All changes made in this file will be lost when recompiling ui file!
  ********************************************************************************/
 package com.dimediary.view.design.ui;
+import com.trolltech.qt.gui.QAbstractItemView.SelectionBehavior;
 import com.trolltech.qt.core.Qt.LayoutDirection;
+import com.trolltech.qt.gui.QAbstractItemView.EditTrigger;
 
 
 
@@ -79,7 +81,9 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         tableTransactions.setGeometry(new QRect(0, 40, 941, 711));
         tableTransactions.setLayoutDirection(LayoutDirection.LeftToRight);
         tableTransactions.setAutoFillBackground(false);
+        tableTransactions.setEditTriggers(EditTrigger.createQFlags(EditTrigger.NoEditTriggers));
         tableTransactions.setAlternatingRowColors(true);
+        tableTransactions.setSelectionBehavior(SelectionBehavior.SelectRows);
         tableTransactions.setSortingEnabled(true);
         tableTransactions.setRowCount(0);
         tableTransactions.setColumnCount(6);

@@ -5,6 +5,11 @@
 		<java>SelectionBehavior.SelectItems</java>
 		<importString>import com.trolltech.qt.gui.QAbstractItemView.SelectionBehavior;</importString>
 	</Mapping>
+		<Mapping>
+		<cpp>QAbstractItemView::SelectRows</cpp> 
+		<java>SelectionBehavior.SelectRows</java>
+		<importString>import com.trolltech.qt.gui.QAbstractItemView.SelectionBehavior;</importString>
+	</Mapping>
 	<Mapping>
 		<cpp>QDialogButtonBox::Cancel</cpp> 
 		<java>StandardButton.Cancel</java>
@@ -37,6 +42,11 @@
 	<Mapping>
 		<cpp>QAbstractItemView::AllEditTriggers</cpp> 
 		<java>EditTrigger.AllEditTriggers</java>
+		<importString>import com.trolltech.qt.gui.QAbstractItemView.EditTrigger;</importString>
+	</Mapping>
+		<Mapping>
+		<cpp>QAbstractItemView::NoEditTriggers</cpp> 
+		<java>EditTrigger.NoEditTriggers</java>
 		<importString>import com.trolltech.qt.gui.QAbstractItemView.EditTrigger;</importString>
 	</Mapping>
 	<Mapping>

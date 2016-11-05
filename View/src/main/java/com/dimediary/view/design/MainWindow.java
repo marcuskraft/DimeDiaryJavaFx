@@ -21,6 +21,8 @@ public class MainWindow extends UiMainWindow {
 
 	private QMainWindow window;
 
+	private List<Transaction> transactions;
+
 	public void initialize() {
 		this.window = new QMainWindow();
 		this.setupUi(this.window);
@@ -51,6 +53,10 @@ public class MainWindow extends UiMainWindow {
 		QApplication.setActiveWindow(this.window);
 	}
 
+	public void rowDoubleClicked(final Integer row, final Integer column) {
+		Main.getTransactionDialog().initialize(this.transactions.get(row));
+	}
+
 	public void updateTransactionsTable() {
 		final Date utilDateFrom = QTUtils.qDateToDate(this.dateFrom.date());
 		final Date utilDateUntil = QTUtils.qDateToDate(this.dateUntil.date());
@@ -59,12 +65,11 @@ public class MainWindow extends UiMainWindow {
 		Assert.assertTrue("No bank accounts in the combo box for bank accounts available", bankAccountName != null);
 		// TODO ask the user to add a bank account
 
-		final List<Transaction> transactions = DBUtils.getInstance().geTransactions(utilDateFrom, utilDateUntil,
-				bankAccountName);
+		this.transactions = DBUtils.getInstance().geTransactions(utilDateFrom, utilDateUntil, bankAccountName);
 
-		this.tableTransactions.setRowCount(transactions.size());
-		for (int i = 0; i < transactions.size(); i++) {
-			final Transaction transaction = transactions.get(i);
+		this.tableTransactions.setRowCount(this.transactions.size());
+		for (int i = 0; i < this.transactions.size(); i++) {
+			final Transaction transaction = this.transactions.get(i);
 
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 			final String date = simpleDateFormat.format(transaction.getDate());
@@ -95,6 +100,8 @@ public class MainWindow extends UiMainWindow {
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "initialize()");
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "exec()");
 
+		this.tableTransactions.cellDoubleClicked.connect(this,
+				"rowDoubleClicked(java.lang.Integer, java.lang.Integer)");
 	}
 
 }
