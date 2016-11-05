@@ -5,100 +5,202 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 
 import com.dimediary.model.EntityManagerHelper;
 import com.dimediary.model.entities.BankAccount;
+import com.dimediary.model.entities.BankAccountCategory;
 import com.dimediary.model.entities.Category;
 import com.dimediary.model.entities.Transaction;
 
 public class DBUtils {
 
-	public static ArrayList<String> getBankAccountNames() {
+	private EntityManager entityManager;
+
+	private DBUtils() {
+		this.initialize();
+	}
+
+	private static DBUtils instance = null;
+
+	public static DBUtils getInstance() {
+		if (DBUtils.instance == null) {
+			DBUtils.instance = new DBUtils();
+		}
+		return DBUtils.instance;
+	}
+
+	public void initialize() {
+		this.entityManager = EntityManagerHelper.getEntityManager();
+	}
+
+	public void close() {
+		EntityManagerHelper.closeEntityManager();
+	}
+
+	public ArrayList<String> getBankAccountNames() {
 		final ArrayList<String> names = new ArrayList<>();
 
-		final EntityManager entityManager = EntityManagerHelper.getEntityManager();
-
-		final TypedQuery<BankAccount> query = entityManager.createNamedQuery("allBankAccounts", BankAccount.class);
+		final TypedQuery<BankAccount> query = this.entityManager.createNamedQuery("allBankAccounts", BankAccount.class);
 		final List<BankAccount> bankAccounts = query.getResultList();
 
 		for (final BankAccount bankAccount : bankAccounts) {
 			names.add(bankAccount.getName());
 		}
 
-		EntityManagerHelper.closeEntityManager();
+		return names;
+	}
+
+	public ArrayList<String> getAccountCategoryNames() {
+		final ArrayList<String> names = new ArrayList<>();
+
+		final List<BankAccountCategory> bankAccountCategories = this.entityManager
+				.createNamedQuery("allAccountCategories", BankAccountCategory.class).getResultList();
+
+		for (final BankAccountCategory bankAccountCategory : bankAccountCategories) {
+			names.add(bankAccountCategory.getName());
+		}
 
 		return names;
 	}
 
-	public static List<Transaction> geTransactions(final Date dateFrom, final Date dateUntil,
-			final String bankAccountName) {
-		final BankAccount bankAccount = DBUtils.getBankAccount(bankAccountName);
-		return DBUtils.geTransactions(dateFrom, dateUntil, bankAccount);
+	public BankAccountCategory getBankAccountCategory(final String bankAccountCategoryName) {
+
+		final BankAccountCategory bankAccountCategory = this.entityManager.find(BankAccountCategory.class,
+				bankAccountCategoryName);
+
+		return bankAccountCategory;
 	}
 
-	public static List<Transaction> geTransactions(final Date dateFrom, final Date dateUntil,
-			final BankAccount bankAccount) {
+	public ArrayList<BankAccountCategory> getBankAccountCategories(final ArrayList<String> bankAccountCategoryNames) {
+
+		final List<BankAccountCategory> bankAccountCategories = this.entityManager
+				.createNamedQuery("findAccountCategories", BankAccountCategory.class)
+				.setParameter("nameList", bankAccountCategoryNames).getResultList();
+
+		return new ArrayList<BankAccountCategory>(bankAccountCategories);
+	}
+
+	public List<Transaction> geTransactions(final Date dateFrom, final Date dateUntil, final String bankAccountName) {
+		final BankAccount bankAccount = this.getBankAccount(bankAccountName);
+		return this.geTransactions(dateFrom, dateUntil, bankAccount);
+	}
+
+	public List<Transaction> geTransactions(final Date dateFrom, final Date dateUntil, final BankAccount bankAccount) {
 		List<Transaction> transactions;
 
-		final EntityManager entityManager = EntityManagerHelper.getEntityManager();
-		final TypedQuery<Transaction> query = entityManager.createNamedQuery("TransactionsBetween", Transaction.class)
-				.setParameter("bankAccount", bankAccount).setParameter("dateFrom", dateFrom)
-				.setParameter("dateUntil", dateUntil);
+		final TypedQuery<Transaction> query = this.entityManager
+				.createNamedQuery("TransactionsBetween", Transaction.class).setParameter("bankAccount", bankAccount)
+				.setParameter("dateFrom", dateFrom).setParameter("dateUntil", dateUntil);
 
 		transactions = query.getResultList();
-
-		EntityManagerHelper.closeEntityManager();
 
 		return transactions;
 	}
 
-	public static BankAccount getBankAccount(final String bankAccountName) {
+	public BankAccount getBankAccount(final String bankAccountName) {
 
-		final EntityManager entityManager = EntityManagerHelper.getEntityManager();
+		final BankAccount bankAccount = this.entityManager.find(BankAccount.class, bankAccountName);
 
-		final BankAccount bankAccount = entityManager.find(BankAccount.class, bankAccountName);
-
-		EntityManagerHelper.closeEntityManager();
 		return bankAccount;
 	}
 
-	public static Category getCategory(final String categoryName) {
+	public ArrayList<BankAccount> getBankAccounts(final BankAccountCategory bankAccountCategory) {
 
-		final EntityManager entityManager = EntityManagerHelper.getEntityManager();
+		final List<BankAccount> bankAccounts = this.entityManager
+				.createNamedQuery("findBankaccountsWithCategory", BankAccount.class)
+				.setParameter("bankAccountCategory", bankAccountCategory).getResultList();
 
-		final Category category = entityManager.createNamedQuery("findCategory", Category.class)
-				.setParameter("name", categoryName).getSingleResult();
+		return new ArrayList<BankAccount>(bankAccounts);
+	}
 
-		EntityManagerHelper.closeEntityManager();
+	public Category getCategory(final String categoryName) {
+
+		final Category category = this.entityManager.find(Category.class, categoryName);
+
 		return category;
 	}
 
-	public static ArrayList<String> getCategoryNames() {
+	public ArrayList<String> getCategoryNames() {
 		final ArrayList<String> categoryNames = new ArrayList<>();
 
-		final EntityManager entityManager = EntityManagerHelper.getEntityManager();
-
-		final List<Category> categories = entityManager.createNamedQuery("allCategories", Category.class)
+		final List<Category> categories = this.entityManager.createNamedQuery("allCategories", Category.class)
 				.getResultList();
 
 		for (final Category category : categories) {
 			categoryNames.add(category.getName());
 		}
 
-		EntityManagerHelper.closeEntityManager();
-
 		return categoryNames;
 	}
 
-	public static void persist(final Transaction transaction) {
-		final EntityManager entityManager = EntityManagerHelper.getEntityManager();
+	public void persist(final Transaction transaction) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
 
-		entityManager.getTransaction().begin();
-		entityManager.persist(transaction);
-		entityManager.getTransaction().commit();
+		this.entityManager.persist(transaction);
 
-		EntityManagerHelper.closeEntityManager();
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+
+	}
+
+	public void persist(final BankAccountCategory bankAccountCategory) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		this.entityManager.persist(bankAccountCategory);
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
+	public void delete(final BankAccountCategory bankAccountCategory) throws RollbackException {
+
+		try {
+			final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+
+			if (ownTransaction) {
+				this.entityManager.getTransaction().begin();
+			}
+
+			this.entityManager.remove(bankAccountCategory);
+
+			if (ownTransaction) {
+				this.entityManager.getTransaction().commit();
+			}
+		} catch (final RollbackException e) {
+			throw e;
+		}
+
+	}
+
+	public void delete(final ArrayList<BankAccountCategory> bankAccountCategories) throws RollbackException {
+		try {
+			final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+
+			if (ownTransaction) {
+				this.entityManager.getTransaction().begin();
+			}
+
+			for (final BankAccountCategory bankAccountCategory : bankAccountCategories) {
+				this.delete(bankAccountCategory);
+			}
+
+			if (ownTransaction) {
+				this.entityManager.getTransaction().commit();
+			}
+		} catch (final RollbackException e) {
+			throw e;
+		}
+
 	}
 
 }

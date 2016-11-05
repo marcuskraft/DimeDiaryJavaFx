@@ -8,7 +8,7 @@
 package com.dimediary.view.design.ui;
 import com.trolltech.qt.gui.QDialogButtonBox.StandardButton;
 import com.trolltech.qt.core.Qt.Orientation;
-import com.trolltech.qt.gui.QFormLayout.FieldGrowthPolicy;
+import com.trolltech.qt.gui.QAbstractItemView.SelectionMode;
 
 
 
@@ -18,13 +18,14 @@ import com.trolltech.qt.gui.*;
 public class UiaccountCategoryDialog implements com.trolltech.qt.QUiForm<QDialog>
 {
     public QDialogButtonBox buttonBox;
-    public QWidget formLayoutWidget;
-    public QFormLayout formLayout;
-    public QLabel label;
-    public QLineEdit lineEdit;
-    public QCheckBox checkBox;
+    public QCheckBox checkBoxRealAccount;
     public QListWidget listCategories;
-    public QPushButton pushButton;
+    public QPushButton pushButtonAdd;
+    public QPushButton pushButtonDelete;
+    public QWidget gridLayoutWidget;
+    public QGridLayout gridLayout;
+    public QLabel label;
+    public QLineEdit lineEditName;
 
     public UiaccountCategoryDialog() { super(); }
 
@@ -37,31 +38,34 @@ public class UiaccountCategoryDialog implements com.trolltech.qt.QUiForm<QDialog
         buttonBox.setGeometry(new QRect(130, 190, 191, 32));
         buttonBox.setOrientation(Orientation.Horizontal);
         buttonBox.setStandardButtons(StandardButton.createQFlags(StandardButton.Cancel,StandardButton.Ok));
-        formLayoutWidget = new QWidget(accountCategoryDialog);
-        formLayoutWidget.setObjectName("formLayoutWidget");
-        formLayoutWidget.setGeometry(new QRect(20, 10, 160, 22));
-        formLayout = new QFormLayout(formLayoutWidget);
-        formLayout.setObjectName("formLayout");
-        formLayout.setFieldGrowthPolicy(FieldGrowthPolicy.AllNonFixedFieldsGrow);
-        label = new QLabel(formLayoutWidget);
-        label.setObjectName("label");
-
-        formLayout.addWidget(label);
-
-        lineEdit = new QLineEdit(formLayoutWidget);
-        lineEdit.setObjectName("lineEdit");
-
-        formLayout.addWidget(lineEdit);
-
-        checkBox = new QCheckBox(accountCategoryDialog);
-        checkBox.setObjectName("checkBox");
-        checkBox.setGeometry(new QRect(20, 40, 121, 17));
+        checkBoxRealAccount = new QCheckBox(accountCategoryDialog);
+        checkBoxRealAccount.setObjectName("checkBoxRealAccount");
+        checkBoxRealAccount.setGeometry(new QRect(10, 50, 121, 17));
         listCategories = new QListWidget(accountCategoryDialog);
         listCategories.setObjectName("listCategories");
-        listCategories.setGeometry(new QRect(200, 10, 121, 171));
-        pushButton = new QPushButton(accountCategoryDialog);
-        pushButton.setObjectName("pushButton");
-        pushButton.setGeometry(new QRect(20, 70, 75, 23));
+        listCategories.setGeometry(new QRect(210, 10, 121, 131));
+        listCategories.setSelectionMode(SelectionMode.MultiSelection);
+        pushButtonAdd = new QPushButton(accountCategoryDialog);
+        pushButtonAdd.setObjectName("pushButtonAdd");
+        pushButtonAdd.setGeometry(new QRect(90, 70, 75, 23));
+        pushButtonDelete = new QPushButton(accountCategoryDialog);
+        pushButtonDelete.setObjectName("pushButtonDelete");
+        pushButtonDelete.setGeometry(new QRect(210, 140, 75, 23));
+        gridLayoutWidget = new QWidget(accountCategoryDialog);
+        gridLayoutWidget.setObjectName("gridLayoutWidget");
+        gridLayoutWidget.setGeometry(new QRect(10, 10, 151, 41));
+        gridLayout = new QGridLayout(gridLayoutWidget);
+        gridLayout.setObjectName("gridLayout");
+        label = new QLabel(gridLayoutWidget);
+        label.setObjectName("label");
+
+        gridLayout.addWidget(label, 0, 0, 1, 1);
+
+        lineEditName = new QLineEdit(gridLayoutWidget);
+        lineEditName.setObjectName("lineEditName");
+
+        gridLayout.addWidget(lineEditName, 0, 1, 1, 1);
+
         retranslateUi(accountCategoryDialog);
         buttonBox.accepted.connect(accountCategoryDialog, "accept()");
         buttonBox.rejected.connect(accountCategoryDialog, "reject()");
@@ -72,9 +76,10 @@ public class UiaccountCategoryDialog implements com.trolltech.qt.QUiForm<QDialog
     void retranslateUi(QDialog accountCategoryDialog)
     {
         accountCategoryDialog.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("accountCategoryDialog", "Kontoart erstellen", null));
+        checkBoxRealAccount.setText(com.trolltech.qt.core.QCoreApplication.translate("accountCategoryDialog", "Reales Konto", null));
+        pushButtonAdd.setText(com.trolltech.qt.core.QCoreApplication.translate("accountCategoryDialog", "Hinzuf\u00fcgen", null));
+        pushButtonDelete.setText(com.trolltech.qt.core.QCoreApplication.translate("accountCategoryDialog", "L\u00f6schen", null));
         label.setText(com.trolltech.qt.core.QCoreApplication.translate("accountCategoryDialog", "Name", null));
-        checkBox.setText(com.trolltech.qt.core.QCoreApplication.translate("accountCategoryDialog", "Reales Konto", null));
-        pushButton.setText(com.trolltech.qt.core.QCoreApplication.translate("accountCategoryDialog", "Hinzuf\u00fcgen", null));
     } // retranslateUi
 
 }

@@ -39,4 +39,9 @@
 		<java>EditTrigger.AllEditTriggers</java>
 		<importString>import com.trolltech.qt.gui.QAbstractItemView.EditTrigger;</importString>
 	</Mapping>
+	<Mapping>
+		<cpp>QAbstractItemView::MultiSelection</cpp> 
+		<java>SelectionMode.MultiSelection</java>
+		<importString>import com.trolltech.qt.gui.QAbstractItemView.SelectionMode;</importString>
+	</Mapping>
 </Mapping_List>

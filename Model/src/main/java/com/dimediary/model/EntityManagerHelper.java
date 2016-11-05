@@ -20,10 +20,15 @@ public class EntityManagerHelper {
 	}
 
 	public static void closeEntityManager() {
-		EntityManagerHelper.entityManager.close();
-		EntityManagerHelper.emf.close();
-		EntityManagerHelper.entityManager = null;
-		EntityManagerHelper.emf = null;
+		if (EntityManagerHelper.entityManager != null) {
+			EntityManagerHelper.entityManager.close();
+			EntityManagerHelper.entityManager = null;
+		}
+		if (EntityManagerHelper.emf != null) {
+			EntityManagerHelper.emf.close();
+			EntityManagerHelper.emf = null;
+		}
+
 	}
 
 }

@@ -17,6 +17,9 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
 {
     public QAction actionBeenden;
     public QAction actionEinstellungen;
+    public QAction actionKonto_erstellen;
+    public QAction actionKontoart_erstellen;
+    public QAction actionKategorie_erstellen;
     public QWidget centralwidget;
     public QWidget gridLayoutWidget;
     public QGridLayout gridLayout;
@@ -41,11 +44,17 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public void setupUi(QMainWindow MainWindow)
     {
         MainWindow.setObjectName("MainWindow");
-        MainWindow.resize(new QSize(941, 775).expandedTo(MainWindow.minimumSizeHint()));
+        MainWindow.resize(new QSize(941, 745).expandedTo(MainWindow.minimumSizeHint()));
         actionBeenden = new QAction(MainWindow);
         actionBeenden.setObjectName("actionBeenden");
         actionEinstellungen = new QAction(MainWindow);
         actionEinstellungen.setObjectName("actionEinstellungen");
+        actionKonto_erstellen = new QAction(MainWindow);
+        actionKonto_erstellen.setObjectName("actionKonto_erstellen");
+        actionKontoart_erstellen = new QAction(MainWindow);
+        actionKontoart_erstellen.setObjectName("actionKontoart_erstellen");
+        actionKategorie_erstellen = new QAction(MainWindow);
+        actionKategorie_erstellen.setObjectName("actionKategorie_erstellen");
         centralwidget = new QWidget(MainWindow);
         centralwidget.setObjectName("centralwidget");
         gridLayoutWidget = new QWidget(centralwidget);
@@ -118,6 +127,10 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         menubar.addAction(menuBearbeiten.menuAction());
         menuDatei.addAction(actionEinstellungen);
         menuDatei.addAction(actionBeenden);
+        menuBearbeiten.addAction(actionKonto_erstellen);
+        menuBearbeiten.addAction(actionKontoart_erstellen);
+        menuBearbeiten.addSeparator();
+        menuBearbeiten.addAction(actionKategorie_erstellen);
         retranslateUi(MainWindow);
         actionBeenden.triggered.connect(MainWindow, "close()");
 
@@ -132,6 +145,9 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         MainWindow.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "DimeDiary", null));
         actionBeenden.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Beenden", null));
         actionEinstellungen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Einstellungen", null));
+        actionKonto_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto erstellen", null));
+        actionKontoart_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kontoart erstellen", null));
+        actionKategorie_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kategorie erstellen", null));
         tableTransactions.clear();
         tableTransactions.setColumnCount(6);
 

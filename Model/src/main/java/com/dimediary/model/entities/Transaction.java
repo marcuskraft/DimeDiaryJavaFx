@@ -48,7 +48,7 @@ public class Transaction implements Serializable {
 	private User user;
 
 	@ManyToOne
-	@JoinColumn(name = "CATEGORY_ID")
+	@JoinColumn(name = "CATEGORY_NAME")
 	private Category category;
 
 	@Temporal(TemporalType.DATE)

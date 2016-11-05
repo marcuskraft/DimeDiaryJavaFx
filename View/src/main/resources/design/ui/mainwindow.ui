@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>941</width>
-    <height>775</height>
+    <height>745</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -227,6 +227,10 @@
     <property name="title">
      <string>Bearbeiten</string>
     </property>
+    <addaction name="actionKonto_erstellen"/>
+    <addaction name="actionKontoart_erstellen"/>
+    <addaction name="separator"/>
+    <addaction name="actionKategorie_erstellen"/>
    </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
@@ -240,6 +244,21 @@
   <action name="actionEinstellungen">
    <property name="text">
     <string>Einstellungen</string>
+   </property>
+  </action>
+  <action name="actionKonto_erstellen">
+   <property name="text">
+    <string>Konto erstellen</string>
+   </property>
+  </action>
+  <action name="actionKontoart_erstellen">
+   <property name="text">
+    <string>Kontoart erstellen</string>
+   </property>
+  </action>
+  <action name="actionKategorie_erstellen">
+   <property name="text">
+    <string>Kategorie erstellen</string>
    </property>
   </action>
  </widget>

@@ -28,36 +28,11 @@
     <set>StandardButton.Cancel|StandardButton.Ok</set>
    </property>
   </widget>
-  <widget class="QWidget" name="formLayoutWidget">
+  <widget class="QCheckBox" name="checkBoxRealAccount">
    <property name="geometry">
     <rect>
-     <x>20</x>
-     <y>10</y>
-     <width>160</width>
-     <height>22</height>
-    </rect>
-   </property>
-   <layout class="QFormLayout" name="formLayout">
-    <property name="fieldGrowthPolicy">
-     <enum>FieldGrowthPolicy.AllNonFixedFieldsGrow</enum>
-    </property>
-    <item row="0" column="0">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Name</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLineEdit" name="lineEdit"/>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QCheckBox" name="checkBox">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>40</y>
+     <x>10</x>
+     <y>50</y>
      <width>121</width>
      <height>17</height>
     </rect>
@@ -69,17 +44,20 @@
   <widget class="QListWidget" name="listCategories">
    <property name="geometry">
     <rect>
-     <x>200</x>
+     <x>210</x>
      <y>10</y>
      <width>121</width>
-     <height>171</height>
+     <height>131</height>
     </rect>
    </property>
+   <property name="selectionMode">
+    <enum>SelectionMode.MultiSelection</enum>
+   </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QPushButton" name="pushButtonAdd">
    <property name="geometry">
     <rect>
-     <x>20</x>
+     <x>90</x>
      <y>70</y>
      <width>75</width>
      <height>23</height>
@@ -88,6 +66,41 @@
    <property name="text">
     <string>Hinzufügen</string>
    </property>
+  </widget>
+  <widget class="QPushButton" name="pushButtonDelete">
+   <property name="geometry">
+    <rect>
+     <x>210</x>
+     <y>140</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Löschen</string>
+   </property>
+  </widget>
+  <widget class="QWidget" name="gridLayoutWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>151</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Name</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLineEdit" name="lineEditName"/>
+    </item>
+   </layout>
   </widget>
  </widget>
  <resources/>

@@ -29,6 +29,8 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
     public QLabel label_5;
     public QComboBox comboBoxCategory;
     public QCheckBox checkBoxIncome;
+    public QPushButton pushButton;
+    public QPushButton pushButton_2;
     public QDialogButtonBox buttonBox;
 
     public UiTransactionDialog() { super(); }
@@ -99,6 +101,16 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
 
         gridLayout.addWidget(checkBoxIncome, 4, 3, 1, 1);
 
+        pushButton = new QPushButton(gridLayoutWidget);
+        pushButton.setObjectName("pushButton");
+
+        gridLayout.addWidget(pushButton, 2, 3, 1, 1);
+
+        pushButton_2 = new QPushButton(gridLayoutWidget);
+        pushButton_2.setObjectName("pushButton_2");
+
+        gridLayout.addWidget(pushButton_2, 3, 3, 1, 1);
+
         buttonBox = new QDialogButtonBox(TransactionDialog);
         buttonBox.setObjectName("buttonBox");
         buttonBox.setGeometry(new QRect(80, 210, 233, 23));
@@ -120,6 +132,8 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
         label_4.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Konto", null));
         label_5.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Betrag", null));
         checkBoxIncome.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Einnahme", null));
+        pushButton.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "erstellen", null));
+        pushButton_2.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "erstellen", null));
     } // retranslateUi
 
 }

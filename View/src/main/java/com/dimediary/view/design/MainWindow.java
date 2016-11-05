@@ -38,7 +38,7 @@ public class MainWindow extends UiMainWindow {
 		this.dateUntil.setDate(qdateUntil);
 
 		// set the possible bank accounts in the combo box
-		final ArrayList<String> bankAccountNames = DBUtils.getBankAccountNames();
+		final ArrayList<String> bankAccountNames = DBUtils.getInstance().getBankAccountNames();
 		// TODO if no bankAccounts exists ask the user to add bank account
 		this.comboBoxBankaccount.addItems(bankAccountNames);
 
@@ -59,7 +59,8 @@ public class MainWindow extends UiMainWindow {
 		Assert.assertTrue("No bank accounts in the combo box for bank accounts available", bankAccountName != null);
 		// TODO ask the user to add a bank account
 
-		final List<Transaction> transactions = DBUtils.geTransactions(utilDateFrom, utilDateUntil, bankAccountName);
+		final List<Transaction> transactions = DBUtils.getInstance().geTransactions(utilDateFrom, utilDateUntil,
+				bankAccountName);
 
 		this.tableTransactions.setRowCount(transactions.size());
 		for (int i = 0; i < transactions.size(); i++) {
@@ -82,7 +83,10 @@ public class MainWindow extends UiMainWindow {
 	}
 
 	private void initTrigger() {
+		// menu buttons
 		this.actionBeenden.triggered.connect(Main.getApplication(), "exit()");
+		this.actionKontoart_erstellen.triggered.connect(Main.getAccountCategoryDialog(), "exec()");
+
 		this.comboBoxBankaccount.currentIndexChanged.connect(this, "updateTransactionsTable()");
 		this.dateFrom.dateChanged.connect(this, "updateTransactionsTable()");
 		this.dateUntil.dateChanged.connect(this, "updateTransactionsTable()");

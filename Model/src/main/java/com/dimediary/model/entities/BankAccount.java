@@ -11,7 +11,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-@NamedQueries({ @NamedQuery(name = "allBankAccounts", query = "from BankAccount") })
+@NamedQueries({ @NamedQuery(name = "allBankAccounts", query = "from BankAccount"),
+		@NamedQuery(name = "findBankaccountsWithCategory", query = "from BankAccount b WHERE bankAccountCategory = :bankAccountCategory") })
 @Entity
 @Table(name = "BANKACCOUNT")
 public class BankAccount implements Serializable {
@@ -39,7 +40,7 @@ public class BankAccount implements Serializable {
 	private User user;
 
 	@ManyToOne
-	@JoinColumn(name = "BANKACCOUNT_CATEGORY_ID")
+	@JoinColumn(name = "BANKACCOUNT_CATEGORY_NAME")
 	private BankAccountCategory bankAccountCategory;
 
 	public BankAccountCategory getBankAccountCategory() {

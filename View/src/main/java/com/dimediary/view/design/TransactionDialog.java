@@ -18,30 +18,34 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.setupUi(this.dialog);
 		this.initialize();
 
-		this.buttonBox.accepted.connect(this, "OnOK()");
-		this.buttonBox.accepted.connect(Main.getMainWindow(), "updateTransactionsTable()");
+		this.createTriggers();
 	}
 
 	private void initialize() {
 		this.dateEdit.setDate(QDate.currentDate());
 		this.comboBoxCategory.clear();
 		this.comboBoxAccount.clear();
-		this.comboBoxCategory.addItems(DBUtils.getCategoryNames());
-		this.comboBoxAccount.addItems(DBUtils.getBankAccountNames());
+		this.comboBoxCategory.addItems(DBUtils.getInstance().getCategoryNames());
+		this.comboBoxAccount.addItems(DBUtils.getInstance().getBankAccountNames());
 		this.checkBoxIncome.setChecked(false);
 		this.subjectEdit.setText("");
 		this.doubleSpinBoxAmount.setValue(0);
 	}
 
+	private void createTriggers() {
+		this.buttonBox.accepted.connect(this, "OnOK()");
+		this.buttonBox.accepted.connect(Main.getMainWindow(), "updateTransactionsTable()");
+	}
+
 	public void OnOK() {
 		final Transaction transaction = new Transaction();
 		transaction.setAmount(this.doubleSpinBoxAmount.value());
-		transaction.setBankAccount(DBUtils.getBankAccount(this.comboBoxAccount.currentText()));
-		transaction.setCategory(DBUtils.getCategory(this.comboBoxCategory.currentText()));
+		transaction.setBankAccount(DBUtils.getInstance().getBankAccount(this.comboBoxAccount.currentText()));
+		transaction.setCategory(DBUtils.getInstance().getCategory(this.comboBoxCategory.currentText()));
 		transaction.setDate(QTUtils.qDateToDate(this.dateEdit.date()));
 		transaction.setName(this.subjectEdit.text());
 		transaction.setUser(null);
-		DBUtils.persist(transaction);
+		DBUtils.getInstance().persist(transaction);
 	}
 
 	public int exec() {
