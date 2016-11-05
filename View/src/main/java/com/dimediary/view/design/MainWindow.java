@@ -89,6 +89,7 @@ public class MainWindow extends UiMainWindow {
 
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "initialize()");
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "exec()");
+
 	}
 
 }

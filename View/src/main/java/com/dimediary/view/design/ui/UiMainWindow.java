@@ -33,6 +33,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public QWidget tab_2;
     public QMenuBar menubar;
     public QMenu menuDatei;
+    public QMenu menuBearbeiten;
     public QStatusBar statusbar;
 
     public UiMainWindow() { super(); }
@@ -55,6 +56,11 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         tabWidget = new QTabWidget(centralwidget);
         tabWidget.setObjectName("tabWidget");
         tabWidget.setGeometry(new QRect(0, 0, 941, 771));
+        QSizePolicy sizePolicy = new QSizePolicy(com.trolltech.qt.gui.QSizePolicy.Policy.Maximum, com.trolltech.qt.gui.QSizePolicy.Policy.Maximum);
+        sizePolicy.setHorizontalStretch((byte)0);
+        sizePolicy.setVerticalStretch((byte)0);
+        sizePolicy.setHeightForWidth(tabWidget.sizePolicy().hasHeightForWidth());
+        tabWidget.setSizePolicy(sizePolicy);
         tabWidget.setTabsClosable(false);
         tabWidget.setMovable(false);
         transactions = new QWidget();
@@ -101,12 +107,15 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         menubar.setGeometry(new QRect(0, 0, 941, 21));
         menuDatei = new QMenu(menubar);
         menuDatei.setObjectName("menuDatei");
+        menuBearbeiten = new QMenu(menubar);
+        menuBearbeiten.setObjectName("menuBearbeiten");
         MainWindow.setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar.setObjectName("statusbar");
         MainWindow.setStatusBar(statusbar);
 
         menubar.addAction(menuDatei.menuAction());
+        menubar.addAction(menuBearbeiten.menuAction());
         menuDatei.addAction(actionEinstellungen);
         menuDatei.addAction(actionBeenden);
         retranslateUi(MainWindow);
@@ -120,7 +129,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
 
     void retranslateUi(QMainWindow MainWindow)
     {
-        MainWindow.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "MainWindow", null));
+        MainWindow.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "DimeDiary", null));
         actionBeenden.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Beenden", null));
         actionEinstellungen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Einstellungen", null));
         tableTransactions.clear();
@@ -157,6 +166,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         tabWidget.setTabText(tabWidget.indexOf(transactions), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Ums\u00e4tze", null));
         tabWidget.setTabText(tabWidget.indexOf(tab_2), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Tab 2", null));
         menuDatei.setTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Datei", null));
+        menuBearbeiten.setTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Bearbeiten", null));
     } // retranslateUi
 
 }

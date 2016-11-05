@@ -29,4 +29,14 @@
 		<java>Orientation.Horizontal</java>
 		<importString>import com.trolltech.qt.core.Qt.Orientation;</importString>
 	</Mapping>
+	<Mapping>
+		<cpp>QFormLayout::AllNonFixedFieldsGrow</cpp> 
+		<java>FieldGrowthPolicy.AllNonFixedFieldsGrow</java>
+		<importString>import com.trolltech.qt.gui.QFormLayout.FieldGrowthPolicy;</importString>
+	</Mapping>
+	<Mapping>
+		<cpp>QAbstractItemView::AllEditTriggers</cpp> 
+		<java>EditTrigger.AllEditTriggers</java>
+		<importString>import com.trolltech.qt.gui.QAbstractItemView.EditTrigger;</importString>
+	</Mapping>
 </Mapping_List>

@@ -21,7 +21,9 @@ public class EntityManagerHelper {
 
 	public static void closeEntityManager() {
 		EntityManagerHelper.entityManager.close();
+		EntityManagerHelper.emf.close();
 		EntityManagerHelper.entityManager = null;
+		EntityManagerHelper.emf = null;
 	}
 
 }

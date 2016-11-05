@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>DimeDiary</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QWidget" name="gridLayoutWidget">
@@ -33,6 +33,12 @@
       <width>941</width>
       <height>771</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
     </property>
     <property name="currentIndex">
      <number>0</number>
@@ -217,7 +223,13 @@
     <addaction name="actionEinstellungen"/>
     <addaction name="actionBeenden"/>
    </widget>
+   <widget class="QMenu" name="menuBearbeiten">
+    <property name="title">
+     <string>Bearbeiten</string>
+    </property>
+   </widget>
    <addaction name="menuDatei"/>
+   <addaction name="menuBearbeiten"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionBeenden">

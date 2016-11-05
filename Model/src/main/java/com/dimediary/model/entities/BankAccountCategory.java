@@ -26,6 +26,9 @@ public class BankAccountCategory implements Serializable {
 	@Column(name = "NAME")
 	private String name;
 
+	@Column(name = "IS_REAL_ACCOUNT")
+	private Boolean isRealAccount;
+
 	public Integer getId() {
 		return this.id;
 	}
