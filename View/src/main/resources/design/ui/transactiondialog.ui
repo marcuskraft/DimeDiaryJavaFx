@@ -88,14 +88,14 @@
      </widget>
     </item>
     <item row="2" column="3">
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="pushButtonAddCategory">
       <property name="text">
        <string>erstellen</string>
       </property>
      </widget>
     </item>
     <item row="3" column="3">
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="pushButtonAddAccount">
       <property name="text">
        <string>erstellen</string>
       </property>

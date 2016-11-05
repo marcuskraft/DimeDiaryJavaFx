@@ -12,7 +12,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @NamedQueries({ @NamedQuery(name = "allBankAccounts", query = "from BankAccount"),
-		@NamedQuery(name = "findBankaccountsWithCategory", query = "from BankAccount b WHERE bankAccountCategory = :bankAccountCategory") })
+		@NamedQuery(name = "findBankaccountsWithCategory", query = "from BankAccount b WHERE bankAccountCategory = :bankAccountCategory"),
+		@NamedQuery(name = "findBankAccounts", query = "from BankAccount b WHERE b.name IN :namesList") })
 @Entity
 @Table(name = "BANKACCOUNT")
 public class BankAccount implements Serializable {

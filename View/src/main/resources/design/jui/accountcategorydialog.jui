@@ -51,7 +51,7 @@
     </rect>
    </property>
    <property name="selectionMode">
-    <enum>SelectionMode.MultiSelection</enum>
+    <enum>SelectionMode.ExtendedSelection</enum>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButtonAdd">

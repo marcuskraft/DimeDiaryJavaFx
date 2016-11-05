@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>684</width>
-    <height>273</height>
+    <width>403</width>
+    <height>272</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,7 +15,7 @@
   <widget class="QDialogButtonBox" name="buttonBox">
    <property name="geometry">
     <rect>
-     <x>510</x>
+     <x>220</x>
      <y>240</y>
      <width>171</width>
      <height>32</height>
@@ -46,7 +46,7 @@
      </widget>
     </item>
     <item row="0" column="1">
-     <widget class="QComboBox" name="comboBox"/>
+     <widget class="QComboBox" name="comboBoxAccountCategory"/>
     </item>
     <item row="2" column="0">
      <widget class="QLabel" name="label_2">
@@ -77,19 +77,26 @@
      </widget>
     </item>
     <item row="5" column="1">
-     <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+     <widget class="QDoubleSpinBox" name="doubleSpinBoxStartBudget">
+      <property name="minimum">
+       <double>-999999999.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>999999999.000000000000000</double>
+      </property>
+     </widget>
     </item>
     <item row="3" column="1">
-     <widget class="QLineEdit" name="lineEdit_3"/>
+     <widget class="QLineEdit" name="lineEditIBAN"/>
     </item>
     <item row="2" column="1">
-     <widget class="QLineEdit" name="lineEdit_2"/>
+     <widget class="QLineEdit" name="lineEditBankName"/>
     </item>
     <item row="1" column="1">
-     <widget class="QLineEdit" name="lineEdit"/>
+     <widget class="QLineEdit" name="lineEditAccountName"/>
     </item>
     <item row="4" column="1">
-     <widget class="QLineEdit" name="lineEdit_4"/>
+     <widget class="QLineEdit" name="lineEditBIC"/>
     </item>
     <item row="1" column="0">
      <widget class="QLabel" name="label_3">
@@ -99,57 +106,18 @@
      </widget>
     </item>
     <item row="0" column="2">
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="pushButtonAddAccountCategory">
       <property name="text">
-       <string>neu erstellen</string>
+       <string>erstellen</string>
       </property>
      </widget>
     </item>
    </layout>
   </widget>
-  <widget class="QTableWidget" name="tableWidget">
+  <widget class="QPushButton" name="pushButtonAdd">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>10</y>
-     <width>411</width>
-     <height>221</height>
-    </rect>
-   </property>
-   <property name="editTriggers">
-    <set>QAbstractItemView::AllEditTriggers</set>
-   </property>
-   <property name="alternatingRowColors">
-    <bool>true</bool>
-   </property>
-   <property name="sortingEnabled">
-    <bool>true</bool>
-   </property>
-   <column>
-    <property name="text">
-     <string>Name</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Kontoart</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Bankname</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>IBAN</string>
-    </property>
-   </column>
-  </widget>
-  <widget class="QPushButton" name="pushButton_2">
-   <property name="geometry">
-    <rect>
-     <x>180</x>
+     <x>10</x>
      <y>240</y>
      <width>75</width>
      <height>23</height>
@@ -159,7 +127,43 @@
     <string>Hinzufügen</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="pushButtonDelete">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>0</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Löschen</string>
+   </property>
+  </widget>
+  <widget class="QListWidget" name="listWidget">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>30</y>
+     <width>111</width>
+     <height>201</height>
+    </rect>
+   </property>
+  </widget>
  </widget>
+ <tabstops>
+  <tabstop>comboBoxAccountCategory</tabstop>
+  <tabstop>lineEditAccountName</tabstop>
+  <tabstop>lineEditBankName</tabstop>
+  <tabstop>lineEditIBAN</tabstop>
+  <tabstop>lineEditBIC</tabstop>
+  <tabstop>doubleSpinBoxStartBudget</tabstop>
+  <tabstop>pushButtonAdd</tabstop>
+  <tabstop>pushButtonAddAccountCategory</tabstop>
+  <tabstop>buttonBox</tabstop>
+  <tabstop>pushButtonDelete</tabstop>
+  <tabstop>listWidget</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

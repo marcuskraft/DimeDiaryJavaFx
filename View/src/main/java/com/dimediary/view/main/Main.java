@@ -2,6 +2,7 @@ package com.dimediary.view.main;
 
 import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.view.design.AccountCategoryDialog;
+import com.dimediary.view.design.BankAccountDialog;
 import com.dimediary.view.design.MainWindow;
 import com.dimediary.view.design.TransactionDialog;
 import com.dimediary.view.design.ui.UiMainWindow;
@@ -12,6 +13,7 @@ public class Main {
 	private static MainWindow mainWindow;
 	private static QApplication application;
 	private static TransactionDialog transactionDialog;
+	private static BankAccountDialog bankAccountDialog;
 	private static AccountCategoryDialog accountCategoryDialog;
 
 	public static void main(final String[] args) {
@@ -19,9 +21,9 @@ public class Main {
 		Main.application = new QApplication(args);
 		Main.application.aboutToQuit.connect(DBUtils.getInstance(), "close()");
 		Main.mainWindow = new MainWindow();
-		Main.transactionDialog = new TransactionDialog();
 		Main.accountCategoryDialog = new AccountCategoryDialog();
-
+		Main.bankAccountDialog = new BankAccountDialog();
+		Main.transactionDialog = new TransactionDialog();
 		Main.mainWindow.initialize();
 
 		Main.application.exec();
@@ -42,6 +44,10 @@ public class Main {
 
 	public static AccountCategoryDialog getAccountCategoryDialog() {
 		return Main.accountCategoryDialog;
+	}
+
+	public static BankAccountDialog getBankAccountDialog() {
+		return Main.bankAccountDialog;
 	}
 
 }

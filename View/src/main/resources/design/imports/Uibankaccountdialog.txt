@@ -1,4 +1,3 @@
 import com.trolltech.qt.gui.QDialogButtonBox.StandardButton;
 import com.trolltech.qt.gui.QDialogButtonBox.StandardButton;
 import com.trolltech.qt.core.Qt.Orientation;
-import com.trolltech.qt.gui.QAbstractItemView.EditTrigger;

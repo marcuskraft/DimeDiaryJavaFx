@@ -35,6 +35,8 @@ public class TransactionDialog extends UiTransactionDialog {
 	private void createTriggers() {
 		this.buttonBox.accepted.connect(this, "OnOK()");
 		this.buttonBox.accepted.connect(Main.getMainWindow(), "updateTransactionsTable()");
+
+		this.pushButtonAddAccount.clicked.connect(Main.getBankAccountDialog(), "exec()");
 	}
 
 	public void OnOK() {

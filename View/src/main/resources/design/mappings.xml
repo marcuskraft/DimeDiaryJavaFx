@@ -44,4 +44,14 @@
 		<java>SelectionMode.MultiSelection</java>
 		<importString>import com.trolltech.qt.gui.QAbstractItemView.SelectionMode;</importString>
 	</Mapping>
+	<Mapping>
+		<cpp>QAbstractItemView::ContiguousSelection</cpp> 
+		<java>SelectionMode.ContiguousSelection</java>
+		<importString>import com.trolltech.qt.gui.QAbstractItemView.SelectionMode;</importString>
+	</Mapping>
+	<Mapping>
+		<cpp>QAbstractItemView::ExtendedSelection</cpp> 
+		<java>SelectionMode.ExtendedSelection</java>
+		<importString>import com.trolltech.qt.gui.QAbstractItemView.SelectionMode;</importString>
+	</Mapping>
 </Mapping_List>

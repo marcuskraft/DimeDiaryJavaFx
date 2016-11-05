@@ -44,7 +44,7 @@ public class UiaccountCategoryDialog implements com.trolltech.qt.QUiForm<QDialog
         listCategories = new QListWidget(accountCategoryDialog);
         listCategories.setObjectName("listCategories");
         listCategories.setGeometry(new QRect(210, 10, 121, 131));
-        listCategories.setSelectionMode(SelectionMode.MultiSelection);
+        listCategories.setSelectionMode(SelectionMode.ExtendedSelection);
         pushButtonAdd = new QPushButton(accountCategoryDialog);
         pushButtonAdd.setObjectName("pushButtonAdd");
         pushButtonAdd.setGeometry(new QRect(90, 70, 75, 23));

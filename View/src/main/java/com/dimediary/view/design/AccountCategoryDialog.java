@@ -7,6 +7,7 @@ import javax.persistence.RollbackException;
 import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.model.entities.BankAccountCategory;
 import com.dimediary.view.design.ui.UiaccountCategoryDialog;
+import com.dimediary.view.main.Main;
 import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QErrorMessage;
 import com.trolltech.qt.gui.QListWidgetItem;
@@ -33,7 +34,7 @@ public class AccountCategoryDialog extends UiaccountCategoryDialog {
 
 	private void initialize() {
 		this.listCategories.clear();
-		this.listCategories.addItems(DBUtils.getInstance().getAccountCategoryNames());
+		this.listCategories.addItems(DBUtils.getInstance().getBankAccountCategoryNames());
 		this.checkBoxRealAccount.setChecked(false);
 		this.lineEditName.clear();
 	}
@@ -45,6 +46,7 @@ public class AccountCategoryDialog extends UiaccountCategoryDialog {
 
 		DBUtils.getInstance().persist(bankAccountCategory);
 		this.initialize();
+		Main.getBankAccountDialog().initialize();
 	}
 
 	public void onDeleteButton() {
@@ -55,16 +57,16 @@ public class AccountCategoryDialog extends UiaccountCategoryDialog {
 		}
 
 		try {
-			DBUtils.getInstance().delete(DBUtils.getInstance().getBankAccountCategories(bankAccountCategoryNames));
+			DBUtils.getInstance().deleteBankAccountCategories(bankAccountCategoryNames);
 		} catch (final RollbackException e) {
 			final QErrorMessage errorMessage = new QErrorMessage(this.getDialog());
+			errorMessage.setWindowTitle("Konto verknüpft!");
 			errorMessage.showMessage(
 					"Es gibt noch mindestens ein Konto, welches diesen Typ hat. Bitte ändern die bei den betroffenen Konten die Kontoart.");
-
 		}
 
 		this.initialize();
-
+		Main.getBankAccountDialog().initialize();
 	}
 
 	public void exec() {

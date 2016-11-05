@@ -85,6 +85,7 @@ public class MainWindow extends UiMainWindow {
 	private void initTrigger() {
 		// menu buttons
 		this.actionBeenden.triggered.connect(Main.getApplication(), "exit()");
+		this.actionKonto_erstellen.triggered.connect(Main.getBankAccountDialog(), "exec()");
 		this.actionKontoart_erstellen.triggered.connect(Main.getAccountCategoryDialog(), "exec()");
 
 		this.comboBoxBankaccount.currentIndexChanged.connect(this, "updateTransactionsTable()");
