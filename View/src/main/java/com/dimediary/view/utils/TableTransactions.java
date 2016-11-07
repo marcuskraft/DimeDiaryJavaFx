@@ -9,15 +9,15 @@ import com.dimediary.model.entities.Transaction;
 import com.trolltech.qt.gui.QTableWidget;
 import com.trolltech.qt.gui.QTableWidgetItem;
 
-public class QTableTransactions {
+public class TableTransactions {
 
 	private final QTableWidget tableWidget;
 
-	private final ArrayList<QTableTransactionItem> items;
+	private final ArrayList<TableTransactionItem> items;
 
 	private ArrayList<Transaction> transactions;
 
-	public QTableTransactions(final QTableWidget tableWidget) {
+	public TableTransactions(final QTableWidget tableWidget) {
 		this.tableWidget = tableWidget;
 		this.items = new ArrayList<>();
 		this.transactions = new ArrayList<>();
@@ -31,6 +31,12 @@ public class QTableTransactions {
 	public void deleteTransaction(final Transaction transaction) {
 		this.transactions.remove(transaction);
 		this.updateTransactionTable();
+	}
+
+	public void deleteTransactions(final ArrayList<Transaction> transactions) {
+		for (final Transaction transaction : transactions) {
+			this.deleteTransaction(transaction);
+		}
 	}
 
 	public void updateTransactionTable(final Date dateFrom, final Date dateUntil, final String bankAccountName) {
@@ -54,15 +60,15 @@ public class QTableTransactions {
 			final String name = transaction.getName();
 			final String category = transaction.getCategory().getName();
 
-			this.addItem(i, 0, new QTableTransactionItem(date, transaction));
-			this.addItem(i, 1, new QTableTransactionItem(weekDay, transaction));
-			this.addItem(i, 2, new QTableTransactionItem(amount, transaction));
-			this.addItem(i, 3, new QTableTransactionItem(name, transaction));
-			this.addItem(i, 4, new QTableTransactionItem(category, transaction));
+			this.addItem(i, 0, new TableTransactionItem(date, transaction));
+			this.addItem(i, 1, new TableTransactionItem(weekDay, transaction));
+			this.addItem(i, 2, new TableTransactionItem(amount, transaction));
+			this.addItem(i, 3, new TableTransactionItem(name, transaction));
+			this.addItem(i, 4, new TableTransactionItem(category, transaction));
 		}
 	}
 
-	private void addItem(final Integer row, final Integer column, final QTableTransactionItem item) {
+	private void addItem(final Integer row, final Integer column, final TableTransactionItem item) {
 		this.items.add(item);
 		this.tableWidget.setItem(row, column, item);
 	}
@@ -71,7 +77,7 @@ public class QTableTransactions {
 		final ArrayList<Transaction> transactions = new ArrayList<>();
 
 		for (final QTableWidgetItem qTableWidgetItem : this.tableWidget.selectedItems()) {
-			final Transaction transaction = ((QTableTransactionItem) qTableWidgetItem).getTransaction();
+			final Transaction transaction = ((TableTransactionItem) qTableWidgetItem).getTransaction();
 			transactions.add(transaction);
 		}
 
@@ -80,10 +86,10 @@ public class QTableTransactions {
 
 	public Transaction getTransaction(final Integer row, final Integer column) {
 		final QTableWidgetItem qTableWidgetItem = this.tableWidget.item(row, column);
-		return ((QTableTransactionItem) qTableWidgetItem).getTransaction();
+		return ((TableTransactionItem) qTableWidgetItem).getTransaction();
 	}
 
-	public ArrayList<QTableTransactionItem> getItems() {
+	public ArrayList<TableTransactionItem> getItems() {
 		return this.items;
 	}
 

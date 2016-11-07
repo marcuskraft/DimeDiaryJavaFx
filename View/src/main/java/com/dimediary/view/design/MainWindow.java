@@ -3,10 +3,11 @@ package com.dimediary.view.design;
 import java.util.ArrayList;
 
 import com.dimediary.controller.utils.DBUtils;
+import com.dimediary.model.entities.Transaction;
 import com.dimediary.view.design.ui.UiMainWindow;
 import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
-import com.dimediary.view.utils.QTableTransactions;
+import com.dimediary.view.utils.TableTransactions;
 import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.gui.QApplication;
 import com.trolltech.qt.gui.QMainWindow;
@@ -14,12 +15,12 @@ import com.trolltech.qt.gui.QMainWindow;
 public class MainWindow extends UiMainWindow {
 
 	private QMainWindow window;
-	private QTableTransactions qtableTransactions;
+	private TableTransactions ownTableTransactions;
 
 	public void initialize() {
 		this.window = new QMainWindow();
 		this.setupUi(this.window);
-		this.qtableTransactions = new QTableTransactions(this.tableTransactions);
+		this.ownTableTransactions = new TableTransactions(this.tableTransactions);
 
 		this.initTrigger();
 
@@ -57,13 +58,20 @@ public class MainWindow extends UiMainWindow {
 	}
 
 	public void updateTransactionsTable() {
-		this.qtableTransactions.updateTransactionTable(QTUtils.qDateToDate(this.dateFrom.date()),
+		this.ownTableTransactions.updateTransactionTable(QTUtils.qDateToDate(this.dateFrom.date()),
 				QTUtils.qDateToDate(this.dateUntil.date()),
 				this.comboBoxBankaccount.itemText(this.comboBoxBankaccount.currentIndex()));
 	}
 
 	public void onDoubleClickRow(final Integer row, final Integer column) {
-		Main.getTransactionDialog().initialize(this.qtableTransactions.getTransaction(row, column));
+		Main.getTransactionDialog().initialize(this.ownTableTransactions.getTransaction(row, column));
+	}
+
+	public void OnDeleteTransaction() {
+		final ArrayList<Transaction> transactionsToDelete = this.ownTableTransactions.getSelectedTransactions();
+		DBUtils.getInstance().deleteTransactions(transactionsToDelete);
+		this.ownTableTransactions.deleteTransactions(transactionsToDelete);
+		Main.getTransactionDialog().deleteTransactions(transactionsToDelete);
 	}
 
 	private void initTrigger() {
@@ -71,6 +79,8 @@ public class MainWindow extends UiMainWindow {
 		this.actionBeenden.triggered.connect(Main.getApplication(), "exit()");
 		this.actionKonto_erstellen.triggered.connect(Main.getBankAccountDialog(), "exec()");
 		this.actionKontoart_erstellen.triggered.connect(Main.getAccountCategoryDialog(), "exec()");
+
+		this.pushButtonDelete.clicked.connect(this, "OnDeleteTransaction()");
 
 		this.comboBoxBankaccount.currentIndexChanged.connect(this, "updateTransactionsTable()");
 		this.dateFrom.dateChanged.connect(this, "updateTransactionsTable()");

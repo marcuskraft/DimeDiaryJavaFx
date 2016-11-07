@@ -7,7 +7,7 @@ import com.dimediary.model.entities.Transaction;
 import com.dimediary.view.design.ui.UiTransactionDialog;
 import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
-import com.dimediary.view.utils.QTableTransactions;
+import com.dimediary.view.utils.TableTransactions;
 import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.gui.QDialog;
 
@@ -15,14 +15,14 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	private final QDialog dialog;
 
-	QTableTransactions qtableTransactions;
+	TableTransactions ownTableTransactions;
 
 	public TransactionDialog() {
 		super();
 		this.dialog = new QDialog();
 		this.setupUi(this.dialog);
 
-		this.qtableTransactions = new QTableTransactions(this.tableTransactions);
+		this.ownTableTransactions = new TableTransactions(this.tableTransactions);
 
 		this.initialize();
 
@@ -49,7 +49,7 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.subjectEdit.setText(transaction.getName());
 		this.doubleSpinBoxAmount.setValue(transaction.getAmount());
 
-		this.qtableTransactions.addTransaction(transaction);
+		this.ownTableTransactions.addTransaction(transaction);
 
 		this.exec();
 	}
@@ -77,17 +77,24 @@ public class TransactionDialog extends UiTransactionDialog {
 		transaction.setName(this.subjectEdit.text());
 		transaction.setUser(null);
 		DBUtils.getInstance().persist(transaction);
-		this.qtableTransactions.addTransaction(transaction);
+		this.ownTableTransactions.addTransaction(transaction);
 	}
 
 	public void onDelete() {
-		final ArrayList<Transaction> transactionsToDelete = this.qtableTransactions.getSelectedTransactions();
+		final ArrayList<Transaction> transactionsToDelete = this.ownTableTransactions.getSelectedTransactions();
 
 		DBUtils.getInstance().deleteTransactions(transactionsToDelete);
-		for (final Transaction transaction : transactionsToDelete) {
-			this.qtableTransactions.deleteTransaction(transaction);
-		}
+		this.ownTableTransactions.deleteTransactions(transactionsToDelete);
+
 		Main.getMainWindow().updateTransactionsTable();
+	}
+
+	public void deleteTransactions(final ArrayList<Transaction> transactions) {
+		for (final Transaction transaction : transactions) {
+			if (this.ownTableTransactions.getTransactions().contains(transaction)) {
+				this.ownTableTransactions.deleteTransaction(transaction);
+			}
+		}
 	}
 
 	public void onEditingFinished() {

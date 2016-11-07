@@ -35,6 +35,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public QLabel label_2;
     public QLabel label_3;
     public QPushButton buttonAddTransaction;
+    public QPushButton pushButtonDelete;
     public QWidget tab_2;
     public QMenuBar menubar;
     public QMenu menuDatei;
@@ -46,7 +47,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public void setupUi(QMainWindow MainWindow)
     {
         MainWindow.setObjectName("MainWindow");
-        MainWindow.resize(new QSize(941, 745).expandedTo(MainWindow.minimumSizeHint()));
+        MainWindow.resize(new QSize(722, 792).expandedTo(MainWindow.minimumSizeHint()));
         actionBeenden = new QAction(MainWindow);
         actionBeenden.setObjectName("actionBeenden");
         actionEinstellungen = new QAction(MainWindow);
@@ -78,7 +79,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         transactions.setObjectName("transactions");
         tableTransactions = new QTableWidget(transactions);
         tableTransactions.setObjectName("tableTransactions");
-        tableTransactions.setGeometry(new QRect(0, 40, 941, 711));
+        tableTransactions.setGeometry(new QRect(0, 40, 711, 651));
         tableTransactions.setLayoutDirection(LayoutDirection.LeftToRight);
         tableTransactions.setAutoFillBackground(false);
         tableTransactions.setEditTriggers(EditTrigger.createQFlags(EditTrigger.NoEditTriggers));
@@ -109,7 +110,10 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         label_3.setGeometry(new QRect(290, 10, 46, 20));
         buttonAddTransaction = new QPushButton(transactions);
         buttonAddTransaction.setObjectName("buttonAddTransaction");
-        buttonAddTransaction.setGeometry(new QRect(814, 10, 111, 23));
+        buttonAddTransaction.setGeometry(new QRect(600, 10, 111, 23));
+        pushButtonDelete = new QPushButton(transactions);
+        pushButtonDelete.setObjectName("pushButtonDelete");
+        pushButtonDelete.setGeometry(new QRect(630, 700, 75, 23));
         tabWidget.addTab(transactions, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Ums\u00e4tze", null));
         tab_2 = new QWidget();
         tab_2.setObjectName("tab_2");
@@ -117,7 +121,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         MainWindow.setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar.setObjectName("menubar");
-        menubar.setGeometry(new QRect(0, 0, 941, 21));
+        menubar.setGeometry(new QRect(0, 0, 722, 21));
         menuDatei = new QMenu(menubar);
         menuDatei.setObjectName("menuDatei");
         menuBearbeiten = new QMenu(menubar);
@@ -183,6 +187,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         label_2.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "von", null));
         label_3.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "bis", null));
         buttonAddTransaction.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion erstellen", null));
+        pushButtonDelete.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "L\u00f6schen", null));
         tabWidget.setTabText(tabWidget.indexOf(transactions), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Ums\u00e4tze", null));
         tabWidget.setTabText(tabWidget.indexOf(tab_2), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Tab 2", null));
         menuDatei.setTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Datei", null));
