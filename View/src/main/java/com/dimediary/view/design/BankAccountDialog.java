@@ -59,6 +59,7 @@ public class BankAccountDialog extends UiBankAccountDialog {
 		bankAccount.setName(this.lineEditAccountName.text());
 
 		DBUtils.getInstance().persist(bankAccount);
+		Main.getMainWindow().initComboBocAccounts();
 		this.initialize();
 	}
 
@@ -77,6 +78,7 @@ public class BankAccountDialog extends UiBankAccountDialog {
 			errorMessage.showMessage("Es gibt noch mindestens eine Transaktion, welche dieses Konto referenziert.");
 		}
 
+		Main.getMainWindow().initComboBocAccounts();
 		this.initialize();
 	}
 

@@ -1,34 +1,36 @@
 package com.dimediary.view.design;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.junit.Assert;
 
 import com.dimediary.controller.utils.DBUtils;
-import com.dimediary.model.entities.Transaction;
 import com.dimediary.view.design.ui.UiMainWindow;
 import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
+import com.dimediary.view.utils.QTableTransactions;
 import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.gui.QApplication;
 import com.trolltech.qt.gui.QMainWindow;
-import com.trolltech.qt.gui.QTableWidgetItem;
 
 public class MainWindow extends UiMainWindow {
 
 	private QMainWindow window;
-
-	private List<Transaction> transactions;
+	private QTableTransactions qtableTransactions;
 
 	public void initialize() {
 		this.window = new QMainWindow();
 		this.setupUi(this.window);
+		this.qtableTransactions = new QTableTransactions(this.tableTransactions);
 
 		this.initTrigger();
 
+		this.initTableTransaction();
+
+		this.window.show();
+
+		QApplication.setActiveWindow(this.window);
+	}
+
+	private void initTableTransaction() {
 		// set date range for the shown transactions
 		QDate today = new QDate();
 		today = QDate.currentDate();
@@ -39,52 +41,29 @@ public class MainWindow extends UiMainWindow {
 		this.dateFrom.setDate(qdateFrom);
 		this.dateUntil.setDate(qdateUntil);
 
-		// set the possible bank accounts in the combo box
-		final ArrayList<String> bankAccountNames = DBUtils.getInstance().getBankAccountNames();
-		// TODO if no bankAccounts exists ask the user to add bank account
-		this.comboBoxBankaccount.addItems(bankAccountNames);
+		this.initComboBocAccounts();
 
 		// fill the table with the transactions between the two dates for the
 		// selected bank account
 		this.updateTransactionsTable();
-
-		this.window.show();
-
-		QApplication.setActiveWindow(this.window);
 	}
 
-	public void rowDoubleClicked(final Integer row, final Integer column) {
-		Main.getTransactionDialog().initialize(this.transactions.get(row));
+	public void initComboBocAccounts() {
+		// set the possible bank accounts in the combo box
+		final ArrayList<String> bankAccountNames = DBUtils.getInstance().getBankAccountNames();
+		// TODO if no bankAccounts exists ask the user to add bank account
+		this.comboBoxBankaccount.clear();
+		this.comboBoxBankaccount.addItems(bankAccountNames);
 	}
 
 	public void updateTransactionsTable() {
-		final Date utilDateFrom = QTUtils.qDateToDate(this.dateFrom.date());
-		final Date utilDateUntil = QTUtils.qDateToDate(this.dateUntil.date());
+		this.qtableTransactions.updateTransactionTable(QTUtils.qDateToDate(this.dateFrom.date()),
+				QTUtils.qDateToDate(this.dateUntil.date()),
+				this.comboBoxBankaccount.itemText(this.comboBoxBankaccount.currentIndex()));
+	}
 
-		final String bankAccountName = this.comboBoxBankaccount.itemText(this.comboBoxBankaccount.currentIndex());
-		Assert.assertTrue("No bank accounts in the combo box for bank accounts available", bankAccountName != null);
-		// TODO ask the user to add a bank account
-
-		this.transactions = DBUtils.getInstance().geTransactions(utilDateFrom, utilDateUntil, bankAccountName);
-
-		this.tableTransactions.setRowCount(this.transactions.size());
-		for (int i = 0; i < this.transactions.size(); i++) {
-			final Transaction transaction = this.transactions.get(i);
-
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-			final String date = simpleDateFormat.format(transaction.getDate());
-			simpleDateFormat = new SimpleDateFormat("E");
-			final String weekDay = simpleDateFormat.format(transaction.getDate());
-			final String amount = transaction.getAmount().toString().replace(".", ",");
-			final String name = transaction.getName();
-			final String category = transaction.getCategory().getName();
-
-			this.tableTransactions.setItem(i, 0, new QTableWidgetItem(date));
-			this.tableTransactions.setItem(i, 1, new QTableWidgetItem(weekDay));
-			this.tableTransactions.setItem(i, 2, new QTableWidgetItem(amount));
-			this.tableTransactions.setItem(i, 3, new QTableWidgetItem(name));
-			this.tableTransactions.setItem(i, 4, new QTableWidgetItem(category));
-		}
+	public void onDoubleClickRow(final Integer row, final Integer column) {
+		Main.getTransactionDialog().initialize(this.qtableTransactions.getTransaction(row, column));
 	}
 
 	private void initTrigger() {
@@ -97,11 +76,11 @@ public class MainWindow extends UiMainWindow {
 		this.dateFrom.dateChanged.connect(this, "updateTransactionsTable()");
 		this.dateUntil.dateChanged.connect(this, "updateTransactionsTable()");
 
+		this.tableTransactions.cellDoubleClicked.connect(this,
+				"onDoubleClickRow(java.lang.Integer, java.lang.Integer)");
+
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "initialize()");
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "exec()");
-
-		this.tableTransactions.cellDoubleClicked.connect(this,
-				"rowDoubleClicked(java.lang.Integer, java.lang.Integer)");
 	}
 
 }

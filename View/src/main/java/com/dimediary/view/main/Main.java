@@ -5,7 +5,6 @@ import com.dimediary.view.design.AccountCategoryDialog;
 import com.dimediary.view.design.BankAccountDialog;
 import com.dimediary.view.design.MainWindow;
 import com.dimediary.view.design.TransactionDialog;
-import com.dimediary.view.design.ui.UiMainWindow;
 import com.trolltech.qt.gui.QApplication;
 
 public class Main {
@@ -30,7 +29,7 @@ public class Main {
 
 	}
 
-	public static UiMainWindow getMainWindow() {
+	public static MainWindow getMainWindow() {
 		return Main.mainWindow;
 	}
 

@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>324</width>
-    <height>243</height>
+    <width>642</width>
+    <height>439</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,58 +16,17 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>0</y>
-     <width>271</width>
+     <y>210</y>
+     <width>307</width>
      <height>191</height>
     </rect>
    </property>
    <layout class="QGridLayout" name="gridLayout">
-    <item row="4" column="2">
-     <widget class="QDoubleSpinBox" name="doubleSpinBoxAmount">
-      <property name="minimum">
-       <double>-999999999.000000000000000</double>
-      </property>
-      <property name="maximum">
-       <double>999999999.000000000000000</double>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1">
-     <widget class="QLabel" name="label_3">
-      <property name="text">
-       <string>Kategorie</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="2">
-     <widget class="QDateEdit" name="dateEdit"/>
-    </item>
-    <item row="1" column="1">
-     <widget class="QLabel" name="label_2">
-      <property name="text">
-       <string>Betreff</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1">
-     <widget class="QLabel" name="label">
-      <property name="text">
-       <string>Datum</string>
-      </property>
-     </widget>
-    </item>
     <item row="1" column="2">
      <widget class="QLineEdit" name="subjectEdit"/>
     </item>
     <item row="3" column="2">
      <widget class="QComboBox" name="comboBoxAccount"/>
-    </item>
-    <item row="3" column="1">
-     <widget class="QLabel" name="label_4">
-      <property name="text">
-       <string>Konto</string>
-      </property>
-     </widget>
     </item>
     <item row="4" column="1">
      <widget class="QLabel" name="label_5">
@@ -76,20 +35,27 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="2">
-     <widget class="QComboBox" name="comboBoxCategory"/>
+    <item row="0" column="2">
+     <widget class="QDateEdit" name="dateEdit"/>
     </item>
-    <item row="4" column="3">
-     <widget class="QCheckBox" name="checkBoxIncome">
+    <item row="2" column="1">
+     <widget class="QLabel" name="label_3">
       <property name="text">
-       <string>Einnahme</string>
+       <string>Kategorie</string>
       </property>
      </widget>
     </item>
-    <item row="2" column="3">
-     <widget class="QPushButton" name="pushButtonAddCategory">
+    <item row="1" column="1">
+     <widget class="QLabel" name="label_2">
       <property name="text">
-       <string>erstellen</string>
+       <string>Betreff</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QLabel" name="label_4">
+      <property name="text">
+       <string>Konto</string>
       </property>
      </widget>
     </item>
@@ -100,56 +66,149 @@
       </property>
      </widget>
     </item>
+    <item row="4" column="3">
+     <widget class="QCheckBox" name="checkBoxIncome">
+      <property name="text">
+       <string>Einnahme</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="2">
+     <widget class="QComboBox" name="comboBoxCategory"/>
+    </item>
+    <item row="2" column="3">
+     <widget class="QPushButton" name="pushButtonAddCategory">
+      <property name="text">
+       <string>erstellen</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QLabel" name="label">
+      <property name="text">
+       <string>Datum</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2">
+     <widget class="QDoubleSpinBox" name="doubleSpinBoxAmount">
+      <property name="minimum">
+       <double>-999999999.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>999999999.000000000000000</double>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
-  <widget class="QDialogButtonBox" name="buttonBox">
+  <widget class="QPushButton" name="pushButtonAdd">
    <property name="geometry">
     <rect>
-     <x>80</x>
-     <y>210</y>
-     <width>233</width>
+     <x>10</x>
+     <y>410</y>
+     <width>75</width>
      <height>23</height>
     </rect>
    </property>
-   <property name="orientation">
-    <enum>Orientation.Horizontal</enum>
+   <property name="text">
+    <string>Hinzufügen</string>
    </property>
-   <property name="standardButtons">
-    <set>StandardButton.Cancel|StandardButton.Ok</set>
+  </widget>
+  <widget class="QTableWidget" name="tableTransactions">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>621</width>
+     <height>192</height>
+    </rect>
+   </property>
+   <property name="selectionBehavior">
+    <enum>SelectionBehavior.SelectRows</enum>
+   </property>
+   <column>
+    <property name="text">
+     <string>Datum</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Betreff</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Kategorie</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Konto</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Betrag</string>
+    </property>
+   </column>
+  </widget>
+  <widget class="QPushButton" name="pushButtonDelete">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>210</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Löschen</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButtonOK">
+   <property name="geometry">
+    <rect>
+     <x>550</x>
+     <y>410</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>OK</string>
    </property>
   </widget>
  </widget>
+ <tabstops>
+  <tabstop>dateEdit</tabstop>
+  <tabstop>subjectEdit</tabstop>
+  <tabstop>comboBoxCategory</tabstop>
+  <tabstop>comboBoxAccount</tabstop>
+  <tabstop>doubleSpinBoxAmount</tabstop>
+  <tabstop>pushButtonAdd</tabstop>
+  <tabstop>pushButtonOK</tabstop>
+  <tabstop>pushButtonAddCategory</tabstop>
+  <tabstop>pushButtonAddAccount</tabstop>
+  <tabstop>checkBoxIncome</tabstop>
+  <tabstop>tableTransactions</tabstop>
+  <tabstop>pushButtonDelete</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
+   <sender>pushButtonOK</sender>
+   <signal>clicked()</signal>
    <receiver>TransactionDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>587</x>
+     <y>421</y>
     </hint>
     <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
-   <signal>rejected()</signal>
-   <receiver>TransactionDialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>286</x>
-     <y>274</y>
+     <x>264</x>
+     <y>218</y>
     </hint>
    </hints>
   </connection>

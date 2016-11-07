@@ -216,6 +216,20 @@ public class DBUtils {
 		}
 	}
 
+	public void delete(final Transaction transaction) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		this.entityManager.remove(transaction);
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
 	public void deleteBankAccountCategories(final ArrayList<String> bankAccountCategoryNames) throws RollbackException {
 		try {
 			final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
@@ -249,6 +263,22 @@ public class DBUtils {
 		final List<BankAccount> bankAccounts = this.getBankAccounts(bankAccountNames);
 		for (final BankAccount bankAccount : bankAccounts) {
 			this.delete(bankAccount);
+		}
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
+	public void deleteTransactions(final ArrayList<Transaction> transactions) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		for (final Transaction transaction : transactions) {
+			this.delete(transaction);
 		}
 
 		if (ownTransaction) {

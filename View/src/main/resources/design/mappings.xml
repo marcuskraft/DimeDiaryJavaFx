@@ -64,4 +64,14 @@
 		<java>SelectionMode.ExtendedSelection</java>
 		<importString>import com.trolltech.qt.gui.QAbstractItemView.SelectionMode;</importString>
 	</Mapping>
+	<Mapping>
+		<cpp>Qt::ClickFocus</cpp> 
+		<java>FocusPolicy.ClickFocus</java>
+		<importString>import com.trolltech.qt.core.Qt.FocusPolicy;</importString>
+	</Mapping>
+	<Mapping>
+		<cpp>Qt::TabFocus</cpp> 
+		<java>FocusPolicy.TabFocus</java>
+		<importString>import com.trolltech.qt.core.Qt.FocusPolicy;</importString>
+	</Mapping>
 </Mapping_List>
