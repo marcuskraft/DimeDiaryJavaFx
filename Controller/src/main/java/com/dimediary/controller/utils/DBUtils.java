@@ -129,6 +129,12 @@ public class DBUtils {
 		return category;
 	}
 
+	public ArrayList<Category> getCategories(final ArrayList<String> categoryNames) {
+		final List<Category> categories = this.entityManager.createNamedQuery("findCategories", Category.class)
+				.setParameter("namesList", categoryNames).getResultList();
+		return new ArrayList<Category>(categories);
+	}
+
 	public ArrayList<String> getCategoryNames() {
 		final ArrayList<String> categoryNames = new ArrayList<>();
 
@@ -149,6 +155,20 @@ public class DBUtils {
 		}
 
 		this.entityManager.persist(transaction);
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+
+	}
+
+	public void persist(final Category category) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		this.entityManager.persist(category);
 
 		if (ownTransaction) {
 			this.entityManager.getTransaction().commit();
@@ -230,6 +250,20 @@ public class DBUtils {
 		}
 	}
 
+	public void delete(final Category category) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		this.entityManager.remove(category);
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
 	public void deleteBankAccountCategories(final ArrayList<String> bankAccountCategoryNames) throws RollbackException {
 		try {
 			final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
@@ -279,6 +313,22 @@ public class DBUtils {
 
 		for (final Transaction transaction : transactions) {
 			this.delete(transaction);
+		}
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
+	public void deleteCategories(final ArrayList<Category> categories) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		for (final Category category : categories) {
+			this.delete(category);
 		}
 
 		if (ownTransaction) {

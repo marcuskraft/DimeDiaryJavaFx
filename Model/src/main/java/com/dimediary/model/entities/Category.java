@@ -9,7 +9,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-@NamedQueries({ @NamedQuery(name = "allCategories", query = "from Category") })
+@NamedQueries({ @NamedQuery(name = "allCategories", query = "from Category"),
+		@NamedQuery(name = "findCategories", query = "from Category c WHERE c.name IN :namesList") })
 @Entity
 @Table(name = "CATEGORY")
 public class Category implements Serializable {

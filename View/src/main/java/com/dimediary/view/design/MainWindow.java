@@ -14,15 +14,14 @@ import com.trolltech.qt.gui.QMainWindow;
 
 public class MainWindow extends UiMainWindow {
 
-	private QMainWindow window;
-	private TableTransactionsMainWindow ownTableTransactions;
+	private final QMainWindow window;
+	private final TableTransactionsMainWindow ownTableTransactions;
 
-	public void initialize() {
+	public MainWindow() {
+		super();
 		this.window = new QMainWindow();
 		this.setupUi(this.window);
 		this.ownTableTransactions = new TableTransactionsMainWindow(this.tableTransactions);
-
-		this.initTrigger();
 
 		this.initTableTransaction();
 
@@ -74,11 +73,12 @@ public class MainWindow extends UiMainWindow {
 		Main.getTransactionDialog().deleteTransactions(transactionsToDelete);
 	}
 
-	private void initTrigger() {
+	public void createTrigger() {
 		// menu buttons
 		this.actionBeenden.triggered.connect(Main.getApplication(), "exit()");
 		this.actionKonto_erstellen.triggered.connect(Main.getBankAccountDialog(), "exec()");
 		this.actionKontoart_erstellen.triggered.connect(Main.getAccountCategoryDialog(), "exec()");
+		this.actionKategorie_erstellen.triggered.connect(Main.getCategoryDialog(), "exec()");
 
 		this.pushButtonDelete.clicked.connect(this, "OnDeleteTransaction()");
 

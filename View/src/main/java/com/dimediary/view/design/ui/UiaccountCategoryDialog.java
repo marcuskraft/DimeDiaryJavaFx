@@ -32,10 +32,10 @@ public class UiaccountCategoryDialog implements com.trolltech.qt.QUiForm<QDialog
     public void setupUi(QDialog accountCategoryDialog)
     {
         accountCategoryDialog.setObjectName("accountCategoryDialog");
-        accountCategoryDialog.resize(new QSize(337, 228).expandedTo(accountCategoryDialog.minimumSizeHint()));
+        accountCategoryDialog.resize(new QSize(338, 198).expandedTo(accountCategoryDialog.minimumSizeHint()));
         buttonBox = new QDialogButtonBox(accountCategoryDialog);
         buttonBox.setObjectName("buttonBox");
-        buttonBox.setGeometry(new QRect(130, 190, 191, 32));
+        buttonBox.setGeometry(new QRect(140, 160, 191, 32));
         buttonBox.setOrientation(Orientation.Horizontal);
         buttonBox.setStandardButtons(StandardButton.createQFlags(StandardButton.Cancel,StandardButton.Ok));
         checkBoxRealAccount = new QCheckBox(accountCategoryDialog);
@@ -47,10 +47,10 @@ public class UiaccountCategoryDialog implements com.trolltech.qt.QUiForm<QDialog
         listCategories.setSelectionMode(SelectionMode.ExtendedSelection);
         pushButtonAdd = new QPushButton(accountCategoryDialog);
         pushButtonAdd.setObjectName("pushButtonAdd");
-        pushButtonAdd.setGeometry(new QRect(90, 70, 75, 23));
+        pushButtonAdd.setGeometry(new QRect(10, 70, 75, 23));
         pushButtonDelete = new QPushButton(accountCategoryDialog);
         pushButtonDelete.setObjectName("pushButtonDelete");
-        pushButtonDelete.setGeometry(new QRect(210, 140, 75, 23));
+        pushButtonDelete.setGeometry(new QRect(130, 120, 75, 23));
         gridLayoutWidget = new QWidget(accountCategoryDialog);
         gridLayoutWidget.setObjectName("gridLayoutWidget");
         gridLayoutWidget.setGeometry(new QRect(10, 10, 151, 41));

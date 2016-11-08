@@ -26,10 +26,9 @@ public class TransactionDialog extends UiTransactionDialog {
 
 		this.initialize();
 
-		this.createTriggers();
 	}
 
-	private void initialize() {
+	public void initialize() {
 		this.dateEdit.setDate(QDate.currentDate());
 		this.comboBoxCategory.clear();
 		this.comboBoxAccount.clear();
@@ -54,7 +53,7 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.exec();
 	}
 
-	private void createTriggers() {
+	public void createTriggers() {
 		this.pushButtonAdd.clicked.connect(this, "onAdd()");
 		this.pushButtonAdd.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
 
@@ -62,6 +61,7 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.pushButtonDelete.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
 
 		this.pushButtonAddAccount.clicked.connect(Main.getBankAccountDialog(), "exec()");
+		this.pushButtonAddCategory.clicked.connect(Main.getCategoryDialog(), "exec()");
 
 		this.checkBoxIncome.clicked.connect(this, "onEditingFinished()");
 		this.doubleSpinBoxAmount.editingFinished.connect(this, "onEditingFinished()");

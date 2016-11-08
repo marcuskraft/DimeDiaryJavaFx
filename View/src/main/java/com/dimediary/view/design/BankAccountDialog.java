@@ -23,7 +23,6 @@ public class BankAccountDialog extends UiBankAccountDialog {
 
 		this.initialize();
 
-		this.createTriggers();
 	}
 
 	public void exec() {
@@ -42,7 +41,7 @@ public class BankAccountDialog extends UiBankAccountDialog {
 		this.listWidget.addItems(DBUtils.getInstance().getBankAccountNames());
 	}
 
-	private void createTriggers() {
+	public void createTriggers() {
 		this.pushButtonAddAccountCategory.clicked.connect(Main.getAccountCategoryDialog(), "exec()");
 		this.pushButtonAdd.clicked.connect(this, "onAddButton()");
 		this.pushButtonDelete.clicked.connect(this, "onDeleteButton()");

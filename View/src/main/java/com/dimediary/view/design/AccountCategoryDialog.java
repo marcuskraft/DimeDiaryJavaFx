@@ -23,11 +23,9 @@ public class AccountCategoryDialog extends UiaccountCategoryDialog {
 
 		this.initialize();
 
-		this.createTrigger();
-
 	}
 
-	private void createTrigger() {
+	public void createTrigger() {
 		this.pushButtonAdd.clicked.connect(this, "onAddButton()");
 		this.pushButtonDelete.clicked.connect(this, "onDeleteButton()");
 	}
