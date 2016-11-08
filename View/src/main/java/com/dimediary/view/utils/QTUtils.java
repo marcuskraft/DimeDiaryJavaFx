@@ -9,12 +9,18 @@ import com.trolltech.qt.core.QDateTime;
 public class QTUtils {
 
 	public static Date qDateToDate(final QDate qdate) {
+		if (qdate == null) {
+			return null;
+		}
 		final QDateTime dateTime = new QDateTime(qdate);
 		final Date dateFrom = new Date(dateTime.toMSecsSinceEpoch());
 		return dateFrom;
 	}
 
 	public static QDate dateToQDate(final Date date) {
+		if (date == null) {
+			return null;
+		}
 		SimpleDateFormat format;
 
 		format = new SimpleDateFormat("yyyy");

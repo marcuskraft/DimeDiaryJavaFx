@@ -8,6 +8,8 @@ import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.view.design.ui.UiBankAccountDialog;
 import com.dimediary.view.main.Main;
+import com.dimediary.view.utils.QTUtils;
+import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QErrorMessage;
 import com.trolltech.qt.gui.QListWidgetItem;
@@ -36,15 +38,38 @@ public class BankAccountDialog extends UiBankAccountDialog {
 		this.lineEditBankName.clear();
 		this.lineEditIBAN.clear();
 		this.lineEditBIC.clear();
-		this.doubleSpinBoxStartBudget.setValue(0);
 		this.listWidget.clear();
 		this.listWidget.addItems(DBUtils.getInstance().getBankAccountNames());
+		this.dateEditStartBudget.setDate(QDate.currentDate());
+		this.doubleSpinBoxStartBudget.setValue(0);
+	}
+
+	public void initialize(final BankAccount bankAccount) {
+		this.comboBoxAccountCategory.clear();
+		this.comboBoxAccountCategory.addItems(DBUtils.getInstance().getBankAccountCategoryNames());
+		this.comboBoxAccountCategory
+				.setCurrentIndex(this.comboBoxAccountCategory.findText(bankAccount.getBankAccountCategory().getName()));
+		this.lineEditAccountName.setText(bankAccount.getName());
+		this.lineEditBankName.setText(bankAccount.getBankName());
+		this.lineEditIBAN.setText(bankAccount.getIban());
+		this.lineEditBIC.setText(bankAccount.getBic());
+		this.listWidget.clear();
+		this.listWidget.addItems(DBUtils.getInstance().getBankAccountNames());
+		this.dateEditStartBudget.setDate(QTUtils.dateToQDate(bankAccount.getDateStartBudget()));
+		this.doubleSpinBoxStartBudget.setValue(bankAccount.getStartBudget());
 	}
 
 	public void createTriggers() {
 		this.pushButtonAddAccountCategory.clicked.connect(Main.getAccountCategoryDialog(), "exec()");
 		this.pushButtonAdd.clicked.connect(this, "onAddButton()");
 		this.pushButtonDelete.clicked.connect(this, "onDeleteButton()");
+
+		this.listWidget.itemDoubleClicked.connect(this, "onDoubleClick(com.trolltech.qt.gui.QListWidgetItem)");
+	}
+
+	public void onDoubleClick(final QListWidgetItem item) {
+		final BankAccount bankAccount = DBUtils.getInstance().getBankAccount(item.text());
+		this.initialize(bankAccount);
 	}
 
 	public void onAddButton() {
@@ -56,9 +81,11 @@ public class BankAccountDialog extends UiBankAccountDialog {
 		bankAccount.setBic(this.lineEditBIC.text());
 		bankAccount.setIban(this.lineEditIBAN.text());
 		bankAccount.setName(this.lineEditAccountName.text());
+		bankAccount.setStartBudget(this.doubleSpinBoxStartBudget.value());
+		bankAccount.setDateStartBudget(QTUtils.qDateToDate(this.dateEditStartBudget.date()));
 
 		DBUtils.getInstance().persist(bankAccount);
-		Main.getMainWindow().initComboBocAccounts();
+		Main.getMainWindow().initComboBoxAccounts();
 		this.initialize();
 	}
 
@@ -77,7 +104,7 @@ public class BankAccountDialog extends UiBankAccountDialog {
 			errorMessage.showMessage("Es gibt noch mindestens eine Transaktion, welche dieses Konto referenziert.");
 		}
 
-		Main.getMainWindow().initComboBocAccounts();
+		Main.getMainWindow().initComboBoxAccounts();
 		this.initialize();
 	}
 

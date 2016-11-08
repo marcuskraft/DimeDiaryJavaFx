@@ -25,13 +25,14 @@ public class UiBankAccountDialog implements com.trolltech.qt.QUiForm<QDialog>
     public QLabel label_6;
     public QLabel label_5;
     public QLabel label_4;
-    public QDoubleSpinBox doubleSpinBoxStartBudget;
     public QLineEdit lineEditIBAN;
     public QLineEdit lineEditBankName;
     public QLineEdit lineEditAccountName;
     public QLineEdit lineEditBIC;
     public QLabel label_3;
     public QPushButton pushButtonAddAccountCategory;
+    public QDoubleSpinBox doubleSpinBoxStartBudget;
+    public QDateEdit dateEditStartBudget;
     public QPushButton pushButtonAdd;
     public QPushButton pushButtonDelete;
     public QListWidget listWidget;
@@ -49,7 +50,7 @@ public class UiBankAccountDialog implements com.trolltech.qt.QUiForm<QDialog>
         buttonBox.setStandardButtons(StandardButton.createQFlags(StandardButton.Cancel,StandardButton.Ok));
         gridLayoutWidget = new QWidget(BankAccountDialog);
         gridLayoutWidget.setObjectName("gridLayoutWidget");
-        gridLayoutWidget.setGeometry(new QRect(10, 0, 251, 231));
+        gridLayoutWidget.setGeometry(new QRect(10, 0, 256, 231));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout.setObjectName("gridLayout");
         label = new QLabel(gridLayoutWidget);
@@ -82,13 +83,6 @@ public class UiBankAccountDialog implements com.trolltech.qt.QUiForm<QDialog>
 
         gridLayout.addWidget(label_4, 3, 0, 1, 1);
 
-        doubleSpinBoxStartBudget = new QDoubleSpinBox(gridLayoutWidget);
-        doubleSpinBoxStartBudget.setObjectName("doubleSpinBoxStartBudget");
-        doubleSpinBoxStartBudget.setMinimum(-1e+09);
-        doubleSpinBoxStartBudget.setMaximum(1e+09);
-
-        gridLayout.addWidget(doubleSpinBoxStartBudget, 5, 1, 1, 1);
-
         lineEditIBAN = new QLineEdit(gridLayoutWidget);
         lineEditIBAN.setObjectName("lineEditIBAN");
 
@@ -119,6 +113,18 @@ public class UiBankAccountDialog implements com.trolltech.qt.QUiForm<QDialog>
 
         gridLayout.addWidget(pushButtonAddAccountCategory, 0, 2, 1, 1);
 
+        doubleSpinBoxStartBudget = new QDoubleSpinBox(gridLayoutWidget);
+        doubleSpinBoxStartBudget.setObjectName("doubleSpinBoxStartBudget");
+        doubleSpinBoxStartBudget.setMinimum(-1e+09);
+        doubleSpinBoxStartBudget.setMaximum(1e+09);
+
+        gridLayout.addWidget(doubleSpinBoxStartBudget, 5, 2, 1, 1);
+
+        dateEditStartBudget = new QDateEdit(gridLayoutWidget);
+        dateEditStartBudget.setObjectName("dateEditStartBudget");
+
+        gridLayout.addWidget(dateEditStartBudget, 5, 1, 1, 1);
+
         pushButtonAdd = new QPushButton(BankAccountDialog);
         pushButtonAdd.setObjectName("pushButtonAdd");
         pushButtonAdd.setGeometry(new QRect(10, 240, 75, 23));
@@ -132,8 +138,7 @@ public class UiBankAccountDialog implements com.trolltech.qt.QUiForm<QDialog>
         QWidget.setTabOrder(lineEditAccountName, lineEditBankName);
         QWidget.setTabOrder(lineEditBankName, lineEditIBAN);
         QWidget.setTabOrder(lineEditIBAN, lineEditBIC);
-        QWidget.setTabOrder(lineEditBIC, doubleSpinBoxStartBudget);
-        QWidget.setTabOrder(doubleSpinBoxStartBudget, pushButtonAdd);
+        QWidget.setTabOrder(lineEditBIC, pushButtonAdd);
         QWidget.setTabOrder(pushButtonAdd, pushButtonAddAccountCategory);
         QWidget.setTabOrder(pushButtonAddAccountCategory, buttonBox);
         QWidget.setTabOrder(buttonBox, pushButtonDelete);
@@ -148,12 +153,12 @@ public class UiBankAccountDialog implements com.trolltech.qt.QUiForm<QDialog>
     void retranslateUi(QDialog BankAccountDialog)
     {
         BankAccountDialog.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "Konto erstellen", null));
-        label.setText(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "Kontoart", null));
+        label.setText(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "Kontoart*", null));
         label_2.setText(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "Bankname", null));
-        label_6.setText(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "Startbudget", null));
+        label_6.setText(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "Startbudget*", null));
         label_5.setText(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "BIC", null));
         label_4.setText(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "IBAN", null));
-        label_3.setText(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "Kontoname", null));
+        label_3.setText(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "Kontoname*", null));
         pushButtonAddAccountCategory.setText(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "erstellen", null));
         pushButtonAdd.setText(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "Hinzuf\u00fcgen", null));
         pushButtonDelete.setText(com.trolltech.qt.core.QCoreApplication.translate("BankAccountDialog", "L\u00f6schen", null));

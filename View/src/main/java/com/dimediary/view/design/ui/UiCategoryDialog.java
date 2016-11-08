@@ -54,7 +54,7 @@ public class UiCategoryDialog implements com.trolltech.qt.QUiForm<QDialog>
 
         pushButtonAdd = new QPushButton(CategoryDialog);
         pushButtonAdd.setObjectName("pushButtonAdd");
-        pushButtonAdd.setGeometry(new QRect(50, 70, 75, 23));
+        pushButtonAdd.setGeometry(new QRect(10, 70, 75, 23));
         listCategories = new QListWidget(CategoryDialog);
         listCategories.setObjectName("listCategories");
         listCategories.setGeometry(new QRect(170, 10, 111, 191));

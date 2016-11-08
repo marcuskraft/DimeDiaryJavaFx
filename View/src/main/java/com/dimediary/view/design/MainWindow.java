@@ -41,14 +41,14 @@ public class MainWindow extends UiMainWindow {
 		this.dateFrom.setDate(qdateFrom);
 		this.dateUntil.setDate(qdateUntil);
 
-		this.initComboBocAccounts();
+		this.initComboBoxAccounts();
 
 		// fill the table with the transactions between the two dates for the
 		// selected bank account
 		this.updateTransactionsTable();
 	}
 
-	public void initComboBocAccounts() {
+	public void initComboBoxAccounts() {
 		// set the possible bank accounts in the combo box
 		final ArrayList<String> bankAccountNames = DBUtils.getInstance().getBankAccountNames();
 		// TODO if no bankAccounts exists ask the user to add bank account

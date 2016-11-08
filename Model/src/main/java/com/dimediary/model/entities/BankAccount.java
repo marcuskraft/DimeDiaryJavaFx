@@ -1,6 +1,7 @@
 package com.dimediary.model.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @NamedQueries({ @NamedQuery(name = "allBankAccounts", query = "from BankAccount"),
 		@NamedQuery(name = "findBankaccountsWithCategory", query = "from BankAccount b WHERE bankAccountCategory = :bankAccountCategory"),
@@ -43,6 +46,13 @@ public class BankAccount implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "BANKACCOUNT_CATEGORY_NAME")
 	private BankAccountCategory bankAccountCategory;
+
+	@Temporal(TemporalType.DATE)
+	@Column(name = "DATE_STARTBUDGET")
+	private Date dateStartBudget;
+
+	@Column(name = "STARTBUDGET")
+	private Double startBudget;
 
 	public BankAccountCategory getBankAccountCategory() {
 		return this.bankAccountCategory;
@@ -90,6 +100,22 @@ public class BankAccount implements Serializable {
 
 	public void setUser(final User user) {
 		this.user = user;
+	}
+
+	public Date getDateStartBudget() {
+		return this.dateStartBudget;
+	}
+
+	public void setDateStartBudget(final Date dateStartBudget) {
+		this.dateStartBudget = dateStartBudget;
+	}
+
+	public Double getStartBudget() {
+		return this.startBudget;
+	}
+
+	public void setStartBudget(final Double startBudget) {
+		this.startBudget = startBudget;
 	}
 
 }
