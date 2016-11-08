@@ -167,15 +167,15 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
         tableTransactions.setHorizontalHeaderItem(1, __colItem1);
 
         QTableWidgetItem __colItem2 = new QTableWidgetItem();
-        __colItem2.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Kategorie", null));
+        __colItem2.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Betrag", null));
         tableTransactions.setHorizontalHeaderItem(2, __colItem2);
 
         QTableWidgetItem __colItem3 = new QTableWidgetItem();
-        __colItem3.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Konto", null));
+        __colItem3.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Kategorie", null));
         tableTransactions.setHorizontalHeaderItem(3, __colItem3);
 
         QTableWidgetItem __colItem4 = new QTableWidgetItem();
-        __colItem4.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Betrag", null));
+        __colItem4.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Konto", null));
         tableTransactions.setHorizontalHeaderItem(4, __colItem4);
         tableTransactions.setRowCount(0);
         pushButtonDelete.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "L\u00f6schen", null));

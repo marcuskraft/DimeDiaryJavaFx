@@ -7,7 +7,7 @@ import com.dimediary.model.entities.Transaction;
 import com.dimediary.view.design.ui.UiTransactionDialog;
 import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
-import com.dimediary.view.utils.TableTransactions;
+import com.dimediary.view.utils.TableTransactionDialog;
 import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.gui.QDialog;
 
@@ -15,14 +15,14 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	private final QDialog dialog;
 
-	TableTransactions ownTableTransactions;
+	TableTransactionDialog ownTableTransactions;
 
 	public TransactionDialog() {
 		super();
 		this.dialog = new QDialog();
 		this.setupUi(this.dialog);
 
-		this.ownTableTransactions = new TableTransactions(this.tableTransactions);
+		this.ownTableTransactions = new TableTransactionDialog(this.tableTransactions);
 
 		this.initialize();
 

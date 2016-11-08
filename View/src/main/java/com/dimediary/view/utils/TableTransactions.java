@@ -1,6 +1,5 @@
 package com.dimediary.view.utils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -9,13 +8,13 @@ import com.dimediary.model.entities.Transaction;
 import com.trolltech.qt.gui.QTableWidget;
 import com.trolltech.qt.gui.QTableWidgetItem;
 
-public class TableTransactions {
+public abstract class TableTransactions {
 
-	private final QTableWidget tableWidget;
+	protected final QTableWidget tableWidget;
 
-	private final ArrayList<TableTransactionItem> items;
+	protected final ArrayList<TableTransactionItem> items;
 
-	private ArrayList<Transaction> transactions;
+	protected ArrayList<Transaction> transactions;
 
 	public TableTransactions(final QTableWidget tableWidget) {
 		this.tableWidget = tableWidget;
@@ -45,30 +44,9 @@ public class TableTransactions {
 		this.updateTransactionTable();
 	}
 
-	public void updateTransactionTable() {
-		// table.clear();
-		this.items.clear();
-		this.tableWidget.setRowCount(this.transactions.size());
-		for (int i = 0; i < this.transactions.size(); i++) {
-			final Transaction transaction = this.transactions.get(i);
+	public abstract void updateTransactionTable();
 
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-			final String date = simpleDateFormat.format(transaction.getDate());
-			simpleDateFormat = new SimpleDateFormat("E");
-			final String weekDay = simpleDateFormat.format(transaction.getDate());
-			final String amount = transaction.getAmount().toString().replace(".", ",");
-			final String name = transaction.getName();
-			final String category = transaction.getCategory().getName();
-
-			this.addItem(i, 0, new TableTransactionItem(date, transaction));
-			this.addItem(i, 1, new TableTransactionItem(weekDay, transaction));
-			this.addItem(i, 2, new TableTransactionItem(amount, transaction));
-			this.addItem(i, 3, new TableTransactionItem(name, transaction));
-			this.addItem(i, 4, new TableTransactionItem(category, transaction));
-		}
-	}
-
-	private void addItem(final Integer row, final Integer column, final TableTransactionItem item) {
+	protected void addItem(final Integer row, final Integer column, final TableTransactionItem item) {
 		this.items.add(item);
 		this.tableWidget.setItem(row, column, item);
 	}

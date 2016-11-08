@@ -7,7 +7,7 @@ import com.dimediary.model.entities.Transaction;
 import com.dimediary.view.design.ui.UiMainWindow;
 import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
-import com.dimediary.view.utils.TableTransactions;
+import com.dimediary.view.utils.TableTransactionsMainWindow;
 import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.gui.QApplication;
 import com.trolltech.qt.gui.QMainWindow;
@@ -15,12 +15,12 @@ import com.trolltech.qt.gui.QMainWindow;
 public class MainWindow extends UiMainWindow {
 
 	private QMainWindow window;
-	private TableTransactions ownTableTransactions;
+	private TableTransactionsMainWindow ownTableTransactions;
 
 	public void initialize() {
 		this.window = new QMainWindow();
 		this.setupUi(this.window);
-		this.ownTableTransactions = new TableTransactions(this.tableTransactions);
+		this.ownTableTransactions = new TableTransactionsMainWindow(this.tableTransactions);
 
 		this.initTrigger();
 

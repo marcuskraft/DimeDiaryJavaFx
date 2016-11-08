@@ -139,17 +139,17 @@
    </column>
    <column>
     <property name="text">
+     <string>Betrag</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
      <string>Kategorie</string>
     </property>
    </column>
    <column>
     <property name="text">
      <string>Konto</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Betrag</string>
     </property>
    </column>
   </widget>
