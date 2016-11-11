@@ -1,4 +1,4 @@
-package com.dimediary.view.utils;
+package com.dimediary.view.design.tables;
 
 import java.util.ArrayList;
 import java.util.Date;

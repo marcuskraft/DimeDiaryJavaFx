@@ -1,13 +1,13 @@
-package com.dimediary.view.utils;
+package com.dimediary.view.design.tables;
 
 import java.text.SimpleDateFormat;
 
 import com.dimediary.model.entities.Transaction;
 import com.trolltech.qt.gui.QTableWidget;
 
-public class TableTransactionDialog extends TableTransactions {
+public class TableTransactionsMainWindow extends TableTransactions {
 
-	public TableTransactionDialog(final QTableWidget tableWidget) {
+	public TableTransactionsMainWindow(final QTableWidget tableWidget) {
 		super(tableWidget);
 	}
 
@@ -21,16 +21,16 @@ public class TableTransactionDialog extends TableTransactions {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 			final String date = simpleDateFormat.format(transaction.getDate());
 			simpleDateFormat = new SimpleDateFormat("E");
-			final String account = transaction.getBankAccount().getName();
+			final String weekDay = simpleDateFormat.format(transaction.getDate());
 			final String amount = transaction.getAmount().toString().replace(".", ",");
 			final String name = transaction.getName();
 			final String category = transaction.getCategory().getName();
 
 			this.addItem(i, 0, new TableTransactionItem(date, transaction));
-			this.addItem(i, 1, new TableTransactionItem(name, transaction));
+			this.addItem(i, 1, new TableTransactionItem(weekDay, transaction));
 			this.addItem(i, 2, new TableTransactionItem(amount, transaction));
-			this.addItem(i, 3, new TableTransactionItem(category, transaction));
-			this.addItem(i, 4, new TableTransactionItem(account, transaction));
+			this.addItem(i, 3, new TableTransactionItem(name, transaction));
+			this.addItem(i, 4, new TableTransactionItem(category, transaction));
 		}
 	}
 

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.model.entities.Transaction;
+import com.dimediary.view.design.tables.TableTransactionDialog;
 import com.dimediary.view.design.ui.UiTransactionDialog;
 import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
-import com.dimediary.view.utils.TableTransactionDialog;
 import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.gui.QDialog;
 

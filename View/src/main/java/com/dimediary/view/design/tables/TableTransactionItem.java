@@ -1,4 +1,4 @@
-package com.dimediary.view.utils;
+package com.dimediary.view.design.tables;
 
 import com.dimediary.model.entities.Transaction;
 import com.trolltech.qt.gui.QTableWidgetItem;
