@@ -9,10 +9,15 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+@NamedQueries({
+		@NamedQuery(name = "accountBalance", query = "from BalanceHistory b WHERE b.bankAccount = :bankAccount"),
+		@NamedQuery(name = "accountBalanceDate", query = "from BalanceHistory b WHERE b.date >= :date") })
 @Entity
 @Table(name = "BALANCE_HISTORY")
 @IdClass(BalanceHistoryPK.class)
@@ -58,6 +63,10 @@ public class BalanceHistory implements Serializable {
 
 	public void setAmount(final Double amount) {
 		this.amount = amount;
+	}
+
+	public void addAmount(final Double amount) {
+		this.amount = this.amount + amount;
 	}
 
 }

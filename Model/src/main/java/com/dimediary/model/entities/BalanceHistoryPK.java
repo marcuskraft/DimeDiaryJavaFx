@@ -12,6 +12,16 @@ public class BalanceHistoryPK implements Serializable {
 	private Date date;
 	private BankAccount bankAccount;
 
+	public BalanceHistoryPK() {
+		super();
+	}
+
+	public BalanceHistoryPK(final BankAccount bankAccount, final Date date) {
+		super();
+		this.date = date;
+		this.bankAccount = bankAccount;
+	}
+
 	public Date getDate() {
 		return this.date;
 	}

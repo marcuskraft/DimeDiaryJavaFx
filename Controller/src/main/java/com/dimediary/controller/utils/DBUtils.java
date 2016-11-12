@@ -9,6 +9,8 @@ import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 
 import com.dimediary.model.EntityManagerHelper;
+import com.dimediary.model.entities.BalanceHistory;
+import com.dimediary.model.entities.BalanceHistoryPK;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.BankAccountCategory;
 import com.dimediary.model.entities.Category;
@@ -66,6 +68,15 @@ public class DBUtils {
 		return new ArrayList<BankAccount>(bankAccounts);
 	}
 
+	public ArrayList<BankAccount> getBankAccounts(final BankAccountCategory bankAccountCategory) {
+
+		final List<BankAccount> bankAccounts = this.entityManager
+				.createNamedQuery("findBankaccountsWithCategory", BankAccount.class)
+				.setParameter("bankAccountCategory", bankAccountCategory).getResultList();
+
+		return new ArrayList<BankAccount>(bankAccounts);
+	}
+
 	public ArrayList<String> getBankAccountCategoryNames() {
 		final ArrayList<String> names = new ArrayList<>();
 
@@ -96,12 +107,32 @@ public class DBUtils {
 		return new ArrayList<BankAccountCategory>(bankAccountCategories);
 	}
 
-	public List<Transaction> geTransactions(final Date dateFrom, final Date dateUntil, final String bankAccountName) {
-		final BankAccount bankAccount = this.getBankAccount(bankAccountName);
-		return this.geTransactions(dateFrom, dateUntil, bankAccount);
+	public ArrayList<BalanceHistory> getBalanceHistories(final BankAccount bankAccount) {
+		final List<BalanceHistory> balanceHistories = this.entityManager
+				.createNamedQuery("accountBalance", BalanceHistory.class).setParameter("bankAccount", bankAccount)
+				.getResultList();
+		return new ArrayList<BalanceHistory>(balanceHistories);
+
 	}
 
-	public List<Transaction> geTransactions(final Date dateFrom, final Date dateUntil, final BankAccount bankAccount) {
+	public ArrayList<BalanceHistory> getBalanceHistoriesAfterDate(final Date date) {
+		final List<BalanceHistory> balanceHistories = this.entityManager
+				.createNamedQuery("accountBalanceDate", BalanceHistory.class).setParameter("date", date)
+				.getResultList();
+		return new ArrayList<BalanceHistory>(balanceHistories);
+	}
+
+	public BalanceHistory getBalanceHistory(final BankAccount bankAccount, final Date date) {
+		final BalanceHistoryPK balanceHistoryPK = new BalanceHistoryPK(bankAccount, date);
+		return this.entityManager.find(BalanceHistory.class, balanceHistoryPK);
+	}
+
+	public List<Transaction> getTransactions(final Date dateFrom, final Date dateUntil, final String bankAccountName) {
+		final BankAccount bankAccount = this.getBankAccount(bankAccountName);
+		return this.getTransactions(dateFrom, dateUntil, bankAccount);
+	}
+
+	public List<Transaction> getTransactions(final Date dateFrom, final Date dateUntil, final BankAccount bankAccount) {
 		List<Transaction> transactions;
 
 		final TypedQuery<Transaction> query = this.entityManager
@@ -113,13 +144,11 @@ public class DBUtils {
 		return transactions;
 	}
 
-	public ArrayList<BankAccount> getBankAccounts(final BankAccountCategory bankAccountCategory) {
-
-		final List<BankAccount> bankAccounts = this.entityManager
-				.createNamedQuery("findBankaccountsWithCategory", BankAccount.class)
-				.setParameter("bankAccountCategory", bankAccountCategory).getResultList();
-
-		return new ArrayList<BankAccount>(bankAccounts);
+	public ArrayList<Transaction> getTransactions(final BankAccount bankAccount) {
+		final List<Transaction> transactions = this.entityManager
+				.createNamedQuery("allAccountTransactions", Transaction.class).setParameter("bankAccount", bankAccount)
+				.getResultList();
+		return new ArrayList<Transaction>(transactions);
 	}
 
 	public Category getCategory(final String categoryName) {
@@ -202,6 +231,62 @@ public class DBUtils {
 		}
 	}
 
+	public void persist(final BalanceHistory balanceHistory) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		this.entityManager.persist(balanceHistory);
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
+	public void persistBalanceHistories(final ArrayList<BalanceHistory> balanceHistories) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		for (final BalanceHistory balanceHistory : balanceHistories) {
+			this.persist(balanceHistory);
+		}
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
+	public void merge(final BalanceHistory balanceHistory) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		this.entityManager.merge(balanceHistory);
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
+	public void mergeBalanceHistories(final ArrayList<BalanceHistory> balanceHistories) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		for (final BalanceHistory balanceHistory : balanceHistories) {
+			this.merge(balanceHistory);
+		}
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
 	public void delete(final BankAccountCategory bankAccountCategory) throws RollbackException {
 
 		try {
@@ -258,6 +343,20 @@ public class DBUtils {
 		}
 
 		this.entityManager.remove(category);
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
+	public void delete(final BalanceHistory balanceHistory) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		this.entityManager.remove(balanceHistory);
 
 		if (ownTransaction) {
 			this.entityManager.getTransaction().commit();
@@ -329,6 +428,22 @@ public class DBUtils {
 
 		for (final Category category : categories) {
 			this.delete(category);
+		}
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
+	public void deleteBalanceHistories(final ArrayList<BalanceHistory> balanceHistories) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		for (final BalanceHistory balanceHistory : balanceHistories) {
+			this.delete(balanceHistory);
 		}
 
 		if (ownTransaction) {

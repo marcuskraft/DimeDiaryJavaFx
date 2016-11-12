@@ -40,7 +40,7 @@ public abstract class TableTransactions {
 
 	public void updateTransactionTable(final Date dateFrom, final Date dateUntil, final String bankAccountName) {
 		this.transactions = new ArrayList<Transaction>(
-				DBUtils.getInstance().geTransactions(dateFrom, dateUntil, bankAccountName));
+				DBUtils.getInstance().getTransactions(dateFrom, dateUntil, bankAccountName));
 		this.updateTransactionTable();
 	}
 
