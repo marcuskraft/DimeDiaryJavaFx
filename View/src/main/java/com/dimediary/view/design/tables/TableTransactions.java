@@ -23,6 +23,9 @@ public abstract class TableTransactions {
 	}
 
 	public void addTransaction(final Transaction transaction) {
+		if (this.transactions.contains(transaction)) {
+			return;
+		}
 		this.transactions.add(transaction);
 		this.updateTransactionTable();
 	}
@@ -56,6 +59,9 @@ public abstract class TableTransactions {
 
 		for (final QTableWidgetItem qTableWidgetItem : this.tableWidget.selectedItems()) {
 			final Transaction transaction = ((TableTransactionItem) qTableWidgetItem).getTransaction();
+			if (transactions.contains(transaction)) {
+				continue;
+			}
 			transactions.add(transaction);
 		}
 

@@ -15,7 +15,9 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	private final QDialog dialog;
 
-	TableTransactionDialog ownTableTransactions;
+	private final TableTransactionDialog ownTableTransactions;
+
+	private boolean isActive = false;
 
 	public TransactionDialog() {
 		super();
@@ -25,6 +27,8 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.ownTableTransactions = new TableTransactionDialog(this.tableTransactions);
 
 		this.initialize();
+
+		this.dialog.finished.connect(this, "OnFinish(java.lang.Integer)");
 
 	}
 
@@ -107,7 +111,15 @@ public class TransactionDialog extends UiTransactionDialog {
 	}
 
 	public int exec() {
+		if (this.isActive) {
+			return 0;
+		}
+		this.isActive = true;
 		return this.dialog.exec();
+	}
+
+	public void OnFinish(final Integer number) {
+		this.isActive = false;
 	}
 
 	public QDialog getDialog() {

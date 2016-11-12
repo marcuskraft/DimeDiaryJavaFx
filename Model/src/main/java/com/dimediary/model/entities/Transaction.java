@@ -16,6 +16,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.dimediary.model.utils.AmountUtils;
+
 @NamedQueries({ @NamedQuery(name = "allTransactions", query = "from Transaction"),
 		@NamedQuery(name = "TransactionsBetween", query = "from Transaction t WHERE t.bankAccount = :bankAccount"
 				+ " AND t.date BETWEEN :dateFrom AND :dateUntil ORDER BY t.date"),
@@ -77,11 +79,11 @@ public class Transaction implements Serializable {
 	}
 
 	public Double getAmount() {
-		return this.amount;
+		return AmountUtils.round(this.amount);
 	}
 
 	public void setAmount(final Double amount) {
-		this.amount = amount;
+		this.amount = AmountUtils.round(amount);
 	}
 
 	public BankAccount getBankAccount() {

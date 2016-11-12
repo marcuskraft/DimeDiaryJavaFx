@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.dimediary.model.utils.AmountUtils;
+
 @NamedQueries({
 		@NamedQuery(name = "accountBalance", query = "from BalanceHistory b WHERE b.bankAccount = :bankAccount"),
 		@NamedQuery(name = "accountBalanceDate", query = "from BalanceHistory b WHERE b.bankAccount = :bankAccount AND b.date >= :date") })
@@ -58,11 +60,11 @@ public class BalanceHistory implements Serializable {
 	}
 
 	public Double getAmount() {
-		return this.amount;
+		return AmountUtils.round(this.amount);
 	}
 
 	public void setAmount(final Double amount) {
-		this.amount = amount;
+		this.amount = AmountUtils.round(amount);
 	}
 
 	public void addAmount(final Double amount) {

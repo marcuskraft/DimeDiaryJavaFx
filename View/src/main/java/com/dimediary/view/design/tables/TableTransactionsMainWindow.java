@@ -2,6 +2,7 @@ package com.dimediary.view.design.tables;
 
 import java.text.SimpleDateFormat;
 
+import com.dimediary.controller.balance.AccountBalancer;
 import com.dimediary.model.entities.Transaction;
 import com.trolltech.qt.gui.QTableWidget;
 
@@ -25,12 +26,15 @@ public class TableTransactionsMainWindow extends TableTransactions {
 			final String amount = transaction.getAmount().toString().replace(".", ",");
 			final String name = transaction.getName();
 			final String category = transaction.getCategory().getName();
+			final String balance = AccountBalancer.getBalance(transaction.getBankAccount(), transaction.getDate())
+					.toString();
 
 			this.addItem(i, 0, new TableTransactionItem(date, transaction));
 			this.addItem(i, 1, new TableTransactionItem(weekDay, transaction));
 			this.addItem(i, 2, new TableTransactionItem(amount, transaction));
 			this.addItem(i, 3, new TableTransactionItem(name, transaction));
 			this.addItem(i, 4, new TableTransactionItem(category, transaction));
+			this.addItem(i, 5, new TableTransactionItem(balance, transaction));
 		}
 	}
 

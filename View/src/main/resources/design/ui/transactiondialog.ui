@@ -157,14 +157,14 @@
   <widget class="QPushButton" name="pushButtonDelete">
    <property name="geometry">
     <rect>
-     <x>550</x>
+     <x>434</x>
      <y>210</y>
-     <width>75</width>
+     <width>191</width>
      <height>23</height>
     </rect>
    </property>
    <property name="text">
-    <string>Löschen</string>
+    <string>Markierte TransaktionenLöschen</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButtonOK">
@@ -187,12 +187,12 @@
   <tabstop>comboBoxCategory</tabstop>
   <tabstop>comboBoxAccount</tabstop>
   <tabstop>doubleSpinBoxAmount</tabstop>
-  <tabstop>pushButtonAdd</tabstop>
-  <tabstop>pushButtonOK</tabstop>
   <tabstop>pushButtonAddCategory</tabstop>
   <tabstop>pushButtonAddAccount</tabstop>
   <tabstop>checkBoxIncome</tabstop>
+  <tabstop>pushButtonAdd</tabstop>
   <tabstop>tableTransactions</tabstop>
+  <tabstop>pushButtonOK</tabstop>
   <tabstop>pushButtonDelete</tabstop>
  </tabstops>
  <resources/>

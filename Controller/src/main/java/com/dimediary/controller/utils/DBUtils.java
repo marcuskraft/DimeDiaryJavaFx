@@ -9,7 +9,7 @@ import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 
 import com.dimediary.controller.balance.AccountBalancer;
-import com.dimediary.controller.balance.IAccountBalancer.BalanceAction;
+import com.dimediary.controller.balance.AccountBalancer.BalanceAction;
 import com.dimediary.model.EntityManagerHelper;
 import com.dimediary.model.entities.BalanceHistory;
 import com.dimediary.model.entities.BalanceHistoryPK;
@@ -187,8 +187,7 @@ public class DBUtils {
 
 		this.entityManager.persist(transaction);
 
-		final AccountBalancer accountBalancer = new AccountBalancer();
-		accountBalancer.updateBalance(transaction, BalanceAction.adding);
+		AccountBalancer.updateBalance(transaction, AccountBalancer.BalanceAction.adding);
 
 		if (ownTransaction) {
 			this.entityManager.getTransaction().commit();
@@ -319,6 +318,8 @@ public class DBUtils {
 			this.entityManager.getTransaction().begin();
 		}
 
+		this.deleteBalanceHistories(bankAccount);
+		this.deleteTransactions(bankAccount);
 		this.entityManager.remove(bankAccount);
 
 		if (ownTransaction) {
@@ -333,8 +334,12 @@ public class DBUtils {
 			this.entityManager.getTransaction().begin();
 		}
 
-		final AccountBalancer accountBalancer = new AccountBalancer();
-		accountBalancer.updateBalance(transaction, BalanceAction.deleting);
+		AccountBalancer.updateBalance(transaction, BalanceAction.deleting);
+
+		// if (!this.entityManager.contains(transaction)) {
+		// transaction = this.entityManager.find(Transaction.class,
+		// transaction.getId());
+		// }
 
 		this.entityManager.remove(transaction);
 
@@ -427,6 +432,23 @@ public class DBUtils {
 		}
 	}
 
+	public void deleteTransactions(final BankAccount bankAccount) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		final List<Transaction> transactions = this.getTransactions(bankAccount);
+		for (final Transaction transaction : transactions) {
+			this.delete(transaction);
+		}
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
 	public void deleteCategories(final ArrayList<Category> categories) {
 		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
 
@@ -452,6 +474,23 @@ public class DBUtils {
 
 		for (final BalanceHistory balanceHistory : balanceHistories) {
 			this.delete(balanceHistory);
+		}
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
+	public void deleteBalanceHistories(final BankAccount bankAccount) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		final ArrayList<BalanceHistory> balanceHistories = DBUtils.getInstance().getBalanceHistories(bankAccount);
+		if (!balanceHistories.isEmpty()) {
+			DBUtils.getInstance().deleteBalanceHistories(balanceHistories);
 		}
 
 		if (ownTransaction) {

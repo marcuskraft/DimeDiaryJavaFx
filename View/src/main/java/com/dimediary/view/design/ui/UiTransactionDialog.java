@@ -122,7 +122,7 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
         tableTransactions.setSelectionBehavior(SelectionBehavior.SelectRows);
         pushButtonDelete = new QPushButton(TransactionDialog);
         pushButtonDelete.setObjectName("pushButtonDelete");
-        pushButtonDelete.setGeometry(new QRect(550, 210, 75, 23));
+        pushButtonDelete.setGeometry(new QRect(434, 210, 191, 23));
         pushButtonOK = new QPushButton(TransactionDialog);
         pushButtonOK.setObjectName("pushButtonOK");
         pushButtonOK.setGeometry(new QRect(550, 410, 75, 23));
@@ -130,13 +130,13 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
         QWidget.setTabOrder(subjectEdit, comboBoxCategory);
         QWidget.setTabOrder(comboBoxCategory, comboBoxAccount);
         QWidget.setTabOrder(comboBoxAccount, doubleSpinBoxAmount);
-        QWidget.setTabOrder(doubleSpinBoxAmount, pushButtonAdd);
-        QWidget.setTabOrder(pushButtonAdd, pushButtonOK);
-        QWidget.setTabOrder(pushButtonOK, pushButtonAddCategory);
+        QWidget.setTabOrder(doubleSpinBoxAmount, pushButtonAddCategory);
         QWidget.setTabOrder(pushButtonAddCategory, pushButtonAddAccount);
         QWidget.setTabOrder(pushButtonAddAccount, checkBoxIncome);
-        QWidget.setTabOrder(checkBoxIncome, tableTransactions);
-        QWidget.setTabOrder(tableTransactions, pushButtonDelete);
+        QWidget.setTabOrder(checkBoxIncome, pushButtonAdd);
+        QWidget.setTabOrder(pushButtonAdd, tableTransactions);
+        QWidget.setTabOrder(tableTransactions, pushButtonOK);
+        QWidget.setTabOrder(pushButtonOK, pushButtonDelete);
         retranslateUi(TransactionDialog);
         pushButtonOK.clicked.connect(TransactionDialog, "accept()");
 
@@ -178,7 +178,7 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
         __colItem4.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Konto", null));
         tableTransactions.setHorizontalHeaderItem(4, __colItem4);
         tableTransactions.setRowCount(0);
-        pushButtonDelete.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "L\u00f6schen", null));
+        pushButtonDelete.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Markierte TransaktionenL\u00f6schen", null));
         pushButtonOK.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "OK", null));
     } // retranslateUi
 
