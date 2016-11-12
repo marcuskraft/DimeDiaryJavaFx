@@ -7,9 +7,13 @@ import com.dimediary.model.entities.Transaction;
 
 public interface IAccountBalancer {
 
+	public static enum BalanceAction {
+		adding, deleting
+	}
+
 	public Double getBalance(BankAccount bankAccount, Date date);
 
-	public void updateBalance(Transaction transaction);
+	public void updateBalance(Transaction transaction, BalanceAction action);
 
 	public void initBalance(BankAccount bankAccount);
 

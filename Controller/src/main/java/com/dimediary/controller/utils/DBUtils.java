@@ -8,6 +8,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 
+import com.dimediary.controller.balance.AccountBalancer;
+import com.dimediary.controller.balance.IAccountBalancer.BalanceAction;
 import com.dimediary.model.EntityManagerHelper;
 import com.dimediary.model.entities.BalanceHistory;
 import com.dimediary.model.entities.BalanceHistoryPK;
@@ -115,10 +117,10 @@ public class DBUtils {
 
 	}
 
-	public ArrayList<BalanceHistory> getBalanceHistoriesAfterDate(final Date date) {
+	public ArrayList<BalanceHistory> getBalanceHistoriesAfterDate(final BankAccount bankAccount, final Date date) {
 		final List<BalanceHistory> balanceHistories = this.entityManager
 				.createNamedQuery("accountBalanceDate", BalanceHistory.class).setParameter("date", date)
-				.getResultList();
+				.setParameter("bankAccount", bankAccount).getResultList();
 		return new ArrayList<BalanceHistory>(balanceHistories);
 	}
 
@@ -184,6 +186,9 @@ public class DBUtils {
 		}
 
 		this.entityManager.persist(transaction);
+
+		final AccountBalancer accountBalancer = new AccountBalancer();
+		accountBalancer.updateBalance(transaction, BalanceAction.adding);
 
 		if (ownTransaction) {
 			this.entityManager.getTransaction().commit();
@@ -327,6 +332,9 @@ public class DBUtils {
 		if (ownTransaction) {
 			this.entityManager.getTransaction().begin();
 		}
+
+		final AccountBalancer accountBalancer = new AccountBalancer();
+		accountBalancer.updateBalance(transaction, BalanceAction.deleting);
 
 		this.entityManager.remove(transaction);
 

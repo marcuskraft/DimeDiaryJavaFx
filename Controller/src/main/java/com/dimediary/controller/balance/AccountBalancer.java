@@ -20,7 +20,10 @@ public class AccountBalancer implements IAccountBalancer {
 	}
 
 	@Override
-	public void updateBalance(final Transaction transaction) {
+	public void updateBalance(final Transaction transaction, final BalanceAction action) {
+		if (transaction.getBankAccount() == null) {
+			return;
+		}
 		final Date date = transaction.getDate();
 		Date nextSunday;
 		if (!this.isSunday(date)) {
@@ -30,12 +33,17 @@ public class AccountBalancer implements IAccountBalancer {
 		}
 
 		final ArrayList<BalanceHistory> balanceHistories = DBUtils.getInstance()
-				.getBalanceHistoriesAfterDate(nextSunday);
+				.getBalanceHistoriesAfterDate(transaction.getBankAccount(), nextSunday);
 
-		for (final BalanceHistory balanceHistory : balanceHistories) {
-			balanceHistory.addAmount(transaction.getAmount());
+		if (action == BalanceAction.adding) {
+			for (final BalanceHistory balanceHistory : balanceHistories) {
+				balanceHistory.addAmount(transaction.getAmount());
+			}
+		} else {
+			for (final BalanceHistory balanceHistory : balanceHistories) {
+				balanceHistory.addAmount(-transaction.getAmount());
+			}
 		}
-
 		DBUtils.getInstance().mergeBalanceHistories(balanceHistories);
 
 	}
@@ -62,7 +70,7 @@ public class AccountBalancer implements IAccountBalancer {
 		DBUtils.getInstance().persistBalanceHistories(balanceHistories);
 
 		for (final Transaction transaction : transactions) {
-			this.updateBalance(transaction);
+			this.updateBalance(transaction, BalanceAction.adding);
 		}
 
 	}

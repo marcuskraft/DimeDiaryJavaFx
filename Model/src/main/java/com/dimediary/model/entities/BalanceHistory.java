@@ -17,7 +17,7 @@ import javax.persistence.TemporalType;
 
 @NamedQueries({
 		@NamedQuery(name = "accountBalance", query = "from BalanceHistory b WHERE b.bankAccount = :bankAccount"),
-		@NamedQuery(name = "accountBalanceDate", query = "from BalanceHistory b WHERE b.date >= :date") })
+		@NamedQuery(name = "accountBalanceDate", query = "from BalanceHistory b WHERE b.bankAccount = :bankAccount AND b.date >= :date") })
 @Entity
 @Table(name = "BALANCE_HISTORY")
 @IdClass(BalanceHistoryPK.class)
