@@ -74,4 +74,9 @@
 		<java>FocusPolicy.TabFocus</java>
 		<importString>import com.trolltech.qt.core.Qt.FocusPolicy;</importString>
 	</Mapping>
+	<Mapping>
+		<cpp>QTabWidget::South</cpp> 
+		<java>TabPosition.South</java>
+		<importString>import com.trolltech.qt.gui.QTabWidget.TabPosition;</importString>
+	</Mapping>
 </Mapping_List>

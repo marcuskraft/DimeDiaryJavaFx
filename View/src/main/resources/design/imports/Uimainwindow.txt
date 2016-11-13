@@ -1,3 +1,4 @@
 import com.trolltech.qt.gui.QAbstractItemView.SelectionBehavior;
 import com.trolltech.qt.core.Qt.LayoutDirection;
 import com.trolltech.qt.gui.QAbstractItemView.EditTrigger;
+import com.trolltech.qt.gui.QTabWidget.TabPosition;

@@ -9,6 +9,7 @@ package com.dimediary.view.design.ui;
 import com.trolltech.qt.gui.QAbstractItemView.SelectionBehavior;
 import com.trolltech.qt.core.Qt.LayoutDirection;
 import com.trolltech.qt.gui.QAbstractItemView.EditTrigger;
+import com.trolltech.qt.gui.QTabWidget.TabPosition;
 
 
 
@@ -25,18 +26,39 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public QWidget centralwidget;
     public QWidget gridLayoutWidget;
     public QGridLayout gridLayout;
+    public QTabWidget MainWindowTabWidget;
+    public QWidget overview;
+    public QWidget gridLayoutWidget_3;
+    public QGridLayout gridLayout_4;
+    public QComboBox comboBoxBankaccount_2;
+    public QLabel label_4;
+    public QLabel label_5;
+    public QSpinBox spinBoxYear;
     public QTabWidget tabWidget;
+    public QWidget tabJanuary;
+    public QWidget tabFebruary;
+    public QWidget tabMarch;
+    public QWidget tabAprile;
+    public QWidget tabMay;
+    public QWidget tabJune;
+    public QWidget tabJuly;
+    public QWidget tabAugust;
+    public QWidget tabSeptember;
+    public QWidget tabOctober;
+    public QWidget tabNovember;
+    public QWidget tabDecember;
     public QWidget transactions;
     public QTableWidget tableTransactions;
-    public QComboBox comboBoxBankaccount;
-    public QLabel label;
-    public QDateEdit dateUntil;
-    public QDateEdit dateFrom;
-    public QLabel label_2;
-    public QLabel label_3;
     public QPushButton buttonAddTransaction;
     public QPushButton pushButtonDelete;
-    public QWidget tab_2;
+    public QWidget gridLayoutWidget_2;
+    public QGridLayout gridLayout_3;
+    public QLabel label;
+    public QComboBox comboBoxBankaccount;
+    public QLabel label_2;
+    public QDateEdit dateFrom;
+    public QLabel label_3;
+    public QDateEdit dateUntil;
     public QMenuBar menubar;
     public QMenu menuDatei;
     public QMenu menuBearbeiten;
@@ -47,7 +69,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public void setupUi(QMainWindow MainWindow)
     {
         MainWindow.setObjectName("MainWindow");
-        MainWindow.resize(new QSize(722, 792).expandedTo(MainWindow.minimumSizeHint()));
+        MainWindow.resize(new QSize(1040, 806).expandedTo(MainWindow.minimumSizeHint()));
         actionBeenden = new QAction(MainWindow);
         actionBeenden.setObjectName("actionBeenden");
         actionEinstellungen = new QAction(MainWindow);
@@ -65,21 +87,92 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         gridLayoutWidget.setGeometry(new QRect(0, 0, 2, 2));
         gridLayout = new QGridLayout(gridLayoutWidget);
         gridLayout.setObjectName("gridLayout");
-        tabWidget = new QTabWidget(centralwidget);
-        tabWidget.setObjectName("tabWidget");
-        tabWidget.setGeometry(new QRect(0, 0, 941, 771));
-        QSizePolicy sizePolicy = new QSizePolicy(com.trolltech.qt.gui.QSizePolicy.Policy.Maximum, com.trolltech.qt.gui.QSizePolicy.Policy.Maximum);
+        MainWindowTabWidget = new QTabWidget(centralwidget);
+        MainWindowTabWidget.setObjectName("MainWindowTabWidget");
+        MainWindowTabWidget.setGeometry(new QRect(0, 0, 1011, 721));
+        QSizePolicy sizePolicy = new QSizePolicy(com.trolltech.qt.gui.QSizePolicy.Policy.Preferred, com.trolltech.qt.gui.QSizePolicy.Policy.Preferred);
         sizePolicy.setHorizontalStretch((byte)0);
         sizePolicy.setVerticalStretch((byte)0);
-        sizePolicy.setHeightForWidth(tabWidget.sizePolicy().hasHeightForWidth());
-        tabWidget.setSizePolicy(sizePolicy);
-        tabWidget.setTabsClosable(false);
-        tabWidget.setMovable(false);
+        sizePolicy.setHeightForWidth(MainWindowTabWidget.sizePolicy().hasHeightForWidth());
+        MainWindowTabWidget.setSizePolicy(sizePolicy);
+        MainWindowTabWidget.setTabsClosable(false);
+        MainWindowTabWidget.setMovable(false);
+        overview = new QWidget();
+        overview.setObjectName("overview");
+        gridLayoutWidget_3 = new QWidget(overview);
+        gridLayoutWidget_3.setObjectName("gridLayoutWidget_3");
+        gridLayoutWidget_3.setGeometry(new QRect(0, 0, 201, 81));
+        gridLayout_4 = new QGridLayout(gridLayoutWidget_3);
+        gridLayout_4.setObjectName("gridLayout_4");
+        comboBoxBankaccount_2 = new QComboBox(gridLayoutWidget_3);
+        comboBoxBankaccount_2.setObjectName("comboBoxBankaccount_2");
+
+        gridLayout_4.addWidget(comboBoxBankaccount_2, 0, 1, 1, 1);
+
+        label_4 = new QLabel(gridLayoutWidget_3);
+        label_4.setObjectName("label_4");
+
+        gridLayout_4.addWidget(label_4, 0, 0, 1, 1);
+
+        label_5 = new QLabel(gridLayoutWidget_3);
+        label_5.setObjectName("label_5");
+
+        gridLayout_4.addWidget(label_5, 1, 0, 1, 1);
+
+        spinBoxYear = new QSpinBox(gridLayoutWidget_3);
+        spinBoxYear.setObjectName("spinBoxYear");
+        spinBoxYear.setMinimum(1900);
+        spinBoxYear.setMaximum(3000);
+        spinBoxYear.setValue(2016);
+
+        gridLayout_4.addWidget(spinBoxYear, 1, 1, 1, 1);
+
+        tabWidget = new QTabWidget(overview);
+        tabWidget.setObjectName("tabWidget");
+        tabWidget.setGeometry(new QRect(0, 120, 1001, 571));
+        tabWidget.setTabPosition(TabPosition.South);
+        tabJanuary = new QWidget();
+        tabJanuary.setObjectName("tabJanuary");
+        tabWidget.addTab(tabJanuary, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Januar", null));
+        tabFebruary = new QWidget();
+        tabFebruary.setObjectName("tabFebruary");
+        tabWidget.addTab(tabFebruary, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Februar", null));
+        tabMarch = new QWidget();
+        tabMarch.setObjectName("tabMarch");
+        tabWidget.addTab(tabMarch, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "M\u00e4rz", null));
+        tabAprile = new QWidget();
+        tabAprile.setObjectName("tabAprile");
+        tabWidget.addTab(tabAprile, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "April", null));
+        tabMay = new QWidget();
+        tabMay.setObjectName("tabMay");
+        tabWidget.addTab(tabMay, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Mai", null));
+        tabJune = new QWidget();
+        tabJune.setObjectName("tabJune");
+        tabWidget.addTab(tabJune, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Juni", null));
+        tabJuly = new QWidget();
+        tabJuly.setObjectName("tabJuly");
+        tabWidget.addTab(tabJuly, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Juli", null));
+        tabAugust = new QWidget();
+        tabAugust.setObjectName("tabAugust");
+        tabWidget.addTab(tabAugust, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "August", null));
+        tabSeptember = new QWidget();
+        tabSeptember.setObjectName("tabSeptember");
+        tabWidget.addTab(tabSeptember, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "September", null));
+        tabOctober = new QWidget();
+        tabOctober.setObjectName("tabOctober");
+        tabWidget.addTab(tabOctober, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Oktober", null));
+        tabNovember = new QWidget();
+        tabNovember.setObjectName("tabNovember");
+        tabWidget.addTab(tabNovember, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "November", null));
+        tabDecember = new QWidget();
+        tabDecember.setObjectName("tabDecember");
+        tabWidget.addTab(tabDecember, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Dezember", null));
+        MainWindowTabWidget.addTab(overview, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "\u00dcberblick", null));
         transactions = new QWidget();
         transactions.setObjectName("transactions");
         tableTransactions = new QTableWidget(transactions);
         tableTransactions.setObjectName("tableTransactions");
-        tableTransactions.setGeometry(new QRect(0, 40, 711, 651));
+        tableTransactions.setGeometry(new QRect(0, 100, 671, 471));
         tableTransactions.setLayoutDirection(LayoutDirection.LeftToRight);
         tableTransactions.setAutoFillBackground(false);
         tableTransactions.setEditTriggers(EditTrigger.createQFlags(EditTrigger.NoEditTriggers));
@@ -88,40 +181,54 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         tableTransactions.setSortingEnabled(true);
         tableTransactions.setRowCount(0);
         tableTransactions.setColumnCount(6);
-        comboBoxBankaccount = new QComboBox(transactions);
-        comboBoxBankaccount.setObjectName("comboBoxBankaccount");
-        comboBoxBankaccount.setGeometry(new QRect(40, 10, 91, 22));
-        label = new QLabel(transactions);
-        label.setObjectName("label");
-        label.setGeometry(new QRect(10, 10, 31, 16));
-        dateUntil = new QDateEdit(transactions);
-        dateUntil.setObjectName("dateUntil");
-        dateUntil.setGeometry(new QRect(310, 10, 110, 22));
-        dateUntil.setCalendarPopup(true);
-        dateFrom = new QDateEdit(transactions);
-        dateFrom.setObjectName("dateFrom");
-        dateFrom.setGeometry(new QRect(170, 10, 110, 22));
-        dateFrom.setCalendarPopup(true);
-        label_2 = new QLabel(transactions);
-        label_2.setObjectName("label_2");
-        label_2.setGeometry(new QRect(150, 10, 21, 20));
-        label_3 = new QLabel(transactions);
-        label_3.setObjectName("label_3");
-        label_3.setGeometry(new QRect(290, 10, 46, 20));
         buttonAddTransaction = new QPushButton(transactions);
         buttonAddTransaction.setObjectName("buttonAddTransaction");
-        buttonAddTransaction.setGeometry(new QRect(600, 10, 111, 23));
+        buttonAddTransaction.setGeometry(new QRect(500, 40, 161, 23));
         pushButtonDelete = new QPushButton(transactions);
         pushButtonDelete.setObjectName("pushButtonDelete");
-        pushButtonDelete.setGeometry(new QRect(630, 700, 75, 23));
-        tabWidget.addTab(transactions, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Ums\u00e4tze", null));
-        tab_2 = new QWidget();
-        tab_2.setObjectName("tab_2");
-        tabWidget.addTab(tab_2, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Tab 2", null));
+        pushButtonDelete.setGeometry(new QRect(30, 570, 75, 23));
+        gridLayoutWidget_2 = new QWidget(transactions);
+        gridLayoutWidget_2.setObjectName("gridLayoutWidget_2");
+        gridLayoutWidget_2.setGeometry(new QRect(0, 0, 181, 101));
+        gridLayout_3 = new QGridLayout(gridLayoutWidget_2);
+        gridLayout_3.setObjectName("gridLayout_3");
+        label = new QLabel(gridLayoutWidget_2);
+        label.setObjectName("label");
+
+        gridLayout_3.addWidget(label, 0, 0, 1, 1);
+
+        comboBoxBankaccount = new QComboBox(gridLayoutWidget_2);
+        comboBoxBankaccount.setObjectName("comboBoxBankaccount");
+
+        gridLayout_3.addWidget(comboBoxBankaccount, 0, 1, 1, 1);
+
+        label_2 = new QLabel(gridLayoutWidget_2);
+        label_2.setObjectName("label_2");
+
+        gridLayout_3.addWidget(label_2, 1, 0, 1, 1);
+
+        dateFrom = new QDateEdit(gridLayoutWidget_2);
+        dateFrom.setObjectName("dateFrom");
+        dateFrom.setCalendarPopup(true);
+
+        gridLayout_3.addWidget(dateFrom, 1, 1, 1, 1);
+
+        label_3 = new QLabel(gridLayoutWidget_2);
+        label_3.setObjectName("label_3");
+
+        gridLayout_3.addWidget(label_3, 2, 0, 1, 1);
+
+        dateUntil = new QDateEdit(gridLayoutWidget_2);
+        dateUntil.setObjectName("dateUntil");
+        dateUntil.setCalendarPopup(true);
+
+        gridLayout_3.addWidget(dateUntil, 2, 1, 1, 1);
+
+        MainWindowTabWidget.addTab(transactions, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Ums\u00e4tze", null));
         MainWindow.setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar.setObjectName("menubar");
-        menubar.setGeometry(new QRect(0, 0, 722, 21));
+        menubar.setGeometry(new QRect(0, 0, 1040, 26));
         menuDatei = new QMenu(menubar);
         menuDatei.setObjectName("menuDatei");
         menuBearbeiten = new QMenu(menubar);
@@ -142,6 +249,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         retranslateUi(MainWindow);
         actionBeenden.triggered.connect(MainWindow, "close()");
 
+        MainWindowTabWidget.setCurrentIndex(0);
         tabWidget.setCurrentIndex(0);
 
 
@@ -156,6 +264,21 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         actionKonto_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto erstellen", null));
         actionKontoart_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kontoart erstellen", null));
         actionKategorie_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kategorie erstellen", null));
+        label_4.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto", null));
+        label_5.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Jahr", null));
+        tabWidget.setTabText(tabWidget.indexOf(tabJanuary), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Januar", null));
+        tabWidget.setTabText(tabWidget.indexOf(tabFebruary), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Februar", null));
+        tabWidget.setTabText(tabWidget.indexOf(tabMarch), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "M\u00e4rz", null));
+        tabWidget.setTabText(tabWidget.indexOf(tabAprile), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "April", null));
+        tabWidget.setTabText(tabWidget.indexOf(tabMay), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Mai", null));
+        tabWidget.setTabText(tabWidget.indexOf(tabJune), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Juni", null));
+        tabWidget.setTabText(tabWidget.indexOf(tabJuly), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Juli", null));
+        tabWidget.setTabText(tabWidget.indexOf(tabAugust), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "August", null));
+        tabWidget.setTabText(tabWidget.indexOf(tabSeptember), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "September", null));
+        tabWidget.setTabText(tabWidget.indexOf(tabOctober), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Oktober", null));
+        tabWidget.setTabText(tabWidget.indexOf(tabNovember), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "November", null));
+        tabWidget.setTabText(tabWidget.indexOf(tabDecember), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Dezember", null));
+        MainWindowTabWidget.setTabText(MainWindowTabWidget.indexOf(overview), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "\u00dcberblick", null));
         tableTransactions.clear();
         tableTransactions.setColumnCount(6);
 
@@ -183,13 +306,12 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         __colItem5.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kontostand", null));
         tableTransactions.setHorizontalHeaderItem(5, __colItem5);
         tableTransactions.setRowCount(0);
+        buttonAddTransaction.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion erstellen", null));
+        pushButtonDelete.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "L\u00f6schen", null));
         label.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto", null));
         label_2.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "von", null));
         label_3.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "bis", null));
-        buttonAddTransaction.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion erstellen", null));
-        pushButtonDelete.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "L\u00f6schen", null));
-        tabWidget.setTabText(tabWidget.indexOf(transactions), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Ums\u00e4tze", null));
-        tabWidget.setTabText(tabWidget.indexOf(tab_2), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Tab 2", null));
+        MainWindowTabWidget.setTabText(MainWindowTabWidget.indexOf(transactions), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Ums\u00e4tze", null));
         menuDatei.setTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Datei", null));
         menuBearbeiten.setTitle(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Bearbeiten", null));
     } // retranslateUi

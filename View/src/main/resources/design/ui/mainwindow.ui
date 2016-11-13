@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>722</width>
-    <height>792</height>
+    <width>1040</width>
+    <height>806</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,17 +25,17 @@
     </property>
     <layout class="QGridLayout" name="gridLayout"/>
    </widget>
-   <widget class="QTabWidget" name="tabWidget">
+   <widget class="QTabWidget" name="MainWindowTabWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>941</width>
-      <height>771</height>
+      <width>1011</width>
+      <height>721</height>
      </rect>
     </property>
     <property name="sizePolicy">
-     <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
       <horstretch>0</horstretch>
       <verstretch>0</verstretch>
      </sizepolicy>
@@ -49,6 +49,129 @@
     <property name="movable">
      <bool>false</bool>
     </property>
+    <widget class="QWidget" name="overview">
+     <attribute name="title">
+      <string>Überblick</string>
+     </attribute>
+     <widget class="QWidget" name="gridLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>201</width>
+        <height>81</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboBoxBankaccount_2"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_4">
+         <property name="text">
+          <string>Konto</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_5">
+         <property name="text">
+          <string>Jahr</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QSpinBox" name="spinBoxYear">
+         <property name="minimum">
+          <number>1900</number>
+         </property>
+         <property name="maximum">
+          <number>3000</number>
+         </property>
+         <property name="value">
+          <number>2016</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>120</y>
+        <width>1001</width>
+        <height>571</height>
+       </rect>
+      </property>
+      <property name="tabPosition">
+       <enum>QTabWidget::South</enum>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tabJanuary">
+       <attribute name="title">
+        <string>Januar</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabFebruary">
+       <attribute name="title">
+        <string>Februar</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabMarch">
+       <attribute name="title">
+        <string>März</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabAprile">
+       <attribute name="title">
+        <string>April</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabMay">
+       <attribute name="title">
+        <string>Mai</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabJune">
+       <attribute name="title">
+        <string>Juni</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabJuly">
+       <attribute name="title">
+        <string>Juli</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabAugust">
+       <attribute name="title">
+        <string>August</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabSeptember">
+       <attribute name="title">
+        <string>September</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabOctober">
+       <attribute name="title">
+        <string>Oktober</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabNovember">
+       <attribute name="title">
+        <string>November</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="tabDecember">
+       <attribute name="title">
+        <string>Dezember</string>
+       </attribute>
+      </widget>
+     </widget>
+    </widget>
     <widget class="QWidget" name="transactions">
      <attribute name="title">
       <string>Umsätze</string>
@@ -57,9 +180,9 @@
       <property name="geometry">
        <rect>
         <x>0</x>
-        <y>40</y>
-        <width>711</width>
-        <height>651</height>
+        <y>100</y>
+        <width>671</width>
+        <height>471</height>
        </rect>
       </property>
       <property name="layoutDirection">
@@ -117,87 +240,12 @@
        </property>
       </column>
      </widget>
-     <widget class="QComboBox" name="comboBoxBankaccount">
-      <property name="geometry">
-       <rect>
-        <x>40</x>
-        <y>10</y>
-        <width>91</width>
-        <height>22</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>10</y>
-        <width>31</width>
-        <height>16</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>Konto</string>
-      </property>
-     </widget>
-     <widget class="QDateEdit" name="dateUntil">
-      <property name="geometry">
-       <rect>
-        <x>310</x>
-        <y>10</y>
-        <width>110</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QDateEdit" name="dateFrom">
-      <property name="geometry">
-       <rect>
-        <x>170</x>
-        <y>10</y>
-        <width>110</width>
-        <height>22</height>
-       </rect>
-      </property>
-      <property name="calendarPopup">
-       <bool>true</bool>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_2">
-      <property name="geometry">
-       <rect>
-        <x>150</x>
-        <y>10</y>
-        <width>21</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>von</string>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label_3">
-      <property name="geometry">
-       <rect>
-        <x>290</x>
-        <y>10</y>
-        <width>46</width>
-        <height>20</height>
-       </rect>
-      </property>
-      <property name="text">
-       <string>bis</string>
-      </property>
-     </widget>
      <widget class="QPushButton" name="buttonAddTransaction">
       <property name="geometry">
        <rect>
-        <x>600</x>
-        <y>10</y>
-        <width>111</width>
+        <x>500</x>
+        <y>40</y>
+        <width>161</width>
         <height>23</height>
        </rect>
       </property>
@@ -208,8 +256,8 @@
      <widget class="QPushButton" name="pushButtonDelete">
       <property name="geometry">
        <rect>
-        <x>630</x>
-        <y>700</y>
+        <x>30</x>
+        <y>570</y>
         <width>75</width>
         <height>23</height>
        </rect>
@@ -218,11 +266,56 @@
        <string>Löschen</string>
       </property>
      </widget>
-    </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>Tab 2</string>
-     </attribute>
+     <widget class="QWidget" name="gridLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>181</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Konto</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboBoxBankaccount"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>von</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QDateEdit" name="dateFrom">
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_3">
+         <property name="text">
+          <string>bis</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QDateEdit" name="dateUntil">
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </widget>
   </widget>
@@ -231,8 +324,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>722</width>
-     <height>21</height>
+     <width>1040</width>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">

@@ -63,6 +63,7 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
 
         dateEdit = new QDateEdit(gridLayoutWidget);
         dateEdit.setObjectName("dateEdit");
+        dateEdit.setCalendarPopup(true);
 
         gridLayout.addWidget(dateEdit, 0, 2, 1, 1);
 
