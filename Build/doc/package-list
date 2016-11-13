@@ -1,0 +1,15 @@
+com.dimediary.controller.balance
+com.dimediary.controller.test
+com.dimediary.controller.utils
+com.dimediary.model
+com.dimediary.model.entities
+com.dimediary.model.utils
+com.dimediary.persistence
+com.dimediary.ui2jui
+com.dimediary.ui2jui.options
+com.dimediary.ui2jui.util
+com.dimediary.view.design
+com.dimediary.view.design.tables
+com.dimediary.view.design.ui
+com.dimediary.view.main
+com.dimediary.view.utils

@@ -11,12 +11,37 @@ import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.utils.AmountUtils;
 
+/**
+ *
+ * @author eyota
+ *
+ */
 public class AccountBalancer {
 
+	/**
+	 *
+	 * @author eyota
+	 *
+	 */
 	public static enum BalanceAction {
-		adding, deleting
+		/**
+		 * adding a transaction
+		 */
+		adding,
+		/**
+		 * deleting a transaction
+		 */
+		deleting
 	}
 
+	/**
+	 *
+	 * @param bankAccount
+	 *            the bank account
+	 * @param dateUntil
+	 *            the date
+	 * @return returns the balance for this bank account and date
+	 */
 	public static Double getBalance(final BankAccount bankAccount, final Date dateUntil) {
 
 		final Date lastSunday = DateUtils.getLastSunday(dateUntil);
@@ -44,6 +69,16 @@ public class AccountBalancer {
 
 	}
 
+	/**
+	 * updates the balance history after adding or deleting a transaction if the
+	 * transaction belongs to a bank account
+	 *
+	 * @param transaction
+	 *            the transaction for the updates; only this transaction will be
+	 *            considered for update
+	 * @param action
+	 *            defines whether the transaction is added or deleted
+	 */
 	public static void updateBalance(final Transaction transaction, final BalanceAction action) {
 		if (transaction.getBankAccount() == null) {
 			return;
@@ -72,6 +107,13 @@ public class AccountBalancer {
 
 	}
 
+	/**
+	 * initialize the balance history for this bank account. All old balance
+	 * histories will be deleted.
+	 *
+	 * @param bankAccount
+	 *            bank account to initialize
+	 */
 	public static void initBalance(final BankAccount bankAccount) {
 		DBUtils.getInstance().deleteBalanceHistories(bankAccount);
 
@@ -95,6 +137,14 @@ public class AccountBalancer {
 
 	}
 
+	/**
+	 * proofs the balance history of this bank account. Initialize the balance
+	 * history if no exists. Corrects wrong entries in the balance history if
+	 * there are some.
+	 *
+	 * @param bankAccount
+	 *            bank account to proof
+	 */
 	public static void proofBalance(final BankAccount bankAccount) {
 		AccountBalancer.initBalance(bankAccount); // TODO implement the logic
 													// for the case that no
