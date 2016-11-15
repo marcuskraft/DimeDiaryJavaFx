@@ -2,6 +2,7 @@ package com.dimediary.controller.balance;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import com.dimediary.controller.utils.DBUtils;
@@ -38,27 +39,31 @@ public class AccountBalancer {
 	 *
 	 * @param bankAccount
 	 *            the bank account
-	 * @param dateUntil
+	 * @param date
 	 *            the date
 	 * @return returns the balance for this bank account and date
 	 */
-	public static Double getBalance(final BankAccount bankAccount, final Date dateUntil) {
-
-		final Date lastSunday = DateUtils.getLastSunday(dateUntil);
+	public static Double getBalance(final BankAccount bankAccount, final Date date) {
+		if (bankAccount == null || date == null) {
+			return null;
+		}
+		final Date lastSunday = DateUtils.getLastSunday(date);
 
 		BalanceHistory balanceHistory = DBUtils.getInstance().getBalanceHistory(bankAccount, lastSunday);
 
 		if (balanceHistory == null) {
 			AccountBalancer.proofBalance(bankAccount);
 			balanceHistory = DBUtils.getInstance().getBalanceHistory(bankAccount, lastSunday);
+			if (balanceHistory == null) {
+				return null;
+			}
 		}
 
 		Double result = balanceHistory.getAmount();
 
-		if (lastSunday.before(dateUntil)) {
+		if (lastSunday.before(date)) {
 			final Date dateFrom = DateUtils.addOneDay(lastSunday);
-			final List<Transaction> transactions = DBUtils.getInstance().getTransactions(dateFrom, dateUntil,
-					bankAccount);
+			final List<Transaction> transactions = DBUtils.getInstance().getTransactions(dateFrom, date, bankAccount);
 
 			for (final Transaction transaction : transactions) {
 				result += transaction.getAmount();
@@ -67,6 +72,58 @@ public class AccountBalancer {
 
 		return AmountUtils.round(result);
 
+	}
+
+	// TODO write junit test for this method in comparison to the other
+	// getBalance() method
+	private static Double getBalance(final BankAccount bankAccount, final Date date, final Double balanceDayBefore) {
+		if (bankAccount == null || date == null) {
+			return null;
+		}
+		final ArrayList<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount, date);
+
+		Double result;
+		if (balanceDayBefore == null) {
+			result = 0.0;
+		} else {
+			result = balanceDayBefore;
+		}
+
+		for (final Transaction transaction : transactions) {
+			result += transaction.getAmount();
+		}
+
+		return AmountUtils.round(result);
+	}
+
+	/**
+	 *
+	 * @param bankAccount
+	 *            bank account for which the balances are requested
+	 * @param dates
+	 *            sequence of following days for which the balances are
+	 *            requested
+	 * @return returns a HashMap with the given Dates and the corresponding
+	 *         balances for this bank account on this date
+	 */
+	public static HashMap<Date, Double> getBalancesFollowingDays(final BankAccount bankAccount,
+			final ArrayList<Date> dates) {
+		final HashMap<Date, Double> balances = new HashMap<>();
+
+		Double lastBalance = 0.0;
+
+		dates.sort(null);
+
+		for (int i = 0; i < dates.size(); i++) {
+			if (i == 0) {
+				lastBalance = AccountBalancer.getBalance(bankAccount, dates.get(i));
+			} else {
+				lastBalance = AccountBalancer.getBalance(bankAccount, dates.get(i), lastBalance);
+			}
+			balances.put(dates.get(i), lastBalance);
+		}
+
+		return balances;
 	}
 
 	/**

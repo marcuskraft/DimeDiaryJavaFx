@@ -1,9 +1,13 @@
 package com.dimediary.view.design;
 
+import java.time.Month;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.dimediary.controller.utils.DBUtils;
+import com.dimediary.controller.utils.DateUtils;
 import com.dimediary.model.entities.Transaction;
+import com.dimediary.view.design.tables.TableMonthOverview;
 import com.dimediary.view.design.tables.TableTransactionsMainWindow;
 import com.dimediary.view.design.ui.UiMainWindow;
 import com.dimediary.view.main.Main;
@@ -11,11 +15,14 @@ import com.dimediary.view.utils.QTUtils;
 import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.gui.QApplication;
 import com.trolltech.qt.gui.QMainWindow;
+import com.trolltech.qt.gui.QTableWidget;
+import com.trolltech.qt.gui.QWidget;
 
 public class MainWindow extends UiMainWindow {
 
 	private final QMainWindow window;
 	private final TableTransactionsMainWindow ownTableTransactions;
+	private TableMonthOverview tableMonthOverview;
 
 	public MainWindow() {
 		super();
@@ -23,11 +30,14 @@ public class MainWindow extends UiMainWindow {
 		this.setupUi(this.window);
 		this.ownTableTransactions = new TableTransactionsMainWindow(this.tableTransactions);
 
-		this.initTableTransaction();
-
 		this.window.show();
 
 		QApplication.setActiveWindow(this.window);
+	}
+
+	public void initialize() {
+		this.initTableTransaction();
+		this.initOverview();
 	}
 
 	private void initTableTransaction() {
@@ -52,14 +62,61 @@ public class MainWindow extends UiMainWindow {
 		// set the possible bank accounts in the combo box
 		final ArrayList<String> bankAccountNames = DBUtils.getInstance().getBankAccountNames();
 		// TODO if no bankAccounts exists ask the user to add bank account
-		this.comboBoxBankaccount.clear();
-		this.comboBoxBankaccount.addItems(bankAccountNames);
+		this.comboBoxBankaccountTransaction.clear();
+		this.comboBoxBankaccountTransaction.addItems(bankAccountNames);
+		this.comboBoxBankaccountOverview.clear();
+		this.comboBoxBankaccountOverview.addItems(bankAccountNames);
 	}
 
 	public void updateTransactionsTable() {
 		this.ownTableTransactions.updateTransactionTable(QTUtils.qDateToDate(this.dateFrom.date()),
 				QTUtils.qDateToDate(this.dateUntil.date()),
-				this.comboBoxBankaccount.itemText(this.comboBoxBankaccount.currentIndex()));
+				this.comboBoxBankaccountTransaction.itemText(this.comboBoxBankaccountTransaction.currentIndex()));
+	}
+
+	private void initOverview() {
+		final HashMap<Month, QTableWidget> tablesOverview = new HashMap<>();
+
+		tablesOverview.put(Month.JANUARY, this.tableWidgetBalanceJanuary);
+		tablesOverview.put(Month.FEBRUARY, this.tableWidgetBalanceFebruar);
+		tablesOverview.put(Month.MARCH, this.tableWidgetBalanceMarch);
+		tablesOverview.put(Month.APRIL, this.tableWidgetBalanceApril);
+		tablesOverview.put(Month.MAY, this.tableWidgetBalanceMay);
+		tablesOverview.put(Month.JUNE, this.tableWidgetBalanceJune);
+		tablesOverview.put(Month.JULY, this.tableWidgetBalanceJuly);
+		tablesOverview.put(Month.AUGUST, this.tableWidgetBalanceAugust);
+		tablesOverview.put(Month.SEPTEMBER, this.tableWidgetBalanceSeptember);
+		tablesOverview.put(Month.OCTOBER, this.tableWidgetBalanceOctober);
+		tablesOverview.put(Month.NOVEMBER, this.tableWidgetBalanceNovember);
+		tablesOverview.put(Month.DECEMBER, this.tableWidgetBalanceDecember);
+
+		final HashMap<Month, QWidget> tabs = new HashMap<>();
+
+		tabs.put(Month.JANUARY, this.tabJanuary);
+		tabs.put(Month.FEBRUARY, this.tabFebruary);
+		tabs.put(Month.MARCH, this.tabMarch);
+		tabs.put(Month.APRIL, this.tabAprile);
+		tabs.put(Month.MAY, this.tabMay);
+		tabs.put(Month.JUNE, this.tabJune);
+		tabs.put(Month.JULY, this.tabJuly);
+		tabs.put(Month.AUGUST, this.tabAugust);
+		tabs.put(Month.SEPTEMBER, this.tabSeptember);
+		tabs.put(Month.OCTOBER, this.tabOctober);
+		tabs.put(Month.NOVEMBER, this.tabNovember);
+		tabs.put(Month.DECEMBER, this.tabDecember);
+
+		this.spinBoxYear.setValue(DateUtils.getActualYear());
+		this.tableMonthOverview = new TableMonthOverview(tablesOverview, tabs, this.tabWidget);
+
+		final Month actualMonth = DateUtils.getActualMonth();
+		this.tabWidget.setCurrentWidget(tabs.get(actualMonth));
+
+		this.updateOverview(actualMonth);
+
+	}
+
+	public void updateOverview(final Month month) {
+		this.tableMonthOverview.updateMonthOverview(month);
 	}
 
 	public void onDoubleClickRow(final Integer row, final Integer column) {
@@ -82,7 +139,7 @@ public class MainWindow extends UiMainWindow {
 
 		this.pushButtonDelete.clicked.connect(this, "OnDeleteTransaction()");
 
-		this.comboBoxBankaccount.currentIndexChanged.connect(this, "updateTransactionsTable()");
+		this.comboBoxBankaccountTransaction.currentIndexChanged.connect(this, "updateTransactionsTable()");
 		this.dateFrom.dateChanged.connect(this, "updateTransactionsTable()");
 		this.dateUntil.dateChanged.connect(this, "updateTransactionsTable()");
 
@@ -91,6 +148,8 @@ public class MainWindow extends UiMainWindow {
 
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "initialize()");
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "exec()");
+
+		this.tableMonthOverview.createTrigger();
 	}
 
 }

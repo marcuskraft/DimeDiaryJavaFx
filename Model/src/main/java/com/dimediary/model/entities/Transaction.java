@@ -21,7 +21,8 @@ import com.dimediary.model.utils.AmountUtils;
 @NamedQueries({ @NamedQuery(name = "allTransactions", query = "from Transaction"),
 		@NamedQuery(name = "TransactionsBetween", query = "from Transaction t WHERE t.bankAccount = :bankAccount"
 				+ " AND t.date BETWEEN :dateFrom AND :dateUntil ORDER BY t.date"),
-		@NamedQuery(name = "allAccountTransactions", query = "from Transaction t WHERE t.bankAccount = :bankAccount") })
+		@NamedQuery(name = "allAccountTransactions", query = "from Transaction t WHERE t.bankAccount = :bankAccount"),
+		@NamedQuery(name = "TransactionsAtDay", query = "from Transaction t WHERE t.bankAccount = :bankAccount AND t.date = :date") })
 @Entity
 @Table(name = "TRANSACTIONS")
 public class Transaction implements Serializable {

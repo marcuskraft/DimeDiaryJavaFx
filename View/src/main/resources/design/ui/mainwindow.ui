@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>815</width>
-    <height>695</height>
+    <width>1063</width>
+    <height>779</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,7 +40,7 @@
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="1">
-           <widget class="QComboBox" name="comboBoxBankaccount_2"/>
+           <widget class="QComboBox" name="comboBoxBankaccountOverview"/>
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
@@ -90,67 +90,319 @@
            <enum>QTabWidget::South</enum>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tabJanuary">
            <attribute name="title">
             <string>Januar</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="tableWidgetBalanceJanuary">
+              <column>
+               <property name="text">
+                <string>Datum</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Wochentag</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Kontostand</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tabFebruary">
            <attribute name="title">
             <string>Februar</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_8">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="tableWidgetBalanceFebruar">
+              <column>
+               <property name="text">
+                <string>Datum</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Wochentag</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Kontostand</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tabMarch">
            <attribute name="title">
             <string>März</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_9">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="tableWidgetBalanceMarch">
+              <column>
+               <property name="text">
+                <string>Datum</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Wochentag</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Kontostand</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tabAprile">
            <attribute name="title">
             <string>April</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_10">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="tableWidgetBalanceApril">
+              <column>
+               <property name="text">
+                <string>Datum</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Wochentag</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Kontostand</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tabMay">
            <attribute name="title">
             <string>Mai</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_11">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="tableWidgetBalanceMay">
+              <column>
+               <property name="text">
+                <string>Datum</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Wochentag</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Kontostand</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tabJune">
            <attribute name="title">
             <string>Juni</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_12">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="tableWidgetBalanceJune">
+              <column>
+               <property name="text">
+                <string>Datum</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Wochentag</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Kontostand</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tabJuly">
            <attribute name="title">
             <string>Juli</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_13">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="tableWidgetBalanceJuly">
+              <column>
+               <property name="text">
+                <string>Datum</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Wochentag</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Kontostand</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tabAugust">
            <attribute name="title">
             <string>August</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_14">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="tableWidgetBalanceAugust">
+              <column>
+               <property name="text">
+                <string>Datum</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Wochentag</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Kontostand</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tabSeptember">
            <attribute name="title">
             <string>September</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_15">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="tableWidgetBalanceSeptember">
+              <column>
+               <property name="text">
+                <string>Datum</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Wochentag</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Kontostand</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tabOctober">
            <attribute name="title">
             <string>Oktober</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_16">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="tableWidgetBalanceOctober">
+              <column>
+               <property name="text">
+                <string>Datum</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Wochentag</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Kontostand</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tabNovember">
            <attribute name="title">
             <string>November</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_17">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="tableWidgetBalanceNovember">
+              <column>
+               <property name="text">
+                <string>Datum</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Wochentag</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Kontostand</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="tabDecember">
            <attribute name="title">
             <string>Dezember</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_18">
+            <item row="0" column="0">
+             <widget class="QTableWidget" name="tableWidgetBalanceDecember">
+              <column>
+               <property name="text">
+                <string>Datum</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Wochentag</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Kontostand</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>
@@ -161,55 +413,6 @@
         <string>Umsätze</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_6">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Konto</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QComboBox" name="comboBoxBankaccount"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_2">
-            <property name="text">
-             <string>von</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QDateEdit" name="dateFrom">
-            <property name="calendarPopup">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_3">
-            <property name="text">
-             <string>bis</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QDateEdit" name="dateUntil">
-            <property name="calendarPopup">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item row="2" column="0">
-         <widget class="QPushButton" name="pushButtonDelete">
-          <property name="text">
-           <string>Löschen</string>
-          </property>
-         </widget>
-        </item>
         <item row="0" column="2">
          <widget class="QPushButton" name="buttonAddTransaction">
           <property name="text">
@@ -288,6 +491,55 @@
           </property>
          </spacer>
         </item>
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Konto</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboBoxBankaccountTransaction"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>von</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDateEdit" name="dateFrom">
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>bis</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QDateEdit" name="dateUntil">
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item row="2" column="2">
+         <widget class="QPushButton" name="pushButtonDelete">
+          <property name="text">
+           <string>Löschen</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </widget>
@@ -310,7 +562,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>815</width>
+     <width>1063</width>
      <height>21</height>
     </rect>
    </property>

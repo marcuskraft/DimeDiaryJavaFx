@@ -153,6 +153,13 @@ public class DBUtils {
 		return new ArrayList<Transaction>(transactions);
 	}
 
+	public ArrayList<Transaction> getTransactions(final BankAccount bankAccount, final Date date) {
+		final List<Transaction> transactions = this.entityManager
+				.createNamedQuery("TransactionsAtDay", Transaction.class).setParameter("bankAccount", bankAccount)
+				.setParameter("date", date).getResultList();
+		return new ArrayList<Transaction>(transactions);
+	}
+
 	public Category getCategory(final String categoryName) {
 
 		final Category category = this.entityManager.find(Category.class, categoryName);

@@ -31,6 +31,8 @@ public class Main {
 		Main.transactionDialog = new TransactionDialog();
 		Main.categoryDialog = new CategoryDialog();
 
+		Main.mainWindow.initialize();
+
 		Main.mainWindow.createTrigger();
 		Main.accountCategoryDialog.createTrigger();
 		Main.bankAccountDialog.createTriggers();
