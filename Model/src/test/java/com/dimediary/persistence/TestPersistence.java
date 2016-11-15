@@ -66,8 +66,8 @@ public class TestPersistence {
 		for (final Transaction transaction : transactions) {
 			System.out.println(transaction.getName());
 			System.out.println(transaction.getBankAccount().getBic());
-			System.out.println(transaction.getBankAccount().getUser().getSurname());
-			System.out.println(transaction.getCategory().getName());
+			// System.out.println(transaction.getBankAccount().getUser().getSurname());
+			// System.out.println(transaction.getCategory().getName());
 			System.out.println(transaction.getTimestamp());
 		}
 
