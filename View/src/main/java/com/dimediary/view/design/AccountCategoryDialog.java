@@ -33,7 +33,7 @@ public class AccountCategoryDialog extends UiaccountCategoryDialog {
 	private void initialize() {
 		this.listCategories.clear();
 		this.listCategories.addItems(DBUtils.getInstance().getBankAccountCategoryNames());
-		this.checkBoxRealAccount.setChecked(false);
+		this.checkBoxRealAccount.setChecked(true);
 		this.lineEditName.clear();
 	}
 

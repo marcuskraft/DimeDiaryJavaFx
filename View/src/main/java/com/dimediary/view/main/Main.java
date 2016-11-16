@@ -7,6 +7,7 @@ import com.dimediary.view.design.CategoryDialog;
 import com.dimediary.view.design.MainWindow;
 import com.dimediary.view.design.TransactionDialog;
 import com.trolltech.qt.gui.QApplication;
+import com.trolltech.qt.gui.QMessageBox;
 
 public class Main {
 
@@ -21,25 +22,32 @@ public class Main {
 
 	public static void main(final String[] args) {
 
-		Main.application = new QApplication(args);
-		Main.application.aboutToQuit.connect(DBUtils.getInstance(), "close()");
+		try {
+			Main.application = new QApplication(args);
+			Main.application.aboutToQuit.connect(DBUtils.getInstance(), "close()");
 
-		Main.mainWindow = new MainWindow();
+			Main.mainWindow = new MainWindow();
 
-		Main.accountCategoryDialog = new AccountCategoryDialog();
-		Main.bankAccountDialog = new BankAccountDialog();
-		Main.transactionDialog = new TransactionDialog();
-		Main.categoryDialog = new CategoryDialog();
+			Main.accountCategoryDialog = new AccountCategoryDialog();
+			Main.bankAccountDialog = new BankAccountDialog();
+			Main.transactionDialog = new TransactionDialog();
+			Main.categoryDialog = new CategoryDialog();
 
-		Main.mainWindow.initialize();
+			Main.mainWindow.initialize();
 
-		Main.mainWindow.createTrigger();
-		Main.accountCategoryDialog.createTrigger();
-		Main.bankAccountDialog.createTriggers();
-		Main.transactionDialog.createTriggers();
-		Main.categoryDialog.createTrigger();
+			Main.mainWindow.createTrigger();
+			Main.accountCategoryDialog.createTrigger();
+			Main.bankAccountDialog.createTriggers();
+			Main.transactionDialog.createTriggers();
+			Main.categoryDialog.createTrigger();
 
-		Main.application.exec();
+			Main.application.exec();
+		} catch (final Exception e) {
+			DBUtils.getInstance().close();
+			final QMessageBox messageBox = new QMessageBox(null, "Error", e.getMessage());
+			messageBox.show();
+			throw e;
+		}
 
 	}
 
