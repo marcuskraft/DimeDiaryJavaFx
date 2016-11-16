@@ -3,6 +3,7 @@ package com.dimediary.controller.test;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -166,7 +167,7 @@ public class TestAccountBalancer {
 		return transaction;
 	}
 
-	// @After
+	@After
 	public void close() {
 		DBUtils.getInstance().delete(this.bankAccount);
 

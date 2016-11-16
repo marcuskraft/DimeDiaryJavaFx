@@ -12,7 +12,7 @@ public class EntityManagerHelper {
 	public static EntityManager getEntityManager() {
 		if (EntityManagerHelper.entityManager == null) {
 			if (EntityManagerHelper.emf == null) {
-				EntityManagerHelper.emf = Persistence.createEntityManagerFactory("PersistenceHSQLDB");
+				EntityManagerHelper.emf = Persistence.createEntityManagerFactory("PersistenceDerby");
 			}
 			EntityManagerHelper.entityManager = EntityManagerHelper.emf.createEntityManager();
 		}
