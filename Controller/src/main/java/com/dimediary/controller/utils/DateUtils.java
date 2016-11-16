@@ -148,14 +148,7 @@ public class DateUtils {
 
 		final Calendar calendar = Calendar.getInstance();
 
-		calendar.set(Calendar.MONTH, month.getValue());
-		calendar.set(Calendar.YEAR, year);
-		calendar.set(Calendar.DAY_OF_MONTH, 1);
-
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		calendar.set(Calendar.MILLISECOND, 0);
+		calendar.set(year, month.getValue() - 1, 0, 0, 0, 0);
 
 		final Integer numberOfDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 
