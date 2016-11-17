@@ -4,6 +4,7 @@ import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.view.design.AccountCategoryDialog;
 import com.dimediary.view.design.BankAccountDialog;
 import com.dimediary.view.design.CategoryDialog;
+import com.dimediary.view.design.ContinuousTransactionDialog;
 import com.dimediary.view.design.MainWindow;
 import com.dimediary.view.design.TransactionDialog;
 import com.trolltech.qt.gui.QApplication;
@@ -19,6 +20,7 @@ public class Main {
 	private static BankAccountDialog bankAccountDialog;
 	private static AccountCategoryDialog accountCategoryDialog;
 	private static CategoryDialog categoryDialog;
+	private static ContinuousTransactionDialog continuousTransactionDialog;
 
 	public static void main(final String[] args) {
 
@@ -32,6 +34,7 @@ public class Main {
 			Main.bankAccountDialog = new BankAccountDialog();
 			Main.transactionDialog = new TransactionDialog();
 			Main.categoryDialog = new CategoryDialog();
+			Main.continuousTransactionDialog = new ContinuousTransactionDialog();
 
 			Main.mainWindow.initialize();
 
@@ -40,6 +43,7 @@ public class Main {
 			Main.bankAccountDialog.createTriggers();
 			Main.transactionDialog.createTriggers();
 			Main.categoryDialog.createTrigger();
+			Main.continuousTransactionDialog.createTrigger();
 
 			Main.application.exec();
 		} catch (final Exception e) {
@@ -74,6 +78,10 @@ public class Main {
 
 	public static CategoryDialog getCategoryDialog() {
 		return Main.categoryDialog;
+	}
+
+	public static ContinuousTransactionDialog getContinuousTransactionDialog() {
+		return Main.continuousTransactionDialog;
 	}
 
 }

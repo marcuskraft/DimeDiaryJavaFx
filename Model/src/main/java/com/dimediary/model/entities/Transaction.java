@@ -12,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -60,8 +61,17 @@ public class Transaction implements Serializable {
 	private Date date;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "TIMESTAMP")
+	@Column(name = "TIMESTAMP", updatable = true)
 	private Date timestamp;
+
+	@ManyToOne
+	@JoinColumn(name = "CONTINUOUS_TRANSACTION_ID")
+	private ContinuousTransaction continuousTransaction;
+
+	@PrePersist
+	private void setTimestamp() {
+		this.timestamp = new Date();
+	}
 
 	public Integer getId() {
 		return this.id;
@@ -125,6 +135,14 @@ public class Transaction implements Serializable {
 
 	public void setTimestamp(final Date timestamp) {
 		this.timestamp = timestamp;
+	}
+
+	public ContinuousTransaction getContinuousTransaction() {
+		return this.continuousTransaction;
+	}
+
+	public void setContinuousTransaction(final ContinuousTransaction continuousTransaction) {
+		this.continuousTransaction = continuousTransaction;
 	}
 
 }

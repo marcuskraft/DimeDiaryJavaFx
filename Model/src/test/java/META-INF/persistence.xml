@@ -12,6 +12,8 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
     <class>com.dimediary.model.entities.BankAccount</class>
     <class>com.dimediary.model.entities.BankAccountCategory</class>
     <class>com.dimediary.model.entities.BalanceHistory</class>
+    <class>com.dimediary.model.entities.ContinuousTransaction</class>
+    
     
     
     <properties>
@@ -34,6 +36,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
     <class>com.dimediary.model.entities.BankAccount</class>
     <class>com.dimediary.model.entities.BankAccountCategory</class>
     <class>com.dimediary.model.entities.BalanceHistory</class>
+    <class>com.dimediary.model.entities.ContinuousTransaction</class>
        
 	<properties>
 		<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect" />

@@ -72,6 +72,8 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.checkBoxIncome.clicked.connect(this, "onEditingFinished()");
 		this.doubleSpinBoxAmount.editingFinished.connect(this, "onEditingFinished()");
 
+		this.pushButtonContinuousTransaction.clicked.connect(Main.getContinuousTransactionDialog(), "exec()");
+
 	}
 
 	public void onAdd() {
