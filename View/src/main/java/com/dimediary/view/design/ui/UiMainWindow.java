@@ -33,8 +33,8 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public QGridLayout gridLayout_5;
     public QGridLayout gridLayout_4;
     public QComboBox comboBoxBankaccountOverview;
-    public QLabel label_4;
     public QLabel label_5;
+    public QLabel label_4;
     public QSpinBox spinBoxYear;
     public QSpacerItem horizontalSpacer;
     public QTabWidget tabWidget;
@@ -74,6 +74,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public QWidget tabDecember;
     public QGridLayout gridLayout_18;
     public QTableWidget tableWidgetBalanceDecember;
+    public QPushButton pushButtonAddTransactionOverview;
     public QWidget transactions;
     public QGridLayout gridLayout_6;
     public QPushButton buttonAddTransaction;
@@ -137,15 +138,15 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
 
         gridLayout_4.addWidget(comboBoxBankaccountOverview, 0, 1, 1, 1);
 
-        label_4 = new QLabel(overview);
-        label_4.setObjectName("label_4");
-
-        gridLayout_4.addWidget(label_4, 0, 0, 1, 1);
-
         label_5 = new QLabel(overview);
         label_5.setObjectName("label_5");
 
         gridLayout_4.addWidget(label_5, 1, 0, 1, 1);
+
+        label_4 = new QLabel(overview);
+        label_4.setObjectName("label_4");
+
+        gridLayout_4.addWidget(label_4, 0, 0, 1, 1);
 
         spinBoxYear = new QSpinBox(overview);
         spinBoxYear.setObjectName("spinBoxYear");
@@ -156,11 +157,11 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         gridLayout_4.addWidget(spinBoxYear, 1, 1, 1, 1);
 
 
-        gridLayout_5.addLayout(gridLayout_4, 0, 0, 1, 1);
+        gridLayout_5.addLayout(gridLayout_4, 1, 0, 1, 1);
 
         horizontalSpacer = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
 
-        gridLayout_5.addItem(horizontalSpacer, 0, 1, 1, 1);
+        gridLayout_5.addItem(horizontalSpacer, 1, 1, 1, 1);
 
         tabWidget = new QTabWidget(overview);
         tabWidget.setObjectName("tabWidget");
@@ -182,7 +183,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         tableWidgetBalanceFebruar = new QTableWidget(tabFebruary);
         tableWidgetBalanceFebruar.setObjectName("tableWidgetBalanceFebruar");
 
-        gridLayout_8.addWidget(tableWidgetBalanceFebruar, 0, 0, 1, 1);
+        gridLayout_8.addWidget(tableWidgetBalanceFebruar, 1, 0, 1, 1);
 
         tabWidget.addTab(tabFebruary, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Februar", null));
         tabMarch = new QWidget();
@@ -286,7 +287,12 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
 
         tabWidget.addTab(tabDecember, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Dezember", null));
 
-        gridLayout_5.addWidget(tabWidget, 1, 0, 1, 2);
+        gridLayout_5.addWidget(tabWidget, 3, 0, 1, 2);
+
+        pushButtonAddTransactionOverview = new QPushButton(overview);
+        pushButtonAddTransactionOverview.setObjectName("pushButtonAddTransactionOverview");
+
+        gridLayout_5.addWidget(pushButtonAddTransactionOverview, 2, 0, 1, 1);
 
         MainWindowTabWidget.addTab(overview, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "\u00dcberblick", null));
         transactions = new QWidget();
@@ -400,8 +406,8 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         actionKonto_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto erstellen", null));
         actionKontoart_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kontoart erstellen", null));
         actionKategorie_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kategorie erstellen", null));
-        label_4.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto", null));
         label_5.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Jahr", null));
+        label_4.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto", null));
         tableWidgetBalanceJanuary.clear();
         tableWidgetBalanceJanuary.setColumnCount(3);
 
@@ -594,6 +600,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         tableWidgetBalanceDecember.setHorizontalHeaderItem(2, __colItem35);
         tableWidgetBalanceDecember.setRowCount(0);
         tabWidget.setTabText(tabWidget.indexOf(tabDecember), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Dezember", null));
+        pushButtonAddTransactionOverview.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion erstellen", null));
         MainWindowTabWidget.setTabText(MainWindowTabWidget.indexOf(overview), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "\u00dcberblick", null));
         buttonAddTransaction.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion erstellen", null));
         tableTransactions.clear();

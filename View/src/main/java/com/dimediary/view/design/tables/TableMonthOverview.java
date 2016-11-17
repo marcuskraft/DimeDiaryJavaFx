@@ -74,6 +74,15 @@ public class TableMonthOverview {
 		// are always there
 		qTableWidget.setRowCount(dates.size());
 
+		final ArrayList<String> labels = new ArrayList<>();
+		labels.add("Datum");
+		labels.add("Wochentag");
+		labels.add("Kontostand");
+		for (int i = 3; i < maxTransaction + 3; i++) {
+			labels.add("");
+		}
+		qTableWidget.setHorizontalHeaderLabels(labels);
+
 		final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 		final SimpleDateFormat simpleDateFormatDay = new SimpleDateFormat("E");
 		for (int i = 0; i < dates.size(); i++) {
@@ -98,6 +107,8 @@ public class TableMonthOverview {
 			}
 
 		}
+
+		qTableWidget.resizeColumnsToContents();
 
 	}
 

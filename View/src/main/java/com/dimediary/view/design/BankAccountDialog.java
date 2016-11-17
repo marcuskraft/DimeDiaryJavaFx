@@ -16,7 +16,7 @@ import com.trolltech.qt.gui.QListWidgetItem;
 
 /**
  * wrapper class for the dialog to create / delete / modify bank accounts
- * 
+ *
  * @author eyota
  *
  */
@@ -62,7 +62,7 @@ public class BankAccountDialog extends UiBankAccountDialog {
 	/**
 	 * initializes the components of this dialog with the data of the bank
 	 * account
-	 * 
+	 *
 	 * @param bankAccount
 	 *            bank account to be shown
 	 */
@@ -86,15 +86,21 @@ public class BankAccountDialog extends UiBankAccountDialog {
 	 */
 	public void createTriggers() {
 		this.pushButtonAddAccountCategory.clicked.connect(Main.getAccountCategoryDialog(), "exec()");
+
 		this.pushButtonAdd.clicked.connect(this, "onAddButton()");
+		this.pushButtonAdd.clicked.connect(Main.getMainWindow(), "initComboBoxAccounts()");
+		this.pushButtonAdd.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
+
 		this.pushButtonDelete.clicked.connect(this, "onDeleteButton()");
+		this.pushButtonDelete.clicked.connect(Main.getMainWindow(), "initComboBoxAccounts()");
+		this.pushButtonDelete.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
 
 		this.listWidget.itemDoubleClicked.connect(this, "onDoubleClick(com.trolltech.qt.gui.QListWidgetItem)");
 	}
 
 	/**
 	 * show the data of the bank account which was double clicked
-	 * 
+	 *
 	 * @param item
 	 */
 	public void onDoubleClick(final QListWidgetItem item) {
@@ -118,7 +124,7 @@ public class BankAccountDialog extends UiBankAccountDialog {
 		bankAccount.setDateStartBudget(QTUtils.qDateToDate(this.dateEditStartBudget.date()));
 
 		DBUtils.getInstance().persist(bankAccount);
-		Main.getMainWindow().initComboBoxAccounts();
+
 		this.initialize();
 	}
 

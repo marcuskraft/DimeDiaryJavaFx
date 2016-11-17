@@ -60,9 +60,11 @@ public class TransactionDialog extends UiTransactionDialog {
 	public void createTriggers() {
 		this.pushButtonAdd.clicked.connect(this, "onAdd()");
 		this.pushButtonAdd.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
+		this.pushButtonAdd.clicked.connect(Main.getMainWindow().getTableMonthOverview(), "updateMonthOverview()");
 
 		this.pushButtonDelete.clicked.connect(this, "onDelete()");
 		this.pushButtonDelete.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
+		this.pushButtonDelete.clicked.connect(Main.getMainWindow().getTableMonthOverview(), "updateMonthOverview()");
 
 		this.pushButtonAddAccount.clicked.connect(Main.getBankAccountDialog(), "exec()");
 		this.pushButtonAddCategory.clicked.connect(Main.getCategoryDialog(), "exec()");

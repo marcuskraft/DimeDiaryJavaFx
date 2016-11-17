@@ -39,7 +39,10 @@ public class AccountCategoryDialog extends UiaccountCategoryDialog {
 	 */
 	public void createTrigger() {
 		this.pushButtonAdd.clicked.connect(this, "onAddButton()");
+		this.pushButtonAdd.clicked.connect(Main.getBankAccountDialog(), "initialize()");
+
 		this.pushButtonDelete.clicked.connect(this, "onDeleteButton()");
+		this.pushButtonDelete.clicked.connect(Main.getBankAccountDialog(), "initialize()");
 	}
 
 	private void initialize() {
@@ -94,7 +97,7 @@ public class AccountCategoryDialog extends UiaccountCategoryDialog {
 
 	/**
 	 * get the real dialog (this class is a wrapper)
-	 * 
+	 *
 	 * @return QDialog
 	 */
 	public QDialog getDialog() {

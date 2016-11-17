@@ -149,7 +149,18 @@ public class MainWindow extends UiMainWindow {
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "initialize()");
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "exec()");
 
+		this.pushButtonAddTransactionOverview.clicked.connect(Main.getTransactionDialog(), "initialize()");
+		this.pushButtonAddTransactionOverview.clicked.connect(Main.getTransactionDialog(), "exec()");
+
 		this.tableMonthOverview.createTrigger();
+	}
+
+	public TableTransactionsMainWindow getOwnTableTransactions() {
+		return this.ownTableTransactions;
+	}
+
+	public TableMonthOverview getTableMonthOverview() {
+		return this.tableMonthOverview;
 	}
 
 }
