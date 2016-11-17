@@ -7,11 +7,23 @@ import java.util.Date;
 
 import com.dimediary.model.entities.BankAccount;
 
+/**
+ * class to handle date functionalities
+ *
+ * @author eyota
+ *
+ */
 public class DateUtils {
 
 	// TODO add the numberOfWeeksFuture in the options
-	private final static int numberOfWeeksFuture = 60;
+	private final static int numberOfWeeksFuture = 108;
 
+	/**
+	 *
+	 * @param date
+	 * @return last sunday corresponding to the given date. If the given date is
+	 *         already a sunday than the given date will be returned
+	 */
 	public static Date getLastSunday(final Date date) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -30,6 +42,12 @@ public class DateUtils {
 		return calendar.getTime();
 	}
 
+	/**
+	 *
+	 * @param date
+	 * @return next sunday corresponding to the given date. The next sunday will
+	 *         be returned even if the given date is already a sunday.
+	 */
 	public static Date getNextSunday(final Date date) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -45,7 +63,13 @@ public class DateUtils {
 		return calendar.getTime();
 	}
 
-	public static ArrayList<Date> getSundays(final BankAccount bankAccount) {
+	/**
+	 *
+	 * @param bankAccount
+	 * @return list of sundays from the creation time of the given bank account
+	 *         until 108 weeks in the future related to the actual date
+	 */
+	public static ArrayList<Date> getAllSundays(final BankAccount bankAccount) {
 		final ArrayList<Date> sundays = new ArrayList<>();
 
 		final Date lastSunday = DateUtils.getLastSunday(DateUtils.numberOfWeeksFuture);
@@ -61,21 +85,38 @@ public class DateUtils {
 
 	}
 
+	/**
+	 *
+	 * @param numberOfWeeks
+	 * @return gives back the sunday for numberOfWeeks weeks in the future
+	 */
 	public static Date getLastSunday(final int numberOfWeeks) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		calendar.add(Calendar.WEEK_OF_YEAR, numberOfWeeks);
+		calendar.set(Calendar.DAY_OF_MONTH, Calendar.SUNDAY);
 
 		return calendar.getTime();
 
 	}
 
+	/**
+	 *
+	 * @param date
+	 * @return true if the fiven date is a sunday and false if not
+	 */
 	public static boolean isSunday(final Date date) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.get(Calendar.DAY_OF_WEEK) == 1;
 	}
 
+	/**
+	 *
+	 * @param date
+	 * @return date which is one day in the future corresponding to the given
+	 *         date
+	 */
 	public static Date addOneDay(final Date date) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -83,32 +124,62 @@ public class DateUtils {
 		return calendar.getTime();
 	}
 
+	/**
+	 *
+	 * @param day
+	 * @param month
+	 * @param year
+	 * @return gives back a date for the given day, month and year
+	 */
 	public static Date getDate(final int day, final int month, final int year) {
 		final Calendar calendar = Calendar.getInstance();
-		calendar.set(year, month, day);
+		calendar.set(year, month, day, 0, 0, 0);
 		return calendar.getTime();
 	}
 
+	/**
+	 *
+	 * @return the actual month
+	 */
 	public static Month getActualMonth() {
 		return DateUtils.getMonth(new Date());
 	}
 
+	/**
+	 *
+	 * @return the actual year
+	 */
 	public static int getActualYear() {
 		return DateUtils.getYear(new Date());
 	}
 
+	/**
+	 *
+	 * @param date
+	 * @return year of the given date
+	 */
 	public static int getYear(final Date date) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return calendar.get(Calendar.YEAR);
 	}
 
+	/**
+	 *
+	 * @param date
+	 * @return month of the given date
+	 */
 	public static Month getMonth(final Date date) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		return DateUtils.getMonth(calendar.get(Calendar.MONTH));
 	}
 
+	/**
+	 *
+	 * @param month
+	 * @return month which belongs to this number of month
+	 */
 	public static Month getMonth(final Integer month) {
 		if (month == null) {
 			return null;
@@ -143,12 +214,18 @@ public class DateUtils {
 		}
 	}
 
+	/**
+	 *
+	 * @param month
+	 * @param year
+	 * @return list of dates for all days of the given month and year
+	 */
 	public static ArrayList<Date> getDatesForMonth(final Month month, final Integer year) {
 		final ArrayList<Date> dates = new ArrayList<>();
 
 		final Calendar calendar = Calendar.getInstance();
 
-		calendar.set(year, month.getValue() - 1, 0, 0, 0, 0);
+		calendar.set(year, month.getValue() - 1, 1, 0, 0, 0);
 
 		final Integer numberOfDays = calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
 

@@ -9,6 +9,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+/**
+ * entity class for the categories
+ * 
+ * @author eyota
+ *
+ */
 @NamedQueries({ @NamedQuery(name = "allCategories", query = "from Category"),
 		@NamedQuery(name = "findCategories", query = "from Category c WHERE c.name IN :namesList") })
 @Entity
@@ -24,10 +30,19 @@ public class Category implements Serializable {
 	@Column(name = "NAME")
 	private String name;
 
+	/**
+	 *
+	 * @return name of the category
+	 */
 	public String getName() {
 		return this.name;
 	}
 
+	/**
+	 *
+	 * @param name
+	 *            name of the entity class
+	 */
 	public void setName(final String name) {
 		this.name = name;
 	}

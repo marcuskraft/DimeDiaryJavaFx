@@ -176,7 +176,7 @@ public class AccountBalancer {
 
 		final ArrayList<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount);
 
-		final ArrayList<Date> sundays = DateUtils.getSundays(bankAccount);
+		final ArrayList<Date> sundays = DateUtils.getAllSundays(bankAccount);
 
 		final ArrayList<BalanceHistory> balanceHistories = new ArrayList<>();
 		for (final Date date : sundays) {

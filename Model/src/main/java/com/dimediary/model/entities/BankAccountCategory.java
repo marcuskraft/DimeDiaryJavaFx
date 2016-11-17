@@ -9,6 +9,12 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+/**
+ * entity for the bank account categories
+ * 
+ * @author eyota
+ *
+ */
 @NamedQueries({ @NamedQuery(name = "allAccountCategories", query = "from BankAccountCategory"),
 		@NamedQuery(name = "findAccountCategories", query = "from BankAccountCategory b WHERE b.name IN :nameList") })
 @Entity
@@ -27,18 +33,36 @@ public class BankAccountCategory implements Serializable {
 	@Column(name = "IS_REAL_ACCOUNT")
 	private Boolean isRealAccount;
 
+	/**
+	 *
+	 * @return name of the bank account category
+	 */
 	public String getName() {
 		return this.name;
 	}
 
+	/**
+	 *
+	 * @param name
+	 *            name of the bank account category
+	 */
 	public void setName(final String name) {
 		this.name = name;
 	}
 
+	/**
+	 *
+	 * @return true is this is a real account
+	 */
 	public Boolean getIsRealAccount() {
 		return this.isRealAccount;
 	}
 
+	/**
+	 *
+	 * @param isRealAccount
+	 *            set if this is a real account or not
+	 */
 	public void setIsRealAccount(final Boolean isRealAccount) {
 		this.isRealAccount = isRealAccount;
 	}

@@ -9,10 +9,19 @@ import com.dimediary.view.main.Main;
 import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QListWidgetItem;
 
+/**
+ * wrapper class for the category dialog
+ * 
+ * @author eyota
+ *
+ */
 public class CategoryDialog extends UiCategoryDialog {
 
 	private final QDialog dialog;
 
+	/**
+	 * constructor
+	 */
 	public CategoryDialog() {
 		super();
 		this.dialog = new QDialog();
@@ -21,6 +30,9 @@ public class CategoryDialog extends UiCategoryDialog {
 		this.initialize();
 	}
 
+	/**
+	 * create trigger for this dialog
+	 */
 	public void createTrigger() {
 		this.pushButtonAdd.clicked.connect(this, "onAddButton()");
 		this.pushButtonDelete.clicked.connect(this, "onDeleteButton()");
@@ -32,6 +44,9 @@ public class CategoryDialog extends UiCategoryDialog {
 		this.lineEditName.clear();
 	}
 
+	/**
+	 * add a category to the data base
+	 */
 	public void onAddButton() {
 		final Category category = new Category();
 		category.setName(this.lineEditName.text());
@@ -41,6 +56,9 @@ public class CategoryDialog extends UiCategoryDialog {
 		Main.getTransactionDialog().initialize();
 	}
 
+	/**
+	 * delete the selected categories from the data base
+	 */
 	public void onDeleteButton() {
 		final ArrayList<String> categoryNames = new ArrayList<>();
 
@@ -54,10 +72,17 @@ public class CategoryDialog extends UiCategoryDialog {
 		Main.getTransactionDialog().initialize();
 	}
 
+	/**
+	 * executes this dialig
+	 */
 	public void exec() {
 		this.dialog.exec();
 	}
 
+	/**
+	 *
+	 * @return real QDialog
+	 */
 	public QDialog getDialog() {
 		return this.dialog;
 	}

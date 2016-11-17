@@ -20,8 +20,25 @@ import com.dimediary.ui2jui.options.Options;
 import com.dimediary.ui2jui.util.Mapping;
 import com.dimediary.ui2jui.util.Mapping_List;
 
+/**
+ * class for converting the ui files into jui files
+ *
+ * @author eyota
+ *
+ */
 public class Converter {
 
+	/**
+	 * converts the ui files into jui files
+	 * 
+	 * @param options
+	 *            options which are given to the application
+	 * @throws ParserConfigurationException
+	 * @throws SAXException
+	 * @throws IOException
+	 * @throws JAXBException
+	 * @throws XMLStreamException
+	 */
 	public void convert(final Options options)
 			throws ParserConfigurationException, SAXException, IOException, JAXBException, XMLStreamException {
 		final Mapping_List mapping_List = this.createMappingList(options);

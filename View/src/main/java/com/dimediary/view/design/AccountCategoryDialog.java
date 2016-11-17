@@ -12,10 +12,19 @@ import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QErrorMessage;
 import com.trolltech.qt.gui.QListWidgetItem;
 
+/**
+ * dialog to add and delete account categories
+ *
+ * @author eyota
+ *
+ */
 public class AccountCategoryDialog extends UiaccountCategoryDialog {
 
 	private final QDialog dialog;
 
+	/**
+	 * creates an instance of an AccountCategoryDialog
+	 */
 	public AccountCategoryDialog() {
 		super();
 		this.dialog = new QDialog();
@@ -25,6 +34,9 @@ public class AccountCategoryDialog extends UiaccountCategoryDialog {
 
 	}
 
+	/**
+	 * creates the trigger for this dialog
+	 */
 	public void createTrigger() {
 		this.pushButtonAdd.clicked.connect(this, "onAddButton()");
 		this.pushButtonDelete.clicked.connect(this, "onDeleteButton()");
@@ -37,6 +49,9 @@ public class AccountCategoryDialog extends UiaccountCategoryDialog {
 		this.lineEditName.clear();
 	}
 
+	/**
+	 * acction by clicking the add button
+	 */
 	public void onAddButton() {
 		final BankAccountCategory bankAccountCategory = new BankAccountCategory();
 		bankAccountCategory.setName(this.lineEditName.text());
@@ -47,6 +62,9 @@ public class AccountCategoryDialog extends UiaccountCategoryDialog {
 		Main.getBankAccountDialog().initialize();
 	}
 
+	/**
+	 * action by clicking the delete button
+	 */
 	public void onDeleteButton() {
 		final ArrayList<String> bankAccountCategoryNames = new ArrayList<>();
 
@@ -67,10 +85,18 @@ public class AccountCategoryDialog extends UiaccountCategoryDialog {
 		Main.getBankAccountDialog().initialize();
 	}
 
+	/**
+	 * executes this dialog
+	 */
 	public void exec() {
 		this.dialog.exec();
 	}
 
+	/**
+	 * get the real dialog (this class is a wrapper)
+	 * 
+	 * @return QDialog
+	 */
 	public QDialog getDialog() {
 		return this.dialog;
 	}
