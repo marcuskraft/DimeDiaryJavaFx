@@ -17,6 +17,8 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	private final TableTransactionDialog ownTableTransactions;
 
+	private final ContinuousTransactionWidget continuousTransactionWidget;
+
 	private boolean isActive = false;
 
 	public TransactionDialog() {
@@ -25,6 +27,10 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.setupUi(this.dialog);
 
 		this.ownTableTransactions = new TableTransactionDialog(this.tableTransactions);
+		this.continuousTransactionWidget = new ContinuousTransactionWidget();
+
+		this.gridLayoutMain.addWidget(this.continuousTransactionWidget.getContinuousTransactionWidget(), 2, 0);
+		this.continuousTransactionWidget.getContinuousTransactionWidget().setVisible(false);
 
 		this.initialize();
 
@@ -72,7 +78,27 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.checkBoxIncome.clicked.connect(this, "onEditingFinished()");
 		this.doubleSpinBoxAmount.editingFinished.connect(this, "onEditingFinished()");
 
-		this.pushButtonContinuousTransaction.clicked.connect(Main.getContinuousTransactionDialog(), "exec()");
+		this.checkBoxIterate.clicked.connect(this, "onCeckBoxIterate(java.lang.Boolean)");
+		this.continuousTransactionWidget.createTrigger();
+
+	}
+
+	public void onCeckBoxIterate(final Boolean active) {
+		this.continuousTransactionWidget.getContinuousTransactionWidget().setVisible(active);
+		this.dialog.adjustSize();
+
+	}
+
+	public void adjustSize() {
+		if (this.checkBoxIterate.isChecked()) {
+			this.continuousTransactionWidget.adjustSize();
+		}
+		this.widgetTransactionData.adjustSize();
+		this.widgetAddButton.adjustSize();
+		this.frameIterateButton.adjustSize();
+		this.tableTransactions.adjustSize();
+		this.widgetOverview.adjustSize();
+		this.groupBoxTransaction.adjustSize();
 
 	}
 

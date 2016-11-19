@@ -79,4 +79,14 @@
 		<java>TabPosition.South</java>
 		<importString>import com.trolltech.qt.gui.QTabWidget.TabPosition;</importString>
 	</Mapping>
+	<Mapping>
+		<cpp>QFrame::StyledPanel</cpp> 
+		<java>QFrame.Shape.StyledPanel</java>
+		<importString>import com.trolltech.qt.gui.QFrame;</importString>
+	</Mapping>
+	<Mapping>
+		<cpp>QFrame::Raised</cpp> 
+		<java>QFrame.Shadow.Raised</java>
+		<importString>import com.trolltech.qt.gui.QFrame;</importString>
+	</Mapping>
 </Mapping_List>
