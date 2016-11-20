@@ -44,9 +44,10 @@ public class AccountBalancer {
 	 * @return returns the balance for this bank account and date
 	 */
 	public static Double getBalance(final BankAccount bankAccount, final Date date) {
-		if (bankAccount == null || date == null) {
+		if (bankAccount == null || date == null || date.before(bankAccount.getDateStartBudget())) {
 			return null;
 		}
+
 		final Date lastSunday = DateUtils.getLastSunday(date);
 
 		BalanceHistory balanceHistory = DBUtils.getInstance().getBalanceHistory(bankAccount, lastSunday);
@@ -55,7 +56,7 @@ public class AccountBalancer {
 			AccountBalancer.proofBalance(bankAccount);
 			balanceHistory = DBUtils.getInstance().getBalanceHistory(bankAccount, lastSunday);
 			if (balanceHistory == null) {
-				return null;
+				return AccountBalancer.getBalance(DBUtils.getInstance().getLastBalanceHistory(bankAccount), date);
 			}
 		}
 
@@ -77,14 +78,17 @@ public class AccountBalancer {
 	// TODO write junit test for this method in comparison to the other
 	// getBalance() method
 	private static Double getBalance(final BankAccount bankAccount, final Date date, final Double balanceDayBefore) {
-		if (bankAccount == null || date == null) {
+		if (bankAccount == null || date == null || date.before(bankAccount.getDateStartBudget())) {
 			return null;
 		}
 		final ArrayList<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount, date);
 
 		Double result;
 		if (balanceDayBefore == null) {
-			result = 0.0;
+			result = AccountBalancer.getBalance(bankAccount, date);
+			if (result == null) {
+				result = 0.0;
+			}
 		} else {
 			result = balanceDayBefore;
 		}
@@ -94,6 +98,19 @@ public class AccountBalancer {
 		}
 
 		return AmountUtils.round(result);
+	}
+
+	public static Double getBalance(final BalanceHistory lastBalanceHistory, final Date date) {
+		Double amount = lastBalanceHistory.getAmount();
+
+		final List<Transaction> transactions = DBUtils.getInstance().getTransactions(
+				DateUtils.addOneDay(lastBalanceHistory.getDate()), date, lastBalanceHistory.getBankAccount());
+
+		for (final Transaction transaction : transactions) {
+			amount += transaction.getAmount();
+		}
+
+		return amount;
 	}
 
 	/**
@@ -176,7 +193,7 @@ public class AccountBalancer {
 
 		final ArrayList<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount);
 
-		final ArrayList<Date> sundays = DateUtils.getAllSundays(bankAccount);
+		final ArrayList<Date> sundays = DateUtils.getAllSundaysForBalancing(bankAccount, null);
 
 		final ArrayList<BalanceHistory> balanceHistories = new ArrayList<>();
 		for (final Date date : sundays) {
@@ -203,11 +220,49 @@ public class AccountBalancer {
 	 *            bank account to proof
 	 */
 	public static void proofBalance(final BankAccount bankAccount) {
-		AccountBalancer.initBalance(bankAccount); // TODO implement the logic
-													// for the case that no
-													// initialization but a
-													// refresh of the balance
-													// history is necessary
+		final BalanceHistory lastBalanceHistory = DBUtils.getInstance().getLastBalanceHistory(bankAccount);
+
+		if (lastBalanceHistory == null) {
+			AccountBalancer.initBalance(bankAccount);
+			return;
+		}
+
+		Date dateFrom = lastBalanceHistory.getDate();
+		final Date dateUntil = DateUtils.getLastSundayForBalancing();
+
+		if (!lastBalanceHistory.getDate().before(dateUntil)) {
+			return;
+		}
+
+		dateFrom = DateUtils.getNextSunday(dateFrom);
+
+		final ArrayList<Date> sundays = DateUtils.getAllSundaysForBalancing(bankAccount, dateFrom);
+
+		Date lastSunday;
+
+		Double lastAmount = lastBalanceHistory.getAmount();
+
+		final ArrayList<BalanceHistory> balanceHistories = new ArrayList<>();
+		for (final Date date : sundays) {
+			final BalanceHistory balanceHistory = new BalanceHistory();
+
+			lastSunday = DateUtils.getLastSundayAlways(date);
+			final List<Transaction> transactions = DBUtils.getInstance()
+					.getTransactions(DateUtils.addOneDay(lastSunday), date, bankAccount);
+
+			for (final Transaction transaction : transactions) {
+				lastAmount += transaction.getAmount();
+			}
+
+			balanceHistory.setBankAccount(bankAccount);
+			balanceHistory.setDate(date);
+			balanceHistory.setAmount(lastAmount);
+
+			balanceHistories.add(balanceHistory);
+		}
+
+		DBUtils.getInstance().persistBalanceHistories(balanceHistories);
+
 	}
 
 }

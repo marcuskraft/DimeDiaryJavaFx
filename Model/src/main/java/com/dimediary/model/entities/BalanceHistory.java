@@ -19,13 +19,14 @@ import com.dimediary.model.utils.AmountUtils;
 
 /**
  * class to persist account balances
- * 
+ *
  * @author eyota
  *
  */
 @NamedQueries({
 		@NamedQuery(name = "accountBalance", query = "from BalanceHistory b WHERE b.bankAccount = :bankAccount"),
-		@NamedQuery(name = "accountBalanceDate", query = "from BalanceHistory b WHERE b.bankAccount = :bankAccount AND b.date >= :date") })
+		@NamedQuery(name = "accountBalanceDate", query = "from BalanceHistory b WHERE b.bankAccount = :bankAccount AND b.date >= :date"),
+		@NamedQuery(name = "lastAccountBalance", query = "FROM BalanceHistory b1 WHERE b1.bankAccount = :bankAccount AND b1.date = (SELECT max(date) FROM BalanceHistory b2 WHERE b2.bankAccount = :bankAccount)") })
 @Entity
 @Table(name = "BALANCE_HISTORY")
 @IdClass(BalanceHistoryPK.class)
@@ -103,7 +104,7 @@ public class BalanceHistory implements Serializable {
 	/**
 	 * adds an amount to this balance (e.g. if a transaction was added or
 	 * deleted)
-	 * 
+	 *
 	 * @param amount
 	 *            amount to be added (can be negative)
 	 */

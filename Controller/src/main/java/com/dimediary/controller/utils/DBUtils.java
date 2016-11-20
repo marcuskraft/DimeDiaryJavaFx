@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 
@@ -201,6 +202,16 @@ public class DBUtils {
 	public BalanceHistory getBalanceHistory(final BankAccount bankAccount, final Date date) {
 		final BalanceHistoryPK balanceHistoryPK = new BalanceHistoryPK(bankAccount, date);
 		return this.entityManager.find(BalanceHistory.class, balanceHistoryPK);
+	}
+
+	public BalanceHistory getLastBalanceHistory(final BankAccount bankAccount) {
+		try {
+			return this.entityManager.createNamedQuery("lastAccountBalance", BalanceHistory.class)
+					.setParameter("bankAccount", bankAccount).getSingleResult();
+		} catch (final NoResultException e) {
+			// TODO logging
+			return null;
+		}
 	}
 
 	/**

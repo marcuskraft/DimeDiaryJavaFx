@@ -27,12 +27,20 @@ public class DateUtils {
 	 *         already a sunday than the given date will be returned
 	 */
 	public static Date getLastSunday(final Date date) {
+		return DateUtils.getLastSunday(date, false);
+	}
+
+	public static Date getLastSundayAlways(final Date date) {
+		return DateUtils.getLastSunday(date, true);
+	}
+
+	private static Date getLastSunday(final Date date, final boolean always) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 
 		final int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
-		if (!DateUtils.isSunday(date)) {
+		if (always || !DateUtils.isSunday(date)) {
 			calendar.add(Calendar.DAY_OF_WEEK, 1 - dayOfWeek);
 		}
 
@@ -68,14 +76,29 @@ public class DateUtils {
 	/**
 	 *
 	 * @param bankAccount
-	 * @return list of sundays from the creation time of the given bank account
-	 *         until 108 weeks in the future related to the actual date
+	 * @return
 	 */
-	public static ArrayList<Date> getAllSundays(final BankAccount bankAccount) {
+
+	/**
+	 *
+	 * @param bankAccount
+	 * @param dateFrom
+	 * @return list of sundays from the dateFrom on or if this is null the
+	 *         creation date of the given bank account until 108 weeks in the
+	 *         future related to the actual date
+	 */
+	public static ArrayList<Date> getAllSundaysForBalancing(final BankAccount bankAccount, final Date dateFrom) {
 		final ArrayList<Date> sundays = new ArrayList<>();
 
-		final Date lastSunday = DateUtils.getLastSunday(DateUtils.numberOfWeeksFutureBalancing);
-		Date sunday = DateUtils.getLastSunday(bankAccount.getDateStartBudget());
+		final Date lastSunday = DateUtils.getLastSundayForBalancing(DateUtils.numberOfWeeksFutureBalancing);
+
+		Date sunday;
+		if (dateFrom != null) {
+			sunday = DateUtils.getLastSunday(dateFrom);
+		} else {
+			sunday = DateUtils.getLastSunday(bankAccount.getDateStartBudget());
+		}
+
 		sundays.add(sunday);
 
 		while (sunday.before(lastSunday)) {
@@ -92,7 +115,11 @@ public class DateUtils {
 	 * @param numberOfWeeks
 	 * @return gives back the sunday for numberOfWeeks weeks in the future
 	 */
-	public static Date getLastSunday(final int numberOfWeeks) {
+	public static Date getLastSundayForBalancing() {
+		return DateUtils.getLastSundayForBalancing(DateUtils.numberOfWeeksFutureBalancing);
+	}
+
+	private static Date getLastSundayForBalancing(final int numberOfWeeks) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 		calendar.add(Calendar.WEEK_OF_YEAR, numberOfWeeks);
@@ -288,26 +315,38 @@ public class DateUtils {
 
 		// create the dates
 		if (dateUntil != null) {
-			final Calendar calendarUntil = Calendar.getInstance();
-			calendarUntil.setTime(dateUntil);
-			calendar.add(Calendar.MONTH, everyNumberOfMonth);
-			calendar.set(Calendar.DAY_OF_MONTH, DateUtils.getDayOfMonth(calendar, dayOfMonth));
-			while (calendar.before(calendarUntil)) {
-				lastDate = calendar.getTime();
-				dates.add(lastDate);
-				calendar.add(Calendar.MONTH, everyNumberOfMonth);
-				calendar.set(Calendar.DAY_OF_MONTH, DateUtils.getDayOfMonth(calendar, dayOfMonth));
-			}
+			DateUtils.getMonthlyDates(everyNumberOfMonth, dayOfMonth, dateUntil, dates, calendar);
 		} else if (numberOfIterations != null) {
-			for (int i = 1; i < numberOfIterations; i++) {
-				calendar.add(Calendar.MONTH, everyNumberOfMonth);
-				calendar.set(Calendar.DAY_OF_MONTH, DateUtils.getDayOfMonth(calendar, dayOfMonth));
-				lastDate = calendar.getTime();
-				dates.add(lastDate);
-			}
+			DateUtils.getMonthlyDates(everyNumberOfMonth, dayOfMonth, numberOfIterations, dates, calendar);
 		}
 
 		return dates;
+	}
+
+	private static void getMonthlyDates(final Integer everyNumberOfMonth, final DayOfMonth dayOfMonth,
+			final Integer numberOfIterations, final ArrayList<Date> dates, final Calendar calendar) {
+		Date lastDate;
+		for (int i = 1; i < numberOfIterations; i++) {
+			calendar.add(Calendar.MONTH, everyNumberOfMonth);
+			calendar.set(Calendar.DAY_OF_MONTH, DateUtils.getDayOfMonth(calendar, dayOfMonth));
+			lastDate = calendar.getTime();
+			dates.add(lastDate);
+		}
+	}
+
+	private static void getMonthlyDates(final Integer everyNumberOfMonth, final DayOfMonth dayOfMonth,
+			final Date dateUntil, final ArrayList<Date> dates, final Calendar calendar) {
+		Date lastDate;
+		final Calendar calendarUntil = Calendar.getInstance();
+		calendarUntil.setTime(dateUntil);
+		calendar.add(Calendar.MONTH, everyNumberOfMonth);
+		calendar.set(Calendar.DAY_OF_MONTH, DateUtils.getDayOfMonth(calendar, dayOfMonth));
+		while (calendar.before(calendarUntil)) {
+			lastDate = calendar.getTime();
+			dates.add(lastDate);
+			calendar.add(Calendar.MONTH, everyNumberOfMonth);
+			calendar.set(Calendar.DAY_OF_MONTH, DateUtils.getDayOfMonth(calendar, dayOfMonth));
+		}
 	}
 
 	private static Integer getDayOfMonth(final Calendar calendar, final DayOfMonth dayOfMonth) {
