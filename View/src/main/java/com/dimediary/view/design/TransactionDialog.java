@@ -3,6 +3,7 @@ package com.dimediary.view.design;
 import java.util.ArrayList;
 
 import com.dimediary.controller.utils.DBUtils;
+import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.view.design.tables.TableTransactionDialog;
 import com.dimediary.view.design.ui.UiTransactionDialog;
@@ -94,7 +95,6 @@ public class TransactionDialog extends UiTransactionDialog {
 			this.continuousTransactionWidget.adjustSize();
 		}
 		this.widgetTransactionData.adjustSize();
-		this.widgetAddButton.adjustSize();
 		this.frameIterateButton.adjustSize();
 		this.tableTransactions.adjustSize();
 		this.widgetOverview.adjustSize();
@@ -103,6 +103,25 @@ public class TransactionDialog extends UiTransactionDialog {
 	}
 
 	public void onAdd() {
+		if (this.checkBoxIterate.isChecked()) {
+			this.addContinuousTransaction();
+		} else {
+			this.addSingleTransaction();
+		}
+
+	}
+
+	private void addContinuousTransaction() {
+		final ContinuousTransaction continuousTransaction = new ContinuousTransaction();
+		continuousTransaction.setAmount(this.doubleSpinBoxAmount.value());
+		continuousTransaction.setBankAccount(DBUtils.getInstance().getBankAccount(this.comboBoxAccount.currentText()));
+		continuousTransaction.setCategory(DBUtils.getInstance().getCategory(this.comboBoxCategory.currentText()));
+		continuousTransaction.setName(this.subjectEdit.text());
+		continuousTransaction.setDateBeginn(QTUtils.qDateToDate(this.dateEdit.date()));
+		this.continuousTransactionWidget.initContinuousTransaction(continuousTransaction);
+	}
+
+	private void addSingleTransaction() {
 		final Transaction transaction = new Transaction();
 		transaction.setAmount(this.doubleSpinBoxAmount.value());
 		transaction.setBankAccount(DBUtils.getInstance().getBankAccount(this.comboBoxAccount.currentText()));

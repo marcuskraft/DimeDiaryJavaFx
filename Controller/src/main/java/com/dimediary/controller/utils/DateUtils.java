@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import com.dimediary.model.entities.BankAccount;
+import com.dimediary.model.entities.ContinuousTransaction.DayOfMonth;
 
 /**
  * class to handle date functionalities
@@ -233,6 +234,13 @@ public class DateUtils {
 			dates.add(calendar.getTime());
 			calendar.add(Calendar.DAY_OF_MONTH, 1);
 		}
+
+		return dates;
+	}
+
+	public static ArrayList<Date> getMonthlyDates(final Integer everNumberOfMonth, final DayOfMonth dayOfMonth,
+			final Date dateFrom, final Date dateUntil, final Integer numberOfIterations) {
+		final ArrayList<Date> dates = new ArrayList<>();
 
 		return dates;
 	}

@@ -56,6 +56,10 @@ public class ContinuousTransaction implements Serializable {
 	@Column(name = "AMOUNT")
 	private Double amount;
 
+	@Temporal(TemporalType.DATE)
+	@Column(name = "DATE_BEGINN")
+	private Date dateBeginn;
+
 	@ManyToOne
 	@JoinColumn(name = "BANKACCOUNT_NAME")
 	private BankAccount bankAccount;
@@ -99,5 +103,141 @@ public class ContinuousTransaction implements Serializable {
 	@PrePersist
 	private void setTimestamp() {
 		this.timestamp = new Date();
+	}
+
+	public Integer getId() {
+		return this.id;
+	}
+
+	public void setId(final Integer id) {
+		this.id = id;
+	}
+
+	public Date getTimestamp() {
+		return this.timestamp;
+	}
+
+	public void setTimestamp(final Date timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public String getName() {
+		return this.name;
+	}
+
+	public void setName(final String name) {
+		this.name = name;
+	}
+
+	public Double getAmount() {
+		return this.amount;
+	}
+
+	public void setAmount(final Double amount) {
+		this.amount = amount;
+	}
+
+	public BankAccount getBankAccount() {
+		return this.bankAccount;
+	}
+
+	public void setBankAccount(final BankAccount bankAccount) {
+		this.bankAccount = bankAccount;
+	}
+
+	public User getUser() {
+		return this.user;
+	}
+
+	public void setUser(final User user) {
+		this.user = user;
+	}
+
+	public Category getCategory() {
+		return this.category;
+	}
+
+	public void setCategory(final Category category) {
+		this.category = category;
+	}
+
+	public Integer getNumberOfIterations() {
+		return this.numberOfIterations;
+	}
+
+	public void setNumberOfIterations(final Integer numberOfIterations) {
+		this.numberOfIterations = numberOfIterations;
+	}
+
+	public Date getIterateUntil() {
+		return this.iterateUntil;
+	}
+
+	public void setIterateUntil(final Date iterateUntil) {
+		this.iterateUntil = iterateUntil;
+	}
+
+	public IterationState getIterationState() {
+		return this.iterationState;
+	}
+
+	public void setIterationState(final IterationState iterationState) {
+		this.iterationState = iterationState;
+	}
+
+	public DayOfMonth getDayOfMonth() {
+		return this.dayOfMonth;
+	}
+
+	public void setDayOfMonth(final DayOfMonth dayOfMonth) {
+		this.dayOfMonth = dayOfMonth;
+	}
+
+	public Integer getEveryIterationState() {
+		return this.everyIterationState;
+	}
+
+	public void setEveryIterationState(final Integer everyIterationState) {
+		this.everyIterationState = everyIterationState;
+	}
+
+	public boolean isEveryWorkday() {
+		return this.everyWorkday;
+	}
+
+	public void setEveryWorkday(final boolean everyWorkday) {
+		this.everyWorkday = everyWorkday;
+	}
+
+	public List<DayOfWeekEntity> getDayOfWeeks() {
+		return this.dayOfWeeks;
+	}
+
+	public void setDayOfWeeks(final List<DayOfWeekEntity> dayOfWeeks) {
+		this.dayOfWeeks = dayOfWeeks;
+	}
+
+	public Integer getEveryYearDayOfMonth() {
+		return this.EveryYearDayOfMonth;
+	}
+
+	public void setEveryYearDayOfMonth(final Integer everyYearDayOfMonth) {
+		this.EveryYearDayOfMonth = everyYearDayOfMonth;
+	}
+
+	public Integer getNumberOfMonth() {
+		return this.numberOfMonth;
+	}
+
+	public void setNumberOfMonth(final Integer numberOfMonth) {
+		this.numberOfMonth = numberOfMonth;
+	}
+
+	public Date getDateBeginn() {
+		return this.dateBeginn;
+	}
+
+	public void setDateBeginn(final Date dateBeginn) {
+		this.dateBeginn = dateBeginn;
 	}
 }

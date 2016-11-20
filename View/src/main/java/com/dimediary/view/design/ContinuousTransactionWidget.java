@@ -1,17 +1,22 @@
 package com.dimediary.view.design;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
+import com.dimediary.controller.utils.DateUtils;
+import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.ContinuousTransaction.DayOfMonth;
+import com.dimediary.model.entities.ContinuousTransaction.IterationState;
 import com.dimediary.view.design.ui.UicontinuousTransactionWidget;
+import com.dimediary.view.utils.QTUtils;
 import com.trolltech.qt.gui.QWidget;
 
 public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 
 	private final QWidget continuousTransactionWidget;
 
-	HashMap<DayOfMonth, String> dayOfMonthByMonthlyMapping;
+	HashMap<String, DayOfMonth> dayOfMonthByMonthlyMapping;
 	ArrayList<String> dayOfMonthStrings;
 
 	public ContinuousTransactionWidget() {
@@ -33,22 +38,58 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 
 	}
 
+	public void initContinuousTransaction(final ContinuousTransaction continuousTransaction) {
+		if (this.radioButtonMonthly.isChecked()) {
+			this.initMonthlyTransaction(continuousTransaction);
+		} else if (this.radioButtonDayli.isChecked()) {
+
+		} else if (this.radioButtonWeekly.isChecked()) {
+
+		} else if (this.radioButtonYearly.isChecked()) {
+
+		}
+	}
+
+	private void initMonthlyTransaction(final ContinuousTransaction continuousTransaction) {
+		continuousTransaction.setIterationState(IterationState.MONTHLY);
+		continuousTransaction.setEveryIterationState(this.spinBoxEveryNumberOfMonths.value());
+		continuousTransaction
+				.setDayOfMonth(this.dayOfMonthByMonthlyMapping.get(this.comboBoxMonthlyWhichDayOfMonth.currentText()));
+
+		if (this.radioButtonNumberOfIterations.isChecked()) {
+			continuousTransaction.setNumberOfIterations(this.spinBoxNumberOfIterations.value());
+		} else if (this.radioButtonIterateUntilDate.isChecked()) {
+			continuousTransaction.setIterateUntil(QTUtils.qDateToDate(this.dateEditIterateUntil.date()));
+
+		}
+		final ArrayList<Date> dates = DateUtils.getMonthlyDates(continuousTransaction.getEveryIterationState(),
+				continuousTransaction.getDayOfMonth(), continuousTransaction.getDateBeginn(),
+				continuousTransaction.getDateBeginn(), continuousTransaction.getNumberOfIterations());
+	}
+
 	private void initMapping() {
 		this.dayOfMonthByMonthlyMapping = new HashMap<>();
-		this.dayOfMonthByMonthlyMapping.put(DayOfMonth.FIRST, "Am ersten Tag des Monats");
-		this.dayOfMonthByMonthlyMapping.put(DayOfMonth.SECOND, "Am zweiten Tag des Monats");
-		this.dayOfMonthByMonthlyMapping.put(DayOfMonth.THIRD, "Am dritten Tag des Monats");
-		this.dayOfMonthByMonthlyMapping.put(DayOfMonth.FIFTHTEENS, "Am Fünfzehnten des Monats");
-		this.dayOfMonthByMonthlyMapping.put(DayOfMonth.NEXT_TO_LAST, "Am vorletzten Tag des Monats");
-		this.dayOfMonthByMonthlyMapping.put(DayOfMonth.LAST, "Am letzten Tag des Monats");
+		final String key1 = "Am ersten Tag des Monats";
+		this.dayOfMonthByMonthlyMapping.put(key1, DayOfMonth.FIRST);
+		final String key2 = "Am zweiten Tag des Monats";
+		this.dayOfMonthByMonthlyMapping.put(key2, DayOfMonth.SECOND);
+		final String key3 = "Am dritten Tag des Monats";
+		this.dayOfMonthByMonthlyMapping.put(key3, DayOfMonth.THIRD);
+		final String key15 = "Am Fünfzehnten des Monats";
+		this.dayOfMonthByMonthlyMapping.put(key15, DayOfMonth.FIFTHTEENS);
+		final String keyNextToLast = "Am vorletzten Tag des Monats";
+		this.dayOfMonthByMonthlyMapping.put(keyNextToLast, DayOfMonth.NEXT_TO_LAST);
+		final String keyLast = "Am letzten Tag des Monats";
+		this.dayOfMonthByMonthlyMapping.put(keyLast, DayOfMonth.LAST);
 
 		this.dayOfMonthStrings = new ArrayList<>();
-		this.dayOfMonthStrings.add(this.dayOfMonthByMonthlyMapping.get(DayOfMonth.FIRST));
-		this.dayOfMonthStrings.add(this.dayOfMonthByMonthlyMapping.get(DayOfMonth.SECOND));
-		this.dayOfMonthStrings.add(this.dayOfMonthByMonthlyMapping.get(DayOfMonth.THIRD));
-		this.dayOfMonthStrings.add(this.dayOfMonthByMonthlyMapping.get(DayOfMonth.FIFTHTEENS));
-		this.dayOfMonthStrings.add(this.dayOfMonthByMonthlyMapping.get(DayOfMonth.NEXT_TO_LAST));
-		this.dayOfMonthStrings.add(this.dayOfMonthByMonthlyMapping.get(DayOfMonth.LAST));
+		this.dayOfMonthStrings.add(key1);
+		this.dayOfMonthStrings.add(key2);
+		this.dayOfMonthStrings.add(key3);
+		this.dayOfMonthStrings.add(key15);
+		this.dayOfMonthStrings.add(keyNextToLast);
+		this.dayOfMonthStrings.add(keyLast);
+
 	}
 
 	public void createTrigger() {
