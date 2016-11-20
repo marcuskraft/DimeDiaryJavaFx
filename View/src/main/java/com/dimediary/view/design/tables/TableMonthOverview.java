@@ -3,6 +3,7 @@ package com.dimediary.view.design.tables;
 import java.text.SimpleDateFormat;
 import java.time.Month;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -143,6 +144,54 @@ public class TableMonthOverview {
 			}
 		}
 		return null;
+	}
+
+	public boolean monthBack() {
+		boolean yearChange = false;
+
+		final QWidget qWidget = this.qTabWidget.currentWidget();
+		Month month = this.findMonth(qWidget);
+
+		if (month == Month.JANUARY) {
+			month = Month.DECEMBER;
+			yearChange = true;
+		} else {
+			final Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.MONTH, month.getValue() - 2);
+			// minus 1 because shift between month as value and enum and minus 1
+			// because we want to shift by one month
+			month = DateUtils.getMonth(calendar.getTime());
+		}
+
+		this.qTabWidget.setCurrentWidget(this.tabs.get(month));
+
+		this.updateMonthOverview(month);
+
+		return yearChange;
+	}
+
+	public boolean monthForward() {
+		boolean yearChange = false;
+
+		final QWidget qWidget = this.qTabWidget.currentWidget();
+		Month month = this.findMonth(qWidget);
+
+		if (month == Month.DECEMBER) {
+			month = Month.JANUARY;
+			yearChange = true;
+		} else {
+			final Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.MONTH, month.getValue());
+			// minus 1 because shift between month as value and enum and plus 1
+			// because we want to shift by one month
+			month = DateUtils.getMonth(calendar.getTime());
+		}
+
+		this.qTabWidget.setCurrentWidget(this.tabs.get(month));
+
+		this.updateMonthOverview(month);
+
+		return yearChange;
 	}
 
 }

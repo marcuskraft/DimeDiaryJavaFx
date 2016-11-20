@@ -128,6 +128,20 @@ public class MainWindow extends UiMainWindow {
 		Main.getTransactionDialog().initialize(this.ownTableTransactions.getTransaction(row, column));
 	}
 
+	public void onButtonBack() {
+		final boolean yearChange = this.tableMonthOverview.monthBack();
+		if (yearChange) {
+			this.spinBoxYear.setValue(this.spinBoxYear.value() - 1);
+		}
+	}
+
+	public void onButtonForward() {
+		final boolean yearChange = this.tableMonthOverview.monthForward();
+		if (yearChange) {
+			this.spinBoxYear.setValue(this.spinBoxYear.value() + 1);
+		}
+	}
+
 	public void OnDeleteTransaction() {
 		final ArrayList<Transaction> transactionsToDelete = this.ownTableTransactions.getSelectedTransactions();
 		DBUtils.getInstance().deleteTransactions(transactionsToDelete);
@@ -143,6 +157,9 @@ public class MainWindow extends UiMainWindow {
 		this.actionKategorie_erstellen.triggered.connect(Main.getCategoryDialog(), "exec()");
 
 		this.pushButtonDelete.clicked.connect(this, "OnDeleteTransaction()");
+
+		this.pushButtonBack.clicked.connect(this, "onButtonBack()");
+		this.pushButtonForward.clicked.connect(this, "onButtonForward()");
 
 		this.comboBoxBankaccountTransaction.currentIndexChanged.connect(this, "updateTransactionsTable()");
 		this.dateFrom.dateChanged.connect(this, "updateTransactionsTable()");

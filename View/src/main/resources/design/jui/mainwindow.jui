@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1063</width>
-    <height>779</height>
+    <width>1048</width>
+    <height>786</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,18 +35,11 @@
        <attribute name="title">
         <string>Überblick</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="1" column="0">
+       <layout class="QGridLayout" name="gridLayout_19">
+        <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="1">
            <widget class="QComboBox" name="comboBoxBankaccountOverview"/>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>Jahr</string>
-            </property>
-           </widget>
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
@@ -68,22 +61,53 @@
             </property>
            </widget>
           </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Jahr</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <spacer name="horizontalSpacer">
+            <property name="orientation">
+             <enum>Orientation.Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </item>
-        <item row="1" column="1">
-         <spacer name="horizontalSpacer">
-          <property name="orientation">
-           <enum>Orientation.Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
+        <item row="1" column="0">
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="pushButtonAddTransactionOverview">
+            <property name="text">
+             <string>Transaktion erstellen</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Orientation.Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </item>
-        <item row="3" column="0" colspan="2">
+        <item row="2" column="0">
          <widget class="QTabWidget" name="tabWidget">
           <property name="tabPosition">
            <enum>TabPosition.South</enum>
@@ -405,12 +429,36 @@
           </widget>
          </widget>
         </item>
-        <item row="2" column="0">
-         <widget class="QPushButton" name="pushButtonAddTransactionOverview">
-          <property name="text">
-           <string>Transaktion erstellen</string>
-          </property>
-         </widget>
+        <item row="3" column="0">
+         <layout class="QHBoxLayout" name="horizontalLayout">
+          <item>
+           <widget class="QPushButton" name="pushButtonBack">
+            <property name="text">
+             <string>zurück</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButtonForward">
+            <property name="text">
+             <string>vor</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Orientation.Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
@@ -568,7 +616,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1063</width>
+     <width>1048</width>
      <height>21</height>
     </rect>
    </property>

@@ -30,13 +30,16 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public QGridLayout gridLayout_2;
     public QTabWidget MainWindowTabWidget;
     public QWidget overview;
-    public QGridLayout gridLayout_5;
+    public QGridLayout gridLayout_19;
     public QGridLayout gridLayout_4;
     public QComboBox comboBoxBankaccountOverview;
-    public QLabel label_5;
     public QLabel label_4;
     public QSpinBox spinBoxYear;
+    public QLabel label_5;
     public QSpacerItem horizontalSpacer;
+    public QGridLayout gridLayout_5;
+    public QPushButton pushButtonAddTransactionOverview;
+    public QSpacerItem horizontalSpacer_4;
     public QTabWidget tabWidget;
     public QWidget tabJanuary;
     public QGridLayout gridLayout_7;
@@ -74,7 +77,10 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public QWidget tabDecember;
     public QGridLayout gridLayout_18;
     public QTableWidget tableWidgetBalanceDecember;
-    public QPushButton pushButtonAddTransactionOverview;
+    public QHBoxLayout horizontalLayout;
+    public QPushButton pushButtonBack;
+    public QPushButton pushButtonForward;
+    public QSpacerItem horizontalSpacer_3;
     public QWidget transactions;
     public QGridLayout gridLayout_6;
     public QPushButton buttonAddTransaction;
@@ -98,7 +104,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public void setupUi(QMainWindow MainWindow)
     {
         MainWindow.setObjectName("MainWindow");
-        MainWindow.resize(new QSize(1063, 779).expandedTo(MainWindow.minimumSizeHint()));
+        MainWindow.resize(new QSize(1048, 786).expandedTo(MainWindow.minimumSizeHint()));
         actionBeenden = new QAction(MainWindow);
         actionBeenden.setObjectName("actionBeenden");
         actionEinstellungen = new QAction(MainWindow);
@@ -129,19 +135,14 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         MainWindowTabWidget.setMovable(false);
         overview = new QWidget();
         overview.setObjectName("overview");
-        gridLayout_5 = new QGridLayout(overview);
-        gridLayout_5.setObjectName("gridLayout_5");
+        gridLayout_19 = new QGridLayout(overview);
+        gridLayout_19.setObjectName("gridLayout_19");
         gridLayout_4 = new QGridLayout();
         gridLayout_4.setObjectName("gridLayout_4");
         comboBoxBankaccountOverview = new QComboBox(overview);
         comboBoxBankaccountOverview.setObjectName("comboBoxBankaccountOverview");
 
         gridLayout_4.addWidget(comboBoxBankaccountOverview, 0, 1, 1, 1);
-
-        label_5 = new QLabel(overview);
-        label_5.setObjectName("label_5");
-
-        gridLayout_4.addWidget(label_5, 1, 0, 1, 1);
 
         label_4 = new QLabel(overview);
         label_4.setObjectName("label_4");
@@ -156,12 +157,31 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
 
         gridLayout_4.addWidget(spinBoxYear, 1, 1, 1, 1);
 
+        label_5 = new QLabel(overview);
+        label_5.setObjectName("label_5");
 
-        gridLayout_5.addLayout(gridLayout_4, 1, 0, 1, 1);
+        gridLayout_4.addWidget(label_5, 1, 0, 1, 1);
 
         horizontalSpacer = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
 
-        gridLayout_5.addItem(horizontalSpacer, 1, 1, 1, 1);
+        gridLayout_4.addItem(horizontalSpacer, 1, 2, 1, 1);
+
+
+        gridLayout_19.addLayout(gridLayout_4, 0, 0, 1, 1);
+
+        gridLayout_5 = new QGridLayout();
+        gridLayout_5.setObjectName("gridLayout_5");
+        pushButtonAddTransactionOverview = new QPushButton(overview);
+        pushButtonAddTransactionOverview.setObjectName("pushButtonAddTransactionOverview");
+
+        gridLayout_5.addWidget(pushButtonAddTransactionOverview, 0, 0, 1, 1);
+
+        horizontalSpacer_4 = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
+
+        gridLayout_5.addItem(horizontalSpacer_4, 0, 1, 1, 1);
+
+
+        gridLayout_19.addLayout(gridLayout_5, 1, 0, 1, 1);
 
         tabWidget = new QTabWidget(overview);
         tabWidget.setObjectName("tabWidget");
@@ -287,12 +307,26 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
 
         tabWidget.addTab(tabDecember, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Dezember", null));
 
-        gridLayout_5.addWidget(tabWidget, 3, 0, 1, 2);
+        gridLayout_19.addWidget(tabWidget, 2, 0, 1, 1);
 
-        pushButtonAddTransactionOverview = new QPushButton(overview);
-        pushButtonAddTransactionOverview.setObjectName("pushButtonAddTransactionOverview");
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout.setObjectName("horizontalLayout");
+        pushButtonBack = new QPushButton(overview);
+        pushButtonBack.setObjectName("pushButtonBack");
 
-        gridLayout_5.addWidget(pushButtonAddTransactionOverview, 2, 0, 1, 1);
+        horizontalLayout.addWidget(pushButtonBack);
+
+        pushButtonForward = new QPushButton(overview);
+        pushButtonForward.setObjectName("pushButtonForward");
+
+        horizontalLayout.addWidget(pushButtonForward);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
+
+        horizontalLayout.addItem(horizontalSpacer_3);
+
+
+        gridLayout_19.addLayout(horizontalLayout, 3, 0, 1, 1);
 
         MainWindowTabWidget.addTab(overview, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "\u00dcberblick", null));
         transactions = new QWidget();
@@ -370,7 +404,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         MainWindow.setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar.setObjectName("menubar");
-        menubar.setGeometry(new QRect(0, 0, 1063, 21));
+        menubar.setGeometry(new QRect(0, 0, 1048, 21));
         menuDatei = new QMenu(menubar);
         menuDatei.setObjectName("menuDatei");
         menuBearbeiten = new QMenu(menubar);
@@ -406,8 +440,9 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         actionKonto_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto erstellen", null));
         actionKontoart_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kontoart erstellen", null));
         actionKategorie_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kategorie erstellen", null));
-        label_5.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Jahr", null));
         label_4.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto", null));
+        label_5.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Jahr", null));
+        pushButtonAddTransactionOverview.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion erstellen", null));
         tableWidgetBalanceJanuary.clear();
         tableWidgetBalanceJanuary.setColumnCount(3);
 
@@ -600,7 +635,8 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         tableWidgetBalanceDecember.setHorizontalHeaderItem(2, __colItem35);
         tableWidgetBalanceDecember.setRowCount(0);
         tabWidget.setTabText(tabWidget.indexOf(tabDecember), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Dezember", null));
-        pushButtonAddTransactionOverview.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion erstellen", null));
+        pushButtonBack.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "zur\u00fcck", null));
+        pushButtonForward.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "vor", null));
         MainWindowTabWidget.setTabText(MainWindowTabWidget.indexOf(overview), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "\u00dcberblick", null));
         buttonAddTransaction.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion erstellen", null));
         tableTransactions.clear();

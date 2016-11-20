@@ -379,6 +379,7 @@ public class UicontinuousTransactionWidget implements com.trolltech.qt.QUiForm<Q
 
         dateEditIterateUntil = new QDateEdit(groupBoxNumberOfIterations);
         dateEditIterateUntil.setObjectName("dateEditIterateUntil");
+        dateEditIterateUntil.setCalendarPopup(true);
 
         gridLayout_22.addWidget(dateEditIterateUntil, 2, 1, 1, 1);
 
