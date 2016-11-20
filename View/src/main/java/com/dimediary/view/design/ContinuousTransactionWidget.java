@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.controller.utils.DateUtils;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.ContinuousTransaction.DayOfMonth;
 import com.dimediary.model.entities.ContinuousTransaction.IterationState;
+import com.dimediary.model.entities.Transaction;
 import com.dimediary.view.design.ui.UicontinuousTransactionWidget;
 import com.dimediary.view.utils.QTUtils;
 import com.trolltech.qt.gui.QWidget;
@@ -59,12 +61,29 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 		if (this.radioButtonNumberOfIterations.isChecked()) {
 			continuousTransaction.setNumberOfIterations(this.spinBoxNumberOfIterations.value());
 		} else if (this.radioButtonIterateUntilDate.isChecked()) {
-			continuousTransaction.setIterateUntil(QTUtils.qDateToDate(this.dateEditIterateUntil.date()));
+			continuousTransaction.setDateUntil(QTUtils.qDateToDate(this.dateEditIterateUntil.date()));
 
 		}
 		final ArrayList<Date> dates = DateUtils.getMonthlyDates(continuousTransaction.getEveryIterationState(),
 				continuousTransaction.getDayOfMonth(), continuousTransaction.getDateBeginn(),
-				continuousTransaction.getDateBeginn(), continuousTransaction.getNumberOfIterations());
+				continuousTransaction.getDateUntil(), continuousTransaction.getNumberOfIterations());
+
+		final ArrayList<Transaction> transactions = new ArrayList<>();
+
+		for (final Date date : dates) {
+			final Transaction transaction = new Transaction();
+			transaction.setAmount(continuousTransaction.getAmount());
+			transaction.setBankAccount(continuousTransaction.getBankAccount());
+			transaction.setCategory(continuousTransaction.getCategory());
+			transaction.setDate(date);
+			transaction.setContinuousTransaction(continuousTransaction);
+			transaction.setName(continuousTransaction.getName());
+			transaction.setUser(continuousTransaction.getUser());
+			transactions.add(transaction);
+		}
+
+		DBUtils.getInstance().persistContinuousTransaction(continuousTransaction, transactions);
+
 	}
 
 	private void initMapping() {

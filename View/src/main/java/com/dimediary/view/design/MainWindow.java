@@ -115,6 +115,11 @@ public class MainWindow extends UiMainWindow {
 
 	}
 
+	public void update() {
+		this.updateTransactionsTable();
+		this.tableMonthOverview.updateMonthOverview();
+	}
+
 	public void updateOverview(final Month month) {
 		this.tableMonthOverview.updateMonthOverview(month);
 	}

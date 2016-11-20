@@ -16,8 +16,9 @@ import com.dimediary.model.entities.ContinuousTransaction.DayOfMonth;
  */
 public class DateUtils {
 
-	// TODO add the numberOfWeeksFuture in the options
-	private final static int numberOfWeeksFuture = 108;
+	// TODO add the numberOfWeeksFutureBalancing in the options
+	private final static int numberOfWeeksFutureBalancing = 108;
+	private final static int numberOfMonthFutureTransactions = 120;
 
 	/**
 	 *
@@ -73,7 +74,7 @@ public class DateUtils {
 	public static ArrayList<Date> getAllSundays(final BankAccount bankAccount) {
 		final ArrayList<Date> sundays = new ArrayList<>();
 
-		final Date lastSunday = DateUtils.getLastSunday(DateUtils.numberOfWeeksFuture);
+		final Date lastSunday = DateUtils.getLastSunday(DateUtils.numberOfWeeksFutureBalancing);
 		Date sunday = DateUtils.getLastSunday(bankAccount.getDateStartBudget());
 		sundays.add(sunday);
 
@@ -238,11 +239,72 @@ public class DateUtils {
 		return dates;
 	}
 
-	public static ArrayList<Date> getMonthlyDates(final Integer everNumberOfMonth, final DayOfMonth dayOfMonth,
-			final Date dateFrom, final Date dateUntil, final Integer numberOfIterations) {
+	public static ArrayList<Date> getMonthlyDates(final Integer everyNumberOfMonth, final DayOfMonth dayOfMonth,
+			final Date dateFrom, Date dateUntil, final Integer numberOfIterations) {
 		final ArrayList<Date> dates = new ArrayList<>();
 
+		final Calendar calendarFrom = Calendar.getInstance();
+		calendarFrom.setTime(dateFrom);
+
+		final Calendar calendar = Calendar.getInstance();
+		calendar.clear();
+		calendar.set(calendarFrom.get(Calendar.YEAR), calendarFrom.get(Calendar.MONTH),
+				DateUtils.getDayOfMonth(calendarFrom, dayOfMonth));
+		Date lastDate = calendar.getTime();
+
+		if (calendarFrom.get(Calendar.DAY_OF_MONTH) > calendar.get(Calendar.DAY_OF_MONTH)) {
+			calendar.add(Calendar.MONTH, 1);
+			lastDate = calendar.getTime();
+		}
+		dates.add(lastDate);
+
+		if (dateUntil == null && numberOfIterations == null) {
+			final Calendar calendarFuture = Calendar.getInstance();
+			calendarFuture.setTime(new Date());
+			calendarFuture.add(Calendar.MONTH, DateUtils.numberOfMonthFutureTransactions);
+			dateUntil = calendarFuture.getTime();
+		}
+
+		if (dateUntil != null) {
+			final Calendar calendarUntil = Calendar.getInstance();
+			calendarUntil.setTime(dateUntil);
+			calendar.add(Calendar.MONTH, everyNumberOfMonth);
+			calendar.set(Calendar.DAY_OF_MONTH, DateUtils.getDayOfMonth(calendar, dayOfMonth));
+			while (calendar.before(calendarUntil)) {
+				lastDate = calendar.getTime();
+				dates.add(lastDate);
+				calendar.add(Calendar.MONTH, everyNumberOfMonth);
+				calendar.set(Calendar.DAY_OF_MONTH, DateUtils.getDayOfMonth(calendar, dayOfMonth));
+			}
+		} else if (numberOfIterations != null) {
+			for (int i = 1; i < numberOfIterations; i++) {
+				calendar.add(Calendar.MONTH, everyNumberOfMonth);
+				calendar.set(Calendar.DAY_OF_MONTH, DateUtils.getDayOfMonth(calendar, dayOfMonth));
+				lastDate = calendar.getTime();
+				dates.add(lastDate);
+			}
+		}
+
 		return dates;
+	}
+
+	private static Integer getDayOfMonth(final Calendar calendar, final DayOfMonth dayOfMonth) {
+		switch (dayOfMonth) {
+		case FIRST:
+			return 1;
+		case SECOND:
+			return 2;
+		case THIRD:
+			return 3;
+		case FIFTHTEENS:
+			return 15;
+		case NEXT_TO_LAST:
+			return calendar.getActualMaximum(Calendar.DAY_OF_MONTH) - 1;
+		case LAST:
+			return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
+		default:
+			return null;
+		}
 	}
 
 }

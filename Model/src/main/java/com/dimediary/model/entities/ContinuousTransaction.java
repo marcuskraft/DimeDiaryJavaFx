@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -43,6 +45,7 @@ public class ContinuousTransaction implements Serializable {
 	};
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "ID")
 	private Integer id;
 
@@ -60,6 +63,18 @@ public class ContinuousTransaction implements Serializable {
 	@Column(name = "DATE_BEGINN")
 	private Date dateBeginn;
 
+	@Temporal(TemporalType.DATE)
+	@Column(name = "ITERATE_UNTIL")
+	private Date dateUntil;
+
+	public Date getDateUntil() {
+		return this.dateUntil;
+	}
+
+	public void setDateUntil(final Date dateUntil) {
+		this.dateUntil = dateUntil;
+	}
+
 	@ManyToOne
 	@JoinColumn(name = "BANKACCOUNT_NAME")
 	private BankAccount bankAccount;
@@ -74,10 +89,6 @@ public class ContinuousTransaction implements Serializable {
 
 	@Column(name = "NUMBER_OF_ITERATIONS")
 	private Integer numberOfIterations;
-
-	@Temporal(TemporalType.DATE)
-	@Column(name = "ITERATE_UNTIL")
-	private Date iterateUntil;
 
 	@Column(name = "ITERATION_STATE")
 	private IterationState iterationState;
@@ -167,14 +178,6 @@ public class ContinuousTransaction implements Serializable {
 
 	public void setNumberOfIterations(final Integer numberOfIterations) {
 		this.numberOfIterations = numberOfIterations;
-	}
-
-	public Date getIterateUntil() {
-		return this.iterateUntil;
-	}
-
-	public void setIterateUntil(final Date iterateUntil) {
-		this.iterateUntil = iterateUntil;
 	}
 
 	public IterationState getIterationState() {

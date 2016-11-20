@@ -16,6 +16,7 @@ import com.dimediary.model.entities.BalanceHistoryPK;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.BankAccountCategory;
 import com.dimediary.model.entities.Category;
+import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
 
 /**
@@ -317,7 +318,51 @@ public class DBUtils {
 		if (ownTransaction) {
 			this.entityManager.getTransaction().commit();
 		}
+	}
 
+	public void persistTransactions(final ArrayList<Transaction> transactions) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		for (final Transaction transaction : transactions) {
+			this.persist(transaction);
+		}
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
+	private void persist(final ContinuousTransaction continuousTransaction) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		this.entityManager.persist(continuousTransaction);
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
+	public void persistContinuousTransaction(final ContinuousTransaction continuousTransaction,
+			final ArrayList<Transaction> transactions) {
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		this.persist(continuousTransaction);
+		for (final Transaction transaction : transactions) {
+			this.persist(transaction);
+		}
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
 	}
 
 	/**
@@ -588,7 +633,7 @@ public class DBUtils {
 
 	/**
 	 * list of bank account names to delete
-	 * 
+	 *
 	 * @param bankAccountNames
 	 */
 	public void deleteBankAccounts(final ArrayList<String> bankAccountNames) {
@@ -610,7 +655,7 @@ public class DBUtils {
 
 	/**
 	 * list of transactions to delete
-	 * 
+	 *
 	 * @param transactions
 	 */
 	public void deleteTransactions(final ArrayList<Transaction> transactions) {

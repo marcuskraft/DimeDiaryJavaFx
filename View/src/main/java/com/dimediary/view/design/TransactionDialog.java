@@ -50,6 +50,13 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.doubleSpinBoxAmount.setValue(0);
 	}
 
+	public void update() {
+		this.comboBoxCategory.clear();
+		this.comboBoxAccount.clear();
+		this.comboBoxCategory.addItems(DBUtils.getInstance().getCategoryNames());
+		this.comboBoxAccount.addItems(DBUtils.getInstance().getBankAccountNames());
+	}
+
 	public void initialize(final Transaction transaction) {
 		this.initialize();
 		this.dateEdit.setDate(QTUtils.dateToQDate(transaction.getDate()));
@@ -119,6 +126,7 @@ public class TransactionDialog extends UiTransactionDialog {
 		continuousTransaction.setName(this.subjectEdit.text());
 		continuousTransaction.setDateBeginn(QTUtils.qDateToDate(this.dateEdit.date()));
 		this.continuousTransactionWidget.initContinuousTransaction(continuousTransaction);
+		// Main.getMainWindow().update();
 	}
 
 	private void addSingleTransaction() {
