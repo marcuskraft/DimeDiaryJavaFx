@@ -24,7 +24,8 @@ public class TableTransactionDialog extends TableTransactions {
 			final String account = transaction.getBankAccount().getName();
 			final String amount = transaction.getAmount().toString().replace(".", ",");
 			final String name = transaction.getName();
-			final String category = transaction.getCategory().getName();
+
+			final String category = transaction.getCategory() != null ? transaction.getCategory().getName() : "-";
 
 			this.addItem(i, 0, new TableTransactionItem(date, transaction));
 			this.addItem(i, 1, new TableTransactionItem(name, transaction));

@@ -7,6 +7,7 @@ import java.util.HashMap;
 import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.controller.utils.DateUtils;
 import com.dimediary.model.entities.Transaction;
+import com.dimediary.view.design.message.AllTransactionMessage;
 import com.dimediary.view.design.tables.TableMonthOverview;
 import com.dimediary.view.design.tables.TableTransactionsMainWindow;
 import com.dimediary.view.design.ui.UiMainWindow;
@@ -124,8 +125,14 @@ public class MainWindow extends UiMainWindow {
 		this.tableMonthOverview.updateMonthOverview(month);
 	}
 
-	public void onDoubleClickRow(final Integer row, final Integer column) {
-		Main.getTransactionDialog().initialize(this.ownTableTransactions.getTransaction(row, column));
+	public void onDoubleClickRowTransactionView(final Integer row, final Integer column) {
+		final Transaction transaction = this.ownTableTransactions.getTransaction(row, column);
+		if (transaction.getContinuousTransaction() != null) {
+			new AllTransactionMessage(transaction);
+		} else {
+			Main.getTransactionDialog().initialize(transaction);
+		}
+
 	}
 
 	public void onButtonBack() {
@@ -166,7 +173,7 @@ public class MainWindow extends UiMainWindow {
 		this.dateUntil.dateChanged.connect(this, "updateTransactionsTable()");
 
 		this.tableTransactions.cellDoubleClicked.connect(this,
-				"onDoubleClickRow(java.lang.Integer, java.lang.Integer)");
+				"onDoubleClickRowTransactionView(java.lang.Integer, java.lang.Integer)");
 
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "initialize()");
 		this.buttonAddTransaction.clicked.connect(Main.getTransactionDialog(), "exec()");

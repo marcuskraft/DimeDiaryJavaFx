@@ -202,6 +202,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         gridLayout_8.setObjectName("gridLayout_8");
         tableWidgetBalanceFebruar = new QTableWidget(tabFebruary);
         tableWidgetBalanceFebruar.setObjectName("tableWidgetBalanceFebruar");
+        tableWidgetBalanceFebruar.setAutoFillBackground(false);
 
         gridLayout_8.addWidget(tableWidgetBalanceFebruar, 1, 0, 1, 1);
 

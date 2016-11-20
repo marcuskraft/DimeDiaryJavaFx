@@ -1,6 +1,7 @@
 package com.dimediary.view.design;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -25,6 +26,15 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 		this.continuousTransactionWidget = new QWidget();
 		this.setupUi(this.continuousTransactionWidget);
 
+		this.initialize();
+
+		this.spinBoxEveryNumberOfMonths.setValue(1);
+
+		this.initMapping();
+
+	}
+
+	private void initialize() {
 		this.radioButtonMonthly.setChecked(true);
 
 		this.groupBoxMonthly.setVisible(true);
@@ -32,10 +42,17 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 		this.groupBoxWeekly.setVisible(false);
 		this.groupBoxYearly.setVisible(false);
 
-		this.spinBoxEveryNumberOfMonths.setValue(1);
+		this.radioButtonNoEndDate.setChecked(true);
 
-		this.initMapping();
+		this.spinBoxNumberOfIterations.setValue(10);
 
+		final Date date = new Date();
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH, 1);
+		this.dateEditIterateUntil.setDate(QTUtils.dateToQDate(calendar.getTime()));
+
+		this.comboBoxMonthlyWhichDayOfMonth.clear();
 		this.comboBoxMonthlyWhichDayOfMonth.addItems(this.dayOfMonthStrings);
 
 	}
@@ -49,6 +66,22 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 
 		} else if (this.radioButtonYearly.isChecked()) {
 
+		}
+	}
+
+	public void initializeMonthly(final ContinuousTransaction continuousTransaction) {
+		this.initialize();
+
+		this.spinBoxEveryNumberOfMonths.setValue(continuousTransaction.getEveryIterationState());
+		final DayOfMonth dayOfMonth = continuousTransaction.getDayOfMonth();
+
+		this.comboBoxMonthlyWhichDayOfMonth
+				.setCurrentIndex(this.comboBoxMonthlyWhichDayOfMonth.findText(this.getStringForDayOfMonth(dayOfMonth)));
+
+		if (continuousTransaction.getDateUntil() != null) {
+			this.radioButtonIterateUntilDate.setChecked(true);
+		} else if (continuousTransaction.getNumberOfIterations() != null) {
+			this.radioButtonNumberOfIterations.setChecked(true);
 		}
 	}
 
@@ -158,6 +191,15 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 		this.groupBoxScheme.adjustSize();
 		this.groupBoxNumberOfIterations.adjustSize();
 		this.frame.adjustSize();
+	}
+
+	private String getStringForDayOfMonth(final DayOfMonth dayOfMonth) {
+		for (final String string : this.dayOfMonthByMonthlyMapping.keySet()) {
+			if (dayOfMonth == this.dayOfMonthByMonthlyMapping.get(string)) {
+				return string;
+			}
+		}
+		return null;
 	}
 
 	public QWidget getContinuousTransactionWidget() {

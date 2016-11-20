@@ -25,7 +25,7 @@ public class TableTransactionsMainWindow extends TableTransactions {
 			final String weekDay = simpleDateFormat.format(transaction.getDate());
 			final String amount = transaction.getAmount().toString().replace(".", ",");
 			final String name = transaction.getName();
-			final String category = transaction.getCategory() != null ? transaction.getCategory().getName() : "";
+			final String category = transaction.getCategory() != null ? transaction.getCategory().getName() : "-";
 			String balance = AccountBalancer.getBalance(transaction.getBankAccount(), transaction.getDate()).toString();
 
 			balance = balance != null ? balance : "";

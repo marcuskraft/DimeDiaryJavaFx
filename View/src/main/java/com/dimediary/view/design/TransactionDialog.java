@@ -48,20 +48,34 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.checkBoxIncome.setChecked(false);
 		this.subjectEdit.setText("");
 		this.doubleSpinBoxAmount.setValue(0);
-	}
 
-	public void update() {
-		this.comboBoxCategory.clear();
-		this.comboBoxAccount.clear();
-		this.comboBoxCategory.addItems(DBUtils.getInstance().getCategoryNames());
-		this.comboBoxAccount.addItems(DBUtils.getInstance().getBankAccountNames());
+		this.checkBoxIterate.setDisabled(false);
+		this.pushButtonAdd.setVisible(true);
+		this.pushButtonModify.setVisible(false);
 	}
 
 	public void initialize(final Transaction transaction) {
 		this.initialize();
+
+		this.checkBoxIterate.setDisabled(true);
+		this.pushButtonAdd.setVisible(false);
+		this.pushButtonModify.setVisible(true);
+
+		String accountName = transaction.getBankAccount() != null ? transaction.getBankAccount().getName() : null;
+		if (accountName == null) {
+			accountName = "-";
+			this.comboBoxAccount.addItem(accountName);
+		}
+		this.comboBoxAccount.setCurrentIndex(this.comboBoxAccount.findText(accountName));
+
+		String categoryName = transaction.getCategory() != null ? transaction.getCategory().getName() : null;
+		if (categoryName == null) {
+			categoryName = "-";
+			this.comboBoxCategory.addItem(categoryName);
+		}
 		this.dateEdit.setDate(QTUtils.dateToQDate(transaction.getDate()));
-		this.comboBoxAccount.setCurrentIndex(this.comboBoxAccount.findText(transaction.getBankAccount().getName()));
-		this.comboBoxCategory.setCurrentIndex(this.comboBoxCategory.findText(transaction.getCategory().getName()));
+
+		this.comboBoxCategory.setCurrentIndex(this.comboBoxCategory.findText(categoryName));
 		this.checkBoxIncome.setChecked(transaction.getAmount() > 0);
 		this.subjectEdit.setText(transaction.getName());
 		this.doubleSpinBoxAmount.setValue(transaction.getAmount());
@@ -69,6 +83,58 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.ownTableTransactions.addTransaction(transaction);
 
 		this.exec();
+	}
+
+	public void initialize(final ContinuousTransaction continuousTransaction) {
+		this.initialize();
+
+		this.pushButtonAdd.setVisible(false);
+		this.pushButtonModify.setVisible(true);
+		this.checkBoxIterate.setChecked(true);
+		this.onCeckBoxIterate(true);
+
+		String accountName = continuousTransaction.getBankAccount() != null
+				? continuousTransaction.getBankAccount().getName() : null;
+		if (accountName == null) {
+			accountName = "-";
+			this.comboBoxAccount.addItem(accountName);
+		}
+		this.comboBoxAccount.setCurrentIndex(this.comboBoxAccount.findText(accountName));
+
+		String categoryName = continuousTransaction.getCategory() != null
+				? continuousTransaction.getCategory().getName() : null;
+		if (categoryName == null) {
+			categoryName = "-";
+			this.comboBoxCategory.addItem(categoryName);
+		}
+		this.dateEdit.setDate(QTUtils.dateToQDate(continuousTransaction.getDateBeginn()));
+
+		this.comboBoxCategory.setCurrentIndex(this.comboBoxCategory.findText(categoryName));
+		this.checkBoxIncome.setChecked(continuousTransaction.getAmount() > 0);
+		this.subjectEdit.setText(continuousTransaction.getName());
+		this.doubleSpinBoxAmount.setValue(continuousTransaction.getAmount());
+
+		switch (continuousTransaction.getIterationState()) {
+		case MONTHLY:
+			this.initializeMonthly(continuousTransaction);
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+	public void initializeMonthly(final ContinuousTransaction continuousTransaction) {
+		this.continuousTransactionWidget.initializeMonthly(continuousTransaction);
+		this.exec();
+	}
+
+	public void update() {
+		this.comboBoxCategory.clear();
+		this.comboBoxAccount.clear();
+		this.comboBoxCategory.addItems(DBUtils.getInstance().getCategoryNames());
+		this.comboBoxAccount.addItems(DBUtils.getInstance().getBankAccountNames());
 	}
 
 	public void createTriggers() {
