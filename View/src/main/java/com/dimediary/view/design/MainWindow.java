@@ -52,14 +52,14 @@ public class MainWindow extends UiMainWindow {
 		this.dateFrom.setDate(qdateFrom);
 		this.dateUntil.setDate(qdateUntil);
 
-		this.initComboBoxAccounts();
+		this.refreshComboBoxAccounts();
 
 		// fill the table with the transactions between the two dates for the
 		// selected bank account
 		this.updateTransactionsTable();
 	}
 
-	public void initComboBoxAccounts() {
+	private void refreshComboBoxAccounts() {
 		// set the possible bank accounts in the combo box
 		final ArrayList<String> bankAccountNames = DBUtils.getInstance().getBankAccountNames();
 		// TODO if no bankAccounts exists ask the user to add bank account
@@ -69,7 +69,7 @@ public class MainWindow extends UiMainWindow {
 		this.comboBoxBankaccountOverview.addItems(bankAccountNames);
 	}
 
-	public void updateTransactionsTable() {
+	private void updateTransactionsTable() {
 		this.ownTableTransactions.updateTransactionTable(QTUtils.qDateToDate(this.dateFrom.date()),
 				QTUtils.qDateToDate(this.dateUntil.date()),
 				this.comboBoxBankaccountTransaction.itemText(this.comboBoxBankaccountTransaction.currentIndex()));
@@ -119,9 +119,10 @@ public class MainWindow extends UiMainWindow {
 	public void update() {
 		this.updateTransactionsTable();
 		this.tableMonthOverview.updateMonthOverview();
+		this.refreshComboBoxAccounts();
 	}
 
-	public void updateOverview(final Month month) {
+	private void updateOverview(final Month month) {
 		this.tableMonthOverview.updateMonthOverview(month);
 	}
 

@@ -17,6 +17,10 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	private boolean isActive = false;
 
+	private Transaction transaction = null;
+
+	private ContinuousTransaction continuousTransaction = null;
+
 	public TransactionDialog() {
 		super();
 		this.dialog = new QDialog();
@@ -34,6 +38,9 @@ public class TransactionDialog extends UiTransactionDialog {
 	}
 
 	public void initialize() {
+		this.transaction = null;
+		this.continuousTransaction = null;
+
 		this.dateEdit.setDate(QDate.currentDate());
 		this.refreshCategories();
 		this.refreshBankAccounts();
@@ -60,6 +67,9 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	public void initialize(final Transaction transaction) {
 		this.initialize();
+
+		this.transaction = transaction;
+		this.continuousTransaction = null;
 
 		this.checkBoxIterate.setDisabled(true);
 		this.pushButtonAdd.setVisible(false);
@@ -89,6 +99,9 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	public void initialize(final ContinuousTransaction continuousTransaction) {
 		this.initialize();
+
+		this.continuousTransaction = continuousTransaction;
+		this.transaction = null;
 
 		this.pushButtonAdd.setVisible(false);
 		this.pushButtonModify.setVisible(true);
@@ -137,6 +150,10 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.pushButtonAdd.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
 		this.pushButtonAdd.clicked.connect(Main.getMainWindow().getTableMonthOverview(), "updateMonthOverview()");
 
+		this.pushButtonModify.clicked.connect(this, "onModify()");
+		this.pushButtonModify.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
+		this.pushButtonModify.clicked.connect(Main.getMainWindow().getTableMonthOverview(), "updateMonthOverview()");
+
 		this.pushButtonAddAccount.clicked.connect(Main.getBankAccountDialog(), "exec()");
 		this.pushButtonAddCategory.clicked.connect(Main.getCategoryDialog(), "exec()");
 
@@ -161,6 +178,26 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	}
 
+	public void onModify() {
+		if (this.transaction != null) {
+			this.mergeTransaction();
+		} else if (this.continuousTransaction != null) {
+			this.mergeContinuousTransaction();
+		} else {
+			throw new IllegalStateException(
+					"TransactionDialog has no transaction or continuous transaction to modify after clicking the modify button!");
+		}
+	}
+
+	private void mergeTransaction() {
+		this.setTransactionAttributes(this.transaction);
+		DBUtils.getInstance().merge(this.transaction);
+	}
+
+	private void mergeContinuousTransaction() {
+
+	}
+
 	private void addContinuousTransaction() {
 		final ContinuousTransaction continuousTransaction = new ContinuousTransaction();
 		continuousTransaction.setAmount(this.doubleSpinBoxAmount.value());
@@ -174,13 +211,17 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	private void addSingleTransaction() {
 		final Transaction transaction = new Transaction();
+		this.setTransactionAttributes(transaction);
+		DBUtils.getInstance().persist(transaction);
+	}
+
+	private void setTransactionAttributes(final Transaction transaction) {
 		transaction.setAmount(this.doubleSpinBoxAmount.value());
 		transaction.setBankAccount(DBUtils.getInstance().getBankAccount(this.comboBoxAccount.currentText()));
 		transaction.setCategory(DBUtils.getInstance().getCategory(this.comboBoxCategory.currentText()));
 		transaction.setDate(QTUtils.qDateToDate(this.dateEdit.date()));
 		transaction.setName(this.subjectEdit.text());
 		transaction.setUser(null);
-		DBUtils.getInstance().persist(transaction);
 	}
 
 	public void onEditingFinished() {

@@ -88,13 +88,11 @@ public class BankAccountDialog extends UiBankAccountDialog {
 		this.pushButtonAddAccountCategory.clicked.connect(Main.getAccountCategoryDialog(), "exec()");
 
 		this.pushButtonAdd.clicked.connect(this, "onAddButton()");
-		this.pushButtonAdd.clicked.connect(Main.getMainWindow(), "initComboBoxAccounts()");
-		this.pushButtonAdd.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
+		this.pushButtonAdd.clicked.connect(Main.getMainWindow(), "update()");
 		this.pushButtonAdd.clicked.connect(Main.getTransactionDialog(), "refreshBankAccounts()");
 
 		this.pushButtonDelete.clicked.connect(this, "onDeleteButton()");
-		this.pushButtonDelete.clicked.connect(Main.getMainWindow(), "initComboBoxAccounts()");
-		this.pushButtonDelete.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
+		this.pushButtonDelete.clicked.connect(Main.getMainWindow(), "update()");
 		this.pushButtonDelete.clicked.connect(Main.getTransactionDialog(), "refreshBankAccounts()");
 
 		this.listWidget.itemDoubleClicked.connect(this, "onDoubleClick(com.trolltech.qt.gui.QListWidgetItem)");
@@ -148,7 +146,6 @@ public class BankAccountDialog extends UiBankAccountDialog {
 			errorMessage.showMessage("Es gibt noch mindestens eine Transaktion, welche dieses Konto referenziert.");
 		}
 
-		Main.getMainWindow().initComboBoxAccounts();
 		this.initialize();
 	}
 

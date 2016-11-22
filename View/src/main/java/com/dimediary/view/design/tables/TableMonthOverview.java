@@ -32,7 +32,6 @@ public class TableMonthOverview {
 		this.tablesOverview = tablesOverview;
 		this.tabs = tabs;
 		this.qTabWidget = qTabWidget;
-
 	}
 
 	public void createTrigger() {
