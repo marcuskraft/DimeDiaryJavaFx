@@ -89,4 +89,14 @@
 		<java>QFrame.Shadow.Raised</java>
 		<importString>import com.trolltech.qt.gui.QFrame;</importString>
 	</Mapping>
+	<Mapping>
+		<cpp>QLayout::SetMinimumSize</cpp> 
+		<java>SizeConstraint.SetMinimumSize</java>
+		<importString>import com.trolltech.qt.gui.QLayout.SizeConstraint;</importString>
+	</Mapping>
+	<Mapping>
+		<cpp>QLayout::SetDefaultConstraint</cpp> 
+		<java>SizeConstraint.SetDefaultConstraint</java>
+		<importString>import com.trolltech.qt.gui.QLayout.SizeConstraint;</importString>
+	</Mapping>
 </Mapping_List>

@@ -9,7 +9,7 @@ import com.dimediary.controller.utils.DateUtils;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.view.design.message.AllTransactionMessage;
 import com.dimediary.view.design.tables.TableMonthOverview;
-import com.dimediary.view.design.tables.TableTransactionsMainWindow;
+import com.dimediary.view.design.tables.TableTransactions;
 import com.dimediary.view.design.ui.UiMainWindow;
 import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
@@ -22,14 +22,14 @@ import com.trolltech.qt.gui.QWidget;
 public class MainWindow extends UiMainWindow {
 
 	private final QMainWindow window;
-	private final TableTransactionsMainWindow ownTableTransactions;
+	private final TableTransactions ownTableTransactions;
 	private TableMonthOverview tableMonthOverview;
 
 	public MainWindow() {
 		super();
 		this.window = new QMainWindow();
 		this.setupUi(this.window);
-		this.ownTableTransactions = new TableTransactionsMainWindow(this.tableTransactions);
+		this.ownTableTransactions = new TableTransactions(this.tableTransactions);
 
 		this.window.show();
 
@@ -153,7 +153,6 @@ public class MainWindow extends UiMainWindow {
 		final ArrayList<Transaction> transactionsToDelete = this.ownTableTransactions.getSelectedTransactions();
 		DBUtils.getInstance().deleteTransactions(transactionsToDelete);
 		this.ownTableTransactions.deleteTransactions(transactionsToDelete);
-		Main.getTransactionDialog().deleteTransactions(transactionsToDelete);
 	}
 
 	public void createTrigger() {
@@ -184,7 +183,7 @@ public class MainWindow extends UiMainWindow {
 		this.tableMonthOverview.createTrigger();
 	}
 
-	public TableTransactionsMainWindow getOwnTableTransactions() {
+	public TableTransactions getOwnTableTransactions() {
 		return this.ownTableTransactions;
 	}
 

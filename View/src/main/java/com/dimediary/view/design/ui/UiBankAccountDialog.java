@@ -43,6 +43,7 @@ public class UiBankAccountDialog implements com.trolltech.qt.QUiForm<QDialog>
     {
         BankAccountDialog.setObjectName("BankAccountDialog");
         BankAccountDialog.resize(new QSize(372, 250).expandedTo(BankAccountDialog.minimumSizeHint()));
+        BankAccountDialog.setModal(true);
         gridLayout_2 = new QGridLayout(BankAccountDialog);
         gridLayout_2.setObjectName("gridLayout_2");
         gridLayout = new QGridLayout();

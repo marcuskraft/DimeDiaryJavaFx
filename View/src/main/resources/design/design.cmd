@@ -15,5 +15,3 @@ for %%f in (%ui%*.jui) do java -jar ui2jui-1.0-jar-with-dependencies.jar -x %map
 for %%f in (%jui%*.jui) do juic.exe -p %package% -pf%praefix% -a -d %relativePath% %jui%%%f
 for %%f in (%output%*.java) do java -jar ui2jui-1.0-jar-with-dependencies.jar -x %mappingsXML% --java-file %%f --java-path %output%
 for %%f in (%jui%*.jui) do del %ui:/=\%\%%f
-
-pause

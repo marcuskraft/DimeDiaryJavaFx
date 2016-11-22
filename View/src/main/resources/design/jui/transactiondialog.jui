@@ -5,28 +5,36 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>564</width>
-    <height>503</height>
+    <width>351</width>
+    <height>361</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>Transaktion erstellen</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_8">
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <property name="sizeConstraint">
+    <enum>SizeConstraint.SetMinimumSize</enum>
+   </property>
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayoutMain">
-     <item row="0" column="0">
-      <widget class="QWidget" name="widgetOverview" native="true">
+     <property name="sizeConstraint">
+      <enum>SizeConstraint.SetDefaultConstraint</enum>
+     </property>
+     <item row="2" column="0">
+      <widget class="QWidget" name="widgetOK" native="true">
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
-         <widget class="QPushButton" name="pushButtonDelete">
-          <property name="text">
-           <string>Markierte Transaktionen Löschen</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <spacer name="horizontalSpacer_3">
+        <item row="1" column="0">
+         <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Orientation.Horizontal</enum>
           </property>
@@ -38,42 +46,34 @@
           </property>
          </spacer>
         </item>
-        <item row="1" column="0" rowspan="2" colspan="2">
-         <widget class="QTableWidget" name="tableTransactions">
-          <property name="selectionBehavior">
-           <enum>SelectionBehavior.SelectRows</enum>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="pushButtonOK">
+          <property name="text">
+           <string>OK</string>
           </property>
-          <column>
-           <property name="text">
-            <string>Datum</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Betreff</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Betrag</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Kategorie</string>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Konto</string>
-           </property>
-          </column>
          </widget>
         </item>
+        <item row="0" column="1">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
        </layout>
+       <zorder>pushButtonOK</zorder>
+       <zorder>horizontalSpacer</zorder>
+       <zorder>groupBoxTransaction</zorder>
+       <zorder>verticalSpacer</zorder>
       </widget>
      </item>
-     <item row="1" column="0">
+     <item row="0" column="0">
       <widget class="QGroupBox" name="groupBoxTransaction">
        <property name="title">
         <string>Transaktion</string>
@@ -179,9 +179,30 @@
           <property name="frameShadow">
            <enum>QFrame.Shadow.Raised</enum>
           </property>
-          <layout class="QGridLayout" name="gridLayout_6">
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="3">
+            <widget class="QPushButton" name="pushButtonModify">
+             <property name="text">
+              <string>Ändern</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="checkBoxIterate">
+             <property name="text">
+              <string>Wiederholen</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QPushButton" name="pushButtonAdd">
+             <property name="text">
+              <string>Hinzufügen</string>
+             </property>
+            </widget>
+           </item>
            <item row="0" column="1">
-            <spacer name="horizontalSpacer_4">
+            <spacer name="horizontalSpacer_2">
              <property name="orientation">
               <enum>Orientation.Horizontal</enum>
              </property>
@@ -193,79 +214,23 @@
              </property>
             </spacer>
            </item>
-           <item row="0" column="0">
-            <widget class="QCheckBox" name="checkBoxIterate">
-             <property name="text">
-              <string>Wiederholen</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </widget>
         </item>
-        <item row="1" column="2">
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Orientation.Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>349</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="1">
-         <layout class="QHBoxLayout" name="horizontalLayout">
-          <item>
-           <widget class="QPushButton" name="pushButtonAdd">
-            <property name="text">
-             <string>Hinzufügen</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="pushButtonModify">
-            <property name="text">
-             <string>Ändern</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
        </layout>
+       <zorder>widgetTransactionData</zorder>
+       <zorder>frameIterateButton</zorder>
+       <zorder>widgetOK</zorder>
       </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QWidget" name="widget" native="true"/>
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
-    <widget class="QWidget" name="widget_4" native="true">
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="1">
-       <widget class="QPushButton" name="pushButtonOK">
-        <property name="text">
-         <string>OK</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="0">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Orientation.Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-     </layout>
-    </widget>
-   </item>
   </layout>
+  <zorder>pushButtonOK</zorder>
+  <zorder>gridLayoutWidget</zorder>
  </widget>
  <tabstops>
   <tabstop>dateEdit</tabstop>

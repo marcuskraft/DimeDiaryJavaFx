@@ -35,10 +35,10 @@ public class CategoryDialog extends UiCategoryDialog {
 	 */
 	public void createTrigger() {
 		this.pushButtonAdd.clicked.connect(this, "onAddButton()");
-		this.pushButtonAdd.clicked.connect(Main.getTransactionDialog(), "update()");
+		this.pushButtonAdd.clicked.connect(Main.getTransactionDialog(), "refreshCategories()");
 
 		this.pushButtonDelete.clicked.connect(this, "onDeleteButton()");
-		this.pushButtonDelete.clicked.connect(Main.getTransactionDialog(), "update()");
+		this.pushButtonDelete.clicked.connect(Main.getTransactionDialog(), "refreshCategories()");
 	}
 
 	private void initialize() {

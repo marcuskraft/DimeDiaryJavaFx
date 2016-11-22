@@ -1,11 +1,8 @@
 package com.dimediary.view.design;
 
-import java.util.ArrayList;
-
 import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
-import com.dimediary.view.design.tables.TableTransactionDialog;
 import com.dimediary.view.design.ui.UiTransactionDialog;
 import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
@@ -16,8 +13,6 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	private final QDialog dialog;
 
-	private final TableTransactionDialog ownTableTransactions;
-
 	private final ContinuousTransactionWidget continuousTransactionWidget;
 
 	private boolean isActive = false;
@@ -27,10 +22,9 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.dialog = new QDialog();
 		this.setupUi(this.dialog);
 
-		this.ownTableTransactions = new TableTransactionDialog(this.tableTransactions);
 		this.continuousTransactionWidget = new ContinuousTransactionWidget();
 
-		this.gridLayoutMain.addWidget(this.continuousTransactionWidget.getContinuousTransactionWidget(), 2, 0);
+		this.gridLayoutMain.addWidget(this.continuousTransactionWidget.getContinuousTransactionWidget(), 1, 0);
 		this.continuousTransactionWidget.getContinuousTransactionWidget().setVisible(false);
 
 		this.initialize();
@@ -41,17 +35,27 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	public void initialize() {
 		this.dateEdit.setDate(QDate.currentDate());
-		this.comboBoxCategory.clear();
-		this.comboBoxAccount.clear();
-		this.comboBoxCategory.addItems(DBUtils.getInstance().getCategoryNames());
-		this.comboBoxAccount.addItems(DBUtils.getInstance().getBankAccountNames());
+		this.refreshCategories();
+		this.refreshBankAccounts();
 		this.checkBoxIncome.setChecked(false);
 		this.subjectEdit.setText("");
 		this.doubleSpinBoxAmount.setValue(0);
 
 		this.checkBoxIterate.setDisabled(false);
+		this.checkBoxIterate.setChecked(false);
+		this.onCeckBoxIterate(false);
 		this.pushButtonAdd.setVisible(true);
 		this.pushButtonModify.setVisible(false);
+	}
+
+	public void refreshBankAccounts() {
+		this.comboBoxAccount.clear();
+		this.comboBoxAccount.addItems(DBUtils.getInstance().getBankAccountNames());
+	}
+
+	public void refreshCategories() {
+		this.comboBoxCategory.clear();
+		this.comboBoxCategory.addItems(DBUtils.getInstance().getCategoryNames());
 	}
 
 	public void initialize(final Transaction transaction) {
@@ -79,8 +83,6 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.checkBoxIncome.setChecked(transaction.getAmount() > 0);
 		this.subjectEdit.setText(transaction.getName());
 		this.doubleSpinBoxAmount.setValue(transaction.getAmount());
-
-		this.ownTableTransactions.addTransaction(transaction);
 
 		this.exec();
 	}
@@ -130,21 +132,10 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.exec();
 	}
 
-	public void update() {
-		this.comboBoxCategory.clear();
-		this.comboBoxAccount.clear();
-		this.comboBoxCategory.addItems(DBUtils.getInstance().getCategoryNames());
-		this.comboBoxAccount.addItems(DBUtils.getInstance().getBankAccountNames());
-	}
-
 	public void createTriggers() {
 		this.pushButtonAdd.clicked.connect(this, "onAdd()");
 		this.pushButtonAdd.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
 		this.pushButtonAdd.clicked.connect(Main.getMainWindow().getTableMonthOverview(), "updateMonthOverview()");
-
-		this.pushButtonDelete.clicked.connect(this, "onDelete()");
-		this.pushButtonDelete.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
-		this.pushButtonDelete.clicked.connect(Main.getMainWindow().getTableMonthOverview(), "updateMonthOverview()");
 
 		this.pushButtonAddAccount.clicked.connect(Main.getBankAccountDialog(), "exec()");
 		this.pushButtonAddCategory.clicked.connect(Main.getCategoryDialog(), "exec()");
@@ -159,20 +150,6 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	public void onCeckBoxIterate(final Boolean active) {
 		this.continuousTransactionWidget.getContinuousTransactionWidget().setVisible(active);
-		this.dialog.adjustSize();
-
-	}
-
-	public void adjustSize() {
-		if (this.checkBoxIterate.isChecked()) {
-			this.continuousTransactionWidget.adjustSize();
-		}
-		this.widgetTransactionData.adjustSize();
-		this.frameIterateButton.adjustSize();
-		this.tableTransactions.adjustSize();
-		this.widgetOverview.adjustSize();
-		this.groupBoxTransaction.adjustSize();
-
 	}
 
 	public void onAdd() {
@@ -204,24 +181,6 @@ public class TransactionDialog extends UiTransactionDialog {
 		transaction.setName(this.subjectEdit.text());
 		transaction.setUser(null);
 		DBUtils.getInstance().persist(transaction);
-		this.ownTableTransactions.addTransaction(transaction);
-	}
-
-	public void onDelete() {
-		final ArrayList<Transaction> transactionsToDelete = this.ownTableTransactions.getSelectedTransactions();
-
-		DBUtils.getInstance().deleteTransactions(transactionsToDelete);
-		this.ownTableTransactions.deleteTransactions(transactionsToDelete);
-
-		Main.getMainWindow().updateTransactionsTable();
-	}
-
-	public void deleteTransactions(final ArrayList<Transaction> transactions) {
-		for (final Transaction transaction : transactions) {
-			if (this.ownTableTransactions.getTransactions().contains(transaction)) {
-				this.ownTableTransactions.deleteTransaction(transaction);
-			}
-		}
 	}
 
 	public void onEditingFinished() {

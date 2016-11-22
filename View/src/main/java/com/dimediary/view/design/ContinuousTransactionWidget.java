@@ -156,7 +156,6 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 		this.groupBoxDayli.setVisible(false);
 		this.groupBoxWeekly.setVisible(false);
 		this.groupBoxYearly.setVisible(false);
-		this.frame.adjustSize();
 	}
 
 	public void onButtonDayli() {
@@ -164,7 +163,6 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 		this.groupBoxDayli.setVisible(true);
 		this.groupBoxWeekly.setVisible(false);
 		this.groupBoxYearly.setVisible(false);
-		this.frame.adjustSize();
 	}
 
 	public void onButtonWeekly() {
@@ -172,7 +170,6 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 		this.groupBoxDayli.setVisible(false);
 		this.groupBoxWeekly.setVisible(true);
 		this.groupBoxYearly.setVisible(false);
-		this.frame.adjustSize();
 	}
 
 	public void onButtonYearly() {
@@ -180,17 +177,6 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 		this.groupBoxDayli.setVisible(false);
 		this.groupBoxWeekly.setVisible(false);
 		this.groupBoxYearly.setVisible(true);
-		this.frame.adjustSize();
-	}
-
-	public void adjustSize() {
-		this.groupBoxMonthly.adjustSize();
-		this.groupBoxDayli.adjustSize();
-		this.groupBoxWeekly.adjustSize();
-		this.groupBoxYearly.adjustSize();
-		this.groupBoxScheme.adjustSize();
-		this.groupBoxNumberOfIterations.adjustSize();
-		this.frame.adjustSize();
 	}
 
 	private String getStringForDayOfMonth(final DayOfMonth dayOfMonth) {

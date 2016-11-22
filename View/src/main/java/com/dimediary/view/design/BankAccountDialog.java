@@ -90,12 +90,12 @@ public class BankAccountDialog extends UiBankAccountDialog {
 		this.pushButtonAdd.clicked.connect(this, "onAddButton()");
 		this.pushButtonAdd.clicked.connect(Main.getMainWindow(), "initComboBoxAccounts()");
 		this.pushButtonAdd.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
-		this.pushButtonAdd.clicked.connect(Main.getTransactionDialog(), "update()");
+		this.pushButtonAdd.clicked.connect(Main.getTransactionDialog(), "refreshBankAccounts()");
 
 		this.pushButtonDelete.clicked.connect(this, "onDeleteButton()");
 		this.pushButtonDelete.clicked.connect(Main.getMainWindow(), "initComboBoxAccounts()");
 		this.pushButtonDelete.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
-		this.pushButtonDelete.clicked.connect(Main.getTransactionDialog(), "update()");
+		this.pushButtonDelete.clicked.connect(Main.getTransactionDialog(), "refreshBankAccounts()");
 
 		this.listWidget.itemDoubleClicked.connect(this, "onDoubleClick(com.trolltech.qt.gui.QListWidgetItem)");
 	}

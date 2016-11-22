@@ -7,7 +7,6 @@
  ********************************************************************************/
 package com.dimediary.view.design.ui;
 import com.trolltech.qt.core.Qt.Orientation;
-import com.trolltech.qt.gui.QFrame;
 
 
 
@@ -16,8 +15,6 @@ import com.trolltech.qt.gui.*;
 
 public class UicontinuousTransactionWidget implements com.trolltech.qt.QUiForm<QWidget>
 {
-    public QGridLayout gridLayout_2;
-    public QFrame frame;
     public QGridLayout gridLayout;
     public QGroupBox groupBoxScheme;
     public QGridLayout gridLayout_14;
@@ -87,23 +84,16 @@ public class UicontinuousTransactionWidget implements com.trolltech.qt.QUiForm<Q
     public QRadioButton radioButtonNoEndDate;
     public QLabel label_14;
     public QSpacerItem horizontalSpacer_9;
-    public QSpacerItem verticalSpacer_7;
 
     public UicontinuousTransactionWidget() { super(); }
 
     public void setupUi(QWidget continuousTransactionWidget)
     {
         continuousTransactionWidget.setObjectName("continuousTransactionWidget");
-        continuousTransactionWidget.resize(new QSize(324, 749).expandedTo(continuousTransactionWidget.minimumSizeHint()));
-        gridLayout_2 = new QGridLayout(continuousTransactionWidget);
-        gridLayout_2.setObjectName("gridLayout_2");
-        frame = new QFrame(continuousTransactionWidget);
-        frame.setObjectName("frame");
-        frame.setFrameShape(QFrame.Shape.StyledPanel);
-        frame.setFrameShadow(QFrame.Shadow.Raised);
-        gridLayout = new QGridLayout(frame);
+        continuousTransactionWidget.resize(new QSize(304, 723).expandedTo(continuousTransactionWidget.minimumSizeHint()));
+        gridLayout = new QGridLayout(continuousTransactionWidget);
         gridLayout.setObjectName("gridLayout");
-        groupBoxScheme = new QGroupBox(frame);
+        groupBoxScheme = new QGroupBox(continuousTransactionWidget);
         groupBoxScheme.setObjectName("groupBoxScheme");
         gridLayout_14 = new QGridLayout(groupBoxScheme);
         gridLayout_14.setObjectName("gridLayout_14");
@@ -361,7 +351,7 @@ public class UicontinuousTransactionWidget implements com.trolltech.qt.QUiForm<Q
 
         gridLayout.addWidget(groupBoxScheme, 0, 0, 1, 1);
 
-        groupBoxNumberOfIterations = new QGroupBox(frame);
+        groupBoxNumberOfIterations = new QGroupBox(continuousTransactionWidget);
         groupBoxNumberOfIterations.setObjectName("groupBoxNumberOfIterations");
         gridLayout_21 = new QGridLayout(groupBoxNumberOfIterations);
         gridLayout_21.setObjectName("gridLayout_21");
@@ -405,15 +395,8 @@ public class UicontinuousTransactionWidget implements com.trolltech.qt.QUiForm<Q
 
         gridLayout_21.addItem(horizontalSpacer_9, 0, 1, 1, 1);
 
-        verticalSpacer_7 = new QSpacerItem(20, 40, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding);
-
-        gridLayout_21.addItem(verticalSpacer_7, 1, 0, 1, 1);
-
 
         gridLayout.addWidget(groupBoxNumberOfIterations, 1, 0, 1, 1);
-
-
-        gridLayout_2.addWidget(frame, 0, 0, 1, 1);
 
         retranslateUi(continuousTransactionWidget);
 

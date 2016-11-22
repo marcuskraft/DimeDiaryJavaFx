@@ -36,6 +36,7 @@ public class UiaccountCategoryDialog implements com.trolltech.qt.QUiForm<QDialog
     {
         accountCategoryDialog.setObjectName("accountCategoryDialog");
         accountCategoryDialog.resize(new QSize(325, 209).expandedTo(accountCategoryDialog.minimumSizeHint()));
+        accountCategoryDialog.setModal(true);
         gridLayout_2 = new QGridLayout(accountCategoryDialog);
         gridLayout_2.setObjectName("gridLayout_2");
         buttonBox = new QDialogButtonBox(accountCategoryDialog);

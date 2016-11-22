@@ -35,6 +35,7 @@ public class UiCategoryDialog implements com.trolltech.qt.QUiForm<QDialog>
     {
         CategoryDialog.setObjectName("CategoryDialog");
         CategoryDialog.resize(new QSize(292, 207).expandedTo(CategoryDialog.minimumSizeHint()));
+        CategoryDialog.setModal(true);
         gridLayout_2 = new QGridLayout(CategoryDialog);
         gridLayout_2.setObjectName("gridLayout_2");
         listCategories = new QListWidget(CategoryDialog);
