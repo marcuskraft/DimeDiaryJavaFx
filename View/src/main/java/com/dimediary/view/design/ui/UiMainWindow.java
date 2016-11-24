@@ -29,6 +29,9 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public QGridLayout gridLayout;
     public QGridLayout gridLayout_2;
     public QTabWidget MainWindowTabWidget;
+    public QWidget tab;
+    public QGridLayout gridLayout_20;
+    public QTextBrowser textBrowser;
     public QWidget overview;
     public QGridLayout gridLayout_19;
     public QGridLayout gridLayout_4;
@@ -133,6 +136,16 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         MainWindowTabWidget.setSizePolicy(sizePolicy);
         MainWindowTabWidget.setTabsClosable(false);
         MainWindowTabWidget.setMovable(false);
+        tab = new QWidget();
+        tab.setObjectName("tab");
+        gridLayout_20 = new QGridLayout(tab);
+        gridLayout_20.setObjectName("gridLayout_20");
+        textBrowser = new QTextBrowser(tab);
+        textBrowser.setObjectName("textBrowser");
+
+        gridLayout_20.addWidget(textBrowser, 0, 0, 1, 1);
+
+        MainWindowTabWidget.addTab(tab, com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Start", null));
         overview = new QWidget();
         overview.setObjectName("overview");
         gridLayout_19 = new QGridLayout(overview);
@@ -441,6 +454,12 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         actionKonto_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto erstellen", null));
         actionKontoart_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kontoart erstellen", null));
         actionKategorie_erstellen.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Kategorie erstellen", null));
+        textBrowser.setHtml(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"+
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"+
+"p, li { white-space: pre-wrap; }\n"+
+"</style></head><body style=\" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"+
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:28pt; font-weight:600;\">Hier k\u00f6nnte irgendeine Fancy \u00dcbersicht dargestellt werden.... k\u00f6nnte</span></p></body></html>", null));
+        MainWindowTabWidget.setTabText(MainWindowTabWidget.indexOf(tab), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Start", null));
         label_4.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto", null));
         label_5.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Jahr", null));
         pushButtonAddTransactionOverview.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion erstellen", null));

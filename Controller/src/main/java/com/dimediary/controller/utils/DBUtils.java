@@ -271,6 +271,22 @@ public class DBUtils {
 		return new ArrayList<Transaction>(transactions);
 	}
 
+	public ArrayList<Transaction> getTransactionsFromDate(final ContinuousTransaction continuousTransaction,
+			final Date date) {
+		final List<Transaction> transactions = this.entityManager
+				.createNamedQuery("ContinuousTransansactionFromDate", Transaction.class)
+				.setParameter("continuousTransaction", continuousTransaction).setParameter("date", date)
+				.getResultList();
+		return new ArrayList<Transaction>(transactions);
+	}
+
+	public ArrayList<Transaction> getTransactions(final ContinuousTransaction continuousTransaction) {
+		final List<Transaction> transactions = this.entityManager
+				.createNamedQuery("ContinuousTransactions", Transaction.class)
+				.setParameter("continuousTransaction", continuousTransaction).getResultList();
+		return new ArrayList<Transaction>(transactions);
+	}
+
 	/**
 	 *
 	 * @param categoryName

@@ -109,6 +109,7 @@ public class TableMonthOverview {
 		}
 
 		qTableWidget.resizeColumnsToContents();
+		qTableWidget.resizeRowsToContents();
 
 	}
 

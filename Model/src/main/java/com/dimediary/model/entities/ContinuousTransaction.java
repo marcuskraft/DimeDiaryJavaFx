@@ -102,7 +102,7 @@ public class ContinuousTransaction implements Serializable {
 	@Column(name = "EVERY_WORKDAY")
 	private boolean everyWorkday;
 
-	@OneToMany()
+	@OneToMany
 	private List<DayOfWeekEntity> dayOfWeeks;
 
 	@Column(name = "EVERY_YEAR_DAY_OF_MONTH")
@@ -243,4 +243,5 @@ public class ContinuousTransaction implements Serializable {
 	public void setDateBeginn(final Date dateBeginn) {
 		this.dateBeginn = dateBeginn;
 	}
+
 }

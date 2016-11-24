@@ -5,12 +5,12 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>351</width>
-    <height>361</height>
+    <width>372</width>
+    <height>351</height>
    </rect>
   </property>
   <property name="sizePolicy">
-   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
     <horstretch>0</horstretch>
     <verstretch>0</verstretch>
    </sizepolicy>
@@ -69,7 +69,6 @@
        </layout>
        <zorder>pushButtonOK</zorder>
        <zorder>horizontalSpacer</zorder>
-       <zorder>groupBoxTransaction</zorder>
        <zorder>verticalSpacer</zorder>
       </widget>
      </item>
@@ -168,6 +167,19 @@
              </item>
             </layout>
            </item>
+           <item row="0" column="1">
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Orientation.Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
           </layout>
          </widget>
         </item>
@@ -218,9 +230,6 @@
          </widget>
         </item>
        </layout>
-       <zorder>widgetTransactionData</zorder>
-       <zorder>frameIterateButton</zorder>
-       <zorder>widgetOK</zorder>
       </widget>
      </item>
      <item row="1" column="0">
@@ -229,8 +238,6 @@
     </layout>
    </item>
   </layout>
-  <zorder>pushButtonOK</zorder>
-  <zorder>gridLayoutWidget</zorder>
  </widget>
  <tabstops>
   <tabstop>dateEdit</tabstop>

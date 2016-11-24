@@ -20,6 +20,16 @@ public class DateUtils {
 	private final static int numberOfWeeksFutureBalancing = 108;
 	private final static int numberOfMonthFutureTransactions = 120;
 
+	public static ArrayList<Date> removeDatesBefore(final ArrayList<Date> dates, final Date dateFrom) {
+		final ArrayList<Date> datesReturn = new ArrayList<>();
+		for (final Date date : dates) {
+			if (!date.before(dateFrom)) {
+				datesReturn.add(date);
+			}
+		}
+		return datesReturn;
+	}
+
 	/**
 	 *
 	 * @param date

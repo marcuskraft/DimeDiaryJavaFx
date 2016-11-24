@@ -7,6 +7,7 @@ import com.dimediary.view.design.ui.UiTransactionDialog;
 import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
 import com.trolltech.qt.core.QDate;
+import com.trolltech.qt.core.QSize;
 import com.trolltech.qt.gui.QDialog;
 
 public class TransactionDialog extends UiTransactionDialog {
@@ -21,10 +22,14 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	private ContinuousTransaction continuousTransaction = null;
 
+	private final QSize size;
+
 	public TransactionDialog() {
 		super();
 		this.dialog = new QDialog();
 		this.setupUi(this.dialog);
+
+		this.size = this.dialog.size();
 
 		this.continuousTransactionWidget = new ContinuousTransactionWidget();
 
@@ -40,6 +45,8 @@ public class TransactionDialog extends UiTransactionDialog {
 	public void initialize() {
 		this.transaction = null;
 		this.continuousTransaction = null;
+
+		this.dialog.resize(this.size);
 
 		this.dateEdit.setDate(QDate.currentDate());
 		this.refreshCategories();
@@ -195,18 +202,23 @@ public class TransactionDialog extends UiTransactionDialog {
 	}
 
 	private void mergeContinuousTransaction() {
-
+		this.setContinuousTransactionAttributes(this.continuousTransaction);
+		this.continuousTransactionWidget.mergeContinuousTransaction(this.continuousTransaction);
 	}
 
 	private void addContinuousTransaction() {
 		final ContinuousTransaction continuousTransaction = new ContinuousTransaction();
+		this.setContinuousTransactionAttributes(continuousTransaction);
+		this.continuousTransactionWidget.addContinuousTransaction(continuousTransaction);
+		// Main.getMainWindow().update();
+	}
+
+	private void setContinuousTransactionAttributes(final ContinuousTransaction continuousTransaction) {
 		continuousTransaction.setAmount(this.doubleSpinBoxAmount.value());
 		continuousTransaction.setBankAccount(DBUtils.getInstance().getBankAccount(this.comboBoxAccount.currentText()));
 		continuousTransaction.setCategory(DBUtils.getInstance().getCategory(this.comboBoxCategory.currentText()));
 		continuousTransaction.setName(this.subjectEdit.text());
 		continuousTransaction.setDateBeginn(QTUtils.qDateToDate(this.dateEdit.date()));
-		this.continuousTransactionWidget.initContinuousTransaction(continuousTransaction);
-		// Main.getMainWindow().update();
 	}
 
 	private void addSingleTransaction() {

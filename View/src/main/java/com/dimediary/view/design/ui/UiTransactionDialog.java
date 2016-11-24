@@ -42,6 +42,7 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
     public QCheckBox checkBoxIncome;
     public QComboBox comboBoxCategory;
     public QPushButton pushButtonAddCategory;
+    public QSpacerItem horizontalSpacer_3;
     public QFrame frameIterateButton;
     public QGridLayout gridLayout_4;
     public QPushButton pushButtonModify;
@@ -55,8 +56,8 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
     public void setupUi(QDialog TransactionDialog)
     {
         TransactionDialog.setObjectName("TransactionDialog");
-        TransactionDialog.resize(new QSize(351, 361).expandedTo(TransactionDialog.minimumSizeHint()));
-        QSizePolicy sizePolicy = new QSizePolicy(com.trolltech.qt.gui.QSizePolicy.Policy.Minimum, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
+        TransactionDialog.resize(new QSize(372, 351).expandedTo(TransactionDialog.minimumSizeHint()));
+        QSizePolicy sizePolicy = new QSizePolicy(com.trolltech.qt.gui.QSizePolicy.Policy.Preferred, com.trolltech.qt.gui.QSizePolicy.Policy.Preferred);
         sizePolicy.setHorizontalStretch((byte)0);
         sizePolicy.setVerticalStretch((byte)0);
         sizePolicy.setHeightForWidth(TransactionDialog.sizePolicy().hasHeightForWidth());
@@ -168,6 +169,10 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
 
 
         gridLayout_7.addLayout(gridLayout_2, 0, 0, 1, 1);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
+
+        gridLayout_7.addItem(horizontalSpacer_3, 0, 1, 1, 1);
 
 
         gridLayout_5.addWidget(widgetTransactionData, 0, 0, 1, 1);

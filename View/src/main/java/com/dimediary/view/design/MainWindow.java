@@ -29,6 +29,9 @@ public class MainWindow extends UiMainWindow {
 		super();
 		this.window = new QMainWindow();
 		this.setupUi(this.window);
+
+		this.window.showMaximized();
+
 		this.ownTableTransactions = new TableTransactions(this.tableTransactions);
 
 		this.window.show();
