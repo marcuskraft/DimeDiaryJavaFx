@@ -28,11 +28,10 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 		this.continuousTransactionWidget = new QWidget();
 		this.setupUi(this.continuousTransactionWidget);
 
+		this.initMapping();
 		this.initialize();
 
 		this.spinBoxEveryNumberOfMonths.setValue(1);
-
-		this.initMapping();
 
 	}
 
@@ -103,6 +102,22 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 		final ArrayList<Transaction> newTransActions = this.createTransactions(continuousTransaction, this.dates);
 
 		this.persist(continuousTransaction, newTransActions);
+	}
+
+	public void deleteContinuousTransaction(final ContinuousTransaction continuousTransaction) {
+		new DeleteContinuousTransactionWidget(this, continuousTransaction);
+	}
+
+	public void deleteAllContinuousTransactions(final ContinuousTransaction continuousTransaction) {
+		DBUtils.getInstance().deleteAllContinuousTransactions(continuousTransaction);
+	}
+
+	public void deleteContinuousTransaction(final ContinuousTransaction continuousTransaction, final Date dateFrom) {
+		final ArrayList<Transaction> transactionsToDelete = DBUtils.getInstance()
+				.getTransactionsFromDate(continuousTransaction, dateFrom);
+		DBUtils.getInstance().deleteTransactions(transactionsToDelete);
+		continuousTransaction.setDateUntil(DateUtils.substractOnDay(dateFrom));
+		DBUtils.getInstance().merge(continuousTransaction);
 	}
 
 	public void initializeMonthly(final ContinuousTransaction continuousTransaction) {

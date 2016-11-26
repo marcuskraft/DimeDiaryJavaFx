@@ -60,6 +60,7 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.onCeckBoxIterate(false);
 		this.pushButtonAdd.setVisible(true);
 		this.pushButtonModify.setVisible(false);
+		this.pushButtonDelete.setVisible(false);
 	}
 
 	public void refreshBankAccounts() {
@@ -81,6 +82,7 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.checkBoxIterate.setDisabled(true);
 		this.pushButtonAdd.setVisible(false);
 		this.pushButtonModify.setVisible(true);
+		this.pushButtonDelete.setVisible(true);
 
 		String accountName = transaction.getBankAccount() != null ? transaction.getBankAccount().getName() : null;
 		if (accountName == null) {
@@ -112,6 +114,8 @@ public class TransactionDialog extends UiTransactionDialog {
 
 		this.pushButtonAdd.setVisible(false);
 		this.pushButtonModify.setVisible(true);
+		this.pushButtonDelete.setVisible(true);
+
 		this.checkBoxIterate.setChecked(true);
 		this.onCeckBoxIterate(true);
 
@@ -161,6 +165,10 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.pushButtonModify.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
 		this.pushButtonModify.clicked.connect(Main.getMainWindow().getTableMonthOverview(), "updateMonthOverview()");
 
+		this.pushButtonDelete.clicked.connect(this, "onDelete()");
+		this.pushButtonDelete.clicked.connect(Main.getMainWindow(), "updateTransactionsTable()");
+		this.pushButtonDelete.clicked.connect(Main.getMainWindow().getTableMonthOverview(), "updateMonthOverview()");
+
 		this.pushButtonAddAccount.clicked.connect(Main.getBankAccountDialog(), "exec()");
 		this.pushButtonAddCategory.clicked.connect(Main.getCategoryDialog(), "exec()");
 
@@ -196,6 +204,17 @@ public class TransactionDialog extends UiTransactionDialog {
 		}
 	}
 
+	public void onDelete() {
+		if (this.transaction != null) {
+			DBUtils.getInstance().delete(this.transaction);
+		} else if (this.continuousTransaction != null) {
+			this.deleteContinuousTransaction();
+		} else {
+			throw new IllegalStateException(
+					"TransactionDialog has no transaction or continuous transaction to delete after clicking the delete button!");
+		}
+	}
+
 	private void mergeTransaction() {
 		this.setTransactionAttributes(this.transaction);
 		DBUtils.getInstance().merge(this.transaction);
@@ -204,6 +223,10 @@ public class TransactionDialog extends UiTransactionDialog {
 	private void mergeContinuousTransaction() {
 		this.setContinuousTransactionAttributes(this.continuousTransaction);
 		this.continuousTransactionWidget.mergeContinuousTransaction(this.continuousTransaction);
+	}
+
+	private void deleteContinuousTransaction() {
+		this.continuousTransactionWidget.deleteContinuousTransaction(this.continuousTransaction);
 	}
 
 	private void addContinuousTransaction() {

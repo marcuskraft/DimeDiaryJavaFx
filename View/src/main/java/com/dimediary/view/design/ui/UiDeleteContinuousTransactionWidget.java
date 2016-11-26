@@ -1,5 +1,5 @@
 /********************************************************************************
- ** Form generated from reading ui file 'mergecontinuoustransactiondialog.jui'
+ ** Form generated from reading ui file 'deletecontinuoustransactionwidget.jui'
  **
  ** Created by: Qt User Interface Compiler version 4.8.7
  **
@@ -14,9 +14,10 @@ import com.trolltech.qt.core.Qt.Orientation;
 import com.trolltech.qt.core.*;
 import com.trolltech.qt.gui.*;
 
-public class UiMergeContinuousTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
+public class UiDeleteContinuousTransactionWidget implements com.trolltech.qt.QUiForm<QDialog>
 {
     public QGridLayout gridLayout_3;
+    public QLabel label;
     public QWidget widget;
     public QGridLayout gridLayout_2;
     public QGridLayout gridLayout;
@@ -26,18 +27,22 @@ public class UiMergeContinuousTransactionDialog implements com.trolltech.qt.QUiF
     public QSpacerItem verticalSpacer;
     public QSpacerItem horizontalSpacer;
     public QDialogButtonBox buttonBox;
-    public QLabel label;
 
-    public UiMergeContinuousTransactionDialog() { super(); }
+    public UiDeleteContinuousTransactionWidget() { super(); }
 
-    public void setupUi(QDialog MergeContinuousTransactionDialog)
+    public void setupUi(QDialog DeleteContinuousTransactionWidget)
     {
-        MergeContinuousTransactionDialog.setObjectName("MergeContinuousTransactionDialog");
-        MergeContinuousTransactionDialog.resize(new QSize(248, 135).expandedTo(MergeContinuousTransactionDialog.minimumSizeHint()));
-        MergeContinuousTransactionDialog.setModal(true);
-        gridLayout_3 = new QGridLayout(MergeContinuousTransactionDialog);
+        DeleteContinuousTransactionWidget.setObjectName("DeleteContinuousTransactionWidget");
+        DeleteContinuousTransactionWidget.resize(new QSize(240, 135).expandedTo(DeleteContinuousTransactionWidget.minimumSizeHint()));
+        DeleteContinuousTransactionWidget.setModal(true);
+        gridLayout_3 = new QGridLayout(DeleteContinuousTransactionWidget);
         gridLayout_3.setObjectName("gridLayout_3");
-        widget = new QWidget(MergeContinuousTransactionDialog);
+        label = new QLabel(DeleteContinuousTransactionWidget);
+        label.setObjectName("label");
+
+        gridLayout_3.addWidget(label, 0, 0, 1, 1);
+
+        widget = new QWidget(DeleteContinuousTransactionWidget);
         widget.setObjectName("widget");
         gridLayout_2 = new QGridLayout(widget);
         gridLayout_2.setObjectName("gridLayout_2");
@@ -73,28 +78,26 @@ public class UiMergeContinuousTransactionDialog implements com.trolltech.qt.QUiF
 
         gridLayout_3.addWidget(widget, 1, 0, 1, 1);
 
-        buttonBox = new QDialogButtonBox(MergeContinuousTransactionDialog);
+        buttonBox = new QDialogButtonBox(DeleteContinuousTransactionWidget);
         buttonBox.setObjectName("buttonBox");
+        buttonBox.setOrientation(Orientation.Horizontal);
         buttonBox.setStandardButtons(StandardButton.createQFlags(StandardButton.Cancel,StandardButton.Ok));
 
         gridLayout_3.addWidget(buttonBox, 2, 0, 1, 1);
 
-        label = new QLabel(MergeContinuousTransactionDialog);
-        label.setObjectName("label");
+        retranslateUi(DeleteContinuousTransactionWidget);
+        buttonBox.accepted.connect(DeleteContinuousTransactionWidget, "accept()");
+        buttonBox.rejected.connect(DeleteContinuousTransactionWidget, "reject()");
 
-        gridLayout_3.addWidget(label, 0, 0, 1, 1);
-
-        retranslateUi(MergeContinuousTransactionDialog);
-
-        MergeContinuousTransactionDialog.connectSlotsByName();
+        DeleteContinuousTransactionWidget.connectSlotsByName();
     } // setupUi
 
-    void retranslateUi(QDialog MergeContinuousTransactionDialog)
+    void retranslateUi(QDialog DeleteContinuousTransactionWidget)
     {
-        MergeContinuousTransactionDialog.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("MergeContinuousTransactionDialog", "Ab wann?", null));
-        radioButtonFrom.setText(com.trolltech.qt.core.QCoreApplication.translate("MergeContinuousTransactionDialog", "ab", null));
-        radioButtonAll.setText(com.trolltech.qt.core.QCoreApplication.translate("MergeContinuousTransactionDialog", "Alle", null));
-        label.setText(com.trolltech.qt.core.QCoreApplication.translate("MergeContinuousTransactionDialog", "Welche Transaktionen sollen ver\u00e4ndert werden?", null));
+        DeleteContinuousTransactionWidget.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("DeleteContinuousTransactionWidget", "Ab wann?", null));
+        label.setText(com.trolltech.qt.core.QCoreApplication.translate("DeleteContinuousTransactionWidget", "Welche Transaktionen sollen gel\u00f6scht werden?", null));
+        radioButtonFrom.setText(com.trolltech.qt.core.QCoreApplication.translate("DeleteContinuousTransactionWidget", "ab", null));
+        radioButtonAll.setText(com.trolltech.qt.core.QCoreApplication.translate("DeleteContinuousTransactionWidget", "Alle", null));
     } // retranslateUi
 
 }

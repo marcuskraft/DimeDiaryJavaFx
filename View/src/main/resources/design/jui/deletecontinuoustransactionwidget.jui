@@ -1,11 +1,11 @@
 <ui version="4.0" language="jambi">
- <class>MergeContinuousTransactionDialog</class>
- <widget class="QDialog" name="MergeContinuousTransactionDialog">
+ <class>DeleteContinuousTransactionWidget</class>
+ <widget class="QDialog" name="DeleteContinuousTransactionWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>248</width>
+    <width>240</width>
     <height>135</height>
    </rect>
   </property>
@@ -16,6 +16,13 @@
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Welche Transaktionen sollen gelöscht werden?</string>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="0">
     <widget class="QWidget" name="widget" native="true">
      <layout class="QGridLayout" name="gridLayout_2">
@@ -75,20 +82,49 @@
    </item>
    <item row="2" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Orientation.Horizontal</enum>
+     </property>
      <property name="standardButtons">
       <set>StandardButton.Cancel|StandardButton.Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Welche Transaktionen sollen verändert werden?</string>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>DeleteContinuousTransactionWidget</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>DeleteContinuousTransactionWidget</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

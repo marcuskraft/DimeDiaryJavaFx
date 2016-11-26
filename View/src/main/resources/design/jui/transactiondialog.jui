@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>372</width>
-    <height>351</height>
+    <width>392</width>
+    <height>311</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -192,6 +192,19 @@
            <enum>QFrame.Shadow.Raised</enum>
           </property>
           <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="1">
+            <spacer name="horizontalSpacer_2">
+             <property name="orientation">
+              <enum>Orientation.Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
            <item row="0" column="3">
             <widget class="QPushButton" name="pushButtonModify">
              <property name="text">
@@ -213,18 +226,12 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <spacer name="horizontalSpacer_2">
-             <property name="orientation">
-              <enum>Orientation.Horizontal</enum>
+           <item row="0" column="4">
+            <widget class="QPushButton" name="pushButtonDelete">
+             <property name="text">
+              <string>Löschen</string>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
+            </widget>
            </item>
           </layout>
          </widget>

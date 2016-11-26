@@ -45,10 +45,11 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
     public QSpacerItem horizontalSpacer_3;
     public QFrame frameIterateButton;
     public QGridLayout gridLayout_4;
+    public QSpacerItem horizontalSpacer_2;
     public QPushButton pushButtonModify;
     public QCheckBox checkBoxIterate;
     public QPushButton pushButtonAdd;
-    public QSpacerItem horizontalSpacer_2;
+    public QPushButton pushButtonDelete;
     public QWidget widget;
 
     public UiTransactionDialog() { super(); }
@@ -56,7 +57,7 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
     public void setupUi(QDialog TransactionDialog)
     {
         TransactionDialog.setObjectName("TransactionDialog");
-        TransactionDialog.resize(new QSize(372, 351).expandedTo(TransactionDialog.minimumSizeHint()));
+        TransactionDialog.resize(new QSize(392, 311).expandedTo(TransactionDialog.minimumSizeHint()));
         QSizePolicy sizePolicy = new QSizePolicy(com.trolltech.qt.gui.QSizePolicy.Policy.Preferred, com.trolltech.qt.gui.QSizePolicy.Policy.Preferred);
         sizePolicy.setHorizontalStretch((byte)0);
         sizePolicy.setVerticalStretch((byte)0);
@@ -183,6 +184,10 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
         frameIterateButton.setFrameShadow(QFrame.Shadow.Raised);
         gridLayout_4 = new QGridLayout(frameIterateButton);
         gridLayout_4.setObjectName("gridLayout_4");
+        horizontalSpacer_2 = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
+
+        gridLayout_4.addItem(horizontalSpacer_2, 0, 1, 1, 1);
+
         pushButtonModify = new QPushButton(frameIterateButton);
         pushButtonModify.setObjectName("pushButtonModify");
 
@@ -198,9 +203,10 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
 
         gridLayout_4.addWidget(pushButtonAdd, 0, 2, 1, 1);
 
-        horizontalSpacer_2 = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
+        pushButtonDelete = new QPushButton(frameIterateButton);
+        pushButtonDelete.setObjectName("pushButtonDelete");
 
-        gridLayout_4.addItem(horizontalSpacer_2, 0, 1, 1, 1);
+        gridLayout_4.addWidget(pushButtonDelete, 0, 4, 1, 1);
 
 
         gridLayout_5.addWidget(frameIterateButton, 1, 0, 1, 1);
@@ -245,6 +251,7 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
         pushButtonModify.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "\u00c4ndern", null));
         checkBoxIterate.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Wiederholen", null));
         pushButtonAdd.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Hinzuf\u00fcgen", null));
+        pushButtonDelete.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "L\u00f6schen", null));
     } // retranslateUi
 
 }

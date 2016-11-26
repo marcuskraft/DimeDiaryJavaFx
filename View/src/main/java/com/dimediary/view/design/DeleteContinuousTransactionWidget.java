@@ -3,21 +3,21 @@ package com.dimediary.view.design;
 import java.util.Date;
 
 import com.dimediary.model.entities.ContinuousTransaction;
-import com.dimediary.view.design.ui.UiMergeContinuousTransactionDialog;
+import com.dimediary.view.design.ui.UiDeleteContinuousTransactionWidget;
 import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.QCursor;
 import com.trolltech.qt.gui.QDialog;
 
-public class MergeContinuousTransactionDialog extends UiMergeContinuousTransactionDialog {
+public class DeleteContinuousTransactionWidget extends UiDeleteContinuousTransactionWidget {
 
 	private final QDialog dialog;
 
-	ContinuousTransactionWidget continuousTransactionWidget;
 	private final ContinuousTransaction continuousTransaction;
+	private final ContinuousTransactionWidget continuousTransactionWidget;
 
-	public MergeContinuousTransactionDialog(final ContinuousTransactionWidget continuousTransactionWidget,
+	public DeleteContinuousTransactionWidget(final ContinuousTransactionWidget continuousTransactionWidget,
 			final ContinuousTransaction continuousTransaction) {
 
 		this.continuousTransaction = continuousTransaction;
@@ -39,14 +39,17 @@ public class MergeContinuousTransactionDialog extends UiMergeContinuousTransacti
 		final QCursor cursor = new QCursor();
 		cursor.setShape(Qt.CursorShape.WaitCursor);
 		this.dialog.setCursor(cursor);
+
 		if (this.radioButtonFrom.isChecked()) {
-			this.continuousTransactionWidget.mergeContinuousTransaction(this.continuousTransaction,
+			this.continuousTransactionWidget.deleteContinuousTransaction(this.continuousTransaction,
 					QTUtils.qDateToDate(this.dateEdit.date()));
 		} else {
-			this.continuousTransactionWidget.mergAllContinuousTransactions(this.continuousTransaction);
+			this.continuousTransactionWidget.deleteAllContinuousTransactions(this.continuousTransaction);
 		}
+
 		cursor.setShape(Qt.CursorShape.ArrowCursor);
 		this.dialog.setCursor(cursor);
+
 		this.dialog.close();
 		Main.getTransactionDialog().getDialog().close();
 	}

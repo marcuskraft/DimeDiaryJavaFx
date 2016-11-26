@@ -163,6 +163,13 @@ public class DateUtils {
 		return calendar.getTime();
 	}
 
+	public static Date substractOnDay(final Date date) {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_WEEK, -1);
+		return calendar.getTime();
+	}
+
 	/**
 	 *
 	 * @param day
