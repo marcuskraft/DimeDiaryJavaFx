@@ -199,4 +199,8 @@ public class TableMonthOverview {
 		return yearChange;
 	}
 
+	public HashMap<Month, QWidget> getTabs() {
+		return this.tabs;
+	}
+
 }

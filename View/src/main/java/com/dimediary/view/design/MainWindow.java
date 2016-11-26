@@ -109,16 +109,20 @@ public class MainWindow extends UiMainWindow {
 		tabs.put(Month.NOVEMBER, this.tabNovember);
 		tabs.put(Month.DECEMBER, this.tabDecember);
 
-		this.spinBoxYear.setValue(DateUtils.getActualYear());
 		this.tableMonthOverview = new TableMonthOverview(tablesOverview, tabs, this.tabWidget);
-
-		final Month actualMonth = DateUtils.getActualMonth();
-		this.tabWidget.setCurrentWidget(tabs.get(actualMonth));
 
 		this.checkBoxTransactionsWithoutAccount.setChecked(true);
 
-		this.updateOverview(actualMonth);
+		this.goToActualMonth();
 
+	}
+
+	public void goToActualMonth() {
+		this.spinBoxYear.setValue(DateUtils.getActualYear());
+		final Month actualMonth = DateUtils.getActualMonth();
+		this.tabWidget.setCurrentWidget(this.tableMonthOverview.getTabs().get(actualMonth));
+
+		this.updateOverview(actualMonth);
 	}
 
 	public void update() {
@@ -168,6 +172,7 @@ public class MainWindow extends UiMainWindow {
 
 		this.pushButtonBack.clicked.connect(this, "onButtonBack()");
 		this.pushButtonForward.clicked.connect(this, "onButtonForward()");
+		this.pushButtonActualMonth.clicked.connect(this, "goToActualMonth()");
 
 		this.comboBoxBankaccountTransaction.currentIndexChanged.connect(this, "updateTransactionsTable()");
 		this.dateFrom.dateChanged.connect(this, "updateTransactionsTable()");

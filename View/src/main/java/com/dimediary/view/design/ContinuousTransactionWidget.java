@@ -37,6 +37,9 @@ public class ContinuousTransactionWidget extends UicontinuousTransactionWidget {
 
 	private void initialize() {
 		this.radioButtonMonthly.setChecked(true);
+		this.radioButtonDayli.setDisabled(true);
+		this.radioButtonWeekly.setDisabled(true);
+		this.radioButtonYearly.setDisabled(true);
 
 		this.groupBoxMonthly.setVisible(true);
 		this.groupBoxDayli.setVisible(false);

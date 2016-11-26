@@ -21,9 +21,12 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
     public QGridLayout gridLayoutMain;
     public QWidget widgetOK;
     public QGridLayout gridLayout_3;
-    public QSpacerItem horizontalSpacer;
+    public QPushButton pushButtonDelete;
+    public QPushButton pushButtonAdd;
     public QPushButton pushButtonOK;
     public QSpacerItem verticalSpacer;
+    public QSpacerItem horizontalSpacer;
+    public QPushButton pushButtonModify;
     public QGroupBox groupBoxTransaction;
     public QGridLayout gridLayout_5;
     public QWidget widgetTransactionData;
@@ -48,10 +51,7 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
     public QFrame frameIterateButton;
     public QGridLayout gridLayout_4;
     public QSpacerItem horizontalSpacer_2;
-    public QPushButton pushButtonModify;
     public QCheckBox checkBoxIterate;
-    public QPushButton pushButtonAdd;
-    public QPushButton pushButtonDelete;
     public QWidget widget;
 
     public UiTransactionDialog() { super(); }
@@ -59,7 +59,7 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
     public void setupUi(QDialog TransactionDialog)
     {
         TransactionDialog.setObjectName("TransactionDialog");
-        TransactionDialog.resize(new QSize(392, 311).expandedTo(TransactionDialog.minimumSizeHint()));
+        TransactionDialog.resize(new QSize(398, 308).expandedTo(TransactionDialog.minimumSizeHint()));
         QSizePolicy sizePolicy = new QSizePolicy(com.trolltech.qt.gui.QSizePolicy.Policy.Preferred, com.trolltech.qt.gui.QSizePolicy.Policy.Preferred);
         sizePolicy.setHorizontalStretch((byte)0);
         sizePolicy.setVerticalStretch((byte)0);
@@ -76,18 +76,33 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
         widgetOK.setObjectName("widgetOK");
         gridLayout_3 = new QGridLayout(widgetOK);
         gridLayout_3.setObjectName("gridLayout_3");
-        horizontalSpacer = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
+        pushButtonDelete = new QPushButton(widgetOK);
+        pushButtonDelete.setObjectName("pushButtonDelete");
 
-        gridLayout_3.addItem(horizontalSpacer, 1, 0, 1, 1);
+        gridLayout_3.addWidget(pushButtonDelete, 1, 2, 1, 1);
+
+        pushButtonAdd = new QPushButton(widgetOK);
+        pushButtonAdd.setObjectName("pushButtonAdd");
+
+        gridLayout_3.addWidget(pushButtonAdd, 1, 1, 1, 1);
 
         pushButtonOK = new QPushButton(widgetOK);
         pushButtonOK.setObjectName("pushButtonOK");
 
-        gridLayout_3.addWidget(pushButtonOK, 1, 1, 1, 1);
+        gridLayout_3.addWidget(pushButtonOK, 1, 4, 1, 1);
 
         verticalSpacer = new QSpacerItem(20, 40, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding);
 
-        gridLayout_3.addItem(verticalSpacer, 0, 1, 1, 1);
+        gridLayout_3.addItem(verticalSpacer, 0, 4, 1, 1);
+
+        horizontalSpacer = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
+
+        gridLayout_3.addItem(horizontalSpacer, 1, 0, 1, 1);
+
+        pushButtonModify = new QPushButton(widgetOK);
+        pushButtonModify.setObjectName("pushButtonModify");
+
+        gridLayout_3.addWidget(pushButtonModify, 1, 3, 1, 1);
 
 
         gridLayoutMain.addWidget(widgetOK, 2, 0, 1, 1);
@@ -200,25 +215,10 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
 
         gridLayout_4.addItem(horizontalSpacer_2, 0, 1, 1, 1);
 
-        pushButtonModify = new QPushButton(frameIterateButton);
-        pushButtonModify.setObjectName("pushButtonModify");
-
-        gridLayout_4.addWidget(pushButtonModify, 0, 3, 1, 1);
-
         checkBoxIterate = new QCheckBox(frameIterateButton);
         checkBoxIterate.setObjectName("checkBoxIterate");
 
         gridLayout_4.addWidget(checkBoxIterate, 0, 0, 1, 1);
-
-        pushButtonAdd = new QPushButton(frameIterateButton);
-        pushButtonAdd.setObjectName("pushButtonAdd");
-
-        gridLayout_4.addWidget(pushButtonAdd, 0, 2, 1, 1);
-
-        pushButtonDelete = new QPushButton(frameIterateButton);
-        pushButtonDelete.setObjectName("pushButtonDelete");
-
-        gridLayout_4.addWidget(pushButtonDelete, 0, 4, 1, 1);
 
 
         gridLayout_5.addWidget(frameIterateButton, 1, 0, 1, 1);
@@ -250,7 +250,10 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
     void retranslateUi(QDialog TransactionDialog)
     {
         TransactionDialog.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Transaktion erstellen", null));
-        pushButtonOK.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "OK", null));
+        pushButtonDelete.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "L\u00f6schen", null));
+        pushButtonAdd.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Hinzuf\u00fcgen", null));
+        pushButtonOK.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Abbrechen", null));
+        pushButtonModify.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "\u00c4ndern", null));
         groupBoxTransaction.setTitle(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Transaktion", null));
         label.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Datum", null));
         pushButtonAddAccount.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "erstellen", null));
@@ -262,10 +265,7 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
         label_2.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Betreff", null));
         checkBoxNoCategory.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "keine", null));
         checkBoxNoAccount.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "keins", null));
-        pushButtonModify.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "\u00c4ndern", null));
         checkBoxIterate.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Wiederholen", null));
-        pushButtonAdd.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Hinzuf\u00fcgen", null));
-        pushButtonDelete.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "L\u00f6schen", null));
     } // retranslateUi
 
 }

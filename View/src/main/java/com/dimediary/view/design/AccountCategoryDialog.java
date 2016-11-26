@@ -30,6 +30,8 @@ public class AccountCategoryDialog extends UiaccountCategoryDialog {
 		this.dialog = new QDialog();
 		this.setupUi(this.dialog);
 
+		this.checkBoxRealAccount.setDisabled(true);
+
 		this.initialize();
 
 	}

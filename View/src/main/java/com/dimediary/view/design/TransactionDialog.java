@@ -259,8 +259,8 @@ public class TransactionDialog extends UiTransactionDialog {
 	}
 
 	private void mergeTransaction() {
-		this.setTransactionAttributes(this.transaction);
-		DBUtils.getInstance().merge(this.transaction);
+		DBUtils.getInstance().delete(this.transaction);
+		this.addSingleTransaction();
 	}
 
 	private void mergeContinuousTransaction() {

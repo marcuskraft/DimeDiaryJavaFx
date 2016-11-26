@@ -84,6 +84,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public QHBoxLayout horizontalLayout;
     public QPushButton pushButtonBack;
     public QPushButton pushButtonForward;
+    public QPushButton pushButtonActualMonth;
     public QSpacerItem horizontalSpacer_3;
     public QWidget transactions;
     public QGridLayout gridLayout_6;
@@ -340,6 +341,11 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         pushButtonForward.setObjectName("pushButtonForward");
 
         horizontalLayout.addWidget(pushButtonForward);
+
+        pushButtonActualMonth = new QPushButton(overview);
+        pushButtonActualMonth.setObjectName("pushButtonActualMonth");
+
+        horizontalLayout.addWidget(pushButtonActualMonth);
 
         horizontalSpacer_3 = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
 
@@ -664,6 +670,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         tabWidget.setTabText(tabWidget.indexOf(tabDecember), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Dezember", null));
         pushButtonBack.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "zur\u00fcck", null));
         pushButtonForward.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "vor", null));
+        pushButtonActualMonth.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "aktueller Monat", null));
         MainWindowTabWidget.setTabText(MainWindowTabWidget.indexOf(overview), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "\u00dcberblick", null));
         buttonAddTransaction.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion erstellen", null));
         tableTransactions.clear();

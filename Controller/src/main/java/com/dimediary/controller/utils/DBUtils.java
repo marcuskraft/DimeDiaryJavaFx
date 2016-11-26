@@ -517,19 +517,6 @@ public class DBUtils {
 		}
 	}
 
-	public void merge(final Transaction transaction) {
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
-
-		this.entityManager.merge(transaction);
-
-		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
-		}
-	}
-
 	public void merge(final ContinuousTransaction continuousTransaction) {
 		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
 		if (ownTransaction) {

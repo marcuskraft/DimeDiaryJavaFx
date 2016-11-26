@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>392</width>
-    <height>311</height>
+    <width>398</width>
+    <height>308</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -34,6 +34,40 @@
      <item row="2" column="0">
       <widget class="QWidget" name="widgetOK" native="true">
        <layout class="QGridLayout" name="gridLayout_3">
+        <item row="1" column="2">
+         <widget class="QPushButton" name="pushButtonDelete">
+          <property name="text">
+           <string>Löschen</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="pushButtonAdd">
+          <property name="text">
+           <string>Hinzufügen</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="4">
+         <widget class="QPushButton" name="pushButtonOK">
+          <property name="text">
+           <string>Abbrechen</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="4">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
         <item row="1" column="0">
          <spacer name="horizontalSpacer">
           <property name="orientation">
@@ -47,30 +81,20 @@
           </property>
          </spacer>
         </item>
-        <item row="1" column="1">
-         <widget class="QPushButton" name="pushButtonOK">
+        <item row="1" column="3">
+         <widget class="QPushButton" name="pushButtonModify">
           <property name="text">
-           <string>Abbrechen</string>
+           <string>Ändern</string>
           </property>
          </widget>
-        </item>
-        <item row="0" column="1">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
        <zorder>pushButtonOK</zorder>
        <zorder>horizontalSpacer</zorder>
        <zorder>verticalSpacer</zorder>
+       <zorder>pushButtonDelete</zorder>
+       <zorder>pushButtonAdd</zorder>
+       <zorder>pushButtonModify</zorder>
       </widget>
      </item>
      <item row="0" column="0">
@@ -220,31 +244,10 @@
              </property>
             </spacer>
            </item>
-           <item row="0" column="3">
-            <widget class="QPushButton" name="pushButtonModify">
-             <property name="text">
-              <string>Ändern</string>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="0">
             <widget class="QCheckBox" name="checkBoxIterate">
              <property name="text">
               <string>Wiederholen</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QPushButton" name="pushButtonAdd">
-             <property name="text">
-              <string>Hinzufügen</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="4">
-            <widget class="QPushButton" name="pushButtonDelete">
-             <property name="text">
-              <string>Löschen</string>
              </property>
             </widget>
            </item>
