@@ -7,7 +7,6 @@ import java.util.HashMap;
 import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.controller.utils.DateUtils;
 import com.dimediary.model.entities.Transaction;
-import com.dimediary.view.design.message.AllTransactionMessage;
 import com.dimediary.view.design.tables.TableMonthOverview;
 import com.dimediary.view.design.tables.TableTransactions;
 import com.dimediary.view.design.ui.UiMainWindow;
@@ -31,6 +30,7 @@ public class MainWindow extends UiMainWindow {
 		this.setupUi(this.window);
 
 		this.window.showMaximized();
+		this.actionEinstellungen.setDisabled(true);
 
 		this.ownTableTransactions = new TableTransactions(this.tableTransactions);
 
@@ -131,11 +131,7 @@ public class MainWindow extends UiMainWindow {
 
 	public void onDoubleClickRowTransactionView(final Integer row, final Integer column) {
 		final Transaction transaction = this.ownTableTransactions.getTransaction(row, column);
-		if (transaction.getContinuousTransaction() != null) {
-			new AllTransactionMessage(transaction);
-		} else {
-			Main.getTransactionDialog().initialize(transaction);
-		}
+		Main.getTransactionDialog().openTransactionDialog(transaction);
 
 	}
 

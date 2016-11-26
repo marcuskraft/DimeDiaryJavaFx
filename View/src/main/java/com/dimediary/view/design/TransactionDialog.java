@@ -3,6 +3,7 @@ package com.dimediary.view.design;
 import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
+import com.dimediary.view.design.message.AllTransactionMessage;
 import com.dimediary.view.design.ui.UiTransactionDialog;
 import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
@@ -40,6 +41,14 @@ public class TransactionDialog extends UiTransactionDialog {
 
 		this.dialog.finished.connect(this, "OnFinish(java.lang.Integer)");
 
+	}
+
+	public void openTransactionDialog(final Transaction transaction) {
+		if (transaction.getContinuousTransaction() != null) {
+			new AllTransactionMessage(transaction);
+		} else {
+			this.initialize(transaction);
+		}
 	}
 
 	public void initialize() {

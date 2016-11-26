@@ -56,7 +56,6 @@ public class CategoryDialog extends UiCategoryDialog {
 
 		DBUtils.getInstance().persist(category);
 		this.initialize();
-		Main.getTransactionDialog().initialize();
 	}
 
 	/**
@@ -72,7 +71,6 @@ public class CategoryDialog extends UiCategoryDialog {
 		DBUtils.getInstance().deleteCategories(DBUtils.getInstance().getCategories(categoryNames));
 
 		this.initialize();
-		Main.getTransactionDialog().initialize();
 	}
 
 	/**

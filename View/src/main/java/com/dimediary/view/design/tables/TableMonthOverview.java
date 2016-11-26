@@ -68,6 +68,8 @@ public class TableMonthOverview {
 			}
 		}
 
+		qTableWidget.clear();
+
 		// create the table now
 		qTableWidget.setColumnCount(maxTransaction + 3);
 		// +3 because of the three colums Datum, Wochentag and Kontostand which
