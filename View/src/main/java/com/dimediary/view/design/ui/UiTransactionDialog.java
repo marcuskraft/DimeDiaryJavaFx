@@ -29,19 +29,21 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
     public QWidget widgetTransactionData;
     public QGridLayout gridLayout_7;
     public QGridLayout gridLayout_2;
-    public QLabel label_5;
-    public QLabel label_4;
+    public QLineEdit subjectEdit;
+    public QLabel label;
     public QPushButton pushButtonAddAccount;
     public QLabel label_3;
-    public QDateEdit dateEdit;
-    public QDoubleSpinBox doubleSpinBoxAmount;
-    public QLabel label_2;
     public QComboBox comboBoxAccount;
-    public QLabel label;
-    public QLineEdit subjectEdit;
+    public QLabel label_5;
+    public QDoubleSpinBox doubleSpinBoxAmount;
+    public QLabel label_4;
+    public QDateEdit dateEdit;
     public QCheckBox checkBoxIncome;
     public QComboBox comboBoxCategory;
     public QPushButton pushButtonAddCategory;
+    public QLabel label_2;
+    public QCheckBox checkBoxNoCategory;
+    public QCheckBox checkBoxNoAccount;
     public QSpacerItem horizontalSpacer_3;
     public QFrame frameIterateButton;
     public QGridLayout gridLayout_4;
@@ -100,31 +102,35 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
         gridLayout_7.setObjectName("gridLayout_7");
         gridLayout_2 = new QGridLayout();
         gridLayout_2.setObjectName("gridLayout_2");
-        label_5 = new QLabel(widgetTransactionData);
-        label_5.setObjectName("label_5");
+        subjectEdit = new QLineEdit(widgetTransactionData);
+        subjectEdit.setObjectName("subjectEdit");
 
-        gridLayout_2.addWidget(label_5, 4, 0, 1, 1);
+        gridLayout_2.addWidget(subjectEdit, 1, 1, 1, 1);
 
-        label_4 = new QLabel(widgetTransactionData);
-        label_4.setObjectName("label_4");
+        label = new QLabel(widgetTransactionData);
+        label.setObjectName("label");
 
-        gridLayout_2.addWidget(label_4, 3, 0, 1, 1);
+        gridLayout_2.addWidget(label, 0, 0, 1, 1);
 
         pushButtonAddAccount = new QPushButton(widgetTransactionData);
         pushButtonAddAccount.setObjectName("pushButtonAddAccount");
 
-        gridLayout_2.addWidget(pushButtonAddAccount, 3, 2, 1, 1);
+        gridLayout_2.addWidget(pushButtonAddAccount, 3, 3, 1, 1);
 
         label_3 = new QLabel(widgetTransactionData);
         label_3.setObjectName("label_3");
 
         gridLayout_2.addWidget(label_3, 2, 0, 1, 1);
 
-        dateEdit = new QDateEdit(widgetTransactionData);
-        dateEdit.setObjectName("dateEdit");
-        dateEdit.setCalendarPopup(true);
+        comboBoxAccount = new QComboBox(widgetTransactionData);
+        comboBoxAccount.setObjectName("comboBoxAccount");
 
-        gridLayout_2.addWidget(dateEdit, 0, 1, 1, 1);
+        gridLayout_2.addWidget(comboBoxAccount, 3, 1, 1, 1);
+
+        label_5 = new QLabel(widgetTransactionData);
+        label_5.setObjectName("label_5");
+
+        gridLayout_2.addWidget(label_5, 4, 0, 1, 1);
 
         doubleSpinBoxAmount = new QDoubleSpinBox(widgetTransactionData);
         doubleSpinBoxAmount.setObjectName("doubleSpinBoxAmount");
@@ -133,30 +139,21 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
 
         gridLayout_2.addWidget(doubleSpinBoxAmount, 4, 1, 1, 1);
 
-        label_2 = new QLabel(widgetTransactionData);
-        label_2.setObjectName("label_2");
+        label_4 = new QLabel(widgetTransactionData);
+        label_4.setObjectName("label_4");
 
-        gridLayout_2.addWidget(label_2, 1, 0, 1, 1);
+        gridLayout_2.addWidget(label_4, 3, 0, 1, 1);
 
-        comboBoxAccount = new QComboBox(widgetTransactionData);
-        comboBoxAccount.setObjectName("comboBoxAccount");
+        dateEdit = new QDateEdit(widgetTransactionData);
+        dateEdit.setObjectName("dateEdit");
+        dateEdit.setCalendarPopup(true);
 
-        gridLayout_2.addWidget(comboBoxAccount, 3, 1, 1, 1);
-
-        label = new QLabel(widgetTransactionData);
-        label.setObjectName("label");
-
-        gridLayout_2.addWidget(label, 0, 0, 1, 1);
-
-        subjectEdit = new QLineEdit(widgetTransactionData);
-        subjectEdit.setObjectName("subjectEdit");
-
-        gridLayout_2.addWidget(subjectEdit, 1, 1, 1, 1);
+        gridLayout_2.addWidget(dateEdit, 0, 1, 1, 1);
 
         checkBoxIncome = new QCheckBox(widgetTransactionData);
         checkBoxIncome.setObjectName("checkBoxIncome");
 
-        gridLayout_2.addWidget(checkBoxIncome, 4, 2, 1, 1);
+        gridLayout_2.addWidget(checkBoxIncome, 4, 3, 1, 1);
 
         comboBoxCategory = new QComboBox(widgetTransactionData);
         comboBoxCategory.setObjectName("comboBoxCategory");
@@ -166,7 +163,22 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
         pushButtonAddCategory = new QPushButton(widgetTransactionData);
         pushButtonAddCategory.setObjectName("pushButtonAddCategory");
 
-        gridLayout_2.addWidget(pushButtonAddCategory, 2, 2, 1, 1);
+        gridLayout_2.addWidget(pushButtonAddCategory, 2, 3, 1, 1);
+
+        label_2 = new QLabel(widgetTransactionData);
+        label_2.setObjectName("label_2");
+
+        gridLayout_2.addWidget(label_2, 1, 0, 1, 1);
+
+        checkBoxNoCategory = new QCheckBox(widgetTransactionData);
+        checkBoxNoCategory.setObjectName("checkBoxNoCategory");
+
+        gridLayout_2.addWidget(checkBoxNoCategory, 2, 2, 1, 1);
+
+        checkBoxNoAccount = new QCheckBox(widgetTransactionData);
+        checkBoxNoAccount.setObjectName("checkBoxNoAccount");
+
+        gridLayout_2.addWidget(checkBoxNoAccount, 3, 2, 1, 1);
 
 
         gridLayout_7.addLayout(gridLayout_2, 0, 0, 1, 1);
@@ -240,14 +252,16 @@ public class UiTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
         TransactionDialog.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Transaktion erstellen", null));
         pushButtonOK.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "OK", null));
         groupBoxTransaction.setTitle(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Transaktion", null));
-        label_5.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Betrag", null));
-        label_4.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Konto", null));
+        label.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Datum", null));
         pushButtonAddAccount.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "erstellen", null));
         label_3.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Kategorie", null));
-        label_2.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Betreff", null));
-        label.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Datum", null));
+        label_5.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Betrag", null));
+        label_4.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Konto", null));
         checkBoxIncome.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Einnahme", null));
         pushButtonAddCategory.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "erstellen", null));
+        label_2.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Betreff", null));
+        checkBoxNoCategory.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "keine", null));
+        checkBoxNoAccount.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "keins", null));
         pushButtonModify.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "\u00c4ndern", null));
         checkBoxIterate.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Wiederholen", null));
         pushButtonAdd.setText(com.trolltech.qt.core.QCoreApplication.translate("TransactionDialog", "Hinzuf\u00fcgen", null));

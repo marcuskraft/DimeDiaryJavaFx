@@ -56,15 +56,22 @@ p, li { white-space: pre-wrap; }
        <layout class="QGridLayout" name="gridLayout_19">
         <item row="0" column="0">
          <layout class="QGridLayout" name="gridLayout_4">
-          <item row="0" column="1">
-           <widget class="QComboBox" name="comboBoxBankaccountOverview"/>
-          </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
             <property name="text">
              <string>Konto</string>
             </property>
            </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Jahr</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QComboBox" name="comboBoxBankaccountOverview"/>
           </item>
           <item row="1" column="1">
            <widget class="QSpinBox" name="spinBoxYear">
@@ -79,14 +86,7 @@ p, li { white-space: pre-wrap; }
             </property>
            </widget>
           </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="text">
-             <string>Jahr</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
+          <item row="1" column="3">
            <spacer name="horizontalSpacer">
             <property name="orientation">
              <enum>Orientation.Horizontal</enum>
@@ -98,6 +98,13 @@ p, li { white-space: pre-wrap; }
              </size>
             </property>
            </spacer>
+          </item>
+          <item row="0" column="2">
+           <widget class="QCheckBox" name="checkBoxTransactionsWithoutAccount">
+            <property name="text">
+             <string>kontolose Transaktionen einblenden</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>

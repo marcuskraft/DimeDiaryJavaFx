@@ -50,7 +50,7 @@
         <item row="1" column="1">
          <widget class="QPushButton" name="pushButtonOK">
           <property name="text">
-           <string>OK</string>
+           <string>Abbrechen</string>
           </property>
          </widget>
         </item>
@@ -84,21 +84,17 @@
           <layout class="QGridLayout" name="gridLayout_7">
            <item row="0" column="0">
             <layout class="QGridLayout" name="gridLayout_2">
-             <item row="4" column="0">
-              <widget class="QLabel" name="label_5">
+             <item row="1" column="1">
+              <widget class="QLineEdit" name="subjectEdit"/>
+             </item>
+             <item row="0" column="0">
+              <widget class="QLabel" name="label">
                <property name="text">
-                <string>Betrag</string>
+                <string>Datum</string>
                </property>
               </widget>
              </item>
-             <item row="3" column="0">
-              <widget class="QLabel" name="label_4">
-               <property name="text">
-                <string>Konto</string>
-               </property>
-              </widget>
-             </item>
-             <item row="3" column="2">
+             <item row="3" column="3">
               <widget class="QPushButton" name="pushButtonAddAccount">
                <property name="text">
                 <string>erstellen</string>
@@ -112,10 +108,13 @@
                </property>
               </widget>
              </item>
-             <item row="0" column="1">
-              <widget class="QDateEdit" name="dateEdit">
-               <property name="calendarPopup">
-                <bool>true</bool>
+             <item row="3" column="1">
+              <widget class="QComboBox" name="comboBoxAccount"/>
+             </item>
+             <item row="4" column="0">
+              <widget class="QLabel" name="label_5">
+               <property name="text">
+                <string>Betrag</string>
                </property>
               </widget>
              </item>
@@ -129,27 +128,21 @@
                </property>
               </widget>
              </item>
-             <item row="1" column="0">
-              <widget class="QLabel" name="label_2">
+             <item row="3" column="0">
+              <widget class="QLabel" name="label_4">
                <property name="text">
-                <string>Betreff</string>
+                <string>Konto</string>
                </property>
               </widget>
              </item>
-             <item row="3" column="1">
-              <widget class="QComboBox" name="comboBoxAccount"/>
-             </item>
-             <item row="0" column="0">
-              <widget class="QLabel" name="label">
-               <property name="text">
-                <string>Datum</string>
+             <item row="0" column="1">
+              <widget class="QDateEdit" name="dateEdit">
+               <property name="calendarPopup">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
-             <item row="1" column="1">
-              <widget class="QLineEdit" name="subjectEdit"/>
-             </item>
-             <item row="4" column="2">
+             <item row="4" column="3">
               <widget class="QCheckBox" name="checkBoxIncome">
                <property name="text">
                 <string>Einnahme</string>
@@ -159,10 +152,31 @@
              <item row="2" column="1">
               <widget class="QComboBox" name="comboBoxCategory"/>
              </item>
-             <item row="2" column="2">
+             <item row="2" column="3">
               <widget class="QPushButton" name="pushButtonAddCategory">
                <property name="text">
                 <string>erstellen</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_2">
+               <property name="text">
+                <string>Betreff</string>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="2">
+              <widget class="QCheckBox" name="checkBoxNoCategory">
+               <property name="text">
+                <string>keine</string>
+               </property>
+              </widget>
+             </item>
+             <item row="3" column="2">
+              <widget class="QCheckBox" name="checkBoxNoAccount">
+               <property name="text">
+                <string>keins</string>
                </property>
               </widget>
              </item>

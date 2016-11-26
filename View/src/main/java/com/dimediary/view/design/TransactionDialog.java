@@ -70,6 +70,10 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.pushButtonAdd.setVisible(true);
 		this.pushButtonModify.setVisible(false);
 		this.pushButtonDelete.setVisible(false);
+
+		this.checkBoxNoCategory.setChecked(false);
+		this.checkBoxNoAccount.setChecked(false);
+
 	}
 
 	public void refreshBankAccounts() {
@@ -112,6 +116,14 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.subjectEdit.setText(transaction.getName());
 		this.doubleSpinBoxAmount.setValue(transaction.getAmount());
 
+		if (transaction.getCategory() == null) {
+			this.checkBoxNoCategory.setChecked(true);
+		}
+
+		if (transaction.getBankAccount() == null) {
+			this.checkBoxNoAccount.setChecked(true);
+		}
+
 		this.exec();
 	}
 
@@ -149,6 +161,14 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.subjectEdit.setText(continuousTransaction.getName());
 		this.doubleSpinBoxAmount.setValue(continuousTransaction.getAmount());
 
+		if (continuousTransaction.getCategory() == null) {
+			this.checkBoxNoCategory.setChecked(true);
+		}
+
+		if (continuousTransaction.getBankAccount() == null) {
+			this.checkBoxNoAccount.setChecked(true);
+		}
+
 		switch (continuousTransaction.getIterationState()) {
 		case MONTHLY:
 			this.initializeMonthly(continuousTransaction);
@@ -185,8 +205,20 @@ public class TransactionDialog extends UiTransactionDialog {
 		this.doubleSpinBoxAmount.editingFinished.connect(this, "onEditingFinished()");
 
 		this.checkBoxIterate.clicked.connect(this, "onCeckBoxIterate(java.lang.Boolean)");
+
+		this.checkBoxNoCategory.clicked.connect(this, "onCheckBoxNoCategory(java.lang.Boolean)");
+		this.checkBoxNoAccount.clicked.connect(this, "onCheckBoxNoAccount(java.lang.Boolean)");
+
 		this.continuousTransactionWidget.createTrigger();
 
+	}
+
+	public void onCheckBoxNoCategory(final Boolean active) {
+		this.comboBoxCategory.setDisabled(active);
+	}
+
+	public void onCheckBoxNoAccount(final Boolean active) {
+		this.comboBoxAccount.setDisabled(active);
 	}
 
 	public void onCeckBoxIterate(final Boolean active) {
@@ -199,7 +231,7 @@ public class TransactionDialog extends UiTransactionDialog {
 		} else {
 			this.addSingleTransaction();
 		}
-
+		this.dialog.close();
 	}
 
 	public void onModify() {
@@ -211,6 +243,7 @@ public class TransactionDialog extends UiTransactionDialog {
 			throw new IllegalStateException(
 					"TransactionDialog has no transaction or continuous transaction to modify after clicking the modify button!");
 		}
+		this.dialog.close();
 	}
 
 	public void onDelete() {
@@ -222,6 +255,7 @@ public class TransactionDialog extends UiTransactionDialog {
 			throw new IllegalStateException(
 					"TransactionDialog has no transaction or continuous transaction to delete after clicking the delete button!");
 		}
+		this.dialog.close();
 	}
 
 	private void mergeTransaction() {
@@ -247,8 +281,20 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	private void setContinuousTransactionAttributes(final ContinuousTransaction continuousTransaction) {
 		continuousTransaction.setAmount(this.doubleSpinBoxAmount.value());
-		continuousTransaction.setBankAccount(DBUtils.getInstance().getBankAccount(this.comboBoxAccount.currentText()));
-		continuousTransaction.setCategory(DBUtils.getInstance().getCategory(this.comboBoxCategory.currentText()));
+
+		if (this.checkBoxNoAccount.isChecked()) {
+			continuousTransaction.setBankAccount(null);
+		} else {
+			continuousTransaction
+					.setBankAccount(DBUtils.getInstance().getBankAccount(this.comboBoxAccount.currentText()));
+		}
+
+		if (this.checkBoxNoCategory.isChecked()) {
+			continuousTransaction.setCategory(null);
+		} else {
+			continuousTransaction.setCategory(DBUtils.getInstance().getCategory(this.comboBoxCategory.currentText()));
+		}
+
 		continuousTransaction.setName(this.subjectEdit.text());
 		continuousTransaction.setDateBeginn(QTUtils.qDateToDate(this.dateEdit.date()));
 	}
@@ -261,8 +307,19 @@ public class TransactionDialog extends UiTransactionDialog {
 
 	private void setTransactionAttributes(final Transaction transaction) {
 		transaction.setAmount(this.doubleSpinBoxAmount.value());
-		transaction.setBankAccount(DBUtils.getInstance().getBankAccount(this.comboBoxAccount.currentText()));
-		transaction.setCategory(DBUtils.getInstance().getCategory(this.comboBoxCategory.currentText()));
+
+		if (this.checkBoxNoAccount.isChecked()) {
+			transaction.setBankAccount(null);
+		} else {
+			transaction.setBankAccount(DBUtils.getInstance().getBankAccount(this.comboBoxAccount.currentText()));
+		}
+
+		if (this.checkBoxNoCategory.isChecked()) {
+			transaction.setCategory(null);
+		} else {
+			transaction.setCategory(DBUtils.getInstance().getCategory(this.comboBoxCategory.currentText()));
+		}
+
 		transaction.setDate(QTUtils.qDateToDate(this.dateEdit.date()));
 		transaction.setName(this.subjectEdit.text());
 		transaction.setUser(null);

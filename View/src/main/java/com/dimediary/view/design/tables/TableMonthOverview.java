@@ -62,6 +62,9 @@ public class TableMonthOverview {
 		int maxTransaction = 0;
 		for (final Date date : dates) {
 			final List<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount, date);
+			if (Main.getMainWindow().isAccountlessTransactionsEnabled()) {
+				transactions.addAll(DBUtils.getInstance().getTrandactionsWithoutAccount(date));
+			}
 			transactionsForDates.put(date, new ArrayList<Transaction>(transactions));
 			if (transactions.size() > maxTransaction) {
 				maxTransaction = transactions.size();

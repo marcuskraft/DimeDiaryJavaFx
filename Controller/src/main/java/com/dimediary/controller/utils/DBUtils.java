@@ -287,6 +287,20 @@ public class DBUtils {
 		return new ArrayList<Transaction>(transactions);
 	}
 
+	public ArrayList<Transaction> getTransactionsWithoutAccount(final Date dateFrom, final Date dateUntil) {
+		final List<Transaction> transactions = this.entityManager
+				.createNamedQuery("TransactionsWithoutAccountBetween", Transaction.class)
+				.setParameter("dateFrom", dateFrom).setParameter("dateUntil", dateUntil).getResultList();
+		return new ArrayList<Transaction>(transactions);
+	}
+
+	public ArrayList<Transaction> getTrandactionsWithoutAccount(final Date date) {
+		final List<Transaction> transactions = this.entityManager
+				.createNamedQuery("TransactionsWithoutAccount", Transaction.class).setParameter("date", date)
+				.getResultList();
+		return new ArrayList<Transaction>(transactions);
+	}
+
 	/**
 	 *
 	 * @param categoryName

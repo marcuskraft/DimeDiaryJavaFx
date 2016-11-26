@@ -5,6 +5,8 @@ import java.util.Date;
 
 import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.core.QDateTime;
+import com.trolltech.qt.gui.QColor;
+import com.trolltech.qt.gui.QWidget;
 
 public class QTUtils {
 
@@ -34,4 +36,10 @@ public class QTUtils {
 
 		return new QDate(year, mounth, day);
 	}
+
+	public static void setBackgrundColor(final QWidget widget, final int r, final int g, final int b) {
+		final QColor BtnColor1 = QColor.fromRgb(r, g, b);
+		widget.setStyleSheet("background-color: " + BtnColor1.name());
+	}
+
 }

@@ -35,11 +35,12 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
     public QWidget overview;
     public QGridLayout gridLayout_19;
     public QGridLayout gridLayout_4;
-    public QComboBox comboBoxBankaccountOverview;
     public QLabel label_4;
-    public QSpinBox spinBoxYear;
     public QLabel label_5;
+    public QComboBox comboBoxBankaccountOverview;
+    public QSpinBox spinBoxYear;
     public QSpacerItem horizontalSpacer;
+    public QCheckBox checkBoxTransactionsWithoutAccount;
     public QGridLayout gridLayout_5;
     public QPushButton pushButtonAddTransactionOverview;
     public QSpacerItem horizontalSpacer_4;
@@ -152,15 +153,20 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         gridLayout_19.setObjectName("gridLayout_19");
         gridLayout_4 = new QGridLayout();
         gridLayout_4.setObjectName("gridLayout_4");
-        comboBoxBankaccountOverview = new QComboBox(overview);
-        comboBoxBankaccountOverview.setObjectName("comboBoxBankaccountOverview");
-
-        gridLayout_4.addWidget(comboBoxBankaccountOverview, 0, 1, 1, 1);
-
         label_4 = new QLabel(overview);
         label_4.setObjectName("label_4");
 
         gridLayout_4.addWidget(label_4, 0, 0, 1, 1);
+
+        label_5 = new QLabel(overview);
+        label_5.setObjectName("label_5");
+
+        gridLayout_4.addWidget(label_5, 1, 0, 1, 1);
+
+        comboBoxBankaccountOverview = new QComboBox(overview);
+        comboBoxBankaccountOverview.setObjectName("comboBoxBankaccountOverview");
+
+        gridLayout_4.addWidget(comboBoxBankaccountOverview, 0, 1, 1, 1);
 
         spinBoxYear = new QSpinBox(overview);
         spinBoxYear.setObjectName("spinBoxYear");
@@ -170,14 +176,14 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
 
         gridLayout_4.addWidget(spinBoxYear, 1, 1, 1, 1);
 
-        label_5 = new QLabel(overview);
-        label_5.setObjectName("label_5");
-
-        gridLayout_4.addWidget(label_5, 1, 0, 1, 1);
-
         horizontalSpacer = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
 
-        gridLayout_4.addItem(horizontalSpacer, 1, 2, 1, 1);
+        gridLayout_4.addItem(horizontalSpacer, 1, 3, 1, 1);
+
+        checkBoxTransactionsWithoutAccount = new QCheckBox(overview);
+        checkBoxTransactionsWithoutAccount.setObjectName("checkBoxTransactionsWithoutAccount");
+
+        gridLayout_4.addWidget(checkBoxTransactionsWithoutAccount, 0, 2, 1, 1);
 
 
         gridLayout_19.addLayout(gridLayout_4, 0, 0, 1, 1);
@@ -462,6 +468,7 @@ public class UiMainWindow implements com.trolltech.qt.QUiForm<QMainWindow>
         MainWindowTabWidget.setTabText(MainWindowTabWidget.indexOf(tab), com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Start", null));
         label_4.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Konto", null));
         label_5.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Jahr", null));
+        checkBoxTransactionsWithoutAccount.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "kontolose Transaktionen einblenden", null));
         pushButtonAddTransactionOverview.setText(com.trolltech.qt.core.QCoreApplication.translate("MainWindow", "Transaktion erstellen", null));
         tableWidgetBalanceJanuary.clear();
         tableWidgetBalanceJanuary.setColumnCount(3);

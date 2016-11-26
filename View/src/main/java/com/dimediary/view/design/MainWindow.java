@@ -115,6 +115,8 @@ public class MainWindow extends UiMainWindow {
 		final Month actualMonth = DateUtils.getActualMonth();
 		this.tabWidget.setCurrentWidget(tabs.get(actualMonth));
 
+		this.checkBoxTransactionsWithoutAccount.setChecked(true);
+
 		this.updateOverview(actualMonth);
 
 	}
@@ -180,6 +182,8 @@ public class MainWindow extends UiMainWindow {
 		this.pushButtonAddTransactionOverview.clicked.connect(Main.getTransactionDialog(), "initialize()");
 		this.pushButtonAddTransactionOverview.clicked.connect(Main.getTransactionDialog(), "exec()");
 
+		this.checkBoxTransactionsWithoutAccount.clicked.connect(this.tableMonthOverview, "updateMonthOverview()");
+
 		this.tableMonthOverview.createTrigger();
 	}
 
@@ -189,6 +193,10 @@ public class MainWindow extends UiMainWindow {
 
 	public TableMonthOverview getTableMonthOverview() {
 		return this.tableMonthOverview;
+	}
+
+	public boolean isAccountlessTransactionsEnabled() {
+		return this.checkBoxTransactionsWithoutAccount.isChecked();
 	}
 
 }
