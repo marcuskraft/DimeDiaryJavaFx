@@ -3,8 +3,8 @@ package com.dimediary.view.design;
 import java.util.Date;
 
 import com.dimediary.model.entities.ContinuousTransaction;
+import com.dimediary.view.Main;
 import com.dimediary.view.design.ui.UiDeleteContinuousTransactionWidget;
-import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
 import com.trolltech.qt.core.Qt;
 import com.trolltech.qt.gui.QCursor;

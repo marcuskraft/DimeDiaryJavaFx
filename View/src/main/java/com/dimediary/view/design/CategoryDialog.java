@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.model.entities.Category;
+import com.dimediary.view.Main;
 import com.dimediary.view.design.ui.UiCategoryDialog;
-import com.dimediary.view.main.Main;
 import com.trolltech.qt.gui.QDialog;
 import com.trolltech.qt.gui.QListWidgetItem;
 

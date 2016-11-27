@@ -13,7 +13,7 @@ import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.controller.utils.DateUtils;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
-import com.dimediary.view.main.Main;
+import com.dimediary.view.Main;
 import com.trolltech.qt.gui.QTabWidget;
 import com.trolltech.qt.gui.QTableWidget;
 import com.trolltech.qt.gui.QTableWidgetItem;

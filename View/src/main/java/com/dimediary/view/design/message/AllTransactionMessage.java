@@ -1,8 +1,8 @@
 package com.dimediary.view.design.message;
 
 import com.dimediary.model.entities.Transaction;
+import com.dimediary.view.Main;
 import com.dimediary.view.design.ui.UiallTransactionsMessage;
-import com.dimediary.view.main.Main;
 import com.trolltech.qt.gui.QDialog;
 
 public class AllTransactionMessage extends UiallTransactionsMessage {

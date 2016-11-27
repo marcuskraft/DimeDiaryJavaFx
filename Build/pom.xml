@@ -68,7 +68,7 @@
                   <archive>
                       <manifest>
                           <addClasspath>true</addClasspath>
-                          <mainClass>com.dimediary.view.main.Main</mainClass>
+                          <mainClass>com.dimediary.view.Main</mainClass>
                       </manifest>
                   </archive>
                   <descriptorRefs>

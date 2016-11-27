@@ -6,8 +6,8 @@ import javax.persistence.RollbackException;
 
 import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.model.entities.BankAccount;
+import com.dimediary.view.Main;
 import com.dimediary.view.design.ui.UiBankAccountDialog;
-import com.dimediary.view.main.Main;
 import com.dimediary.view.utils.QTUtils;
 import com.trolltech.qt.core.QDate;
 import com.trolltech.qt.gui.QDialog;

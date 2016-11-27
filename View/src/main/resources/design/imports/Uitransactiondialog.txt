@@ -1,5 +1,0 @@
-import com.trolltech.qt.core.Qt.Orientation;
-import com.trolltech.qt.gui.QFrame;
-import com.trolltech.qt.gui.QFrame;
-import com.trolltech.qt.gui.QLayout.SizeConstraint;
-import com.trolltech.qt.gui.QLayout.SizeConstraint;

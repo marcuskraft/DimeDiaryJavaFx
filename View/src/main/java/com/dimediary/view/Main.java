@@ -1,6 +1,5 @@
-package com.dimediary.view.main;
+package com.dimediary.view;
 
-import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.view.design.AccountCategoryDialog;
 import com.dimediary.view.design.BankAccountDialog;
 import com.dimediary.view.design.CategoryDialog;
@@ -8,7 +7,13 @@ import com.dimediary.view.design.MainWindow;
 import com.dimediary.view.design.TransactionDialog;
 import com.trolltech.qt.gui.QApplication;
 
-public class Main {
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class Main extends Application {
 
 	private static QApplication application;
 
@@ -20,36 +25,7 @@ public class Main {
 	private static CategoryDialog categoryDialog;
 
 	public static void main(final String[] args) {
-
-		// try {
-		Main.application = new QApplication(args);
-		Main.application.aboutToQuit.connect(DBUtils.getInstance(), "close()");
-
-		Main.mainWindow = new MainWindow();
-
-		Main.accountCategoryDialog = new AccountCategoryDialog();
-		Main.bankAccountDialog = new BankAccountDialog();
-		Main.transactionDialog = new TransactionDialog();
-		Main.categoryDialog = new CategoryDialog();
-
-		Main.mainWindow.initialize();
-
-		Main.mainWindow.createTrigger();
-		Main.accountCategoryDialog.createTrigger();
-		Main.bankAccountDialog.createTriggers();
-		Main.transactionDialog.createTriggers();
-		Main.categoryDialog.createTrigger();
-
-		Main.application.exec();
-		// } catch (final Exception e) {
-		// DBUtils.getInstance().close();
-		// final QMessageBox messageBox = new QMessageBox(null, "Error",
-		// e.getMessage());
-		// messageBox.show();
-		// e.printStackTrace();
-		// throw e;
-		// }
-
+		Application.launch(args);
 	}
 
 	public static void initialize() {
@@ -78,6 +54,17 @@ public class Main {
 
 	public static CategoryDialog getCategoryDialog() {
 		return Main.categoryDialog;
+	}
+
+	@Override
+	public void start(final Stage stage) throws Exception {
+		final Parent root = FXMLLoader.load(this.getClass().getResource("design/window/MainWindow.fxml"));
+
+		final Scene scene = new Scene(root, 300, 275);
+
+		stage.setTitle("FXML Welcome");
+		stage.setScene(scene);
+		stage.show();
 	}
 
 }

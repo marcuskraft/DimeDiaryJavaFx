@@ -6,96 +6,104 @@
  ** WARNING! All changes made in this file will be lost when recompiling ui file!
  ********************************************************************************/
 package com.dimediary.view.design.ui;
+
+import com.trolltech.qt.core.QSize;
+import com.trolltech.qt.gui.QDateEdit;
+import com.trolltech.qt.gui.QDialog;
+import com.trolltech.qt.gui.QDialogButtonBox;
 import com.trolltech.qt.gui.QDialogButtonBox.StandardButton;
-import com.trolltech.qt.core.Qt.Orientation;
+import com.trolltech.qt.gui.QGridLayout;
+import com.trolltech.qt.gui.QLabel;
+import com.trolltech.qt.gui.QRadioButton;
+import com.trolltech.qt.gui.QSpacerItem;
+import com.trolltech.qt.gui.QWidget;
 
+public class UiMergeContinuousTransactionDialog implements com.trolltech.qt.QUiForm<QDialog> {
+	public QGridLayout gridLayout_3;
+	public QWidget widget;
+	public QGridLayout gridLayout_2;
+	public QGridLayout gridLayout;
+	public QDateEdit dateEdit;
+	public QRadioButton radioButtonFrom;
+	public QRadioButton radioButtonAll;
+	public QSpacerItem verticalSpacer;
+	public QSpacerItem horizontalSpacer;
+	public QDialogButtonBox buttonBox;
+	public QLabel label;
 
+	public UiMergeContinuousTransactionDialog() {
+		super();
+	}
 
-import com.trolltech.qt.core.*;
-import com.trolltech.qt.gui.*;
+	@Override
+	public void setupUi(final QDialog MergeContinuousTransactionDialog) {
+		MergeContinuousTransactionDialog.setObjectName("MergeContinuousTransactionDialog");
+		MergeContinuousTransactionDialog
+				.resize(new QSize(248, 135).expandedTo(MergeContinuousTransactionDialog.minimumSizeHint()));
+		MergeContinuousTransactionDialog.setModal(true);
+		this.gridLayout_3 = new QGridLayout(MergeContinuousTransactionDialog);
+		this.gridLayout_3.setObjectName("gridLayout_3");
+		this.widget = new QWidget(MergeContinuousTransactionDialog);
+		this.widget.setObjectName("widget");
+		this.gridLayout_2 = new QGridLayout(this.widget);
+		this.gridLayout_2.setObjectName("gridLayout_2");
+		this.gridLayout = new QGridLayout();
+		this.gridLayout.setObjectName("gridLayout");
+		this.dateEdit = new QDateEdit(this.widget);
+		this.dateEdit.setObjectName("dateEdit");
+		this.dateEdit.setCalendarPopup(true);
 
-public class UiMergeContinuousTransactionDialog implements com.trolltech.qt.QUiForm<QDialog>
-{
-    public QGridLayout gridLayout_3;
-    public QWidget widget;
-    public QGridLayout gridLayout_2;
-    public QGridLayout gridLayout;
-    public QDateEdit dateEdit;
-    public QRadioButton radioButtonFrom;
-    public QRadioButton radioButtonAll;
-    public QSpacerItem verticalSpacer;
-    public QSpacerItem horizontalSpacer;
-    public QDialogButtonBox buttonBox;
-    public QLabel label;
+		this.gridLayout.addWidget(this.dateEdit, 1, 1, 1, 1);
 
-    public UiMergeContinuousTransactionDialog() { super(); }
+		this.radioButtonFrom = new QRadioButton(this.widget);
+		this.radioButtonFrom.setObjectName("radioButtonFrom");
 
-    public void setupUi(QDialog MergeContinuousTransactionDialog)
-    {
-        MergeContinuousTransactionDialog.setObjectName("MergeContinuousTransactionDialog");
-        MergeContinuousTransactionDialog.resize(new QSize(248, 135).expandedTo(MergeContinuousTransactionDialog.minimumSizeHint()));
-        MergeContinuousTransactionDialog.setModal(true);
-        gridLayout_3 = new QGridLayout(MergeContinuousTransactionDialog);
-        gridLayout_3.setObjectName("gridLayout_3");
-        widget = new QWidget(MergeContinuousTransactionDialog);
-        widget.setObjectName("widget");
-        gridLayout_2 = new QGridLayout(widget);
-        gridLayout_2.setObjectName("gridLayout_2");
-        gridLayout = new QGridLayout();
-        gridLayout.setObjectName("gridLayout");
-        dateEdit = new QDateEdit(widget);
-        dateEdit.setObjectName("dateEdit");
-        dateEdit.setCalendarPopup(true);
+		this.gridLayout.addWidget(this.radioButtonFrom, 1, 0, 1, 1);
 
-        gridLayout.addWidget(dateEdit, 1, 1, 1, 1);
+		this.radioButtonAll = new QRadioButton(this.widget);
+		this.radioButtonAll.setObjectName("radioButtonAll");
 
-        radioButtonFrom = new QRadioButton(widget);
-        radioButtonFrom.setObjectName("radioButtonFrom");
+		this.gridLayout.addWidget(this.radioButtonAll, 2, 0, 1, 1);
 
-        gridLayout.addWidget(radioButtonFrom, 1, 0, 1, 1);
+		this.gridLayout_2.addLayout(this.gridLayout, 0, 0, 1, 1);
 
-        radioButtonAll = new QRadioButton(widget);
-        radioButtonAll.setObjectName("radioButtonAll");
+		this.verticalSpacer = new QSpacerItem(20, 40, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum,
+				com.trolltech.qt.gui.QSizePolicy.Policy.Expanding);
 
-        gridLayout.addWidget(radioButtonAll, 2, 0, 1, 1);
+		this.gridLayout_2.addItem(this.verticalSpacer, 1, 0, 1, 1);
 
+		this.horizontalSpacer = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding,
+				com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
 
-        gridLayout_2.addLayout(gridLayout, 0, 0, 1, 1);
+		this.gridLayout_2.addItem(this.horizontalSpacer, 0, 1, 1, 1);
 
-        verticalSpacer = new QSpacerItem(20, 40, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding);
+		this.gridLayout_3.addWidget(this.widget, 1, 0, 1, 1);
 
-        gridLayout_2.addItem(verticalSpacer, 1, 0, 1, 1);
+		this.buttonBox = new QDialogButtonBox(MergeContinuousTransactionDialog);
+		this.buttonBox.setObjectName("buttonBox");
+		this.buttonBox.setStandardButtons(StandardButton.createQFlags(StandardButton.Cancel, StandardButton.Ok));
 
-        horizontalSpacer = new QSpacerItem(40, 20, com.trolltech.qt.gui.QSizePolicy.Policy.Expanding, com.trolltech.qt.gui.QSizePolicy.Policy.Minimum);
+		this.gridLayout_3.addWidget(this.buttonBox, 2, 0, 1, 1);
 
-        gridLayout_2.addItem(horizontalSpacer, 0, 1, 1, 1);
+		this.label = new QLabel(MergeContinuousTransactionDialog);
+		this.label.setObjectName("label");
 
+		this.gridLayout_3.addWidget(this.label, 0, 0, 1, 1);
 
-        gridLayout_3.addWidget(widget, 1, 0, 1, 1);
+		this.retranslateUi(MergeContinuousTransactionDialog);
 
-        buttonBox = new QDialogButtonBox(MergeContinuousTransactionDialog);
-        buttonBox.setObjectName("buttonBox");
-        buttonBox.setStandardButtons(StandardButton.createQFlags(StandardButton.Cancel,StandardButton.Ok));
+		MergeContinuousTransactionDialog.connectSlotsByName();
+	} // setupUi
 
-        gridLayout_3.addWidget(buttonBox, 2, 0, 1, 1);
-
-        label = new QLabel(MergeContinuousTransactionDialog);
-        label.setObjectName("label");
-
-        gridLayout_3.addWidget(label, 0, 0, 1, 1);
-
-        retranslateUi(MergeContinuousTransactionDialog);
-
-        MergeContinuousTransactionDialog.connectSlotsByName();
-    } // setupUi
-
-    void retranslateUi(QDialog MergeContinuousTransactionDialog)
-    {
-        MergeContinuousTransactionDialog.setWindowTitle(com.trolltech.qt.core.QCoreApplication.translate("MergeContinuousTransactionDialog", "Ab wann?", null));
-        radioButtonFrom.setText(com.trolltech.qt.core.QCoreApplication.translate("MergeContinuousTransactionDialog", "ab", null));
-        radioButtonAll.setText(com.trolltech.qt.core.QCoreApplication.translate("MergeContinuousTransactionDialog", "Alle", null));
-        label.setText(com.trolltech.qt.core.QCoreApplication.translate("MergeContinuousTransactionDialog", "Welche Transaktionen sollen ver\u00e4ndert werden?", null));
-    } // retranslateUi
+	void retranslateUi(final QDialog MergeContinuousTransactionDialog) {
+		MergeContinuousTransactionDialog.setWindowTitle(
+				com.trolltech.qt.core.QCoreApplication.translate("MergeContinuousTransactionDialog", "Ab wann?", null));
+		this.radioButtonFrom.setText(
+				com.trolltech.qt.core.QCoreApplication.translate("MergeContinuousTransactionDialog", "ab", null));
+		this.radioButtonAll.setText(
+				com.trolltech.qt.core.QCoreApplication.translate("MergeContinuousTransactionDialog", "Alle", null));
+		this.label.setText(com.trolltech.qt.core.QCoreApplication.translate("MergeContinuousTransactionDialog",
+				"Welche Transaktionen sollen ver\u00e4ndert werden?", null));
+	} // retranslateUi
 
 }
-
