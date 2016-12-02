@@ -58,9 +58,10 @@ public class Main extends Application {
 
 	@Override
 	public void start(final Stage stage) throws Exception {
+		stage.setMaximized(true);
 		final Parent root = FXMLLoader.load(this.getClass().getResource("design/window/MainWindow.fxml"));
 
-		final Scene scene = new Scene(root, 300, 275);
+		final Scene scene = new Scene(root);
 
 		stage.setTitle("FXML Welcome");
 		stage.setScene(scene);
