@@ -9,16 +9,14 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 
-<BorderPane prefHeight="1003.0" prefWidth="1596.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dimediary.view.design.window.MainWindow">
+<BorderPane prefHeight="771.0" prefWidth="1109.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dimediary.view.design.window.MainWindow">
    <top>
-      <MenuBar prefHeight="0.0" prefWidth="723.0" BorderPane.alignment="CENTER">
+      <MenuBar prefHeight="0.0" prefWidth="1293.0" BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -45,174 +43,66 @@
                <content>
                   <BorderPane prefHeight="200.0" prefWidth="200.0">
                      <center>
-                        <TabPane prefHeight="683.0" prefWidth="1137.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+                        <TabPane fx:id="tabPane" prefHeight="683.0" prefWidth="1137.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
                           <tabs>
                             <Tab fx:id="tabJanuary" text="Januar">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tableJanuary" layoutX="232.0" layoutY="164.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                            <columns>
-                                              <TableColumn prefWidth="75.0" text="C1" />
-                                              <TableColumn prefWidth="75.0" text="C2" />
-                                            </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                               </content>
                             </Tab>
                             <Tab fx:id="tabFebruary" text="Februar">
                               <content>
-                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tableFebruary" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                             </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                               </content>
                             </Tab>
                               <Tab fx:id="tabMarch" text="März">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tableMarch" layoutX="232.0" layoutY="164.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                             </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                  </content>
                               </Tab>
                               <Tab fx:id="tabAprile" text="April">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tableAprile" layoutX="232.0" layoutY="164.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                             </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                  </content>
                               </Tab>
                               <Tab fx:id="tabMay" text="Mai">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tableMay" layoutX="232.0" layoutY="164.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                             </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                  </content>
                               </Tab>
                               <Tab fx:id="tabJune" text="Juni">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tableJune" layoutX="232.0" layoutY="164.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                             </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                  </content>
                               </Tab>
                               <Tab fx:id="tabJuly" text="Juli">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tableJuly" layoutX="232.0" layoutY="164.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                             </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                  </content>
                               </Tab>
                               <Tab fx:id="tabAugust" text="August">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tableAugust" layoutX="232.0" layoutY="164.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                             </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                  </content>
                               </Tab>
                               <Tab fx:id="tabSeptembre" text="September">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tableSeptembre" layoutX="232.0" layoutY="164.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                             </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                  </content>
                               </Tab>
                               <Tab fx:id="tabOctober" text="Oktober">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tableOctober" layoutX="232.0" layoutY="164.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                             </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                  </content>
                               </Tab>
                               <Tab fx:id="tabNovember" text="November">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tableNovember" layoutX="232.0" layoutY="164.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                             </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                  </content>
                               </Tab>
                               <Tab fx:id="tabDecember" text="Dezember">
                                  <content>
-                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                       <children>
-                                          <TableView fx:id="tableDecember" layoutX="232.0" layoutY="164.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <columns>
-                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                <TableColumn prefWidth="75.0" text="C2" />
-                                             </columns>
-                                          </TableView>
-                                       </children>
-                                    </AnchorPane>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                                  </content>
                               </Tab>
                           </tabs>
@@ -223,9 +113,9 @@
                            <children>
                               <AnchorPane>
                                  <children>
-                                    <Button fx:id="buttonBack" mnemonicParsing="false" text="zurück" />
-                                    <Button fx:id="buttonForward" layoutX="56.0" mnemonicParsing="false" text="vor" />
-                                    <Button fx:id="buttonActualMonth" layoutX="94.0" mnemonicParsing="false" text="aktueller Monat" />
+                                    <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#onBackwards" text="zurück" />
+                                    <Button fx:id="buttonForward" layoutX="56.0" mnemonicParsing="false" onAction="#onForwards" text="vor" />
+                                    <Button fx:id="buttonActualMonth" layoutX="94.0" mnemonicParsing="false" onAction="#onButtonActualMonth" text="aktueller Monat" />
                                  </children>
                               </AnchorPane>
                            </children>
@@ -235,7 +125,7 @@
                         <Pane prefHeight="112.0" prefWidth="1596.0">
                            <children>
                               <Label layoutX="9.0" layoutY="14.0" text="Konto" />
-                              <ComboBox fx:id="comboBoxAccount" layoutX="52.0" layoutY="10.0" prefHeight="25.0" prefWidth="117.0" />
+                              <ComboBox fx:id="comboBoxAccount" layoutX="52.0" layoutY="10.0" onAction="#onComboBoxAccount" prefHeight="25.0" prefWidth="117.0" />
                               <Label layoutX="14.0" layoutY="47.0" prefHeight="22.0" prefWidth="22.0" text="Jahr" />
                               <Spinner fx:id="SpinnerYear" layoutX="52.0" layoutY="45.0" prefHeight="25.0" prefWidth="118.0" />
                               <Button fx:id="buttonAddTransaction" layoutX="14.0" layoutY="80.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="148.0" text="Transaktion erstellen" />

@@ -1,5 +1,6 @@
 package com.dimediary.view;
 
+import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.view.design.AccountCategoryDialog;
 import com.dimediary.view.design.BankAccountDialog;
 import com.dimediary.view.design.CategoryDialog;
@@ -66,6 +67,11 @@ public class Main extends Application {
 		stage.setTitle("FXML Welcome");
 		stage.setScene(scene);
 		stage.show();
+	}
+
+	@Override
+	public void stop() {
+		DBUtils.getInstance().close();
 	}
 
 }
