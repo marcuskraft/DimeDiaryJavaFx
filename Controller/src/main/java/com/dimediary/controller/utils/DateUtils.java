@@ -1,6 +1,9 @@
 package com.dimediary.controller.utils;
 
+import java.time.Instant;
+import java.time.LocalDate;
 import java.time.Month;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -383,6 +386,14 @@ public class DateUtils {
 		default:
 			return null;
 		}
+	}
+
+	public static Date localDateToDate(final LocalDate localDate) {
+		return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+	}
+
+	public static LocalDate date2LocalDate(final Date date) {
+		return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 	}
 
 }

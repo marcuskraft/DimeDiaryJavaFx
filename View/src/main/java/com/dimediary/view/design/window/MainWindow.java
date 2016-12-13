@@ -4,6 +4,7 @@
 
 package com.dimediary.view.design.window;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.Month;
@@ -19,6 +20,7 @@ import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.controller.utils.DateUtils;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
+import com.dimediary.view.Main;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,15 +28,22 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class MainWindow {
 
@@ -101,6 +110,15 @@ public class MainWindow {
 	@FXML // fx:id="buttonAddTransaction"
 	private Button buttonAddTransaction; // Value injected by FXMLLoader
 
+	@FXML // fx:id="checkboxAccountlessTransactions"
+	private CheckBox checkboxAccountlessTransactions; // Value injected by
+														// FXMLLoader
+
+	@FXML
+	void onAccountlessTransactions(final ActionEvent event) {
+
+	}
+
 	@FXML // This method is called by the FXMLLoader when initialization is
 			// complete
 	void initialize() {
@@ -139,6 +157,26 @@ public class MainWindow {
 		this.SpinnerYear.getValueFactory().setValue(DateUtils.getActualYear());
 
 		this.refreshFirst();
+	}
+
+	@FXML
+	void onButtonAddTransaction(final ActionEvent event) throws IOException {
+		final Stage stage = new Stage();
+		Parent root;
+		try {
+			root = FXMLLoader.load(Main.class.getResource("design/window/TransactionDialog.fxml"));
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw e;
+		}
+
+		final Scene scene = new Scene(root);
+
+		stage.setTitle("Transaktion erstellen / bearbeiten");
+		stage.setScene(scene);
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.show();
 	}
 
 	@FXML
@@ -315,7 +353,8 @@ public class MainWindow {
 
 		}
 
-		this.month2Tabs.get(month).setContent(gridPane);
+		final ScrollPane scrollPane = new ScrollPane(gridPane);
+		this.month2Tabs.get(month).setContent(scrollPane);
 		gridPane.setGridLinesVisible(true);
 
 	}
