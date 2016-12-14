@@ -22,6 +22,8 @@
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
           <Button fx:id="buttonAdd" mnemonicParsing="false" onAction="#onButtonAdd" text="Hinzufügen" />
+            <Button fx:id="buttonDelete" mnemonicParsing="false" onAction="#onDelete" text="Löschen" />
+            <Button fx:id="buttonModify" mnemonicParsing="false" onAction="#onModify" text="Ändern" />
             <Button fx:id="buttonCancel" mnemonicParsing="false" onAction="#onButtonCancel" text="Abbrechen" />
         </buttons>
       </ButtonBar>
@@ -76,19 +78,19 @@
                         <ComboBox fx:id="comboBoxCategory" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <ComboBox fx:id="comboBoxAccount" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Spinner fx:id="spinnerAmount" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <CheckBox fx:id="checkBoxNoCategory" mnemonicParsing="false" text="keine" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                        <CheckBox fx:id="checkBoxNoCategory" mnemonicParsing="false" onAction="#onNoCategory" text="keine" GridPane.columnIndex="2" GridPane.rowIndex="2">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </CheckBox>
-                        <CheckBox fx:id="checkBoxNoAccount" mnemonicParsing="false" text="keins" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                        <CheckBox fx:id="checkBoxNoAccount" mnemonicParsing="false" onAction="#onNoAccount" text="keins" GridPane.columnIndex="2" GridPane.rowIndex="3">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </CheckBox>
                         <Button fx:id="buttonCreateCategory" mnemonicParsing="false" onAction="#onCreateCategory" text="erstellen" GridPane.columnIndex="3" GridPane.rowIndex="2" />
                         <Button fx:id="buttonCreateAccount" mnemonicParsing="false" onAction="#onCreateAccount" text="erstellen" GridPane.columnIndex="3" GridPane.rowIndex="3" />
-                        <CheckBox fx:id="checkBoxIncome" mnemonicParsing="false" text="Einnahme" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                        <CheckBox fx:id="checkBoxIncome" mnemonicParsing="false" onAction="#onCheckBoxIncome" text="Einnahme" GridPane.columnIndex="2" GridPane.rowIndex="4">
                            <padding>
                               <Insets left="5.0" />
                            </padding>

@@ -29,7 +29,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -42,8 +41,10 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class MainWindow {
 
@@ -161,20 +162,19 @@ public class MainWindow {
 
 	@FXML
 	void onButtonAddTransaction(final ActionEvent event) throws IOException {
-		final Stage stage = new Stage();
-		Parent root;
+		final FXMLLoader loader = new FXMLLoader(Main.class.getResource("design/window/TransactionDialog.fxml"));
+
+		final Stage stage = new Stage(StageStyle.DECORATED);
 		try {
-			root = FXMLLoader.load(Main.class.getResource("design/window/TransactionDialog.fxml"));
+			stage.setScene(new Scene((Pane) loader.load()));
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw e;
 		}
 
-		final Scene scene = new Scene(root);
-
+		final TransactionDialog controller = loader.<TransactionDialog> getController();
+		controller.setMainWindow(this);
 		stage.setTitle("Transaktion erstellen / bearbeiten");
-		stage.setScene(scene);
 		stage.initModality(Modality.WINDOW_MODAL);
 		stage.show();
 	}
@@ -348,7 +348,8 @@ public class MainWindow {
 
 			for (int j = 0; j < transactions.size(); j++) {
 				final String text = transactions.get(j).getName() + " : " + transactions.get(j).getAmount();
-				gridPane.add(new Button(text), 3 + j, i);
+				gridPane.add(TransactionButtonFactory.createTransactionButton(text, transactions.get(j), this), 3 + j,
+						i);
 			}
 
 		}

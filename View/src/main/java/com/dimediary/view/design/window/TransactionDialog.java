@@ -28,8 +28,17 @@ import javafx.stage.Stage;
 
 public class TransactionDialog {
 
-	private Transaction transaction;
-	private ContinuousTransaction continuousTransaction;
+	private Transaction transaction = null;
+	private ContinuousTransaction continuousTransaction = null;
+	private MainWindow mainWindow = null;
+
+	private static final Double MAX_AMOUNT = 999999999.99;
+
+	@FXML // fx:id="buttonDelete"
+	private Button buttonDelete; // Value injected by FXMLLoader
+
+	@FXML // fx:id="buttonModify"
+	private Button buttonModify; // Value injected by FXMLLoader
 
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -79,6 +88,65 @@ public class TransactionDialog {
 	@FXML // fx:id="buttonIterate"
 	private Button buttonIterate; // Value injected by FXMLLoader
 
+	@FXML // This method is called by the FXMLLoader when initialization is
+			// complete
+	void initialize() {
+		assert this.buttonAdd != null : "fx:id=\"buttonAdd\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.buttonCancel != null : "fx:id=\"buttonCancel\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.datePicker != null : "fx:id=\"datePicker\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.textFieldName != null : "fx:id=\"textFieldName\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.comboBoxCategory != null : "fx:id=\"comboBoxCategory\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.comboBoxAccount != null : "fx:id=\"comboBoxAccount\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.spinnerAmount != null : "fx:id=\"spinnerAmount\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.checkBoxNoCategory != null : "fx:id=\"checkBoxNoCategory\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.checkBoxNoAccount != null : "fx:id=\"checkBoxNoAccount\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.buttonCreateCategory != null : "fx:id=\"buttonCreateCategory\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.buttonCreateAccount != null : "fx:id=\"buttonCreateAccount\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.checkBoxIncome != null : "fx:id=\"checkBoxIncome\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.checkBoxIterate != null : "fx:id=\"checkBoxIterate\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+		assert this.buttonIterate != null : "fx:id=\"buttonIterate\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
+
+		this.refreshCategories(true);
+		this.refreshBankAccounts(true);
+		this.datePicker.setValue(DateUtils.date2LocalDate(new Date()));
+		this.textFieldName.setText("");
+
+		final SpinnerValueFactory<Double> spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(
+				-TransactionDialog.MAX_AMOUNT, 0.0, 0.0) {
+		};
+
+		this.spinnerAmount.setValueFactory(spinnerValueFactory);
+
+		this.buttonDelete.setVisible(false);
+		this.buttonModify.setVisible(false);
+		this.buttonAdd.setVisible(true);
+	}
+
+	private void initTransaction() {
+		this.refreshCategories(true);
+		this.refreshBankAccounts(true);
+		this.buttonAdd.setVisible(false);
+		this.buttonDelete.setVisible(true);
+		this.buttonModify.setVisible(true);
+
+		this.datePicker.setValue(DateUtils.date2LocalDate(this.transaction.getDate()));
+		this.textFieldName.setText(this.transaction.getName());
+		final SpinnerValueFactory<Double> spinnerValueFactory;
+		if (this.transaction.getAmount() > 0.0) {
+			spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, TransactionDialog.MAX_AMOUNT,
+					this.transaction.getAmount()) {
+			};
+			this.checkBoxIncome.setSelected(true);
+		} else {
+			spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(-TransactionDialog.MAX_AMOUNT, 0.0,
+					this.transaction.getAmount()) {
+			};
+			this.checkBoxIncome.setSelected(false);
+		}
+
+		this.spinnerAmount.setValueFactory(spinnerValueFactory);
+	}
+
 	@FXML
 	void onButtonAdd(final ActionEvent event) {
 		if (this.checkBoxIterate.isSelected()) {
@@ -86,8 +154,118 @@ public class TransactionDialog {
 		} else {
 			this.addSingleTransaction();
 		}
-		final Stage stage = (Stage) this.buttonAdd.getScene().getWindow();
-		stage.close();
+		if (this.mainWindow != null) {
+			this.mainWindow.refreshMonthOverview();
+		}
+		this.close();
+	}
+
+	@FXML
+	void onDelete(final ActionEvent event) {
+		if (this.transaction != null) {
+			DBUtils.getInstance().delete(this.transaction);
+		} else if (this.continuousTransaction != null) {
+			this.deleteContinuousTransaction();
+		} else {
+			throw new IllegalStateException(
+					"TransactionDialog has no transaction or continuous transaction to delete after clicking the delete button!");
+		}
+		if (this.mainWindow != null) {
+			this.mainWindow.refreshMonthOverview();
+		}
+		this.close();
+	}
+
+	@FXML
+	void onModify(final ActionEvent event) {
+		if (this.transaction != null) {
+			this.mergeTransaction();
+		} else if (this.continuousTransaction != null) {
+			this.mergeContinuousTransaction();
+		} else {
+			throw new IllegalStateException(
+					"TransactionDialog has no transaction or continuous transaction to modify after clicking the modify button!");
+		}
+		if (this.mainWindow != null) {
+			this.mainWindow.refreshMonthOverview();
+		}
+		this.close();
+	}
+
+	@FXML
+	void onButtonCancel(final ActionEvent event) {
+		this.close();
+	}
+
+	@FXML
+	void onButtonIterate(final ActionEvent event) {
+
+	}
+
+	@FXML
+	void onCheckboxIterate(final ActionEvent event) {
+
+	}
+
+	@FXML
+	void onCreateAccount(final ActionEvent event) {
+
+	}
+
+	@FXML
+	void onCreateCategory(final ActionEvent event) {
+
+	}
+
+	@FXML
+	void onCheckBoxIncome(final ActionEvent event) {
+		final Double value = this.spinnerAmount.getValue();
+		if (this.checkBoxIncome.isSelected()) {
+			this.spinnerAmount.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0,
+					TransactionDialog.MAX_AMOUNT, Math.abs(value)) {
+			});
+		} else {
+			this.spinnerAmount.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(
+					-TransactionDialog.MAX_AMOUNT, 0, -Math.abs(value)) {
+			});
+		}
+	}
+
+	@FXML
+	void onNoCategory(final ActionEvent event) {
+		if (this.checkBoxNoCategory.isSelected()) {
+			this.comboBoxCategory.setValue("-");
+			this.comboBoxCategory.setEditable(false);
+		} else {
+			this.comboBoxCategory.setEditable(true);
+			this.refreshCategories(false);
+		}
+	}
+
+	@FXML
+	void onNoAccount(final ActionEvent event) {
+		if (this.checkBoxNoAccount.isSelected()) {
+			this.comboBoxAccount.setValue("-");
+			this.comboBoxAccount.setEditable(false);
+		} else {
+			this.comboBoxAccount.setEditable(true);
+			this.refreshBankAccounts(false);
+		}
+	}
+
+	private void deleteContinuousTransaction() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void mergeContinuousTransaction() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void mergeTransaction() {
+		DBUtils.getInstance().delete(this.transaction);
+		this.addSingleTransaction();
 	}
 
 	private void addSingleTransaction() {
@@ -121,74 +299,7 @@ public class TransactionDialog {
 
 	}
 
-	@FXML
-	void onButtonCancel(final ActionEvent event) {
-
-	}
-
-	@FXML
-	void onButtonIterate(final ActionEvent event) {
-
-	}
-
-	@FXML
-	void onCheckboxIterate(final ActionEvent event) {
-
-	}
-
-	@FXML
-	void onCreateAccount(final ActionEvent event) {
-
-	}
-
-	@FXML
-	void onCreateCategory(final ActionEvent event) {
-
-	}
-
-	@FXML // This method is called by the FXMLLoader when initialization is
-			// complete
-	void initialize() {
-		assert this.buttonAdd != null : "fx:id=\"buttonAdd\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.buttonCancel != null : "fx:id=\"buttonCancel\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.datePicker != null : "fx:id=\"datePicker\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.textFieldName != null : "fx:id=\"textFieldName\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.comboBoxCategory != null : "fx:id=\"comboBoxCategory\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.comboBoxAccount != null : "fx:id=\"comboBoxAccount\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.spinnerAmount != null : "fx:id=\"spinnerAmount\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.checkBoxNoCategory != null : "fx:id=\"checkBoxNoCategory\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.checkBoxNoAccount != null : "fx:id=\"checkBoxNoAccount\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.buttonCreateCategory != null : "fx:id=\"buttonCreateCategory\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.buttonCreateAccount != null : "fx:id=\"buttonCreateAccount\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.checkBoxIncome != null : "fx:id=\"checkBoxIncome\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.checkBoxIterate != null : "fx:id=\"checkBoxIterate\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-		assert this.buttonIterate != null : "fx:id=\"buttonIterate\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
-
-		this.init();
-	}
-
-	private void init() {
-		this.transaction = null;
-		this.continuousTransaction = null;
-
-		this.datePicker.setValue(DateUtils.date2LocalDate(new Date()));
-		this.refreshCategories();
-		this.refreshBankAccounts();
-		this.textFieldName.setText("");
-
-		final SpinnerValueFactory<Double> spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(
-				-9999999.9, 99999999.9, 0.0) {
-		};
-
-		this.spinnerAmount.setValueFactory(spinnerValueFactory);
-		//
-		// this.pushButtonAdd.setVisible(true);
-		// this.pushButtonModify.setVisible(false);
-		// this.pushButtonDelete.setVisible(false);
-
-	}
-
-	private void refreshBankAccounts() {
+	private void refreshBankAccounts(final boolean refreshFirst) {
 		final ObservableList<String> bankAccountNames = FXCollections
 				.observableArrayList(DBUtils.getInstance().getBankAccountNames());
 
@@ -200,10 +311,26 @@ public class TransactionDialog {
 		if (bankAccountNames.size() == 0) {
 			return;
 		}
-		this.comboBoxAccount.setValue(bankAccountNames.get(0));
+		if (this.transaction != null) {
+			if (this.transaction.getBankAccount() != null) {
+				this.comboBoxAccount.setValue(this.transaction.getBankAccount().getName());
+			} else {
+				this.comboBoxAccount.setValue("-");
+				if (refreshFirst) {
+					this.comboBoxAccount.setEditable(false);
+					this.checkBoxNoAccount.setSelected(true);
+				} else {
+					this.comboBoxAccount.setEditable(true);
+				}
+			}
+		} else if (this.continuousTransaction != null) {
+			// TODO implement the logic here
+		} else {
+			this.comboBoxAccount.setValue(bankAccountNames.get(0));
+		}
 	}
 
-	private void refreshCategories() {
+	private void refreshCategories(final boolean refreshFirst) {
 		final ObservableList<String> categoryNames = FXCollections
 				.observableArrayList(DBUtils.getInstance().getCategoryNames());
 
@@ -213,9 +340,47 @@ public class TransactionDialog {
 		this.comboBoxCategory.setItems(categoryNames);
 
 		if (categoryNames.size() == 0) {
+			this.comboBoxCategory.setValue("-");
 			return;
 		}
-		this.comboBoxCategory.setValue(categoryNames.get(0));
+
+		if (this.transaction != null) {
+			if (this.transaction.getCategory() != null) {
+				this.comboBoxCategory.setValue(this.transaction.getCategory().getName());
+			} else {
+				this.comboBoxCategory.setValue("-");
+				if (refreshFirst) {
+					this.comboBoxCategory.setEditable(false);
+					this.checkBoxNoCategory.setSelected(true);
+				} else {
+					this.comboBoxCategory.setEditable(true);
+				}
+
+			}
+		} else if (this.continuousTransaction != null) {
+			// TODO implement the logic here
+		} else {
+			this.comboBoxCategory.setValue(categoryNames.get(0));
+		}
+
+	}
+
+	private void close() {
+		final Stage stage = (Stage) this.buttonAdd.getScene().getWindow();
+		stage.close();
+	}
+
+	public void setTransaction(final Transaction transaction) {
+		this.transaction = transaction;
+		this.initTransaction();
+	}
+
+	public void setMainWindow(final MainWindow mainWindow) {
+		this.mainWindow = mainWindow;
+	}
+
+	public void setContinuousTransaction(final ContinuousTransaction continuousTransaction) {
+		this.continuousTransaction = continuousTransaction;
 	}
 
 }
