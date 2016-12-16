@@ -24,22 +24,43 @@ public class TransactionButtonFactory {
 
 			@Override
 			public void handle(final ActionEvent event) {
-				final FXMLLoader loader = new FXMLLoader(
-						Main.class.getResource("design/window/TransactionDialog.fxml"));
 
-				final Stage stage = new Stage(StageStyle.DECORATED);
-				try {
-					stage.setScene(new Scene((Pane) loader.load()));
-				} catch (final IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if (transaction.getContinuousTransaction() != null) {
+					final FXMLLoader loader = new FXMLLoader(
+							Main.class.getResource("design/window/AllTransactionMessage.fxml"));
+
+					final Stage stage = new Stage(StageStyle.DECORATED);
+					try {
+						stage.setScene(new Scene((Pane) loader.load()));
+					} catch (final IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					final AllTransactionWindow controller = loader.<AllTransactionWindow> getController();
+					controller.setTransaction(transaction);
+					controller.setMainWindow(mainWindow);
+					stage.setTitle("Dauertransaktion");
+					stage.initModality(Modality.APPLICATION_MODAL);
+					stage.show();
+				} else {
+					final FXMLLoader loader = new FXMLLoader(
+							Main.class.getResource("design/window/TransactionDialog.fxml"));
+
+					final Stage stage = new Stage(StageStyle.DECORATED);
+					try {
+						stage.setScene(new Scene((Pane) loader.load()));
+					} catch (final IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+					final TransactionDialog controller = loader.<TransactionDialog> getController();
+					controller.setTransaction(transaction);
+					controller.setMainWindow(mainWindow);
+					stage.initModality(Modality.APPLICATION_MODAL);
+					stage.show();
 				}
-
-				final TransactionDialog controller = loader.<TransactionDialog> getController();
-				controller.setTransaction(transaction);
-				controller.setMainWindow(mainWindow);
-				stage.initModality(Modality.WINDOW_MODAL);
-				stage.show();
 
 			}
 		});

@@ -175,7 +175,7 @@ public class MainWindow {
 		final TransactionDialog controller = loader.<TransactionDialog> getController();
 		controller.setMainWindow(this);
 		stage.setTitle("Transaktion erstellen / bearbeiten");
-		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.show();
 	}
 

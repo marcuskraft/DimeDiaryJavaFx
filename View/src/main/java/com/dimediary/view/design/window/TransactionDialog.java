@@ -4,7 +4,9 @@
 
 package com.dimediary.view.design.window;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -12,11 +14,14 @@ import com.dimediary.controller.utils.DBUtils;
 import com.dimediary.controller.utils.DateUtils;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
+import com.dimediary.view.Main;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -24,13 +29,17 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class TransactionDialog {
 
 	private Transaction transaction = null;
 	private ContinuousTransaction continuousTransaction = null;
 	private MainWindow mainWindow = null;
+	private ArrayList<Date> dates = null;
 
 	private static final Double MAX_AMOUNT = 999999999.99;
 
@@ -117,29 +126,89 @@ public class TransactionDialog {
 
 		this.spinnerAmount.setValueFactory(spinnerValueFactory);
 
-		this.buttonDelete.setVisible(false);
-		this.buttonModify.setVisible(false);
-		this.buttonAdd.setVisible(true);
+		this.buttonDelete.setDisable(true);
+		this.buttonModify.setDisable(true);
+		this.buttonAdd.setDisable(false);
+		this.buttonIterate.setDisable(true);
 	}
 
-	private void initTransaction() {
+	public void initTransaction(final Transaction transaction) {
+		this.transaction = transaction;
+		this.continuousTransaction = null;
+		this.initTransaction();
+	}
+
+	public void initTransaction() {
+		if (this.transaction == null) {
+			throw new IllegalStateException("transaction is not set to an instance!");
+		}
 		this.refreshCategories(true);
 		this.refreshBankAccounts(true);
-		this.buttonAdd.setVisible(false);
-		this.buttonDelete.setVisible(true);
-		this.buttonModify.setVisible(true);
+		this.buttonDelete.setDisable(false);
+		this.buttonModify.setDisable(false);
+		this.buttonAdd.setDisable(true);
+		this.buttonIterate.setDisable(true);
 
 		this.datePicker.setValue(DateUtils.date2LocalDate(this.transaction.getDate()));
 		this.textFieldName.setText(this.transaction.getName());
+		this.setSpinnerValueFactory();
+		this.checkBoxIterate.setDisable(true);
+	}
+
+	private void initContinuousTransaction() {
+
+		this.transaction = null;
+
+		this.refreshCategories(true);
+		this.refreshBankAccounts(true);
+		this.buttonDelete.setDisable(false);
+		this.buttonModify.setDisable(false);
+		this.buttonAdd.setDisable(true);
+
+		this.checkBoxIterate.setSelected(true);
+		this.checkBoxIterate.setDisable(true);
+
+		this.datePicker.setValue(DateUtils.date2LocalDate(this.continuousTransaction.getDateBeginn()));
+
+		this.setSpinnerValueFactory();
+
+		this.textFieldName.setText(this.continuousTransaction.getName());
+
+		this.checkBoxIterate.setSelected(true);
+		this.buttonIterate.setDisable(false);
+		switch (this.continuousTransaction.getIterationState()) {
+		case MONTHLY:
+			this.buttonIterate.setText("monatlich");
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	private void setSpinnerValueFactory() {
 		final SpinnerValueFactory<Double> spinnerValueFactory;
-		if (this.transaction.getAmount() > 0.0) {
+		Double amount;
+		if (this.transaction != null) {
+			amount = this.transaction.getAmount();
+		} else if (this.continuousTransaction != null) {
+			amount = this.continuousTransaction.getAmount();
+		} else {
+			if (this.checkBoxIncome.isSelected()) {
+				amount = Math.abs(this.spinnerAmount.getValue());
+			} else {
+				amount = -Math.abs(this.spinnerAmount.getValue());
+			}
+		}
+
+		if (amount > 0.0) {
 			spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, TransactionDialog.MAX_AMOUNT,
-					this.transaction.getAmount()) {
+					amount) {
 			};
 			this.checkBoxIncome.setSelected(true);
 		} else {
 			spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(-TransactionDialog.MAX_AMOUNT, 0.0,
-					this.transaction.getAmount()) {
+					amount) {
 			};
 			this.checkBoxIncome.setSelected(false);
 		}
@@ -154,10 +223,6 @@ public class TransactionDialog {
 		} else {
 			this.addSingleTransaction();
 		}
-		if (this.mainWindow != null) {
-			this.mainWindow.refreshMonthOverview();
-		}
-		this.close();
 	}
 
 	@FXML
@@ -186,10 +251,6 @@ public class TransactionDialog {
 			throw new IllegalStateException(
 					"TransactionDialog has no transaction or continuous transaction to modify after clicking the modify button!");
 		}
-		if (this.mainWindow != null) {
-			this.mainWindow.refreshMonthOverview();
-		}
-		this.close();
 	}
 
 	@FXML
@@ -199,7 +260,22 @@ public class TransactionDialog {
 
 	@FXML
 	void onButtonIterate(final ActionEvent event) {
+		final FXMLLoader loader = new FXMLLoader(
+				Main.class.getResource("design/window/ContinuousTransactionDialog.fxml"));
 
+		final Stage stage = new Stage(StageStyle.DECORATED);
+		try {
+			stage.setScene(new Scene((Pane) loader.load()));
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		final ContinuousTransactionDialog controller = loader.<ContinuousTransactionDialog> getController();
+		controller.setTransactionDialog(this);
+		stage.setTitle("Transaktion erstellen / bearbeiten");
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.show();
 	}
 
 	@FXML
@@ -219,16 +295,7 @@ public class TransactionDialog {
 
 	@FXML
 	void onCheckBoxIncome(final ActionEvent event) {
-		final Double value = this.spinnerAmount.getValue();
-		if (this.checkBoxIncome.isSelected()) {
-			this.spinnerAmount.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(0,
-					TransactionDialog.MAX_AMOUNT, Math.abs(value)) {
-			});
-		} else {
-			this.spinnerAmount.setValueFactory(new SpinnerValueFactory.DoubleSpinnerValueFactory(
-					-TransactionDialog.MAX_AMOUNT, 0, -Math.abs(value)) {
-			});
-		}
+		this.setSpinnerValueFactory();
 	}
 
 	@FXML
@@ -259,8 +326,89 @@ public class TransactionDialog {
 	}
 
 	private void mergeContinuousTransaction() {
-		// TODO Auto-generated method stub
+		this.setTransactionAttributes(this.continuousTransaction);
+		switch (this.continuousTransaction.getIterationState()) {
+		case MONTHLY:
+			this.dates = DateUtils.getMonthlyDates(this.continuousTransaction.getEveryIterationState(),
+					this.continuousTransaction.getDayOfMonth(), this.continuousTransaction.getDateBeginn(),
+					this.continuousTransaction.getDateUntil(), this.continuousTransaction.getNumberOfIterations());
+			break;
+		case DAYLI:
 
+			break;
+		case WEEKLY:
+
+			break;
+
+		case YEARLY:
+
+			break;
+		default:
+			break;
+		}
+
+		final FXMLLoader loader = new FXMLLoader(
+				Main.class.getResource("design/window/MergeContinuousTransactionDialog.fxml"));
+
+		final Stage stage = new Stage(StageStyle.DECORATED);
+		try {
+			stage.setScene(new Scene((Pane) loader.load()));
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		final MergeContinuousTransactionDialog controller = loader.<MergeContinuousTransactionDialog> getController();
+		controller.setTransactionDialog(this);
+		stage.setTitle("Ab wann?");
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.show();
+
+	}
+
+	public void mergeContinuousTransaction(final Date date) {
+		final ArrayList<Transaction> oldTransactions = DBUtils.getInstance()
+				.getTransactionsFromDate(this.continuousTransaction, date);
+		DBUtils.getInstance().deleteTransactions(oldTransactions);
+		this.dates = DateUtils.removeDatesBefore(this.dates, date);
+		final ArrayList<Transaction> newTransActions = this.createTransactions(this.continuousTransaction, this.dates);
+
+		this.persist(this.continuousTransaction, newTransActions);
+		if (this.mainWindow != null) {
+			this.mainWindow.refreshMonthOverview();
+		}
+		this.close();
+	}
+
+	public void mergAllContinuousTransactions() {
+		final ArrayList<Transaction> oldTransactions = DBUtils.getInstance()
+				.getTransactions(this.continuousTransaction);
+		DBUtils.getInstance().deleteTransactions(oldTransactions);
+		final ArrayList<Transaction> newTransActions = this.createTransactions(this.continuousTransaction, this.dates);
+
+		this.persist(this.continuousTransaction, newTransActions);
+		if (this.mainWindow != null) {
+			this.mainWindow.refreshMonthOverview();
+		}
+		this.close();
+	}
+
+	private ArrayList<Transaction> createTransactions(final ContinuousTransaction continuousTransaction,
+			final ArrayList<Date> dates) {
+		final ArrayList<Transaction> transactions = new ArrayList<>();
+
+		for (final Date date : dates) {
+			final Transaction transaction = new Transaction();
+			transaction.setAmount(continuousTransaction.getAmount());
+			transaction.setBankAccount(continuousTransaction.getBankAccount());
+			transaction.setCategory(continuousTransaction.getCategory());
+			transaction.setDate(date);
+			transaction.setContinuousTransaction(continuousTransaction);
+			transaction.setName(continuousTransaction.getName());
+			transaction.setUser(continuousTransaction.getUser());
+			transactions.add(transaction);
+		}
+		return transactions;
 	}
 
 	private void mergeTransaction() {
@@ -272,6 +420,10 @@ public class TransactionDialog {
 		final Transaction transaction = new Transaction();
 		this.setTransactionAttributes(transaction);
 		DBUtils.getInstance().persist(transaction);
+		if (this.mainWindow != null) {
+			this.mainWindow.refreshMonthOverview();
+		}
+		this.close();
 	}
 
 	private void setTransactionAttributes(final Transaction transaction) {
@@ -294,9 +446,77 @@ public class TransactionDialog {
 		transaction.setUser(null);
 	}
 
-	private void addContinuousTransaction() {
-		// TODO Auto-generated method stub
+	private void setTransactionAttributes(final ContinuousTransaction continuousTransaction) {
+		continuousTransaction.setAmount(this.spinnerAmount.getValue());
 
+		if (this.checkBoxNoAccount.isSelected()) {
+			continuousTransaction.setBankAccount(null);
+		} else {
+			continuousTransaction.setBankAccount(DBUtils.getInstance().getBankAccount(this.comboBoxAccount.getValue()));
+		}
+
+		if (this.checkBoxNoCategory.isSelected()) {
+			continuousTransaction.setCategory(null);
+		} else {
+			continuousTransaction.setCategory(DBUtils.getInstance().getCategory(this.comboBoxCategory.getValue()));
+		}
+
+		continuousTransaction.setDateBeginn(DateUtils.localDateToDate(this.datePicker.getValue()));
+		continuousTransaction.setName(this.textFieldName.getText());
+		continuousTransaction.setUser(null);
+	}
+
+	private void addContinuousTransaction() {
+		this.setTransactionAttributes(this.continuousTransaction);
+		ArrayList<Date> dates = new ArrayList<>();
+		switch (this.continuousTransaction.getIterationState()) {
+		case MONTHLY:
+			dates = DateUtils.getMonthlyDates(this.continuousTransaction.getEveryIterationState(),
+					this.continuousTransaction.getDayOfMonth(), this.continuousTransaction.getDateBeginn(),
+					this.continuousTransaction.getDateUntil(), this.continuousTransaction.getNumberOfIterations());
+			break;
+		case DAYLI:
+
+			break;
+		case WEEKLY:
+
+			break;
+
+		case YEARLY:
+
+			break;
+		default:
+			break;
+		}
+
+		final ArrayList<Transaction> transactions = this.createTransactions(dates);
+		this.persist(this.continuousTransaction, transactions);
+		if (this.mainWindow != null) {
+			this.mainWindow.refreshMonthOverview();
+		}
+		this.close();
+	}
+
+	private void persist(final ContinuousTransaction continuousTransaction2,
+			final ArrayList<Transaction> transactions) {
+		DBUtils.getInstance().persistContinuousTransaction(this.continuousTransaction, transactions);
+	}
+
+	private ArrayList<Transaction> createTransactions(final ArrayList<Date> dates) {
+		final ArrayList<Transaction> transactions = new ArrayList<>();
+
+		for (final Date date : dates) {
+			final Transaction transaction = new Transaction();
+			transaction.setAmount(this.continuousTransaction.getAmount());
+			transaction.setBankAccount(this.continuousTransaction.getBankAccount());
+			transaction.setCategory(this.continuousTransaction.getCategory());
+			transaction.setDate(date);
+			transaction.setContinuousTransaction(this.continuousTransaction);
+			transaction.setName(this.continuousTransaction.getName());
+			transaction.setUser(this.continuousTransaction.getUser());
+			transactions.add(transaction);
+		}
+		return transactions;
 	}
 
 	private void refreshBankAccounts(final boolean refreshFirst) {
@@ -324,7 +544,17 @@ public class TransactionDialog {
 				}
 			}
 		} else if (this.continuousTransaction != null) {
-			// TODO implement the logic here
+			if (this.continuousTransaction.getBankAccount() != null) {
+				this.comboBoxAccount.setValue(this.continuousTransaction.getBankAccount().getName());
+			} else {
+				this.comboBoxAccount.setValue("-");
+				if (refreshFirst) {
+					this.comboBoxAccount.setEditable(false);
+					this.checkBoxNoAccount.setSelected(true);
+				} else {
+					this.comboBoxAccount.setEditable(true);
+				}
+			}
 		} else {
 			this.comboBoxAccount.setValue(bankAccountNames.get(0));
 		}
@@ -358,14 +588,24 @@ public class TransactionDialog {
 
 			}
 		} else if (this.continuousTransaction != null) {
-			// TODO implement the logic here
+			if (this.continuousTransaction.getCategory() != null) {
+				this.comboBoxCategory.setValue(this.continuousTransaction.getCategory().getName());
+			} else {
+				this.comboBoxCategory.setValue("-");
+				if (refreshFirst) {
+					this.comboBoxCategory.setEditable(false);
+					this.checkBoxNoCategory.setSelected(true);
+				} else {
+					this.comboBoxCategory.setEditable(true);
+				}
+			}
 		} else {
 			this.comboBoxCategory.setValue(categoryNames.get(0));
 		}
 
 	}
 
-	private void close() {
+	public void close() {
 		final Stage stage = (Stage) this.buttonAdd.getScene().getWindow();
 		stage.close();
 	}
@@ -379,8 +619,13 @@ public class TransactionDialog {
 		this.mainWindow = mainWindow;
 	}
 
+	public ContinuousTransaction getContinuousTransaction() {
+		return this.continuousTransaction;
+	}
+
 	public void setContinuousTransaction(final ContinuousTransaction continuousTransaction) {
 		this.continuousTransaction = continuousTransaction;
+		this.initContinuousTransaction();
 	}
 
 }
