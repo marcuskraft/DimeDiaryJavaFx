@@ -6,11 +6,6 @@
 	<version>0.1</version>
   <dependencies>
   	<dependency>
-  		<groupId>com.dimediary.controller</groupId>
-  		<artifactId>Controller</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  	<dependency>
   		<groupId>com.dimediary.view</groupId>
   		<artifactId>View</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
@@ -20,6 +15,11 @@
   		<artifactId>Model</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   		<type>pom</type>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.dimediary.util</groupId>
+  		<artifactId>Utils</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
   </dependencies>
   <parent>
@@ -68,7 +68,7 @@
                   <archive>
                       <manifest>
                           <addClasspath>true</addClasspath>
-                          <mainClass>com.dimediary.view.main.Main</mainClass>
+                          <mainClass>com.dimediary.view.Main</mainClass>
                       </manifest>
                   </archive>
                   <descriptorRefs>

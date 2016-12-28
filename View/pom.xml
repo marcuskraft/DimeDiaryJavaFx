@@ -9,23 +9,6 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../Dimediary</relativePath>
 	</parent>
-	<dependencies>
-		<dependency>
-			<groupId>com.dimediary.controller</groupId>
-			<artifactId>Controller</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.trolltech</groupId>
-			<artifactId>qtjambi</artifactId>
-			<version>4.8.7</version>
-		</dependency>
-		<dependency>
-			<groupId>com.trolltech</groupId>
-			<artifactId>qtjambi-native</artifactId>
-			<version>4.8.7</version>
-		</dependency>
-	</dependencies>
 
 	<build>
 		<plugins>
@@ -38,7 +21,24 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
+			
+			<plugin>
+	           <groupId>com.zenjava</groupId>
+			   <artifactId>javafx-maven-plugin</artifactId>
+		       <version>2.0</version>
+	           <configuration>
+	              <mainClass>com.javafxtest.main.Main</mainClass>
+	           </configuration>
+        	</plugin>
+			
 		</plugins>
 	</build>
 
+	<dependencies>
+		<dependency>
+			<groupId>com.dimediary.util</groupId>
+			<artifactId>Utils</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>

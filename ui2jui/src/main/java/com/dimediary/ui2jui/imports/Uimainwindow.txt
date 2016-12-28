@@ -1,1 +1,0 @@
-import com.trolltech.qt.core.Qt.LayoutDirection;

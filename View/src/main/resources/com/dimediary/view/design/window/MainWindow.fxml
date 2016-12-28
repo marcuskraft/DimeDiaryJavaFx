@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+
+<BorderPane prefHeight="771.0" prefWidth="1109.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dimediary.view.design.window.MainWindow">
+   <top>
+      <MenuBar prefHeight="0.0" prefWidth="1293.0" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="File">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Edit">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+   <center>
+      <TabPane prefHeight="648.0" prefWidth="888.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Überblick">
+               <content>
+                  <BorderPane prefHeight="200.0" prefWidth="200.0">
+                     <center>
+                        <TabPane fx:id="tabPane" prefHeight="683.0" prefWidth="1137.0" side="BOTTOM" tabClosingPolicy="UNAVAILABLE">
+                          <tabs>
+                            <Tab fx:id="tabJanuary" text="Januar" />
+                            <Tab fx:id="tabFebruary" text="Februar" />
+                              <Tab fx:id="tabMarch" text="März" />
+                              <Tab fx:id="tabAprile" text="April" />
+                              <Tab fx:id="tabMay" text="Mai" />
+                              <Tab fx:id="tabJune" text="Juni" />
+                              <Tab fx:id="tabJuly" text="Juli" />
+                              <Tab fx:id="tabAugust" text="August" />
+                              <Tab fx:id="tabSeptembre" text="September" />
+                              <Tab fx:id="tabOctober" text="Oktober" />
+                              <Tab fx:id="tabNovember" text="November" />
+                              <Tab fx:id="tabDecember" text="Dezember" />
+                          </tabs>
+                        </TabPane>
+                     </center>
+                     <bottom>
+                        <StackPane BorderPane.alignment="CENTER">
+                           <children>
+                              <AnchorPane>
+                                 <children>
+                                    <Button fx:id="buttonBack" mnemonicParsing="false" onAction="#onBackwards" text="zurück" />
+                                    <Button fx:id="buttonForward" layoutX="56.0" mnemonicParsing="false" onAction="#onForwards" text="vor" />
+                                    <Button fx:id="buttonActualMonth" layoutX="94.0" mnemonicParsing="false" onAction="#onButtonActualMonth" text="aktueller Monat" />
+                                 </children>
+                              </AnchorPane>
+                           </children>
+                        </StackPane>
+                     </bottom>
+                     <top>
+                        <Pane prefHeight="112.0" prefWidth="1596.0">
+                           <children>
+                              <Label layoutX="9.0" layoutY="14.0" text="Konto" />
+                              <ComboBox fx:id="comboBoxAccount" layoutX="52.0" layoutY="10.0" onAction="#onComboBoxAccount" prefHeight="25.0" prefWidth="117.0" />
+                              <Label layoutX="14.0" layoutY="47.0" prefHeight="22.0" prefWidth="22.0" text="Jahr" />
+                              <Spinner fx:id="SpinnerYear" layoutX="52.0" layoutY="45.0" prefHeight="25.0" prefWidth="118.0" />
+                              <Button fx:id="buttonAddTransaction" layoutX="14.0" layoutY="80.0" mnemonicParsing="false" onAction="#onButtonAddTransaction" prefHeight="25.0" prefWidth="148.0" text="Transaktion erstellen" />
+                              <CheckBox fx:id="checkboxAccountlessTransactions" layoutX="182.0" layoutY="14.0" mnemonicParsing="false" onAction="#onAccountlessTransactions" text="kontolose Transaktionen anzeigen" />
+                           </children>
+                        </Pane>
+                     </top>
+                  </BorderPane>
+               </content>
+          </Tab>
+          <Tab text="Umsätze">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>
