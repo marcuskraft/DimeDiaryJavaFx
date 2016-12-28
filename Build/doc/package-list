@@ -1,6 +1,6 @@
-com.dimediary.controller.balance
+com.dimediary.util.balance
 com.dimediary.controller.test
-com.dimediary.controller.utils
+com.dimediary.util.utils
 com.dimediary.model
 com.dimediary.model.entities
 com.dimediary.model.utils

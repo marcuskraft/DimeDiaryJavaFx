@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-import com.dimediary.controller.utils.DBUtils;
-import com.dimediary.controller.utils.DateUtils;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
+import com.dimediary.util.utils.DBUtils;
+import com.dimediary.util.utils.DateUtils;
 import com.dimediary.view.Main;
 
 import javafx.collections.FXCollections;
@@ -120,9 +120,10 @@ public class TransactionDialog {
 		this.datePicker.setValue(DateUtils.date2LocalDate(new Date()));
 		this.textFieldName.setText("");
 
-		final SpinnerValueFactory<Double> spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(
-				-TransactionDialog.MAX_AMOUNT, 0.0, 0.0) {
+		final SpinnerValueFactory<Double> spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0,
+				TransactionDialog.MAX_AMOUNT, 0.0) {
 		};
+		this.spinnerAmount.setEditable(true);
 
 		this.spinnerAmount.setValueFactory(spinnerValueFactory);
 
@@ -151,7 +152,11 @@ public class TransactionDialog {
 
 		this.datePicker.setValue(DateUtils.date2LocalDate(this.transaction.getDate()));
 		this.textFieldName.setText(this.transaction.getName());
-		this.setSpinnerValueFactory();
+
+		final Double amount = this.transaction.getAmount();
+		this.checkBoxIncome.setSelected(amount > 0.0);
+		this.spinnerAmount.getValueFactory().setValue(Math.abs(amount));
+
 		this.checkBoxIterate.setDisable(true);
 	}
 
@@ -170,9 +175,11 @@ public class TransactionDialog {
 
 		this.datePicker.setValue(DateUtils.date2LocalDate(this.continuousTransaction.getDateBeginn()));
 
-		this.setSpinnerValueFactory();
-
 		this.textFieldName.setText(this.continuousTransaction.getName());
+
+		final Double amount = this.continuousTransaction.getAmount();
+		this.checkBoxIncome.setSelected(amount > 0.0);
+		this.spinnerAmount.getValueFactory().setValue(Math.abs(amount));
 
 		this.checkBoxIterate.setSelected(true);
 		this.buttonIterate.setDisable(false);
@@ -184,36 +191,6 @@ public class TransactionDialog {
 		default:
 			break;
 		}
-	}
-
-	private void setSpinnerValueFactory() {
-		final SpinnerValueFactory<Double> spinnerValueFactory;
-		Double amount;
-		if (this.transaction != null) {
-			amount = this.transaction.getAmount();
-		} else if (this.continuousTransaction != null) {
-			amount = this.continuousTransaction.getAmount();
-		} else {
-			if (this.checkBoxIncome.isSelected()) {
-				amount = Math.abs(this.spinnerAmount.getValue());
-			} else {
-				amount = -Math.abs(this.spinnerAmount.getValue());
-			}
-		}
-
-		if (amount > 0.0) {
-			spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0, TransactionDialog.MAX_AMOUNT,
-					amount) {
-			};
-			this.checkBoxIncome.setSelected(true);
-		} else {
-			spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(-TransactionDialog.MAX_AMOUNT, 0.0,
-					amount) {
-			};
-			this.checkBoxIncome.setSelected(false);
-		}
-
-		this.spinnerAmount.setValueFactory(spinnerValueFactory);
 	}
 
 	@FXML
@@ -295,7 +272,7 @@ public class TransactionDialog {
 
 	@FXML
 	void onCheckBoxIncome(final ActionEvent event) {
-		this.setSpinnerValueFactory();
+
 	}
 
 	@FXML
@@ -393,6 +370,18 @@ public class TransactionDialog {
 		this.close();
 	}
 
+	public void deleteContinuousTransaction(final Date dateFrom) {
+		final ArrayList<Transaction> transactionsToDelete = DBUtils.getInstance()
+				.getTransactionsFromDate(this.continuousTransaction, dateFrom);
+		DBUtils.getInstance().deleteTransactions(transactionsToDelete);
+		this.continuousTransaction.setDateUntil(DateUtils.substractOnDay(dateFrom));
+		DBUtils.getInstance().merge(this.continuousTransaction);
+	}
+
+	public void deleteAllContinuousTransactions() {
+		DBUtils.getInstance().deleteAllContinuousTransactions(this.continuousTransaction);
+	}
+
 	private ArrayList<Transaction> createTransactions(final ContinuousTransaction continuousTransaction,
 			final ArrayList<Date> dates) {
 		final ArrayList<Transaction> transactions = new ArrayList<>();
@@ -427,7 +416,13 @@ public class TransactionDialog {
 	}
 
 	private void setTransactionAttributes(final Transaction transaction) {
-		transaction.setAmount(this.spinnerAmount.getValue());
+		Double amount;
+		if (this.checkBoxIncome.isSelected()) {
+			amount = Math.abs(this.spinnerAmount.getValue());
+		} else {
+			amount = -Math.abs(this.spinnerAmount.getValue());
+		}
+		transaction.setAmount(amount);
 
 		if (this.checkBoxNoAccount.isSelected()) {
 			transaction.setBankAccount(null);
@@ -447,7 +442,13 @@ public class TransactionDialog {
 	}
 
 	private void setTransactionAttributes(final ContinuousTransaction continuousTransaction) {
-		continuousTransaction.setAmount(this.spinnerAmount.getValue());
+		Double amount;
+		if (this.checkBoxIncome.isSelected()) {
+			amount = Math.abs(this.spinnerAmount.getValue());
+		} else {
+			amount = -Math.abs(this.spinnerAmount.getValue());
+		}
+		continuousTransaction.setAmount(amount);
 
 		if (this.checkBoxNoAccount.isSelected()) {
 			continuousTransaction.setBankAccount(null);

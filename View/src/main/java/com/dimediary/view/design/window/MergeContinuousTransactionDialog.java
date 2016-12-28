@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
 
-import com.dimediary.controller.utils.DateUtils;
+import com.dimediary.util.utils.DateUtils;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -45,7 +45,7 @@ public class MergeContinuousTransactionDialog {
 
 	@FXML
 	void onAll(final ActionEvent event) {
-
+		this.dateUntil.setDisable(true);
 	}
 
 	@FXML
@@ -65,7 +65,7 @@ public class MergeContinuousTransactionDialog {
 
 	@FXML
 	void onUntil(final ActionEvent event) {
-
+		this.dateUntil.setDisable(false);
 	}
 
 	@FXML // This method is called by the FXMLLoader when initialization is

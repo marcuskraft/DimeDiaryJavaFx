@@ -9,23 +9,6 @@
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../Dimediary</relativePath>
 	</parent>
-	<dependencies>
-		<dependency>
-			<groupId>com.dimediary.controller</groupId>
-			<artifactId>Controller</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>com.trolltech</groupId>
-			<artifactId>qtjambi</artifactId>
-			<version>4.8.7</version>
-		</dependency>
-		<dependency>
-			<groupId>com.trolltech</groupId>
-			<artifactId>qtjambi-native</artifactId>
-			<version>4.8.7</version>
-		</dependency>
-	</dependencies>
 
 	<build>
 		<plugins>
@@ -51,4 +34,11 @@
 		</plugins>
 	</build>
 
+	<dependencies>
+		<dependency>
+			<groupId>com.dimediary.util</groupId>
+			<artifactId>Utils</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
 </project>

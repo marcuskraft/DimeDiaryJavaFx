@@ -15,11 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import com.dimediary.controller.balance.AccountBalancer;
-import com.dimediary.controller.utils.DBUtils;
-import com.dimediary.controller.utils.DateUtils;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
+import com.dimediary.util.balance.AccountBalancer;
+import com.dimediary.util.utils.DBUtils;
+import com.dimediary.util.utils.DateUtils;
 import com.dimediary.view.Main;
 
 import javafx.beans.value.ChangeListener;
@@ -304,8 +304,8 @@ public class MainWindow {
 		this.actualMonth = month;
 
 		final ArrayList<Date> dates = DateUtils.getDatesForMonth(month, this.SpinnerYear.getValue());
-		final String name = this.comboBoxAccount.getValue();
-		final BankAccount bankAccount = DBUtils.getInstance().getBankAccount(name);
+		final String bankaccountName = this.comboBoxAccount.getValue();
+		final BankAccount bankAccount = DBUtils.getInstance().getBankAccount(bankaccountName);
 
 		final HashMap<Date, Double> balances = AccountBalancer.getBalancesFollowingDays(bankAccount, dates);
 

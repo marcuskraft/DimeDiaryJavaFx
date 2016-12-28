@@ -5,9 +5,10 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
   <modules>
-  	<module>../Controller</module>
+  	
   	<module>../Model</module>
   	<module>../Build</module>
   	<module>../View</module>
+  	<module>../Utils</module>
   </modules>
 </project>

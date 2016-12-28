@@ -11,10 +11,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 
-import com.dimediary.controller.utils.DateUtils;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.ContinuousTransaction.DayOfMonth;
 import com.dimediary.model.entities.ContinuousTransaction.IterationState;
+import com.dimediary.util.utils.DateUtils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,8 +33,6 @@ import javafx.stage.Stage;
 public class ContinuousTransactionDialog {
 
 	private TransactionDialog transactionDialog;
-
-	private ArrayList<Date> dates;
 
 	HashMap<String, DayOfMonth> dayOfMonthByMonthlyMapping;
 	ArrayList<String> dayOfMonthStrings;
