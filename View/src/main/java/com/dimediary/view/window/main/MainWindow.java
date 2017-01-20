@@ -22,6 +22,7 @@ import com.dimediary.util.utils.DBUtils;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.view.Main;
 import com.dimediary.view.window.bankaccount.BankAccountDialog;
+import com.dimediary.view.window.bankaccount.BankaccountCategoryDialog;
 import com.dimediary.view.window.category.CategoryDialog;
 import com.dimediary.view.window.transaction.TransactionButtonFactory;
 import com.dimediary.view.window.transaction.TransactionDialog;
@@ -57,6 +58,9 @@ public class MainWindow {
 
 	@FXML // fx:id="menuAccount"
 	private MenuItem menuAccount; // Value injected by FXMLLoader
+
+	@FXML
+	private MenuItem menuAccCategory;
 
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -168,6 +172,13 @@ public class MainWindow {
 	@FXML
 	void onMenuClose(final ActionEvent event) {
 
+	}
+
+	@FXML
+	void onMenuAccCategory(final ActionEvent event) {
+		final WindowCreater<BankaccountCategoryDialog> windowCreater = new WindowCreater<>();
+		windowCreater.createWindow(Main.class.getResource("design/window/BankaccountCategoryDialog.fxml"),
+				"Konto-Kategorien bearbeiten");
 	}
 
 	@FXML

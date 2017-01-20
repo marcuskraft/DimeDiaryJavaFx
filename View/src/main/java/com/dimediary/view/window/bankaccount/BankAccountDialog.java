@@ -14,8 +14,11 @@ import javax.persistence.RollbackException;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.util.utils.DBUtils;
 import com.dimediary.util.utils.DateUtils;
+import com.dimediary.view.Main;
+import com.dimediary.view.window.category.CategoryDialog;
 import com.dimediary.view.window.transaction.TransactionDialog;
 import com.dimediary.view.window.util.IWindowParameterInjection;
+import com.dimediary.view.window.util.WindowCreater;
 import com.dimediary.view.window.util.WindowParameters;
 
 import javafx.collections.FXCollections;
@@ -104,7 +107,11 @@ public class BankAccountDialog implements IWindowParameterInjection {
 
 	@FXML
 	void onButtonAddAccCategory(final ActionEvent event) {
-
+		final WindowParameters parameters = new WindowParameters();
+		parameters.put(BankAccountDialog.class, this);
+		final WindowCreater<CategoryDialog> windowCreater = new WindowCreater<>();
+		windowCreater.createWindow(Main.class.getResource("design/window/BankaccountCategoryDialog.fxml"),
+				"Konto-Kategorien bearbeiten", parameters);
 	}
 
 	@FXML

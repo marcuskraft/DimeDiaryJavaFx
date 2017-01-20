@@ -28,6 +28,7 @@
                <items>
                   <MenuItem fx:id="menuCategory" mnemonicParsing="false" onAction="#onMenuCategory" text="Kategorien bearbeiten" />
                   <MenuItem fx:id="menuAccount" mnemonicParsing="false" onAction="#onMenuAccount" text="Konten bearbeiten" />
+                  <MenuItem fx:id="menuAccCategory" mnemonicParsing="false" onAction="#onMenuAccCategory" text="Konto-Kategorien bearbeiten" />
                </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Hilfe">
