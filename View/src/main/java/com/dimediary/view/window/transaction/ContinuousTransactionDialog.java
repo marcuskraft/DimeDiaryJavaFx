@@ -2,7 +2,7 @@
  * Sample Skeleton for 'ContinuousTransactionDialog.fxml' Controller Class
  */
 
-package com.dimediary.view.design.window;
+package com.dimediary.view.window.transaction;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,6 +15,8 @@ import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.ContinuousTransaction.DayOfMonth;
 import com.dimediary.model.entities.ContinuousTransaction.IterationState;
 import com.dimediary.util.utils.DateUtils;
+import com.dimediary.view.window.util.IWindowParameterInjection;
+import com.dimediary.view.window.util.WindowParameters;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,7 +32,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
-public class ContinuousTransactionDialog {
+public class ContinuousTransactionDialog implements IWindowParameterInjection {
 
 	private TransactionDialog transactionDialog;
 
@@ -97,12 +99,14 @@ public class ContinuousTransactionDialog {
 
 	@FXML
 	void onIterateNumber(final ActionEvent event) {
-
+		this.dateUntil.setDisable(true);
+		this.spinnerNumberOfIterations.setDisable(false);
 	}
 
 	@FXML
 	void onIterateUntil(final ActionEvent event) {
-
+		this.dateUntil.setDisable(false);
+		this.spinnerNumberOfIterations.setDisable(true);
 	}
 
 	@FXML
@@ -112,7 +116,8 @@ public class ContinuousTransactionDialog {
 
 	@FXML
 	void onNoEndDate(final ActionEvent event) {
-
+		this.dateUntil.setDisable(true);
+		this.spinnerNumberOfIterations.setDisable(true);
 	}
 
 	@FXML
@@ -129,7 +134,12 @@ public class ContinuousTransactionDialog {
 	}
 
 	private void initMonthlyTransaction() {
-		final ContinuousTransaction continuousTransaction = this.transactionDialog.getContinuousTransaction();
+		ContinuousTransaction continuousTransaction = this.transactionDialog.getContinuousTransaction();
+		if (continuousTransaction == null) {
+			continuousTransaction = new ContinuousTransaction();
+			this.transactionDialog.setContinuousTransaction(continuousTransaction);
+			this.transactionDialog.setTransaction(null);
+		}
 		continuousTransaction.setIterationState(IterationState.MONTHLY);
 		continuousTransaction.setEveryIterationState(this.spinnerEveryMonth.getValue());
 		continuousTransaction
@@ -235,8 +245,13 @@ public class ContinuousTransactionDialog {
 	}
 
 	private void initContinuousTransaction() {
-		if (this.transactionDialog == null || this.transactionDialog.getContinuousTransaction() == null) {
+		if (this.transactionDialog == null) {
 			throw new IllegalStateException("transactionDialog not injected or has no continuous transaction");
+		}
+
+		if (this.transactionDialog.getContinuousTransaction() == null) {
+			this.initMonthly();
+			return;
 		}
 
 		switch (this.transactionDialog.getContinuousTransaction().getIterationState()) {
@@ -260,24 +275,34 @@ public class ContinuousTransactionDialog {
 
 	private void initMonthly() {
 		this.radioButtonMonthly.setSelected(true);
-		this.spinnerEveryMonth.getValueFactory()
-				.setValue(this.transactionDialog.getContinuousTransaction().getEveryIterationState());
-		this.comboBoxWhichDayOfMonth.setValue(
-				this.getStringForDayOfMonth(this.transactionDialog.getContinuousTransaction().getDayOfMonth()));
 
-		if (this.transactionDialog.getContinuousTransaction().getDateUntil() != null) {
-			this.radioButtonIterateUntil.setSelected(true);
-			this.dateUntil.setValue(
-					DateUtils.date2LocalDate(this.transactionDialog.getContinuousTransaction().getDateUntil()));
-			this.spinnerNumberOfIterations.setDisable(true);
-		} else if (this.transactionDialog.getContinuousTransaction().getNumberOfIterations() != null) {
+		final ContinuousTransaction continuousTransaction = this.transactionDialog.getContinuousTransaction();
+
+		if (continuousTransaction == null) {
+			this.spinnerEveryMonth.getValueFactory().setValue(1);
+			this.comboBoxWhichDayOfMonth.setValue(this.getStringForDayOfMonth(DayOfMonth.FIRST));
+
 			this.radioButtonIterateNumber.setSelected(true);
-			this.spinnerNumberOfIterations.getValueFactory()
-					.setValue(this.transactionDialog.getContinuousTransaction().getNumberOfIterations());
+			this.spinnerNumberOfIterations.getValueFactory().setValue(10);
 			this.dateUntil.setDisable(true);
+
 		} else {
-			this.radioButtonNoEndDate.setSelected(true);
+			this.spinnerEveryMonth.getValueFactory().setValue(continuousTransaction.getEveryIterationState());
+			this.comboBoxWhichDayOfMonth.setValue(this.getStringForDayOfMonth(continuousTransaction.getDayOfMonth()));
+			if (continuousTransaction.getDateUntil() != null) {
+				this.radioButtonIterateUntil.setSelected(true);
+				this.dateUntil.setValue(DateUtils.date2LocalDate(continuousTransaction.getDateUntil()));
+				this.spinnerNumberOfIterations.setDisable(true);
+			} else if (continuousTransaction.getNumberOfIterations() != null) {
+				this.radioButtonIterateNumber.setSelected(true);
+				this.spinnerNumberOfIterations.getValueFactory()
+						.setValue(continuousTransaction.getNumberOfIterations());
+				this.dateUntil.setDisable(true);
+			} else {
+				this.radioButtonNoEndDate.setSelected(true);
+			}
 		}
+
 	}
 
 	private void initMapping() {
@@ -314,14 +339,21 @@ public class ContinuousTransactionDialog {
 		return null;
 	}
 
-	public void setTransactionDialog(final TransactionDialog transactionDialog) {
-		this.transactionDialog = transactionDialog;
-		this.initContinuousTransaction();
-	}
-
 	private void close() {
 		final Stage stage = (Stage) this.buttonOk.getScene().getWindow();
 		stage.close();
+	}
+
+	@Override
+	public void inject(final WindowParameters parameters) {
+		final Object object = parameters.getParameters().get(TransactionDialog.class);
+		if (object == null || !(object instanceof TransactionDialog)) {
+			throw new IllegalArgumentException(
+					"transaction dialog must be set to create a continuous transaction dialog");
+		}
+		this.transactionDialog = (TransactionDialog) object;
+
+		this.initContinuousTransaction();
 	}
 
 }

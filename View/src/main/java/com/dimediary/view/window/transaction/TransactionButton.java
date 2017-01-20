@@ -1,4 +1,4 @@
-package com.dimediary.view.design.window;
+package com.dimediary.view.window.transaction;
 
 import com.dimediary.model.entities.Transaction;
 

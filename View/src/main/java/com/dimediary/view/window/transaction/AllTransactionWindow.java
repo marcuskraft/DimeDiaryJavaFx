@@ -2,26 +2,25 @@
  * Sample Skeleton for 'AllTransactionMessage.fxml' Controller Class
  */
 
-package com.dimediary.view.design.window;
+package com.dimediary.view.window.transaction;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.view.Main;
+import com.dimediary.view.window.main.MainWindow;
+import com.dimediary.view.window.util.IWindowParameterInjection;
+import com.dimediary.view.window.util.WindowCreater;
+import com.dimediary.view.window.util.WindowParameters;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-public class AllTransactionWindow {
+public class AllTransactionWindow implements IWindowParameterInjection {
 
 	private Transaction transaction;
 
@@ -44,21 +43,13 @@ public class AllTransactionWindow {
 
 	@FXML
 	void onAll(final ActionEvent event) {
-		final FXMLLoader loader = new FXMLLoader(Main.class.getResource("design/window/TransactionDialog.fxml"));
+		final WindowParameters parameters = new WindowParameters();
+		parameters.put(ContinuousTransaction.class, this.transaction.getContinuousTransaction());
+		parameters.put(MainWindow.class, this.mainWindow);
 
-		final Stage stage = new Stage(StageStyle.DECORATED);
-		try {
-			stage.setScene(new Scene((Pane) loader.load()));
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		final TransactionDialog controller = loader.<TransactionDialog> getController();
-		controller.setMainWindow(this.mainWindow);
-		controller.setContinuousTransaction(this.transaction.getContinuousTransaction());
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.show();
+		final WindowCreater<TransactionDialog> windowCreater = new WindowCreater<>();
+		windowCreater.createWindow(Main.class.getResource("design/window/TransactionDialog.fxml"),
+				"Transaktion erstellen / bearbeiten", parameters);
 		this.close();
 	}
 
@@ -69,21 +60,14 @@ public class AllTransactionWindow {
 
 	@FXML
 	void onOnlyThis(final ActionEvent event) {
-		final FXMLLoader loader = new FXMLLoader(Main.class.getResource("design/window/TransactionDialog.fxml"));
 
-		final Stage stage = new Stage(StageStyle.DECORATED);
-		try {
-			stage.setScene(new Scene((Pane) loader.load()));
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		final WindowParameters parameters = new WindowParameters();
+		parameters.put(Transaction.class, this.transaction);
+		parameters.put(MainWindow.class, this.mainWindow);
 
-		final TransactionDialog controller = loader.<TransactionDialog> getController();
-		controller.setMainWindow(this.mainWindow);
-		controller.setTransaction(this.transaction);
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.show();
+		final WindowCreater<TransactionDialog> windowCreater = new WindowCreater<>();
+		windowCreater.createWindow(Main.class.getResource("design/window/TransactionDialog.fxml"),
+				"Transaktion erstellen / bearbeiten", parameters);
 		this.close();
 	}
 
@@ -108,8 +92,19 @@ public class AllTransactionWindow {
 		stage.close();
 	}
 
-	public void setMainWindow(final MainWindow mainWindow) {
-		this.mainWindow = mainWindow;
+	@Override
+	public void inject(final WindowParameters parameters) {
+		Object object = parameters.getParameters().get(MainWindow.class);
+		if (object == null || !(object instanceof MainWindow)) {
+			throw new IllegalArgumentException("mainwindow must be set to create a all transaction dialog");
+		}
+		this.mainWindow = (MainWindow) object;
+
+		object = parameters.getParameters().get(Transaction.class);
+		if (object == null || !(object instanceof Transaction)) {
+			throw new IllegalArgumentException("transaction must be set to create a all transaction dialog");
+		}
+		this.setTransaction((Transaction) object);
 	}
 
 }

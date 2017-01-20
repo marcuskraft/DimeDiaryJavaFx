@@ -2,7 +2,7 @@
  * Sample Skeleton for 'MainWindow.fxml' Controller Class
  */
 
-package com.dimediary.view.design.window;
+package com.dimediary.view.window.main;
 
 import java.io.IOException;
 import java.net.URL;
@@ -21,6 +21,12 @@ import com.dimediary.util.balance.AccountBalancer;
 import com.dimediary.util.utils.DBUtils;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.view.Main;
+import com.dimediary.view.window.bankaccount.BankAccountDialog;
+import com.dimediary.view.window.category.CategoryDialog;
+import com.dimediary.view.window.transaction.TransactionButtonFactory;
+import com.dimediary.view.window.transaction.TransactionDialog;
+import com.dimediary.view.window.util.WindowCreater;
+import com.dimediary.view.window.util.WindowParameters;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -28,12 +34,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Spinner;
@@ -41,12 +46,17 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class MainWindow {
+
+	@FXML // fx:id="menuClose"
+	private MenuItem menuClose; // Value injected by FXMLLoader
+
+	@FXML // fx:id="menuCategory"
+	private MenuItem menuCategory; // Value injected by FXMLLoader
+
+	@FXML // fx:id="menuAccount"
+	private MenuItem menuAccount; // Value injected by FXMLLoader
 
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -115,11 +125,6 @@ public class MainWindow {
 	private CheckBox checkboxAccountlessTransactions; // Value injected by
 														// FXMLLoader
 
-	@FXML
-	void onAccountlessTransactions(final ActionEvent event) {
-
-	}
-
 	@FXML // This method is called by the FXMLLoader when initialization is
 			// complete
 	void initialize() {
@@ -148,6 +153,29 @@ public class MainWindow {
 	}
 
 	@FXML
+	void onMenuAccount(final ActionEvent event) {
+		final WindowCreater<BankAccountDialog> windowCreater = new WindowCreater<>();
+		windowCreater.createWindow(Main.class.getResource("design/window/AccountDialog.fxml"), "Konten bearbeiten");
+	}
+
+	@FXML
+	void onMenuCategory(final ActionEvent event) {
+		final WindowCreater<CategoryDialog> windowCreater = new WindowCreater<>();
+		windowCreater.createWindow(Main.class.getResource("design/window/CategoryDialog.fxml"),
+				"Kategorien bearbeiten");
+	}
+
+	@FXML
+	void onMenuClose(final ActionEvent event) {
+
+	}
+
+	@FXML
+	void onAccountlessTransactions(final ActionEvent event) {
+
+	}
+
+	@FXML
 	void onComboBoxAccount(final ActionEvent event) {
 		this.refreshMonthOverview();
 	}
@@ -162,21 +190,11 @@ public class MainWindow {
 
 	@FXML
 	void onButtonAddTransaction(final ActionEvent event) throws IOException {
-		final FXMLLoader loader = new FXMLLoader(Main.class.getResource("design/window/TransactionDialog.fxml"));
-
-		final Stage stage = new Stage(StageStyle.DECORATED);
-		try {
-			stage.setScene(new Scene((Pane) loader.load()));
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		final TransactionDialog controller = loader.<TransactionDialog> getController();
-		controller.setMainWindow(this);
-		stage.setTitle("Transaktion erstellen / bearbeiten");
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.show();
+		final WindowParameters parameters = new WindowParameters();
+		parameters.put(MainWindow.class, this);
+		final WindowCreater<TransactionDialog> windowCreater = new WindowCreater<>();
+		windowCreater.createWindow(Main.class.getResource("design/window/TransactionDialog.fxml"),
+				"Transaktion erstellen / bearbeiten", parameters);
 	}
 
 	@FXML

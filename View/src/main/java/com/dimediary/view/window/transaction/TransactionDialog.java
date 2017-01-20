@@ -2,9 +2,8 @@
  * Sample Skeleton for 'TransactionDialog.fxml' Controller Class
  */
 
-package com.dimediary.view.design.window;
+package com.dimediary.view.window.transaction;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,13 +14,17 @@ import com.dimediary.model.entities.Transaction;
 import com.dimediary.util.utils.DBUtils;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.view.Main;
+import com.dimediary.view.window.bankaccount.BankAccountDialog;
+import com.dimediary.view.window.category.CategoryDialog;
+import com.dimediary.view.window.main.MainWindow;
+import com.dimediary.view.window.util.IWindowParameterInjection;
+import com.dimediary.view.window.util.WindowCreater;
+import com.dimediary.view.window.util.WindowParameters;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -29,19 +32,16 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-public class TransactionDialog {
+public class TransactionDialog implements IWindowParameterInjection {
 
 	private Transaction transaction = null;
 	private ContinuousTransaction continuousTransaction = null;
 	private MainWindow mainWindow = null;
 	private ArrayList<Date> dates = null;
 
-	private static final Double MAX_AMOUNT = 999999999.99;
+	public static final Double MAX_AMOUNT = 999999999.99;
 
 	@FXML // fx:id="buttonDelete"
 	private Button buttonDelete; // Value injected by FXMLLoader
@@ -120,8 +120,9 @@ public class TransactionDialog {
 		this.datePicker.setValue(DateUtils.date2LocalDate(new Date()));
 		this.textFieldName.setText("");
 
-		final SpinnerValueFactory<Double> spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0,
-				TransactionDialog.MAX_AMOUNT, 0.0) {
+		final SpinnerValueFactory<Double> spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(
+				-TransactionDialog.MAX_AMOUNT, TransactionDialog.MAX_AMOUNT, 0.0) {
+
 		};
 		this.spinnerAmount.setEditable(true);
 
@@ -237,37 +238,35 @@ public class TransactionDialog {
 
 	@FXML
 	void onButtonIterate(final ActionEvent event) {
-		final FXMLLoader loader = new FXMLLoader(
-				Main.class.getResource("design/window/ContinuousTransactionDialog.fxml"));
+		final WindowParameters parameters = new WindowParameters();
+		parameters.put(TransactionDialog.class, this);
 
-		final Stage stage = new Stage(StageStyle.DECORATED);
-		try {
-			stage.setScene(new Scene((Pane) loader.load()));
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		final ContinuousTransactionDialog controller = loader.<ContinuousTransactionDialog> getController();
-		controller.setTransactionDialog(this);
-		stage.setTitle("Transaktion erstellen / bearbeiten");
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.show();
+		final WindowCreater<ContinuousTransactionDialog> windowCreater = new WindowCreater<>();
+		windowCreater.createWindow(Main.class.getResource("design/window/ContinuousTransactionDialog.fxml"),
+				"Transaktion erstellen / bearbeiten", parameters);
 	}
 
 	@FXML
 	void onCheckboxIterate(final ActionEvent event) {
-
+		this.buttonIterate.setDisable(!this.checkBoxIterate.isSelected());
 	}
 
 	@FXML
 	void onCreateAccount(final ActionEvent event) {
-
+		final WindowParameters parameters = new WindowParameters();
+		parameters.put(TransactionDialog.class, this);
+		final WindowCreater<BankAccountDialog> windowCreater = new WindowCreater<>();
+		windowCreater.createWindow(Main.class.getResource("design/window/AccountDialog.fxml"), "Konten bearbeiten",
+				parameters);
 	}
 
 	@FXML
 	void onCreateCategory(final ActionEvent event) {
-
+		final WindowParameters parameters = new WindowParameters();
+		parameters.put(TransactionDialog.class, this);
+		final WindowCreater<CategoryDialog> windowCreater = new WindowCreater<>();
+		windowCreater.createWindow(Main.class.getResource("design/window/CategoryDialog.fxml"), "Kategorien bearbeiten",
+				parameters);
 	}
 
 	@FXML
@@ -324,22 +323,12 @@ public class TransactionDialog {
 			break;
 		}
 
-		final FXMLLoader loader = new FXMLLoader(
-				Main.class.getResource("design/window/MergeContinuousTransactionDialog.fxml"));
+		final WindowParameters parameters = new WindowParameters();
+		parameters.put(TransactionDialog.class, this);
 
-		final Stage stage = new Stage(StageStyle.DECORATED);
-		try {
-			stage.setScene(new Scene((Pane) loader.load()));
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		final MergeContinuousTransactionDialog controller = loader.<MergeContinuousTransactionDialog> getController();
-		controller.setTransactionDialog(this);
-		stage.setTitle("Ab wann?");
-		stage.initModality(Modality.APPLICATION_MODAL);
-		stage.show();
+		final WindowCreater<MergeContinuousTransactionDialog> windowCreater = new WindowCreater<>();
+		windowCreater.createWindow(Main.class.getResource("design/window/MergeContinuousTransactionDialog.fxml"),
+				"Ab wann?", parameters);
 
 	}
 
@@ -417,10 +406,11 @@ public class TransactionDialog {
 
 	private void setTransactionAttributes(final Transaction transaction) {
 		Double amount;
+		final Double value = this.spinnerAmount.getValue();
 		if (this.checkBoxIncome.isSelected()) {
-			amount = Math.abs(this.spinnerAmount.getValue());
+			amount = Math.abs(value);
 		} else {
-			amount = -Math.abs(this.spinnerAmount.getValue());
+			amount = -Math.abs(value);
 		}
 		transaction.setAmount(amount);
 
@@ -561,6 +551,10 @@ public class TransactionDialog {
 		}
 	}
 
+	public void refreshBankAccounts() {
+		this.refreshBankAccounts(false);
+	}
+
 	private void refreshCategories(final boolean refreshFirst) {
 		final ObservableList<String> categoryNames = FXCollections
 				.observableArrayList(DBUtils.getInstance().getCategoryNames());
@@ -606,27 +600,64 @@ public class TransactionDialog {
 
 	}
 
+	public void refreshCategories() {
+		this.refreshCategories(false);
+	}
+
 	public void close() {
 		final Stage stage = (Stage) this.buttonAdd.getScene().getWindow();
 		stage.close();
-	}
-
-	public void setTransaction(final Transaction transaction) {
-		this.transaction = transaction;
-		this.initTransaction();
-	}
-
-	public void setMainWindow(final MainWindow mainWindow) {
-		this.mainWindow = mainWindow;
 	}
 
 	public ContinuousTransaction getContinuousTransaction() {
 		return this.continuousTransaction;
 	}
 
+	@Override
+	public void inject(final WindowParameters parameters) {
+		Object object = parameters.getParameters().get(MainWindow.class);
+		if (object == null || !(object instanceof MainWindow)) {
+			throw new IllegalArgumentException("mainwindow must be set to create a transaction dialog");
+		}
+		this.mainWindow = (MainWindow) object;
+
+		object = parameters.getParameters().get(Transaction.class);
+		if (object != null && object instanceof Transaction) {
+			this.transaction = (Transaction) object;
+		}
+
+		object = parameters.getParameters().get(ContinuousTransaction.class);
+		if (object != null && object instanceof ContinuousTransaction) {
+			this.continuousTransaction = (ContinuousTransaction) object;
+		}
+
+		if (this.transaction != null && this.continuousTransaction != null) {
+			throw new IllegalArgumentException(
+					"it's not possible to create a transaction dialog for a transaction and a continuous transaction together");
+		}
+
+		if (this.transaction != null) {
+			this.initTransaction();
+			return;
+		}
+
+		if (this.continuousTransaction != null) {
+			this.initContinuousTransaction();
+			return;
+		}
+
+	}
+
 	public void setContinuousTransaction(final ContinuousTransaction continuousTransaction) {
 		this.continuousTransaction = continuousTransaction;
-		this.initContinuousTransaction();
+	}
+
+	public Transaction getTransaction() {
+		return this.transaction;
+	}
+
+	public void setTransaction(final Transaction transaction) {
+		this.transaction = transaction;
 	}
 
 }

@@ -2,13 +2,15 @@
  * Sample Skeleton for 'DeleteContinuousTransactionDialog.fxml' Controller Class
  */
 
-package com.dimediary.view.design.window;
+package com.dimediary.view.window.transaction;
 
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
 
 import com.dimediary.util.utils.DateUtils;
+import com.dimediary.view.window.util.IWindowParameterInjection;
+import com.dimediary.view.window.util.WindowParameters;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,7 +20,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.stage.Stage;
 
-public class DeleteContinuousTransactionDialog {
+public class DeleteContinuousTransactionDialog implements IWindowParameterInjection {
 
 	private TransactionDialog transactionDialog;
 
@@ -82,11 +84,6 @@ public class DeleteContinuousTransactionDialog {
 		this.radiobuttonUntil.setToggleGroup(toggleGroup);
 	}
 
-	public void setTransactionDialog(final TransactionDialog transactionDialog) {
-		this.transactionDialog = transactionDialog;
-		this.init();
-	}
-
 	private void init() {
 		this.dateUntil.setValue(DateUtils.date2LocalDate(new Date()));
 		this.radiobuttonUntil.setSelected(true);
@@ -95,5 +92,16 @@ public class DeleteContinuousTransactionDialog {
 	private void close() {
 		final Stage stage = (Stage) this.buttonOK.getScene().getWindow();
 		stage.close();
+	}
+
+	@Override
+	public void inject(final WindowParameters parameters) {
+		final Object object = parameters.getParameters().get(TransactionDialog.class);
+		if (object == null || !(object instanceof TransactionDialog)) {
+			throw new IllegalArgumentException(
+					"transaction dialog must be set to create a delete continuous transaction dialog");
+		}
+		this.transactionDialog = (TransactionDialog) object;
+		this.init();
 	}
 }
