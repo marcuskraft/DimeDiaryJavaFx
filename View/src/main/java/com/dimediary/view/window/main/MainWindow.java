@@ -29,6 +29,7 @@ import com.dimediary.view.window.transaction.TransactionDialog;
 import com.dimediary.view.window.util.WindowCreater;
 import com.dimediary.view.window.util.WindowParameters;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -171,7 +172,7 @@ public class MainWindow {
 
 	@FXML
 	void onMenuClose(final ActionEvent event) {
-
+		Platform.exit();
 	}
 
 	@FXML
