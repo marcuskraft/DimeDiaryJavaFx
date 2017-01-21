@@ -117,7 +117,9 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 		this.refreshCategories(true);
 		this.refreshBankAccounts(true);
+
 		this.datePicker.setValue(DateUtils.date2LocalDate(new Date()));
+
 		this.textFieldName.setText("");
 
 		final SpinnerValueFactory<Double> spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(
@@ -629,6 +631,11 @@ public class TransactionDialog implements IWindowParameterInjection {
 		object = parameters.getParameters().get(ContinuousTransaction.class);
 		if (object != null && object instanceof ContinuousTransaction) {
 			this.continuousTransaction = (ContinuousTransaction) object;
+		}
+
+		object = parameters.getParameters().get(Date.class);
+		if (object != null && object instanceof Date) {
+			this.datePicker.setValue(DateUtils.date2LocalDate((Date) object));
 		}
 
 		if (this.transaction != null && this.continuousTransaction != null) {

@@ -6,6 +6,7 @@ package com.dimediary.view.window.main;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Month;
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ import com.dimediary.view.window.bankaccount.BankaccountCategoryDialog;
 import com.dimediary.view.window.category.CategoryDialog;
 import com.dimediary.view.window.transaction.TransactionButtonFactory;
 import com.dimediary.view.window.transaction.TransactionDialog;
+import com.dimediary.view.window.util.GridPaneUtils;
 import com.dimediary.view.window.util.WindowCreater;
 import com.dimediary.view.window.util.WindowParameters;
 
@@ -35,7 +37,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -47,7 +51,10 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.RowConstraints;
 
 public class MainWindow {
 
@@ -153,6 +160,7 @@ public class MainWindow {
 		assert this.SpinnerYear != null : "fx:id=\"SpinnerYear\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert this.buttonAddTransaction != null : "fx:id=\"buttonAddTransaction\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
+		this.checkboxAccountlessTransactions.setSelected(true);
 		this.init();
 
 	}
@@ -184,7 +192,7 @@ public class MainWindow {
 
 	@FXML
 	void onAccountlessTransactions(final ActionEvent event) {
-
+		this.refreshMonthOverview();
 	}
 
 	@FXML
@@ -344,20 +352,30 @@ public class MainWindow {
 		int maxTransaction = 0;
 		for (final Date date : dates) {
 			final List<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount, date);
-			// if (Main.getMainWindow().isAccountlessTransactionsEnabled()) {
-			// transactions.addAll(DBUtils.getInstance().getTrandactionsWithoutAccount(date));
-			// }
+			if (this.checkboxAccountlessTransactions.isSelected()) {
+				transactions.addAll(DBUtils.getInstance().getTrandactionsWithoutAccount(date));
+			}
 			transactionsForDates.put(date, new ArrayList<Transaction>(transactions));
 			if (transactions.size() > maxTransaction) {
 				maxTransaction = transactions.size();
 			}
 		}
 
+		final ArrayList<RowConstraints> rowConstraints = new ArrayList<>();
+		for (int i = 0; i < dates.size() + 1; i++) {
+			final RowConstraints rowConstraint = new RowConstraints();
+			rowConstraint.setPercentHeight(100 / (dates.size() + 1));
+			rowConstraints.add(rowConstraint);
+		}
+
 		final GridPane gridPane = new GridPane();
+		gridPane.getRowConstraints().addAll(rowConstraints);
 
 		gridPane.add(new Label("Datum"), 0, 0);
 		gridPane.add(new Label("Wochentag"), 1, 0);
 		gridPane.add(new Label("Kontostand"), 2, 0);
+
+		final MainWindow mainWindow = this;
 
 		final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
 		final SimpleDateFormat simpleDateFormatDay = new SimpleDateFormat("E");
@@ -382,10 +400,55 @@ public class MainWindow {
 						i);
 			}
 
+			for (int j = transactions.size(); j < maxTransaction; j++) {
+				final Pane pane = new Pane();
+
+				pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+					@Override
+					public void handle(final MouseEvent event) {
+						if (event.getClickCount() < 2) {
+							return;
+						}
+						final Node nodeClicked = event.getPickResult().getIntersectedNode();
+						if (nodeClicked == null) {
+							return;
+						}
+						final Integer rowIndex = GridPane.getRowIndex(nodeClicked);
+						if (rowIndex == null) {
+							return;
+						}
+						final Node node = GridPaneUtils.getGridPaneCell(gridPane, rowIndex, 0);
+						Label dateLabel = null;
+						Date date = null;
+						if (node != null && node instanceof Label) {
+							dateLabel = (Label) node;
+						}
+						if (dateLabel != null) {
+							try {
+								date = simpleDateFormat.parse(dateLabel.getText());
+							} catch (final ParseException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						if (date != null) {
+							final WindowParameters parameters = new WindowParameters();
+							parameters.put(MainWindow.class, mainWindow);
+							parameters.put(Date.class, date);
+							final WindowCreater<TransactionDialog> windowCreater = new WindowCreater<>();
+							windowCreater.createWindow(Main.class.getResource("design/window/TransactionDialog.fxml"),
+									"Transaktion erstellen / bearbeiten", parameters);
+						}
+					}
+				});
+				gridPane.add(pane, 3 + j, i);
+			}
+
 		}
 
 		final ScrollPane scrollPane = new ScrollPane(gridPane);
 		this.month2Tabs.get(month).setContent(scrollPane);
+		gridPane.setMinSize(0, 0);
 		gridPane.setGridLinesVisible(true);
 
 	}
