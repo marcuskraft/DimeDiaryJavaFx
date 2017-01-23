@@ -8,6 +8,10 @@ import com.dimediary.view.window.util.WindowParameters;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
 
 public class TransactionButtonFactory {
 
@@ -33,6 +37,23 @@ public class TransactionButtonFactory {
 							"Transaktion erstellen / bearbeiten", parameters);
 				}
 
+			}
+		});
+
+		transactionButton.setOnDragDetected(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(final MouseEvent event) {
+				/* allow any transfer mode */
+				final Dragboard db = transactionButton.startDragAndDrop(TransferMode.MOVE);
+
+				/* put a string on dragboard */
+				final ClipboardContent content = new ClipboardContent();
+				content.putString(transaction.getId().toString());
+
+				db.setContent(content);
+
+				event.consume();
 			}
 		});
 

@@ -214,6 +214,10 @@ public class DBUtils {
 		}
 	}
 
+	public Transaction getTransaction(final Integer id) {
+		return this.entityManager.find(Transaction.class, id);
+	}
+
 	/**
 	 *
 	 * @param dateFrom

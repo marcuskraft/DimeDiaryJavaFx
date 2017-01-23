@@ -6,7 +6,6 @@ package com.dimediary.view.window.main;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Month;
 import java.util.ArrayList;
@@ -25,9 +24,9 @@ import com.dimediary.view.Main;
 import com.dimediary.view.window.bankaccount.BankAccountDialog;
 import com.dimediary.view.window.bankaccount.BankaccountCategoryDialog;
 import com.dimediary.view.window.category.CategoryDialog;
+import com.dimediary.view.window.transaction.TransactionButton;
 import com.dimediary.view.window.transaction.TransactionButtonFactory;
 import com.dimediary.view.window.transaction.TransactionDialog;
-import com.dimediary.view.window.util.GridPaneUtils;
 import com.dimediary.view.window.util.WindowCreater;
 import com.dimediary.view.window.util.WindowParameters;
 
@@ -39,7 +38,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -51,7 +50,11 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.input.TransferMode;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
@@ -368,8 +371,20 @@ public class MainWindow {
 			rowConstraints.add(rowConstraint);
 		}
 
+		final ArrayList<ColumnConstraints> columnConstraints = new ArrayList<>();
+		for (int i = 0; i < maxTransaction + 4; i++) {
+			final ColumnConstraints columnConstraint = new ColumnConstraints();
+			columnConstraint.setMinWidth(50);
+			columnConstraint.setMaxWidth(200);
+			columnConstraints.add(columnConstraint);
+		}
+
+		final Insets insets = new Insets(5, 5, 5, 5);
+
 		final GridPane gridPane = new GridPane();
+		gridPane.setPadding(insets);
 		gridPane.getRowConstraints().addAll(rowConstraints);
+		gridPane.getColumnConstraints().addAll(columnConstraints);
 
 		gridPane.add(new Label("Datum"), 0, 0);
 		gridPane.add(new Label("Wochentag"), 1, 0);
@@ -388,59 +403,31 @@ public class MainWindow {
 				balanceString = balance.toString();
 			}
 
-			gridPane.add(new Label(simpleDateFormat.format(dates.get(i - 1))), 0, i);
-			gridPane.add(new Label(simpleDateFormatDay.format(dates.get(i - 1))), 1, i);
-			gridPane.add(new Label(balanceString), 2, i);
+			final Label labelDate = new Label(simpleDateFormat.format(dates.get(i - 1)));
+			final Label labelDay = new Label(simpleDateFormatDay.format(dates.get(i - 1)));
+			final Label labelBalance = new Label(balanceString);
 
-			final ArrayList<Transaction> transactions = transactionsForDates.get(dates.get(i - 1));
+			labelDate.setPadding(insets);
+			labelBalance.setPadding(insets);
+			labelDay.setPadding(insets);
+
+			gridPane.add(labelBalance, 2, i);
+			gridPane.add(labelDate, 0, i);
+			gridPane.add(labelDay, 1, i);
+
+			final Date date = dates.get(i - 1);
+			final ArrayList<Transaction> transactions = transactionsForDates.get(date);
 
 			for (int j = 0; j < transactions.size(); j++) {
 				final String text = transactions.get(j).getName() + " : " + transactions.get(j).getAmount();
-				gridPane.add(TransactionButtonFactory.createTransactionButton(text, transactions.get(j), this), 3 + j,
-						i);
+				final TransactionButton transactionButton = TransactionButtonFactory.createTransactionButton(text,
+						transactions.get(j), this);
+				transactionButton.setPadding(insets);
+				gridPane.add(transactionButton, 3 + j, i);
 			}
 
-			for (int j = transactions.size(); j < maxTransaction; j++) {
-				final Pane pane = new Pane();
-
-				pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-					@Override
-					public void handle(final MouseEvent event) {
-						if (event.getClickCount() < 2) {
-							return;
-						}
-						final Node nodeClicked = event.getPickResult().getIntersectedNode();
-						if (nodeClicked == null) {
-							return;
-						}
-						final Integer rowIndex = GridPane.getRowIndex(nodeClicked);
-						if (rowIndex == null) {
-							return;
-						}
-						final Node node = GridPaneUtils.getGridPaneCell(gridPane, rowIndex, 0);
-						Label dateLabel = null;
-						Date date = null;
-						if (node != null && node instanceof Label) {
-							dateLabel = (Label) node;
-						}
-						if (dateLabel != null) {
-							try {
-								date = simpleDateFormat.parse(dateLabel.getText());
-							} catch (final ParseException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-						}
-						if (date != null) {
-							final WindowParameters parameters = new WindowParameters();
-							parameters.put(MainWindow.class, mainWindow);
-							parameters.put(Date.class, date);
-							final WindowCreater<TransactionDialog> windowCreater = new WindowCreater<>();
-							windowCreater.createWindow(Main.class.getResource("design/window/TransactionDialog.fxml"),
-									"Transaktion erstellen / bearbeiten", parameters);
-						}
-					}
-				});
+			for (int j = transactions.size(); j < maxTransaction + 1; j++) {
+				final Pane pane = this.getEmptyPane(mainWindow, date);
 				gridPane.add(pane, 3 + j, i);
 			}
 
@@ -451,6 +438,63 @@ public class MainWindow {
 		gridPane.setMinSize(0, 0);
 		gridPane.setGridLinesVisible(true);
 
+	}
+
+	private Pane getEmptyPane(final MainWindow mainWindow, final Date date) {
+		final Pane pane = new Pane();
+
+		pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(final MouseEvent event) {
+				if (event.getClickCount() < 2) {
+					return;
+				}
+				if (date != null) {
+					final WindowParameters parameters = new WindowParameters();
+					parameters.put(MainWindow.class, mainWindow);
+					parameters.put(Date.class, date);
+					final WindowCreater<TransactionDialog> windowCreater = new WindowCreater<>();
+					windowCreater.createWindow(Main.class.getResource("design/window/TransactionDialog.fxml"),
+							"Transaktion erstellen / bearbeiten", parameters);
+				}
+			}
+		});
+
+		pane.setOnDragDropped(new EventHandler<DragEvent>() {
+
+			@Override
+			public void handle(final DragEvent event) {
+				final Dragboard dragboard = event.getDragboard();
+				final String idString = dragboard.getString();
+				if (idString == null) {
+					return;
+				}
+				final Integer id = Integer.valueOf(idString);
+				if (id == null) {
+					return;
+				}
+				final Transaction transaction = DBUtils.getInstance().getTransaction(id);
+				if (transaction.getContinuousTransaction() == null) {
+					final Transaction transactionNew = transaction.getCopy();
+					DBUtils.getInstance().delete(transaction);
+					transactionNew.setDate(date);
+					DBUtils.getInstance().persist(transactionNew);
+					mainWindow.refreshMonthOverview();
+				}
+				event.setDropCompleted(true);
+				event.consume();
+			}
+		});
+
+		pane.setOnDragOver(new EventHandler<DragEvent>() {
+
+			@Override
+			public void handle(final DragEvent event) {
+				event.acceptTransferModes(TransferMode.MOVE);
+				event.consume();
+			}
+		});
+		return pane;
 	}
 
 	private Month findMonth(final Tab tab) {
