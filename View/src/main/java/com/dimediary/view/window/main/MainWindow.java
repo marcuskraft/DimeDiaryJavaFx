@@ -231,6 +231,7 @@ public class MainWindow {
 			yearChange = true;
 		} else {
 			final Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.DAY_OF_MONTH, 1);
 			calendar.set(Calendar.MONTH, month.getValue() - 2);
 			// minus 1 because shift between month as value and enum and minus 1
 			// because we want to shift by one month
@@ -257,6 +258,7 @@ public class MainWindow {
 			yearChange = true;
 		} else {
 			final Calendar calendar = Calendar.getInstance();
+			calendar.set(Calendar.DAY_OF_MONTH, 1);
 			calendar.set(Calendar.MONTH, month.getValue());
 			// minus 1 because shift between month as value and enum and plus 1
 			// because we want to shift by one month

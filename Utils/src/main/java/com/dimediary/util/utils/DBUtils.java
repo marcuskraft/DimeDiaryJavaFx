@@ -9,6 +9,9 @@ import javax.persistence.NoResultException;
 import javax.persistence.RollbackException;
 import javax.persistence.TypedQuery;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.dimediary.model.EntityManagerHelper;
 import com.dimediary.model.entities.BalanceHistory;
 import com.dimediary.model.entities.BalanceHistoryPK;
@@ -27,6 +30,8 @@ import com.dimediary.util.balance.AccountBalancer.BalanceAction;
  *
  */
 public class DBUtils {
+
+	private final static Logger log = LogManager.getLogger(DBUtils.class);
 
 	private EntityManager entityManager;
 
@@ -63,6 +68,8 @@ public class DBUtils {
 	 * @return names of all bank accounts
 	 */
 	public ArrayList<String> getBankAccountNames() {
+		final UnsupportedOperationException exception = new UnsupportedOperationException("test");
+		DBUtils.log.error("testing", exception);
 		final ArrayList<String> names = new ArrayList<>();
 
 		final TypedQuery<BankAccount> query = this.entityManager.createNamedQuery("allBankAccounts", BankAccount.class);

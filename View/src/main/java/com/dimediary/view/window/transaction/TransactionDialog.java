@@ -122,13 +122,19 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 		this.textFieldName.setText("");
 
-		final SpinnerValueFactory<Double> spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(
-				-TransactionDialog.MAX_AMOUNT, TransactionDialog.MAX_AMOUNT, 0.0) {
+		final SpinnerValueFactory<Double> spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(0.0,
+				TransactionDialog.MAX_AMOUNT, 0.0) {
 
 		};
-		this.spinnerAmount.setEditable(true);
 
 		this.spinnerAmount.setValueFactory(spinnerValueFactory);
+		this.spinnerAmount.setEditable(true);
+		this.spinnerAmount.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue) {
+				this.spinnerAmount.increment(0); // won't change value, but will
+													// commit editor
+			}
+		});
 
 		this.buttonDelete.setDisable(true);
 		this.buttonModify.setDisable(true);
