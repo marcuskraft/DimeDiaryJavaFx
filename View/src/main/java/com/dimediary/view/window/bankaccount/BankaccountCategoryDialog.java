@@ -10,6 +10,9 @@ import java.util.ResourceBundle;
 
 import javax.persistence.RollbackException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.dimediary.model.entities.BankAccountCategory;
 import com.dimediary.util.utils.DBUtils;
 import com.dimediary.view.window.util.IWindowParameterInjection;
@@ -28,6 +31,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class BankaccountCategoryDialog implements IWindowParameterInjection {
+
+	private final static Logger log = LogManager.getLogger(DBUtils.class);
 
 	private BankAccountDialog bankAccountDialog;
 	private ObservableList<String> items;
@@ -74,6 +79,7 @@ public class BankaccountCategoryDialog implements IWindowParameterInjection {
 		try {
 			DBUtils.getInstance().deleteBankAccountCategories(bankAccountCategoryNames);
 		} catch (final RollbackException e) {
+			BankaccountCategoryDialog.log.warn(e);
 			final Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Fehler");
 			alert.setHeaderText("Konto verknüpft!");

@@ -1,5 +1,8 @@
 package com.dimediary.view;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.dimediary.util.utils.DBUtils;
 
 import javafx.application.Application;
@@ -10,12 +13,15 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+	private final static Logger log = LogManager.getLogger(DBUtils.class);
+
 	public static void main(final String[] args) {
-		Application.launch(args);
-	}
-
-	public static void initialize() {
-
+		try {
+			Application.launch(args);
+		} catch (final Exception e) {
+			DBUtils.getInstance().close();
+			Main.log.error(e);
+		}
 	}
 
 	@Override
