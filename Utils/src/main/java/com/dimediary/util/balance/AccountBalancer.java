@@ -76,7 +76,7 @@ public class AccountBalancer {
 	}
 
 	// TODO write junit test for this method in comparison to the other
-	// getBalance() method
+	// getBalance() method test
 	private static Double getBalance(final BankAccount bankAccount, final Date date, final Double balanceDayBefore) {
 		if (bankAccount == null || date == null || date.before(bankAccount.getDateStartBudget())) {
 			return null;
