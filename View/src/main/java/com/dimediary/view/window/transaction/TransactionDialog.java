@@ -43,12 +43,6 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 	public static final Double MAX_AMOUNT = 999999999.99;
 
-	@FXML // fx:id="buttonDelete"
-	private Button buttonDelete; // Value injected by FXMLLoader
-
-	@FXML // fx:id="buttonModify"
-	private Button buttonModify; // Value injected by FXMLLoader
-
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
 
@@ -136,9 +130,6 @@ public class TransactionDialog implements IWindowParameterInjection {
 			}
 		});
 
-		this.buttonDelete.setDisable(true);
-		this.buttonModify.setDisable(true);
-		this.buttonAdd.setDisable(false);
 		this.buttonIterate.setDisable(true);
 	}
 
@@ -154,9 +145,6 @@ public class TransactionDialog implements IWindowParameterInjection {
 		}
 		this.refreshCategories(true);
 		this.refreshBankAccounts(true);
-		this.buttonDelete.setDisable(false);
-		this.buttonModify.setDisable(false);
-		this.buttonAdd.setDisable(true);
 		this.buttonIterate.setDisable(true);
 
 		this.datePicker.setValue(DateUtils.date2LocalDate(this.transaction.getDate()));
@@ -175,9 +163,6 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 		this.refreshCategories(true);
 		this.refreshBankAccounts(true);
-		this.buttonDelete.setDisable(false);
-		this.buttonModify.setDisable(false);
-		this.buttonAdd.setDisable(true);
 
 		this.checkBoxIterate.setSelected(true);
 		this.checkBoxIterate.setDisable(true);
@@ -204,38 +189,16 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 	@FXML
 	void onButtonAdd(final ActionEvent event) {
-		if (this.checkBoxIterate.isSelected()) {
-			this.addContinuousTransaction();
-		} else {
-			this.addSingleTransaction();
-		}
-	}
-
-	@FXML
-	void onDelete(final ActionEvent event) {
-		if (this.transaction != null) {
-			DBUtils.getInstance().delete(this.transaction);
-		} else if (this.continuousTransaction != null) {
-			this.deleteContinuousTransaction();
-		} else {
-			throw new IllegalStateException(
-					"TransactionDialog has no transaction or continuous transaction to delete after clicking the delete button!");
-		}
-		if (this.mainWindow != null) {
-			this.mainWindow.refreshMonthOverview();
-		}
-		this.close();
-	}
-
-	@FXML
-	void onModify(final ActionEvent event) {
 		if (this.transaction != null) {
 			this.mergeTransaction();
 		} else if (this.continuousTransaction != null) {
 			this.mergeContinuousTransaction();
 		} else {
-			throw new IllegalStateException(
-					"TransactionDialog has no transaction or continuous transaction to modify after clicking the modify button!");
+			if (this.checkBoxIterate.isSelected()) {
+				this.addContinuousTransaction();
+			} else {
+				this.addSingleTransaction();
+			}
 		}
 	}
 
@@ -302,11 +265,6 @@ public class TransactionDialog implements IWindowParameterInjection {
 			this.comboBoxAccount.setEditable(true);
 			this.refreshBankAccounts(false);
 		}
-	}
-
-	private void deleteContinuousTransaction() {
-		// TODO Auto-generated method stub
-
 	}
 
 	private void mergeContinuousTransaction() {

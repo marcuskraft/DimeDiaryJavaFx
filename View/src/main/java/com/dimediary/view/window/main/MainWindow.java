@@ -466,19 +466,23 @@ public class MainWindow {
 
 			@Override
 			public void handle(final DragEvent event) {
+
+				final Transaction transaction;
 				final Dragboard dragboard = event.getDragboard();
-				final String idString = dragboard.getString();
-				if (idString == null) {
+
+				final Object object = dragboard.getContent(TransactionButtonFactory.KEY_TRANSACTION);
+
+				if (object instanceof Transaction) {
+					transaction = (Transaction) object;
+				} else {
 					return;
 				}
-				final Integer id = Integer.valueOf(idString);
-				if (id == null) {
-					return;
-				}
-				final Transaction transaction = DBUtils.getInstance().getTransaction(id);
+
 				if (transaction.getContinuousTransaction() == null) {
 					final Transaction transactionNew = transaction.getCopy();
-					DBUtils.getInstance().delete(transaction);
+					if (dragboard.getTransferModes().contains(TransferMode.MOVE)) {
+						DBUtils.getInstance().delete(transaction);
+					}
 					transactionNew.setDate(date);
 					DBUtils.getInstance().persist(transactionNew);
 					mainWindow.refreshMonthOverview();
@@ -492,10 +496,11 @@ public class MainWindow {
 
 			@Override
 			public void handle(final DragEvent event) {
-				event.acceptTransferModes(TransferMode.MOVE);
+				event.acceptTransferModes(TransferMode.COPY_OR_MOVE);
 				event.consume();
 			}
 		});
+
 		return pane;
 	}
 

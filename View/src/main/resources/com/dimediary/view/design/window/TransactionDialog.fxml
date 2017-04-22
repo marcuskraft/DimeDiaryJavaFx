@@ -21,9 +21,7 @@
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-          <Button fx:id="buttonAdd" mnemonicParsing="false" onAction="#onButtonAdd" text="Hinzufügen" />
-            <Button fx:id="buttonDelete" mnemonicParsing="false" onAction="#onDelete" text="Löschen" />
-            <Button fx:id="buttonModify" mnemonicParsing="false" onAction="#onModify" text="Ändern" />
+          <Button fx:id="buttonAdd" mnemonicParsing="false" onAction="#onButtonAdd" text="OK" />
             <Button fx:id="buttonCancel" mnemonicParsing="false" onAction="#onButtonCancel" text="Abbrechen" />
         </buttons>
       </ButtonBar>

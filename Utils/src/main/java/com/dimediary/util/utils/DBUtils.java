@@ -831,8 +831,12 @@ public class DBUtils {
 			}
 
 			AccountBalancer.updateBalance(transaction, BalanceAction.deleting);
-
-			this.entityManager.remove(transaction);
+			if (!this.entityManager.contains(transaction)) {
+				final Transaction transactionLocal = this.entityManager.merge(transaction);
+				this.entityManager.remove(transactionLocal);
+			} else {
+				this.entityManager.remove(transaction);
+			}
 
 			if (ownTransaction) {
 				this.entityManager.getTransaction().commit();
