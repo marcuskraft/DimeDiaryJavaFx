@@ -9,7 +9,6 @@ import java.util.ResourceBundle;
 
 import com.dimediary.model.entities.Category;
 import com.dimediary.util.utils.DBUtils;
-import com.dimediary.view.window.transaction.TransactionDialog;
 import com.dimediary.view.window.util.IWindowParameterInjection;
 import com.dimediary.view.window.util.WindowParameters;
 
@@ -25,7 +24,6 @@ import javafx.stage.Stage;
 
 public class CategoryDialog implements IWindowParameterInjection {
 
-	private TransactionDialog transactionDialog;
 	private ObservableList<String> items;
 
 	@FXML // ResourceBundle that was given to the FXMLLoader
@@ -98,16 +96,10 @@ public class CategoryDialog implements IWindowParameterInjection {
 
 	@Override
 	public void inject(final WindowParameters parameters) {
-		final Object object = parameters.getParameters().get(TransactionDialog.class);
-		if (object != null && object instanceof TransactionDialog) {
-			this.transactionDialog = (TransactionDialog) object;
-		}
+
 	}
 
 	public void close() {
-		if (this.transactionDialog != null) {
-			this.transactionDialog.refreshCategories();
-		}
 		final Stage stage = (Stage) this.okButton.getScene().getWindow();
 		stage.close();
 	}

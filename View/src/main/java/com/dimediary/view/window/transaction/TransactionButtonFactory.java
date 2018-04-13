@@ -61,7 +61,7 @@ public class TransactionButtonFactory {
 						}
 					}
 					if (mainWindow != null) {
-						mainWindow.refreshMonthOverview();
+						mainWindow.refresh();
 					}
 					event.consume();
 					break;

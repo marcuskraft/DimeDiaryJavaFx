@@ -71,7 +71,6 @@ public class Transaction implements Serializable {
 	private Date timestamp;
 
 	@ManyToOne
-	@JoinColumn(name = "CONTINUOUS_TRANSACTION_ID")
 	private ContinuousTransaction continuousTransaction;
 
 	@PrePersist
@@ -143,14 +142,6 @@ public class Transaction implements Serializable {
 		this.timestamp = timestamp;
 	}
 
-	public ContinuousTransaction getContinuousTransaction() {
-		return this.continuousTransaction;
-	}
-
-	public void setContinuousTransaction(final ContinuousTransaction continuousTransaction) {
-		this.continuousTransaction = continuousTransaction;
-	}
-
 	public Transaction getCopy() {
 		final Transaction transaction = new Transaction();
 		transaction.setAmount(this.getAmount());
@@ -161,6 +152,14 @@ public class Transaction implements Serializable {
 		transaction.setName(this.getName());
 		transaction.setUser(this.getUser());
 		return transaction;
+	}
+
+	public ContinuousTransaction getContinuousTransaction() {
+		return this.continuousTransaction;
+	}
+
+	public void setContinuousTransaction(final ContinuousTransaction continuousTransaction) {
+		this.continuousTransaction = continuousTransaction;
 	}
 
 }
