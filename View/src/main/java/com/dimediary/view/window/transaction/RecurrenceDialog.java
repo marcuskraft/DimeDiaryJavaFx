@@ -69,7 +69,7 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 
 	private static final ObservableList<String> FREQUENCES_LIST = FXCollections.observableArrayList(
 			Frequences.MONTHLY.getText(), Frequences.WEEKLY.getText(), Frequences.DAILY.getText(),
-			Frequences.YEARLY.getText());
+			Frequences.YEARLY.getText(), Frequences.NONE.getText());
 
 	private static final int MAX_DAY_OF_MONTH = 366;
 	private static final int MAX_INTERVALL = 10000;
@@ -279,7 +279,7 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 		assert this.sonntagComboBox != null : "fx:id=\"sonntagComboBox\" was not injected: check your FXML file 'RecurrenceDialog.fxml'.";
 
 		this.frequenceCheckbox.setItems(RecurrenceDialog.FREQUENCES_LIST);
-		this.frequenceCheckbox.setValue(RecurrenceDialog.FREQUENCES_LIST.get(0));
+		this.frequenceCheckbox.setValue(Frequences.NONE.getText());
 
 		final SpinnerValueFactory<Integer> intervallSpinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(
 				1, RecurrenceDialog.MAX_INTERVALL, 1);
@@ -328,18 +328,9 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 		this.noEndRadioButton.setSelected(true);
 
 		this.untilDatepicker.setValue(DateUtils.date2LocalDate(new Date()));
-		this.untilDatepicker.setDisable(true);
 
-		final boolean disableDayOfWeek = true;
-		this.montagComboBox.setDisable(disableDayOfWeek);
-		this.dienstagComboBox.setDisable(disableDayOfWeek);
-		this.mittwochComboBox.setDisable(disableDayOfWeek);
-		this.donnerstagComboBox.setDisable(disableDayOfWeek);
-		this.freitagComboBox.setDisable(disableDayOfWeek);
-		this.samstagComboBox.setDisable(disableDayOfWeek);
-		this.sonntagComboBox.setDisable(disableDayOfWeek);
+		this.onFrequenceCheckbox(null);
 
-		this.countSpinner.setDisable(true);
 	}
 
 	@Override
@@ -396,6 +387,8 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 			this.untilRadiobutton.setSelected(true);
 			this.untilDatepicker.setValue(DateUtils.dateTimeToLocalDate(recurrenceRule.getUntil()));
 		}
+
+		this.onFrequenceCheckbox(null);
 
 	}
 

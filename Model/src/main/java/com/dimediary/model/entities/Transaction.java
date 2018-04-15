@@ -30,7 +30,7 @@ import com.dimediary.model.utils.AmountUtils;
 		@NamedQuery(name = "TransactionsWithoutAccountBetween", query = "from Transaction t where t.bankAccount is null and t.date BETWEEN :dateFrom"
 				+ " AND :dateUntil ORDER BY t.date"),
 		@NamedQuery(name = "TransactionsWithoutAccount", query = "from Transaction t where t.bankAccount is null and t.date = :date"),
-		@NamedQuery(name = Transaction.DATE_OF_LAST_TRANSACTION_OF_CONTINUOUS_TRANSACTION, query = "SELECT MAX(date) from Transaction t WHERE t.continuousTransaction = :continuousTransaction AND ") })
+		@NamedQuery(name = Transaction.DATE_OF_LAST_TRANSACTION_OF_CONTINUOUS_TRANSACTION, query = "SELECT MAX(date) from Transaction t WHERE t.continuousTransaction = :continuousTransaction") })
 @Entity
 @Table(name = "TRANSACTIONS")
 public class Transaction implements Serializable {
