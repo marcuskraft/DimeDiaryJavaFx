@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -17,7 +19,11 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "CONTINUOUS_TRANSACTION")
+@NamedQueries({
+		@NamedQuery(name = ContinuousTransaction.CONTINUOUS_TRANSACTION_FOR_BANK_ACCOUNT, query = "from ContinuousTransaction WHERE bankAccount = :bankAccount") })
 public class ContinuousTransaction implements Serializable {
+
+	public static final String CONTINUOUS_TRANSACTION_FOR_BANK_ACCOUNT = "continuousTransactionForBankAccount";
 
 	/**
 	 *
@@ -132,6 +138,17 @@ public class ContinuousTransaction implements Serializable {
 
 	public void setRecurrenceRule(final String recurrenceRule) {
 		this.recurrenceRule = recurrenceRule;
+	}
+
+	public Transaction createTransaction(Date date) {
+		final Transaction transaction = new Transaction();
+		transaction.setAmount(this.getAmount());
+		transaction.setBankAccount(this.getBankAccount());
+		transaction.setCategory(this.getCategory());
+		transaction.setContinuousTransaction(this);
+		transaction.setDate(date);
+		transaction.setName(this.getName());
+		return transaction;
 	}
 
 }

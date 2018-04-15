@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.dmfs.rfc5545.DateTime;
+
 import com.dimediary.model.entities.BankAccount;
 
 /**
@@ -67,8 +69,8 @@ public class DateUtils {
 	/**
 	 *
 	 * @param date
-	 * @return next sunday corresponding to the given date. The next sunday will
-	 *         be returned even if the given date is already a sunday.
+	 * @return next sunday corresponding to the given date. The next sunday will be
+	 *         returned even if the given date is already a sunday.
 	 */
 	public static Date getNextSunday(final Date date) {
 		final Calendar calendar = Calendar.getInstance();
@@ -95,9 +97,9 @@ public class DateUtils {
 	 *
 	 * @param bankAccount
 	 * @param dateFrom
-	 * @return list of sundays from the dateFrom on or if this is null the
-	 *         creation date of the given bank account until 108 weeks in the
-	 *         future related to the actual date
+	 * @return list of sundays from the dateFrom on or if this is null the creation
+	 *         date of the given bank account until 108 weeks in the future related
+	 *         to the actual date
 	 */
 	public static ArrayList<Date> getAllSundaysForBalancing(final BankAccount bankAccount, final Date dateFrom) {
 		final ArrayList<Date> sundays = new ArrayList<>();
@@ -155,13 +157,19 @@ public class DateUtils {
 	/**
 	 *
 	 * @param date
-	 * @return date which is one day in the future corresponding to the given
-	 *         date
+	 * @return date which is one day in the future corresponding to the given date
 	 */
 	public static Date addOneDay(final Date date) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
 		calendar.add(Calendar.DAY_OF_WEEK, 1);
+		return calendar.getTime();
+	}
+
+	public static Date AddMonth(Date date, Integer month) {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH, month);
 		return calendar.getTime();
 	}
 
@@ -291,6 +299,22 @@ public class DateUtils {
 
 	public static LocalDate date2LocalDate(final Date date) {
 		return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+
+	public static DateTime localDateTimeToDateTime(LocalDate localDate) {
+		return new DateTime(localDateToDate(localDate).getTime());
+	}
+
+	public static LocalDate dateTimeToLocalDate(DateTime dateTime) {
+		return Instant.ofEpochMilli(dateTime.getTimestamp()).atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+
+	public static Date dateTimeToDate(DateTime dateTime) {
+		return new Date(dateTime.getTimestamp());
+	}
+
+	public static DateTime dateToDateTime(Date date) {
+		return new DateTime(date.getTime());
 	}
 
 }

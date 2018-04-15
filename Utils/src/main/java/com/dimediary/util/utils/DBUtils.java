@@ -222,8 +222,8 @@ public class DBUtils {
 	 *            bank account
 	 * @param date
 	 *            date
-	 * @return list of balance histories for this bank account after the given
-	 *         date (including the given date)
+	 * @return list of balance histories for this bank account after the given date
+	 *         (including the given date)
 	 */
 	public ArrayList<BalanceHistory> getBalanceHistoriesAfterDate(final BankAccount bankAccount, final Date date) {
 		if (bankAccount == null || date == null) {
@@ -298,8 +298,8 @@ public class DBUtils {
 	 * @param dateFrom
 	 * @param dateUntil
 	 * @param bankAccount
-	 * @return list of transactions belonging to the given bank account between
-	 *         the two dates (including both days)
+	 * @return list of transactions belonging to the given bank account between the
+	 *         two dates (including both days)
 	 */
 	public List<Transaction> getTransactions(final Date dateFrom, final Date dateUntil, final BankAccount bankAccount) {
 		if (dateFrom == null || dateUntil == null || bankAccount == null) {
@@ -358,8 +358,8 @@ public class DBUtils {
 	 *
 	 * @param continuousTransaction
 	 * @param date
-	 * @return list of transactions belonging to this continuous transaction
-	 *         after the given date (inclusive)
+	 * @return list of transactions belonging to this continuous transaction after
+	 *         the given date (inclusive)
 	 */
 	public ArrayList<Transaction> getTransactionsFromDate(final ContinuousTransaction continuousTransaction,
 			final Date date) {
@@ -431,6 +431,32 @@ public class DBUtils {
 				.createNamedQuery("TransactionsWithoutAccount", Transaction.class).setParameter("date", date)
 				.getResultList();
 		return new ArrayList<Transaction>(transactions);
+	}
+
+	/**
+	 *
+	 * @param bankAccount
+	 * @return all ContinuousTransactions belonging to this account
+	 */
+	public List<ContinuousTransaction> getContinuousTransactions(BankAccount bankAccount) {
+		if (bankAccount == null) {
+			return null;
+		}
+
+		DBUtils.log.info("geContinuousTransactions for: " + bankAccount.getName());
+		return this.entityManager.createNamedQuery(ContinuousTransaction.CONTINUOUS_TRANSACTION_FOR_BANK_ACCOUNT,
+				ContinuousTransaction.class).setParameter("bankAccount", bankAccount).getResultList();
+	}
+
+	public Date getDateOfLastTransaction(ContinuousTransaction continuousTransaction) {
+		if (continuousTransaction == null) {
+			return null;
+		}
+
+		DBUtils.log.info("getDateOfLastTransaction for: " + continuousTransaction.getName());
+		return this.entityManager
+				.createNamedQuery(Transaction.DATE_OF_LAST_TRANSACTION_OF_CONTINUOUS_TRANSACTION, Date.class)
+				.setParameter("continuousTransaction", continuousTransaction).getSingleResult();
 	}
 
 	/**
@@ -515,7 +541,7 @@ public class DBUtils {
 	 *
 	 * @param transactions
 	 */
-	public void persistTransactions(final ArrayList<Transaction> transactions) {
+	public void persistTransactions(final List<Transaction> transactions) {
 		if (transactions == null || transactions.isEmpty()) {
 			return;
 		}

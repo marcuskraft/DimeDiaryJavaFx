@@ -8,15 +8,19 @@ import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.dmfs.rfc5545.recur.Freq;
 import org.dmfs.rfc5545.recur.RecurrenceRule;
 
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.util.utils.DBUtils;
 import com.dimediary.util.utils.DateUtils;
-import com.dimediary.util.utils.RecurrenceUtils;
+import com.dimediary.util.utils.RecurrenceRuleUtils;
 import com.dimediary.view.Main;
 import com.dimediary.view.window.main.MainWindow;
+import com.dimediary.view.window.transaction.RecurrenceDialog.Frequences;
 import com.dimediary.view.window.util.IWindowParameterInjection;
 import com.dimediary.view.window.util.WindowCreater;
 import com.dimediary.view.window.util.WindowParameters;
@@ -36,7 +40,17 @@ import javafx.stage.Stage;
 
 public class TransactionDialog implements IWindowParameterInjection {
 
+	private final static Logger log = LogManager.getLogger(TransactionDialog.class);
+
 	public static final Double MAX_AMOUNT = 999999999.99;
+
+	private MainWindow mainWindow;
+
+	private Transaction transaction;
+
+	private ContinuousTransaction continuousTransaction;
+
+	private RecurrenceRule recurrenceRule;
 
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -78,12 +92,6 @@ public class TransactionDialog implements IWindowParameterInjection {
 	@FXML // fx:id="buttonCancel"
 	private Button buttonCancel; // Value injected by FXMLLoader
 
-	private MainWindow mainWindow;
-
-	private Transaction transaction;
-
-	private ContinuousTransaction continuousTransaction;
-
 	@FXML
 	void onButtonCancel(final ActionEvent event) {
 		this.close();
@@ -91,8 +99,28 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 	@FXML
 	void onButtonOk(final ActionEvent event) {
+		if (this.transaction != null) {
+			if (this.recurrenceRule == null) {
+				this.changeTransaction();
+			} else {
+				this.changeNewContinuousTransactionFromTransaction();
+			}
+		} else if (this.continuousTransaction != null) {
+			if (this.recurrenceRule == null) {
+				this.changeContinuesTransactionToTransaction();
+			} else {
+				this.changeContinuousTransaction();
+			}
+		} else {
+			if (this.recurrenceRule == null) {
+				this.createNewTransaction();
+			} else {
+				this.createNewContinuousTransaction();
+			}
+		}
 
 		this.mainWindow.refresh();
+		this.close();
 	}
 
 	@FXML
@@ -175,11 +203,11 @@ public class TransactionDialog implements IWindowParameterInjection {
 	}
 
 	public RecurrenceRule getRecurrenceRule() {
-		if (this.continuousTransaction != null) {
-			final String ruleString = this.continuousTransaction.getRecurrenceRule();
-			return RecurrenceUtils.getRecurrenceRule(ruleString);
-		}
-		return null;
+		return this.recurrenceRule;
+	}
+
+	public void setRecurrenceRule(RecurrenceRule recurrenceRule) {
+		this.recurrenceRule = recurrenceRule;
 	}
 
 	public void refreshCategories() {
@@ -304,7 +332,9 @@ public class TransactionDialog implements IWindowParameterInjection {
 		this.checkboxIncome.setSelected(amount > 0.0);
 		this.spinnerAmount.getValueFactory().setValue(Math.abs(amount));
 
-		this.buttonRecurrence.setText(this.continuousTransaction.getRecurrenceRule());
+		this.recurrenceRule = RecurrenceRuleUtils.createRecurrenceRule(this.continuousTransaction.getRecurrenceRule());
+
+		this.setNameOfRecurrenceButton(this.recurrenceRule.getFreq());
 
 	}
 
@@ -321,6 +351,69 @@ public class TransactionDialog implements IWindowParameterInjection {
 		final Double amount = this.transaction.getAmount();
 		this.checkboxIncome.setSelected(amount > 0.0);
 		this.spinnerAmount.getValueFactory().setValue(Math.abs(amount));
+	}
+
+	private void createNewTransaction() {
+		this.transaction = new Transaction();
+		this.setTransactionAttributes(this.transaction);
+		DBUtils.getInstance().persist(this.transaction);
+
+	}
+
+	private void createNewContinuousTransaction() {
+
+	}
+
+	private void changeNewContinuousTransactionFromTransaction() {
+
+	}
+
+	private void changeContinuesTransactionToTransaction() {
+
+	}
+
+	private void changeTransaction() {
+		DBUtils.getInstance().delete(this.transaction);
+		this.createNewTransaction();
+	}
+
+	private void changeContinuousTransaction() {
+
+	}
+
+	private void setTransactionAttributes(Transaction transactionPara) {
+		transactionPara.setAmount(
+				this.checkboxIncome.isSelected() ? this.spinnerAmount.getValue() : -this.spinnerAmount.getValue());
+		transactionPara.setBankAccount(DBUtils.getInstance().getBankAccount(this.comboboxAccount.getValue()));
+		transactionPara.setCategory(DBUtils.getInstance().getCategory(this.comboboxCategory.getValue()));
+		transactionPara.setDate(DateUtils.localDateToDate(this.datepicker.getValue()));
+		transactionPara.setName(this.fieldDescription.getText());
+	}
+
+	public void setNameOfRecurrenceButton(Freq freq) {
+		if (freq == null) {
+			this.buttonRecurrence.setText(Frequences.NONE.getText());
+			return;
+		}
+
+		switch (freq) {
+		case DAILY:
+			this.buttonRecurrence.setText(Frequences.DAILY.getText());
+			break;
+		case MONTHLY:
+			this.buttonRecurrence.setText(Frequences.MONTHLY.getText());
+			break;
+		case WEEKLY:
+			this.buttonRecurrence.setText(Frequences.WEEKLY.getText());
+			break;
+		case YEARLY:
+			this.buttonRecurrence.setText(Frequences.YEARLY.getText());
+			break;
+		default:
+			log.error("no valid RecurrenceRule");
+			throw new IllegalStateException("no valid RecurrenceRule");
+		}
+
 	}
 
 	private void close() {
