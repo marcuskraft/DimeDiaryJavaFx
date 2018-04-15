@@ -360,7 +360,12 @@ public class MainWindow {
 
 		int maxTransaction = 0;
 		for (final Date date : dates) {
-			final List<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount, date);
+			List<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount, date);
+
+			if (transactions == null) {
+				transactions = new ArrayList<>();
+			}
+
 			if (this.checkboxAccountlessTransactions.isSelected()) {
 				transactions.addAll(DBUtils.getInstance().getTrandactionsWithoutAccount(date));
 			}
