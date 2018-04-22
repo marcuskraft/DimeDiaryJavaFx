@@ -760,6 +760,25 @@ public class DBUtils {
 		}
 	}
 
+	public void merge(final List<Transaction> transactions) {
+		if (transactions == null) {
+			return;
+		}
+		DBUtils.log.info("merge Transactions");
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		for (final Transaction transaction : transactions) {
+			this.entityManager.merge(transaction);
+		}
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
 	/**
 	 *
 	 * @param balanceHistories
@@ -999,7 +1018,7 @@ public class DBUtils {
 	 *
 	 * @param transactions
 	 */
-	public void deleteTransactions(final ArrayList<Transaction> transactions) {
+	public void deleteTransactions(final List<Transaction> transactions) {
 		if (transactions == null || transactions.isEmpty()) {
 			return;
 		}

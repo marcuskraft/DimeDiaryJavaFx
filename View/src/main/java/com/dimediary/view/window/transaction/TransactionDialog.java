@@ -295,11 +295,6 @@ public class TransactionDialog implements IWindowParameterInjection {
 			this.transaction = (Transaction) object;
 		}
 
-		object = parameters.getParameters().get(Date.class);
-		if (object != null && object instanceof Date) {
-			this.datepicker.setValue(DateUtils.date2LocalDate((Date) object));
-		}
-
 		object = parameters.getParameters().get(ContinuousTransaction.class);
 		if (object != null && object instanceof ContinuousTransaction) {
 			this.continuousTransaction = (ContinuousTransaction) object;
@@ -312,12 +307,15 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 		if (this.transaction != null) {
 			this.initTransaction();
-			return;
 		}
 
 		if (this.continuousTransaction != null) {
 			this.initContinuousTransaction();
-			return;
+		}
+
+		object = parameters.getParameters().get(Date.class);
+		if (object != null && object instanceof Date) {
+			this.datepicker.setValue(DateUtils.date2LocalDate((Date) object));
 		}
 
 	}
@@ -382,7 +380,8 @@ public class TransactionDialog implements IWindowParameterInjection {
 	}
 
 	private void changeNewContinuousTransactionFromTransaction() {
-
+		DBUtils.getInstance().delete(this.transaction);
+		this.createNewContinuousTransaction();
 	}
 
 	private void changeContinuesTransactionToTransaction() {
@@ -395,7 +394,41 @@ public class TransactionDialog implements IWindowParameterInjection {
 	}
 
 	private void changeContinuousTransaction() {
+		final WindowParameters parameters = new WindowParameters();
+		parameters.put(TransactionDialog.class, this);
+		parameters.put(Date.class, DateUtils.localDateToDate(this.datepicker.getValue()));
+		final WindowCreater<MergeContinuousTransactionDialog> windowCreater = new WindowCreater<>();
+		windowCreater.createWindow(Main.class.getResource("design/window/MergeContinuousTransactionDialog.fxml"),
+				"Ab wann?", parameters);
+	}
 
+	public void changeContinuosTransacationFrom(final Date dateFrom) {
+		if (this.continuousTransaction == null) {
+			throw new IllegalStateException("continuousTransaction should not be null");
+		}
+
+		if (this.recurrenceRule == null) {
+			this.recurrenceRule = RecurrenceRuleUtils
+					.createRecurrenceRule(this.continuousTransaction.getRecurrenceRule());
+		}
+
+		if (dateFrom == null) {
+			DBUtils.getInstance().deleteAllContinuousTransactions(this.continuousTransaction);
+			this.createNewContinuousTransaction();
+		} else {
+			this.datepicker.setValue(DateUtils.date2LocalDate(dateFrom));
+			final List<Transaction> transactionsAfter = DBUtils.getInstance()
+					.getTransactionsFromDate(this.continuousTransaction, dateFrom);
+			DBUtils.getInstance().deleteTransactions(transactionsAfter);
+
+			final List<Transaction> oldTransactions = DBUtils.getInstance().getTransactions(this.continuousTransaction);
+			for (final Transaction transaction : oldTransactions) {
+				transaction.setContinuousTransaction(null);
+			}
+			DBUtils.getInstance().merge(oldTransactions);
+			DBUtils.getInstance().deleteAllContinuousTransactions(this.continuousTransaction);
+			this.createNewContinuousTransaction();
+		}
 	}
 
 	private void setTransactionAttributes(final Transaction transactionPara) {

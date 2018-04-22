@@ -5,6 +5,7 @@
 package com.dimediary.view.window.transaction;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
 
 import com.dimediary.model.entities.ContinuousTransaction;
@@ -23,6 +24,8 @@ import javafx.stage.Stage;
 public class AllTransactionWindow implements IWindowParameterInjection {
 
 	private Transaction transaction;
+
+	private Date date;
 
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -46,6 +49,9 @@ public class AllTransactionWindow implements IWindowParameterInjection {
 		final WindowParameters parameters = new WindowParameters();
 		parameters.put(ContinuousTransaction.class, this.transaction.getContinuousTransaction());
 		parameters.put(MainWindow.class, this.mainWindow);
+		if (this.date != null) {
+			parameters.put(Date.class, this.date);
+		}
 
 		final WindowCreater<TransactionDialog> windowCreater = new WindowCreater<>();
 		windowCreater.createWindow(Main.class.getResource("design/window/TransactionDialog.fxml"),
@@ -105,6 +111,11 @@ public class AllTransactionWindow implements IWindowParameterInjection {
 			throw new IllegalArgumentException("transaction must be set to create a all transaction dialog");
 		}
 		this.setTransaction((Transaction) object);
+
+		object = parameters.getParameters().get(Date.class);
+		if (object != null && object instanceof Date) {
+			this.date = (Date) object;
+		}
 	}
 
 }
