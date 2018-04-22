@@ -6,6 +6,7 @@ package com.dimediary.view.window.transaction;
 
 import java.net.URL;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
@@ -13,8 +14,11 @@ import org.apache.logging.log4j.Logger;
 import org.dmfs.rfc5545.recur.Freq;
 import org.dmfs.rfc5545.recur.RecurrenceRule;
 
+import com.dimediary.model.entities.BankAccount;
+import com.dimediary.model.entities.Category;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
+import com.dimediary.util.transaction.ContinuousTransactionManager;
 import com.dimediary.util.utils.DBUtils;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.util.utils.RecurrenceRuleUtils;
@@ -206,7 +210,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 		return this.recurrenceRule;
 	}
 
-	public void setRecurrenceRule(RecurrenceRule recurrenceRule) {
+	public void setRecurrenceRule(final RecurrenceRule recurrenceRule) {
 		this.recurrenceRule = recurrenceRule;
 	}
 
@@ -361,7 +365,20 @@ public class TransactionDialog implements IWindowParameterInjection {
 	}
 
 	private void createNewContinuousTransaction() {
+		this.continuousTransaction = new ContinuousTransaction();
+		this.setContinuousTransactionAttributtes(this.continuousTransaction);
+		final List<Transaction> transactions = ContinuousTransactionManager
+				.generateTransactionsFromNewContinuousTransaction(this.continuousTransaction);
+		DBUtils.getInstance().persistContinuousTransaction(this.continuousTransaction, transactions);
+	}
 
+	private void setContinuousTransactionAttributtes(final ContinuousTransaction continuousTransaction) {
+		continuousTransaction.setAmount(this.getAmount());
+		continuousTransaction.setBankAccount(this.getBankAccount());
+		continuousTransaction.setCategory(this.getCategory());
+		continuousTransaction.setDateBeginn(this.getDate());
+		continuousTransaction.setName(this.getName());
+		continuousTransaction.setRecurrenceRule(this.recurrenceRule.toString());
 	}
 
 	private void changeNewContinuousTransactionFromTransaction() {
@@ -381,16 +398,37 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 	}
 
-	private void setTransactionAttributes(Transaction transactionPara) {
-		transactionPara.setAmount(
-				this.checkboxIncome.isSelected() ? this.spinnerAmount.getValue() : -this.spinnerAmount.getValue());
-		transactionPara.setBankAccount(DBUtils.getInstance().getBankAccount(this.comboboxAccount.getValue()));
-		transactionPara.setCategory(DBUtils.getInstance().getCategory(this.comboboxCategory.getValue()));
-		transactionPara.setDate(DateUtils.localDateToDate(this.datepicker.getValue()));
-		transactionPara.setName(this.fieldDescription.getText());
+	private void setTransactionAttributes(final Transaction transactionPara) {
+		transactionPara.setAmount(this.getAmount());
+		transactionPara.setBankAccount(this.getBankAccount());
+		transactionPara.setCategory(this.getCategory());
+		transactionPara.setDate(this.getDate());
+		transactionPara.setName(this.getName());
 	}
 
-	public void setNameOfRecurrenceButton(Freq freq) {
+	private String getName() {
+		return this.fieldDescription.getText();
+	}
+
+	private Date getDate() {
+		final Date startDate = DateUtils.localDateToDate(this.datepicker.getValue());
+
+		return startDate;
+	}
+
+	private Category getCategory() {
+		return DBUtils.getInstance().getCategory(this.comboboxCategory.getValue());
+	}
+
+	private BankAccount getBankAccount() {
+		return DBUtils.getInstance().getBankAccount(this.comboboxAccount.getValue());
+	}
+
+	private double getAmount() {
+		return this.checkboxIncome.isSelected() ? this.spinnerAmount.getValue() : -this.spinnerAmount.getValue();
+	}
+
+	public void setNameOfRecurrenceButton(final Freq freq) {
 		if (freq == null) {
 			this.buttonRecurrence.setText(Frequences.NONE.getText());
 			return;
@@ -410,7 +448,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 			this.buttonRecurrence.setText(Frequences.YEARLY.getText());
 			break;
 		default:
-			log.error("no valid RecurrenceRule");
+			TransactionDialog.log.error("no valid RecurrenceRule");
 			throw new IllegalStateException("no valid RecurrenceRule");
 		}
 

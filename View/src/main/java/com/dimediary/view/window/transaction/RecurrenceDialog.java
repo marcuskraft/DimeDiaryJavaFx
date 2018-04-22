@@ -11,7 +11,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.dmfs.rfc5545.Weekday;
 import org.dmfs.rfc5545.recur.Freq;
+import org.dmfs.rfc5545.recur.InvalidRecurrenceRuleException;
 import org.dmfs.rfc5545.recur.RecurrenceRule;
+import org.dmfs.rfc5545.recur.RecurrenceRule.Part;
+import org.dmfs.rfc5545.recur.RecurrenceRule.RfcMode;
 import org.dmfs.rfc5545.recur.RecurrenceRule.WeekdayNum;
 
 import com.dimediary.util.utils.DateUtils;
@@ -31,6 +34,7 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.Tooltip;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
@@ -84,7 +88,7 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 	private URL location;
 
 	@FXML
-	private ComboBox<String> frequenceCheckbox;
+	private ComboBox<String> frequenceCombobox;
 
 	@FXML
 	private Spinner<Integer> intervallSpinner;
@@ -140,6 +144,9 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 	@FXML
 	private Label intervallString;
 
+	@FXML // fx:id="fromEndOfMonth"
+	private CheckBox fromEndOfMonth; // Value injected by FXMLLoader
+
 	@FXML
 	void onCancel(final ActionEvent event) {
 		this.close();
@@ -162,42 +169,58 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 	}
 
 	@FXML
-	void onFrequenceCheckbox(final ActionEvent event) {
+	void onFrequenceCombobox(final ActionEvent event) {
 		boolean disableDayOfWeek = true;
 		boolean disabledayOfMonthSpinner = false;
 		boolean disableAllOthers = false;
+		boolean disableFromEndOf = false;
 		String intervall = "Monat";
 		String dayOf = "Tag des Monats";
-		switch (Frequences.getFrequence(this.frequenceCheckbox.getValue())) {
+		String fromEndOfString = "";
+		String helpStringForFromEnd = "";
+		switch (Frequences.getFrequence(this.frequenceCombobox.getValue())) {
 		case DAILY:
 			disableDayOfWeek = false;
 			disabledayOfMonthSpinner = true;
 			intervall = "Tag";
 			dayOf = "";
+			disableFromEndOf = false;
+			fromEndOfString = "";
 			break;
 		case WEEKLY:
 			disableDayOfWeek = false;
 			disabledayOfMonthSpinner = true;
 			intervall = "Woche";
 			dayOf = "";
+			disableFromEndOf = false;
+			fromEndOfString = "";
 			break;
 		case MONTHLY:
 			disableDayOfWeek = true;
 			disabledayOfMonthSpinner = false;
 			intervall = "Monat";
 			dayOf = "Tag des Monats";
+			disableFromEndOf = true;
+			fromEndOfString = "vom Ende des Monats aus";
+			helpStringForFromEnd = "Wenn aktiviert, dann werden die Tage vom Ende des Monats aus betrachtet. Das heißt eine 1 steht für den letzten und eine 2 für den vorletzten Tag des Monats und so weiter.";
 			break;
 		case YEARLY:
 			disableDayOfWeek = true;
 			disabledayOfMonthSpinner = false;
 			intervall = "Jahr";
 			dayOf = "Tag im Jahr";
+			disableFromEndOf = true;
+			fromEndOfString = "vom Ende des Jahres aus";
+			helpStringForFromEnd = "Wenn aktiviert, dann werden die Tage vom Ende des Jahres aus betrachtet. Das heißt eine 1 steht für den letzten und eine 2 für den vorletzten Tag des Jahres und so weiter.";
 			break;
 		case NONE:
+		default:
 			disableDayOfWeek = true;
 			disabledayOfMonthSpinner = true;
 			disableAllOthers = true;
-		default:
+			dayOf = "";
+			disableFromEndOf = false;
+			fromEndOfString = "";
 			break;
 		}
 
@@ -218,6 +241,10 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 
 		this.dayOfMonthSpinner.setDisable(disabledayOfMonthSpinner);
 
+		this.fromEndOfMonth.setVisible(disableFromEndOf);
+		this.fromEndOfMonth.setTooltip(new Tooltip(helpStringForFromEnd));
+		this.fromEndOfMonth.setText(fromEndOfString);
+
 		this.intervallString.setText(intervall);
 		this.dayOfString.setText(dayOf);
 	}
@@ -236,8 +263,13 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 	@FXML
 	void onOk(final ActionEvent event) {
 		RecurrenceRule recurrenceRule = null;
-		if (!Frequences.NONE.getText().equals(this.frequenceCheckbox.getValue())) {
-			recurrenceRule = this.createRecurrenceRule();
+		if (!Frequences.NONE.getText().equals(this.frequenceCombobox.getValue())) {
+			try {
+				recurrenceRule = this.createRecurrenceRule();
+			} catch (final InvalidRecurrenceRuleException e) {
+				RecurrenceDialog.log.error("error by creating RecurrenceRule from gui", e);
+				throw new IllegalStateException("error by creating RecurrenceRule from gui", e);
+			}
 
 		}
 		this.transactionDialog.setRecurrenceRule(recurrenceRule);
@@ -257,8 +289,13 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 	}
 
 	@FXML
+	void onFromEndOfMonth(final ActionEvent event) {
+
+	}
+
+	@FXML
 	void initialize() {
-		assert this.frequenceCheckbox != null : "fx:id=\"frequenceCheckbox\" was not injected: check your FXML file 'RecurrenceDialog.fxml'.";
+		assert this.frequenceCombobox != null : "fx:id=\"frequenceCombobox\" was not injected: check your FXML file 'RecurrenceDialog.fxml'.";
 		assert this.intervallSpinner != null : "fx:id=\"intervallSpinner\" was not injected: check your FXML file 'RecurrenceDialog.fxml'.";
 		assert this.intervallString != null : "fx:id=\"intervallString\" was not injected: check your FXML file 'RecurrenceDialog.fxml'.";
 		assert this.dayOfMonthSpinner != null : "fx:id=\"dayOfMonthSpinner\" was not injected: check your FXML file 'RecurrenceDialog.fxml'.";
@@ -278,8 +315,8 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 		assert this.samstagComboBox != null : "fx:id=\"samstagComboBox\" was not injected: check your FXML file 'RecurrenceDialog.fxml'.";
 		assert this.sonntagComboBox != null : "fx:id=\"sonntagComboBox\" was not injected: check your FXML file 'RecurrenceDialog.fxml'.";
 
-		this.frequenceCheckbox.setItems(RecurrenceDialog.FREQUENCES_LIST);
-		this.frequenceCheckbox.setValue(Frequences.NONE.getText());
+		this.frequenceCombobox.setItems(RecurrenceDialog.FREQUENCES_LIST);
+		this.frequenceCombobox.setValue(Frequences.NONE.getText());
 
 		final SpinnerValueFactory<Integer> intervallSpinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(
 				1, RecurrenceDialog.MAX_INTERVALL, 1);
@@ -329,7 +366,7 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 
 		this.untilDatepicker.setValue(DateUtils.date2LocalDate(new Date()));
 
-		this.onFrequenceCheckbox(null);
+		this.onFrequenceCombobox(null);
 
 	}
 
@@ -358,27 +395,59 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 
 	private void initRecurrenceRule(final RecurrenceRule recurrenceRule) {
 
+		final List<Integer> monthDays = recurrenceRule.getByPart(Part.BYMONTHDAY);
+		Integer monthDay = null;
+		if (monthDays != null && monthDays.size() == 1) {
+			monthDay = monthDays.get(0);
+			if (monthDay > 0) {
+				this.fromEndOfMonth.setSelected(false);
+			} else {
+				this.fromEndOfMonth.setSelected(true);
+				monthDay = Math.abs(monthDay);
+			}
+		}
+
+		final List<Integer> yearDays = recurrenceRule.getByPart(Part.BYYEARDAY);
+		Integer yearDay = null;
+		if (yearDays != null && yearDays.size() == 1) {
+			yearDay = yearDays.get(0);
+			if (yearDay > 0) {
+				this.fromEndOfMonth.setSelected(false);
+			} else {
+				this.fromEndOfMonth.setSelected(true);
+				yearDay = Math.abs(yearDay);
+			}
+		}
+
 		switch (recurrenceRule.getFreq()) {
 		case DAILY:
-			this.frequenceCheckbox.setValue(Frequences.DAILY.getText());
+			this.frequenceCombobox.setValue(Frequences.DAILY.getText());
 			this.setWeekNums(recurrenceRule.getByDayPart());
 			break;
 		case MONTHLY:
-			this.frequenceCheckbox.setValue(Frequences.MONTHLY.getText());
-			this.intervallSpinner.getValueFactory().setValue(recurrenceRule.getInterval());
+			this.frequenceCombobox.setValue(Frequences.MONTHLY.getText());
+			if (monthDays == null || monthDays.size() != 1 || monthDay == null) {
+				throw new IllegalStateException("Part.BYMONTHDAY of the RecurrenceRule should be exactly one day");
+			}
+			this.dayOfMonthSpinner.getValueFactory().setValue(monthDay);
 			break;
 		case WEEKLY:
-			this.frequenceCheckbox.setValue(Frequences.WEEKLY.getText());
+			this.frequenceCombobox.setValue(Frequences.WEEKLY.getText());
 			this.setWeekNums(recurrenceRule.getByDayPart());
 			break;
 		case YEARLY:
-			this.frequenceCheckbox.setValue(Frequences.YEARLY.getText());
-			this.intervallSpinner.getValueFactory().setValue(recurrenceRule.getInterval());
+			this.frequenceCombobox.setValue(Frequences.YEARLY.getText());
+			if (yearDays == null || yearDays.size() != 1 || yearDay == null) {
+				throw new IllegalStateException("Part.BYYEARDAY of the RecurrenceRule should be exactly one day");
+			}
+			this.dayOfMonthSpinner.getValueFactory().setValue(yearDay);
 			break;
 		default:
-			log.error("no valid RecurrenceRule for the initializiation of the gui");
+			RecurrenceDialog.log.error("no valid RecurrenceRule for the initializiation of the gui");
 			throw new InvalidParameterException("no valid RecurrenceRule for the initializiation of the gui");
 		}
+
+		this.intervallSpinner.getValueFactory().setValue(recurrenceRule.getInterval());
 
 		if (recurrenceRule.getCount() != null) {
 			this.countRadioButton.setSelected(true);
@@ -388,40 +457,45 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 			this.untilDatepicker.setValue(DateUtils.dateTimeToLocalDate(recurrenceRule.getUntil()));
 		}
 
-		this.onFrequenceCheckbox(null);
+		this.onFrequenceCombobox(null);
 
 	}
 
-	private RecurrenceRule createRecurrenceRule() {
+	private RecurrenceRule createRecurrenceRule() throws InvalidRecurrenceRuleException {
 
 		RecurrenceRule recurrenceRule;
 
-		switch (Frequences.getFrequence(this.frequenceCheckbox.getValue())) {
+		final int dayOfMonth = this.fromEndOfMonth.isSelected() ? -this.dayOfMonthSpinner.getValue()
+				: this.dayOfMonthSpinner.getValue();
+		switch (Frequences.getFrequence(this.frequenceCombobox.getValue())) {
 		case DAILY:
-			recurrenceRule = new RecurrenceRule(Freq.DAILY);
+			recurrenceRule = new RecurrenceRule(Freq.DAILY, RfcMode.RFC5545_STRICT);
 			recurrenceRule.setByDayPart(this.getWeekDayNums());
 			break;
 		case MONTHLY:
-			recurrenceRule = new RecurrenceRule(Freq.MONTHLY);
-			recurrenceRule.setInterval(this.intervallSpinner.getValue());
+			recurrenceRule = new RecurrenceRule(Freq.MONTHLY, RfcMode.RFC5545_STRICT);
+			if (dayOfMonth != 0) {
+				recurrenceRule.setByPart(Part.BYMONTHDAY, dayOfMonth);
+			}
 			break;
 		case WEEKLY:
-			recurrenceRule = new RecurrenceRule(Freq.WEEKLY);
+			recurrenceRule = new RecurrenceRule(Freq.WEEKLY, RfcMode.RFC5545_STRICT);
 			recurrenceRule.setByDayPart(this.getWeekDayNums());
 			break;
 		case YEARLY:
-			recurrenceRule = new RecurrenceRule(Freq.YEARLY);
-			recurrenceRule.setInterval(this.intervallSpinner.getValue());
+			recurrenceRule = new RecurrenceRule(Freq.YEARLY, RfcMode.RFC5545_STRICT);
+			recurrenceRule.setByPart(Part.BYYEARDAY, dayOfMonth);
 			break;
 		default:
-			recurrenceRule = new RecurrenceRule(Freq.MONTHLY);
-			recurrenceRule.setInterval(this.intervallSpinner.getValue());
+			recurrenceRule = new RecurrenceRule(Freq.MONTHLY, RfcMode.RFC5545_STRICT);
 			break;
 
 		}
 
+		recurrenceRule.setInterval(this.intervallSpinner.getValue());
+
 		if (this.untilRadiobutton.isSelected()) {
-			recurrenceRule.setUntil(DateUtils.localDateTimeToDateTime(this.untilDatepicker.getValue()));
+			recurrenceRule.setUntil(DateUtils.localDateToDateTime(this.untilDatepicker.getValue()));
 		} else if (this.countRadioButton.isSelected()) {
 			recurrenceRule.setCount(this.countSpinner.getValue());
 		}
@@ -432,47 +506,42 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 	private List<WeekdayNum> getWeekDayNums() {
 		final List<WeekdayNum> weekdayNums = new ArrayList<>();
 
-		int pos = 1;
+		final int pos = 0;
 		if (this.montagComboBox.isSelected()) {
 			weekdayNums.add(new WeekdayNum(pos, Weekday.MO));
-			pos++;
 		}
 
 		if (this.dienstagComboBox.isSelected()) {
 			weekdayNums.add(new WeekdayNum(pos, Weekday.TU));
-			pos++;
 		}
 
 		if (this.mittwochComboBox.isSelected()) {
 			weekdayNums.add(new WeekdayNum(pos, Weekday.WE));
-			pos++;
 		}
 
 		if (this.donnerstagComboBox.isSelected()) {
 			weekdayNums.add(new WeekdayNum(pos, Weekday.TH));
-			pos++;
 		}
 
 		if (this.freitagComboBox.isSelected()) {
 			weekdayNums.add(new WeekdayNum(pos, Weekday.FR));
-			pos++;
 		}
 
 		if (this.samstagComboBox.isSelected()) {
 			weekdayNums.add(new WeekdayNum(pos, Weekday.SA));
-			pos++;
 		}
 
 		if (this.sonntagComboBox.isSelected()) {
 			weekdayNums.add(new WeekdayNum(pos, Weekday.SU));
-			pos++;
 		}
 
 		return weekdayNums;
 	}
 
-	private void setWeekNums(List<WeekdayNum> weekdayNums) {
-
+	private void setWeekNums(final List<WeekdayNum> weekdayNums) {
+		if (weekdayNums == null) {
+			return;
+		}
 		for (final WeekdayNum weekdayNum : weekdayNums) {
 			switch (weekdayNum.weekday) {
 			case FR:
@@ -506,7 +575,7 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 	}
 
 	private void close() {
-		final Stage stage = (Stage) this.frequenceCheckbox.getScene().getWindow();
+		final Stage stage = (Stage) this.frequenceCombobox.getScene().getWindow();
 		stage.close();
 	}
 }

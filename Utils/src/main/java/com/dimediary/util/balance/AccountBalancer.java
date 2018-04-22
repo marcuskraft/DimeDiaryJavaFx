@@ -5,16 +5,14 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.dmfs.rfc5545.recur.RecurrenceRule;
-
 import com.dimediary.model.entities.BalanceHistory;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.utils.AmountUtils;
+import com.dimediary.util.transaction.ContinuousTransactionManager;
 import com.dimediary.util.utils.DBUtils;
 import com.dimediary.util.utils.DateUtils;
-import com.dimediary.util.utils.RecurrenceRuleUtils;
 
 /**
  *
@@ -122,9 +120,10 @@ public class AccountBalancer {
 	 * @param bankAccount
 	 *            bank account for which the balances are requested
 	 * @param dates
-	 *            sequence of following days for which the balances are requested
-	 * @return returns a HashMap with the given Dates and the corresponding balances
-	 *         for this bank account on this date
+	 *            sequence of following days for which the balances are
+	 *            requested
+	 * @return returns a HashMap with the given Dates and the corresponding
+	 *         balances for this bank account on this date
 	 */
 	public static HashMap<Date, Double> getBalancesFollowingDays(final BankAccount bankAccount,
 			final ArrayList<Date> dates) {
@@ -216,14 +215,14 @@ public class AccountBalancer {
 
 	/**
 	 * proofs the balance history of this bank account. Initialize the balance
-	 * history if no exists. Corrects wrong entries in the balance history if there
-	 * are some.
+	 * history if no exists. Corrects wrong entries in the balance history if
+	 * there are some.
 	 *
 	 * @param bankAccount
 	 *            bank account to proof
 	 */
 	public static void proofBalance(final BankAccount bankAccount) {
-		proofContinuosTransactions(bankAccount);
+		AccountBalancer.proofContinuosTransactions(bankAccount);
 		final BalanceHistory lastBalanceHistory = DBUtils.getInstance().getLastBalanceHistory(bankAccount);
 
 		if (lastBalanceHistory == null) {
@@ -269,53 +268,16 @@ public class AccountBalancer {
 
 	}
 
-	public static void generateTransactionsFromContinuousTransaction(ContinuousTransaction continuousTransaction) {
-		final RecurrenceRule recurrenceRule = RecurrenceRuleUtils
-				.createRecurrenceRule(continuousTransaction.getRecurrenceRule());
-
-		final Date currentMaxDate = DBUtils.getInstance().getDateOfLastTransaction(continuousTransaction);
-		AccountBalancer.generateTransactionsFromContinuousTransaction(continuousTransaction, recurrenceRule,
-				currentMaxDate);
-	}
-
-	private static void generateTransactionsFromContinuousTransaction(ContinuousTransaction continuousTransaction,
-			RecurrenceRule recurrenceRule, Date fromDate) {
-		Date firstDate;
-		boolean skipFirst = false;
-		if (fromDate == null) {
-			firstDate = continuousTransaction.getDateBeginn();
-		} else {
-			firstDate = fromDate;
-			skipFirst = true;
-		}
-
-		final List<Date> dates = RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule,
-				DateUtils.dateToDateTime(continuousTransaction.getDateBeginn()), DateUtils.dateToDateTime(firstDate));
-
-		if (skipFirst) {
-			dates.remove(0);
-		}
-
-		final List<Transaction> transactions = new ArrayList<>();
-		for (final Date date : dates) {
-			transactions.add(continuousTransaction.createTransaction(date));
-		}
-
-		DBUtils.getInstance().persistTransactions(transactions);
-
-	}
-
-	private static void proofContinuosTransactions(BankAccount bankAccount) {
+	private static void proofContinuosTransactions(final BankAccount bankAccount) {
 		final List<ContinuousTransaction> continuousTransactions = DBUtils.getInstance()
 				.getContinuousTransactions(bankAccount);
 
 		for (final ContinuousTransaction continuousTransaction : continuousTransactions) {
-			final RecurrenceRule recurrenceRule = RecurrenceRuleUtils
-					.createRecurrenceRule(continuousTransaction.getRecurrenceRule());
 
-			final Date currentMaxDate = DBUtils.getInstance().getDateOfLastTransaction(continuousTransaction);
-			AccountBalancer.generateTransactionsFromContinuousTransaction(continuousTransaction, recurrenceRule,
-					currentMaxDate);
+			final List<Transaction> transactions = ContinuousTransactionManager
+					.generateTransactionsFromContinuousTransaction(continuousTransaction);
+
+			DBUtils.getInstance().persistTransactions(transactions);
 
 		}
 	}

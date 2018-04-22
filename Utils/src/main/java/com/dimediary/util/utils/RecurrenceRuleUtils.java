@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.dmfs.rfc5545.DateTime;
 import org.dmfs.rfc5545.recur.InvalidRecurrenceRuleException;
 import org.dmfs.rfc5545.recur.RecurrenceRule;
+import org.dmfs.rfc5545.recur.RecurrenceRule.RfcMode;
 import org.dmfs.rfc5545.recur.RecurrenceRuleIterator;
 
 public class RecurrenceRuleUtils {
@@ -17,8 +18,8 @@ public class RecurrenceRuleUtils {
 
 	public final static int numberOfMonthFutureTransactions = 120;
 
-	public static List<Date> getDatesForRecurrenceRule(RecurrenceRule recurrenceRule, DateTime beginOfRule,
-			DateTime dateFrom) {
+	public static List<Date> getDatesForRecurrenceRule(final RecurrenceRule recurrenceRule, final DateTime beginOfRule,
+			final DateTime dateFrom) {
 		final List<Date> dates = new ArrayList<>();
 		final RecurrenceRuleIterator recurrenceRuleIterator = recurrenceRule.iterator(beginOfRule);
 
@@ -26,7 +27,7 @@ public class RecurrenceRuleUtils {
 			recurrenceRuleIterator.fastForward(dateFrom);
 		}
 
-		final Date dateUntilMax = DateUtils.AddMonth(new Date(), numberOfMonthFutureTransactions);
+		final Date dateUntilMax = DateUtils.AddMonth(new Date(), RecurrenceRuleUtils.numberOfMonthFutureTransactions);
 
 		Date date = DateUtils.dateTimeToDate(beginOfRule);
 		while (recurrenceRuleIterator.hasNext() && date.before(dateUntilMax)) {
@@ -39,17 +40,18 @@ public class RecurrenceRuleUtils {
 
 	public static RecurrenceRule createRecurrenceRule(final String ruleString) {
 		try {
-			return new RecurrenceRule(ruleString);
+			return new RecurrenceRule(ruleString, RfcMode.RFC5545_STRICT);
 		} catch (final InvalidRecurrenceRuleException e) {
-			log.error("RuleString ist keine gültige RecurrenceRule", e);
+			RecurrenceRuleUtils.log.error("RuleString ist keine gültige RecurrenceRule", e);
 			throw new IllegalStateException("RuleString ist keine gültige RecurrenceRule", e);
 		}
 	}
 
-	public static Date getLastDateByCount(RecurrenceRule recurrenceRule, DateTime begin) {
+	public static Date getLastDateByCount(final RecurrenceRule recurrenceRule, final DateTime begin) {
 		if (recurrenceRule.isInfinite()) {
 			return null;
 		}
+
 		final RecurrenceRuleIterator recurrenceRuleIterator = recurrenceRule.iterator(begin);
 		recurrenceRuleIterator.skipAllButLast();
 		Date date = null;
@@ -58,5 +60,11 @@ public class RecurrenceRuleUtils {
 		}
 		return date;
 	}
+
+	// public static Date getFirstDateOfRuleAfter(final RecurrenceRule
+	// recurrenceRule, final DateTime startDate) {
+	// final RecurrenceRuleIterator recurrenceRuleIterator =
+	// recurrenceRule.iterator(startDate);
+	// }
 
 }
