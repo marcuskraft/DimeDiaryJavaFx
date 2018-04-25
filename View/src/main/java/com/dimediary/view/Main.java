@@ -1,5 +1,7 @@
 package com.dimediary.view;
 
+import java.net.URL;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +29,16 @@ public class Main extends Application {
 	@Override
 	public void start(final Stage stage) throws Exception {
 		stage.setMaximized(true);
-		final Parent root = FXMLLoader.load(this.getClass().getResource("design/window/MainWindow.fxml"));
+		final URL resource = this.getClass().getResource("design/window/MainWindow.fxml");
+
+		Parent root;
+		try {
+			root = FXMLLoader.load(resource);
+		} catch (final Exception e) {
+			log.error(e);
+			e.printStackTrace();
+			throw e;
+		}
 
 		final Scene scene = new Scene(root);
 

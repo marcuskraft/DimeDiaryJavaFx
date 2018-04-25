@@ -24,6 +24,8 @@ public class MergeContinuousTransactionDialog implements IWindowParameterInjecti
 
 	private TransactionDialog transactionDialog;
 
+	private Date date;
+
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
 
@@ -58,9 +60,10 @@ public class MergeContinuousTransactionDialog implements IWindowParameterInjecti
 	@FXML
 	void onOK(final ActionEvent event) {
 		if (this.radiobuttonAll.isSelected()) {
-			this.transactionDialog.mergAllContinuousTransactions();
+			this.transactionDialog.changeContinuosTransacationFrom(null);
 		} else {
-			this.transactionDialog.mergeContinuousTransaction(DateUtils.localDateToDate(this.dateUntil.getValue()));
+			this.transactionDialog
+					.changeContinuosTransacationFrom(DateUtils.localDateToDate(this.dateUntil.getValue()));
 		}
 		this.close();
 	}
@@ -85,25 +88,33 @@ public class MergeContinuousTransactionDialog implements IWindowParameterInjecti
 	}
 
 	private void init() {
-		this.dateUntil.setValue(DateUtils.date2LocalDate(new Date()));
+		if (this.date != null) {
+			this.dateUntil.setValue(DateUtils.date2LocalDate(this.date));
+		} else {
+			this.dateUntil.setValue(DateUtils.date2LocalDate(new Date()));
+		}
 		this.radiobuttonUntil.setSelected(true);
-	}
-
-	private void close() {
-		final Stage stage = (Stage) this.buttonOK.getScene().getWindow();
-		stage.close();
 	}
 
 	@Override
 	public void inject(final WindowParameters parameters) {
-		final Object object = parameters.getParameters().get(TransactionDialog.class);
+		Object object = parameters.getParameters().get(TransactionDialog.class);
 		if (object == null || !(object instanceof TransactionDialog)) {
 			throw new IllegalArgumentException(
 					"transaction dialog must be set to create a merge continuous transaction dialog");
 		}
 		this.transactionDialog = (TransactionDialog) object;
 
+		object = parameters.getParameters().get(Date.class);
+		if (object != null && object instanceof Date) {
+			this.date = (Date) object;
+		}
+
 		this.init();
 	}
 
+	private void close() {
+		final Stage stage = (Stage) this.buttonOK.getScene().getWindow();
+		stage.close();
+	}
 }

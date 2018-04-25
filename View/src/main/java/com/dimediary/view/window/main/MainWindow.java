@@ -195,12 +195,12 @@ public class MainWindow {
 
 	@FXML
 	void onAccountlessTransactions(final ActionEvent event) {
-		this.refreshMonthOverview();
+		this.refresh();
 	}
 
 	@FXML
 	void onComboBoxAccount(final ActionEvent event) {
-		this.refreshMonthOverview();
+		this.refresh();
 	}
 
 	@FXML
@@ -304,7 +304,7 @@ public class MainWindow {
 			@Override
 			public void changed(final ObservableValue<? extends Integer> observable, final Integer oldValue,
 					final Integer newValue) {
-				MainWindow.this.refreshMonthOverview();
+				MainWindow.this.refresh();
 			}
 		});
 	}
@@ -333,7 +333,11 @@ public class MainWindow {
 		this.comboBoxAccount.setValue(bankAccountNames.get(0));
 	}
 
-	public void refreshMonthOverview() {
+	public void refresh() {
+		this.refreshMonthOverview();
+	}
+
+	private void refreshMonthOverview() {
 		if (this.actualMonth == null) {
 			this.actualMonth = DateUtils.getActualMonth();
 		}
@@ -356,7 +360,12 @@ public class MainWindow {
 
 		int maxTransaction = 0;
 		for (final Date date : dates) {
-			final List<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount, date);
+			List<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount, date);
+
+			if (transactions == null) {
+				transactions = new ArrayList<>();
+			}
+
 			if (this.checkboxAccountlessTransactions.isSelected()) {
 				transactions.addAll(DBUtils.getInstance().getTrandactionsWithoutAccount(date));
 			}
@@ -485,7 +494,7 @@ public class MainWindow {
 					}
 					transactionNew.setDate(date);
 					DBUtils.getInstance().persist(transactionNew);
-					mainWindow.refreshMonthOverview();
+					mainWindow.refresh();
 				}
 				event.setDropCompleted(true);
 				event.consume();

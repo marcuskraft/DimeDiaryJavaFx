@@ -7,9 +7,11 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
+
+import org.dmfs.rfc5545.DateTime;
 
 import com.dimediary.model.entities.BankAccount;
-import com.dimediary.model.entities.ContinuousTransaction.DayOfMonth;
 
 /**
  * class to handle date functionalities
@@ -166,6 +168,26 @@ public class DateUtils {
 		return calendar.getTime();
 	}
 
+	/**
+	 *
+	 * @param date
+	 * @return date which is one day in the future corresponding to the given
+	 *         date
+	 */
+	public static Date minusOneDay(final Date date) {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_WEEK, -1);
+		return calendar.getTime();
+	}
+
+	public static Date AddMonth(final Date date, final Integer month) {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.MONTH, month);
+		return calendar.getTime();
+	}
+
 	public static Date substractOnDay(final Date date) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);
@@ -286,114 +308,28 @@ public class DateUtils {
 		return dates;
 	}
 
-	/**
-	 *
-	 * @param everyNumberOfMonth
-	 *            determines every which month a date should be create (e.g. if
-	 *            it is 2 only every second month will be considered)
-	 * @param dayOfMonth
-	 *            determines which day of the month will be created
-	 * @param dateFrom
-	 *            determines from which date on the dates will be created
-	 * @param dateUntil
-	 *            determines until which date the dates will be created
-	 * @param numberOfIterations
-	 *            determines how much dates will be created (will only be
-	 *            considered if dateUntil is NULL)
-	 * @return List of dates with the specification given by the parameters. If
-	 *         no end date and number of iterations are given (both NULL) than
-	 *         dates for 10 years will be created.
-	 */
-	public static ArrayList<Date> getMonthlyDates(final Integer everyNumberOfMonth, final DayOfMonth dayOfMonth,
-			final Date dateFrom, Date dateUntil, final Integer numberOfIterations) {
-		final ArrayList<Date> dates = new ArrayList<>();
-
-		final Calendar calendarFrom = Calendar.getInstance();
-		calendarFrom.setTime(dateFrom);
-
-		final Calendar calendar = Calendar.getInstance();
-		calendar.clear();
-		calendar.set(calendarFrom.get(Calendar.YEAR), calendarFrom.get(Calendar.MONTH),
-				DateUtils.getDayOfMonth(calendarFrom, dayOfMonth));
-		Date lastDate = calendar.getTime();
-
-		// if the first iteration for the actual month is before the given
-		// dateFrom add 1 month
-		if (calendar.before(calendarFrom)) {
-			calendar.add(Calendar.MONTH, 1);
-			lastDate = calendar.getTime();
-		}
-		dates.add(lastDate);
-
-		// create a dateUntil if there is no dateUntil oder number of iterations
-		if (dateUntil == null && numberOfIterations == null) {
-			final Calendar calendarFuture = Calendar.getInstance();
-			calendarFuture.setTime(new Date());
-			calendarFuture.add(Calendar.MONTH, DateUtils.numberOfMonthFutureTransactions);
-			dateUntil = calendarFuture.getTime();
-		}
-
-		// create the dates
-		if (dateUntil != null) {
-			DateUtils.getMonthlyDates(everyNumberOfMonth, dayOfMonth, dateUntil, dates, calendar);
-		} else if (numberOfIterations != null) {
-			DateUtils.getMonthlyDates(everyNumberOfMonth, dayOfMonth, numberOfIterations, dates, calendar);
-		}
-
-		return dates;
-	}
-
-	private static void getMonthlyDates(final Integer everyNumberOfMonth, final DayOfMonth dayOfMonth,
-			final Integer numberOfIterations, final ArrayList<Date> dates, final Calendar calendar) {
-		Date lastDate;
-		for (int i = 1; i < numberOfIterations; i++) {
-			calendar.add(Calendar.MONTH, everyNumberOfMonth);
-			calendar.set(Calendar.DAY_OF_MONTH, DateUtils.getDayOfMonth(calendar, dayOfMonth));
-			lastDate = calendar.getTime();
-			dates.add(lastDate);
-		}
-	}
-
-	private static void getMonthlyDates(final Integer everyNumberOfMonth, final DayOfMonth dayOfMonth,
-			final Date dateUntil, final ArrayList<Date> dates, final Calendar calendar) {
-		Date lastDate;
-		final Calendar calendarUntil = Calendar.getInstance();
-		calendarUntil.setTime(dateUntil);
-		calendar.add(Calendar.MONTH, everyNumberOfMonth);
-		calendar.set(Calendar.DAY_OF_MONTH, DateUtils.getDayOfMonth(calendar, dayOfMonth));
-		while (calendar.before(calendarUntil)) {
-			lastDate = calendar.getTime();
-			dates.add(lastDate);
-			calendar.add(Calendar.MONTH, everyNumberOfMonth);
-			calendar.set(Calendar.DAY_OF_MONTH, DateUtils.getDayOfMonth(calendar, dayOfMonth));
-		}
-	}
-
-	private static Integer getDayOfMonth(final Calendar calendar, final DayOfMonth dayOfMonth) {
-		switch (dayOfMonth) {
-		case FIRST:
-			return 1;
-		case SECOND:
-			return 2;
-		case THIRD:
-			return 3;
-		case FIFTHTEENS:
-			return 15;
-		case NEXT_TO_LAST:
-			return calendar.getActualMaximum(Calendar.DAY_OF_MONTH) - 1;
-		case LAST:
-			return calendar.getActualMaximum(Calendar.DAY_OF_MONTH);
-		default:
-			return null;
-		}
-	}
-
 	public static Date localDateToDate(final LocalDate localDate) {
 		return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 	}
 
 	public static LocalDate date2LocalDate(final Date date) {
 		return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+
+	public static DateTime localDateToDateTime(final LocalDate localDate) {
+		return new DateTime(DateUtils.localDateToDate(localDate).getTime());
+	}
+
+	public static LocalDate dateTimeToLocalDate(final DateTime dateTime) {
+		return Instant.ofEpochMilli(dateTime.getTimestamp()).atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+
+	public static Date dateTimeToDate(final DateTime dateTime) {
+		return new Date(dateTime.getTimestamp());
+	}
+
+	public static DateTime dateToDateTime(final Date date) {
+		return new DateTime(TimeZone.getDefault(), date.getTime());
 	}
 
 }

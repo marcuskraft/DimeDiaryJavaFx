@@ -7,8 +7,10 @@ import java.util.List;
 
 import com.dimediary.model.entities.BalanceHistory;
 import com.dimediary.model.entities.BankAccount;
+import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.utils.AmountUtils;
+import com.dimediary.util.transaction.ContinuousTransactionManager;
 import com.dimediary.util.utils.DBUtils;
 import com.dimediary.util.utils.DateUtils;
 
@@ -220,6 +222,7 @@ public class AccountBalancer {
 	 *            bank account to proof
 	 */
 	public static void proofBalance(final BankAccount bankAccount) {
+		AccountBalancer.proofContinuosTransactions(bankAccount);
 		final BalanceHistory lastBalanceHistory = DBUtils.getInstance().getLastBalanceHistory(bankAccount);
 
 		if (lastBalanceHistory == null) {
@@ -263,6 +266,20 @@ public class AccountBalancer {
 
 		DBUtils.getInstance().persistBalanceHistories(balanceHistories);
 
+	}
+
+	private static void proofContinuosTransactions(final BankAccount bankAccount) {
+		final List<ContinuousTransaction> continuousTransactions = DBUtils.getInstance()
+				.getContinuousTransactions(bankAccount);
+
+		for (final ContinuousTransaction continuousTransaction : continuousTransactions) {
+
+			final List<Transaction> transactions = ContinuousTransactionManager
+					.generateTransactionsFromContinuousTransaction(continuousTransaction);
+
+			DBUtils.getInstance().persistTransactions(transactions);
+
+		}
 	}
 
 }

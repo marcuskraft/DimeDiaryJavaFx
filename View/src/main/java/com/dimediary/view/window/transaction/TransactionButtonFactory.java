@@ -1,5 +1,7 @@
 package com.dimediary.view.window.transaction;
 
+import java.util.Date;
+
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.util.utils.DBUtils;
 import com.dimediary.view.Main;
@@ -33,6 +35,7 @@ public class TransactionButtonFactory {
 					parameters.put(MainWindow.class, mainWindow);
 					parameters.put(Transaction.class, transaction);
 					if (transaction.getContinuousTransaction() != null) {
+						parameters.put(Date.class, transaction.getDate());
 						final WindowCreater<AllTransactionWindow> windowCreater = new WindowCreater<>();
 						windowCreater.createWindow(Main.class.getResource("design/window/AllTransactionMessage.fxml"),
 								"Dauertransaktion", parameters);
@@ -61,7 +64,7 @@ public class TransactionButtonFactory {
 						}
 					}
 					if (mainWindow != null) {
-						mainWindow.refreshMonthOverview();
+						mainWindow.refresh();
 					}
 					event.consume();
 					break;

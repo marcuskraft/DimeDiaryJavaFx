@@ -19,8 +19,7 @@ public class WindowCreater<T extends IWindowParameterInjection> {
 		try {
 			stage.setScene(new Scene((Pane) loader.load()));
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new IllegalStateException("fxml file could not be found", e);
 		}
 
 		if (parameters != null) {

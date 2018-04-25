@@ -104,7 +104,7 @@ public class DBUtils {
 	 *            names of bank accounts
 	 * @return list of bank accounts
 	 */
-	public ArrayList<BankAccount> getBankAccounts(final ArrayList<String> bankAccountsNames) {
+	public List<BankAccount> getBankAccounts(final List<String> bankAccountsNames) {
 
 		if (bankAccountsNames.isEmpty()) {
 			return null;
@@ -435,6 +435,32 @@ public class DBUtils {
 
 	/**
 	 *
+	 * @param bankAccount
+	 * @return all ContinuousTransactions belonging to this account
+	 */
+	public List<ContinuousTransaction> getContinuousTransactions(final BankAccount bankAccount) {
+		if (bankAccount == null) {
+			return null;
+		}
+
+		DBUtils.log.info("geContinuousTransactions for: " + bankAccount.getName());
+		return this.entityManager.createNamedQuery(ContinuousTransaction.CONTINUOUS_TRANSACTION_FOR_BANK_ACCOUNT,
+				ContinuousTransaction.class).setParameter("bankAccount", bankAccount).getResultList();
+	}
+
+	public Date getDateOfLastTransaction(final ContinuousTransaction continuousTransaction) {
+		if (continuousTransaction == null) {
+			return null;
+		}
+		this.entityManager.merge(continuousTransaction);
+		DBUtils.log.info("getDateOfLastTransaction for: " + continuousTransaction.getName());
+		return this.entityManager
+				.createNamedQuery(Transaction.DATE_OF_LAST_TRANSACTION_OF_CONTINUOUS_TRANSACTION, Date.class)
+				.setParameter("continuousTransaction", continuousTransaction).getSingleResult();
+	}
+
+	/**
+	 *
 	 * @param categoryName
 	 * @return category belonging to this category name
 	 */
@@ -515,7 +541,7 @@ public class DBUtils {
 	 *
 	 * @param transactions
 	 */
-	public void persistTransactions(final ArrayList<Transaction> transactions) {
+	public void persistTransactions(final List<Transaction> transactions) {
 		if (transactions == null || transactions.isEmpty()) {
 			return;
 		}
@@ -562,7 +588,7 @@ public class DBUtils {
 	 * @param transactions
 	 */
 	public void persistContinuousTransaction(final ContinuousTransaction continuousTransaction,
-			final ArrayList<Transaction> transactions) {
+			final List<Transaction> transactions) {
 		if (continuousTransaction == null || transactions == null || transactions.isEmpty()) {
 			return;
 		}
@@ -728,6 +754,25 @@ public class DBUtils {
 		}
 
 		this.entityManager.merge(continuousTransaction);
+
+		if (ownTransaction) {
+			this.entityManager.getTransaction().commit();
+		}
+	}
+
+	public void merge(final List<Transaction> transactions) {
+		if (transactions == null) {
+			return;
+		}
+		DBUtils.log.info("merge Transactions");
+		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		if (ownTransaction) {
+			this.entityManager.getTransaction().begin();
+		}
+
+		for (final Transaction transaction : transactions) {
+			this.entityManager.merge(transaction);
+		}
 
 		if (ownTransaction) {
 			this.entityManager.getTransaction().commit();
@@ -973,7 +1018,7 @@ public class DBUtils {
 	 *
 	 * @param transactions
 	 */
-	public void deleteTransactions(final ArrayList<Transaction> transactions) {
+	public void deleteTransactions(final List<Transaction> transactions) {
 		if (transactions == null || transactions.isEmpty()) {
 			return;
 		}

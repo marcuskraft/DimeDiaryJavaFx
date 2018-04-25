@@ -45,7 +45,6 @@ public class BankAccountDialog implements IWindowParameterInjection {
 
 	private final static Logger log = LogManager.getLogger(DBUtils.class);
 
-	private TransactionDialog transactionDialog;
 	private ObservableList<String> items;
 
 	@FXML
@@ -224,16 +223,10 @@ public class BankAccountDialog implements IWindowParameterInjection {
 
 	@Override
 	public void inject(final WindowParameters parameters) {
-		final Object object = parameters.getParameters().get(TransactionDialog.class);
-		if (object != null && object instanceof TransactionDialog) {
-			this.transactionDialog = (TransactionDialog) object;
-		}
+
 	}
 
 	public void close() {
-		if (this.transactionDialog != null) {
-			this.transactionDialog.refreshBankAccounts();
-		}
 		final Stage stage = (Stage) this.buttonOk.getScene().getWindow();
 		stage.close();
 	}
