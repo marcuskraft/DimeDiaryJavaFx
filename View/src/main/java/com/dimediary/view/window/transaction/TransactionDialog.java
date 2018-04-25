@@ -232,9 +232,11 @@ public class TransactionDialog implements IWindowParameterInjection {
 			return;
 		}
 
-		if (this.transaction != null) {
-			if (this.transaction.getCategory() != null) {
+		if (this.transaction != null || this.continuousTransaction != null) {
+			if (this.transaction != null && this.transaction.getCategory() != null) {
 				this.comboboxCategory.setValue(this.transaction.getCategory().getName());
+			} else if (this.continuousTransaction != null && this.continuousTransaction.getCategory() != null) {
+				this.comboboxCategory.setValue(this.continuousTransaction.getCategory().getName());
 			} else {
 				this.comboboxCategory.setValue("-");
 				if (refreshFirst) {
@@ -261,9 +263,11 @@ public class TransactionDialog implements IWindowParameterInjection {
 		if (bankAccountNames.size() == 0) {
 			return;
 		}
-		if (this.transaction != null) {
-			if (this.transaction.getBankAccount() != null) {
+		if (this.transaction != null || this.continuousTransaction != null) {
+			if (this.transaction != null && this.transaction.getBankAccount() != null) {
 				this.comboboxAccount.setValue(this.transaction.getBankAccount().getName());
+			} else if (this.continuousTransaction != null && this.continuousTransaction.getBankAccount() != null) {
+				this.comboboxAccount.setValue(this.continuousTransaction.getBankAccount().getName());
 			} else {
 				this.comboboxAccount.setValue("-");
 				if (refreshFirst) {

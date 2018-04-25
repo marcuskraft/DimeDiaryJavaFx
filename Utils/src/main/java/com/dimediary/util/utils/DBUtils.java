@@ -104,7 +104,7 @@ public class DBUtils {
 	 *            names of bank accounts
 	 * @return list of bank accounts
 	 */
-	public ArrayList<BankAccount> getBankAccounts(final ArrayList<String> bankAccountsNames) {
+	public List<BankAccount> getBankAccounts(final List<String> bankAccountsNames) {
 
 		if (bankAccountsNames.isEmpty()) {
 			return null;

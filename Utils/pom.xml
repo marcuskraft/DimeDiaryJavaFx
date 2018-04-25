@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>com.dimediary</groupId>
 		<artifactId>Dimediary</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>0.0.2-SNAPSHOT</version>
 		<relativePath>../Dimediary</relativePath>
 	</parent>
 	<build>
@@ -29,7 +29,7 @@
 		<dependency>
 			<groupId>com.dimediary.model</groupId>
 			<artifactId>Model</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
