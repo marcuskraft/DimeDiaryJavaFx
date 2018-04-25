@@ -168,6 +168,19 @@ public class DateUtils {
 		return calendar.getTime();
 	}
 
+	/**
+	 *
+	 * @param date
+	 * @return date which is one day in the future corresponding to the given
+	 *         date
+	 */
+	public static Date minusOneDay(final Date date) {
+		final Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_WEEK, -1);
+		return calendar.getTime();
+	}
+
 	public static Date AddMonth(final Date date, final Integer month) {
 		final Calendar calendar = Calendar.getInstance();
 		calendar.setTime(date);

@@ -385,7 +385,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 	}
 
 	private void changeContinuesTransactionToTransaction() {
-
+		this.changeContinuousTransaction();
 	}
 
 	private void changeTransaction() {
@@ -407,27 +407,27 @@ public class TransactionDialog implements IWindowParameterInjection {
 			throw new IllegalStateException("continuousTransaction should not be null");
 		}
 
-		if (this.recurrenceRule == null) {
-			this.recurrenceRule = RecurrenceRuleUtils
-					.createRecurrenceRule(this.continuousTransaction.getRecurrenceRule());
-		}
-
 		if (dateFrom == null) {
 			DBUtils.getInstance().deleteAllContinuousTransactions(this.continuousTransaction);
-			this.createNewContinuousTransaction();
 		} else {
 			this.datepicker.setValue(DateUtils.date2LocalDate(dateFrom));
+
 			final List<Transaction> transactionsAfter = DBUtils.getInstance()
 					.getTransactionsFromDate(this.continuousTransaction, dateFrom);
 			DBUtils.getInstance().deleteTransactions(transactionsAfter);
 
-			final List<Transaction> oldTransactions = DBUtils.getInstance().getTransactions(this.continuousTransaction);
-			for (final Transaction transaction : oldTransactions) {
-				transaction.setContinuousTransaction(null);
-			}
-			DBUtils.getInstance().merge(oldTransactions);
-			DBUtils.getInstance().deleteAllContinuousTransactions(this.continuousTransaction);
+			final RecurrenceRule recurrenceRuleOfOldContinuousTransaction = RecurrenceRuleUtils
+					.createRecurrenceRule(this.continuousTransaction.getRecurrenceRule());
+			recurrenceRuleOfOldContinuousTransaction
+					.setUntil(DateUtils.dateToDateTime(DateUtils.minusOneDay(dateFrom)));
+			this.continuousTransaction.setRecurrenceRule(this.recurrenceRule.toString());
+			DBUtils.getInstance().merge(this.continuousTransaction);
+		}
+
+		if (this.recurrenceRule != null) {
 			this.createNewContinuousTransaction();
+		} else {
+			this.createNewTransaction();
 		}
 	}
 

@@ -486,6 +486,8 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 			recurrenceRule = new RecurrenceRule(Freq.YEARLY, RfcMode.RFC5545_STRICT);
 			recurrenceRule.setByPart(Part.BYYEARDAY, dayOfMonth);
 			break;
+		case NONE:
+			return null;
 		default:
 			recurrenceRule = new RecurrenceRule(Freq.MONTHLY, RfcMode.RFC5545_STRICT);
 			break;
