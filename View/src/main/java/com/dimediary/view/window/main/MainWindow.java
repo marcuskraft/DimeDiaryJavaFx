@@ -39,9 +39,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.scene.chart.LineChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
@@ -61,6 +63,12 @@ import javafx.scene.layout.RowConstraints;
 
 public class MainWindow {
 
+	@FXML // ResourceBundle that was given to the FXMLLoader
+	private ResourceBundle resources;
+
+	@FXML // URL location of the FXML file that was given to the FXMLLoader
+	private URL location;
+
 	@FXML // fx:id="menuClose"
 	private MenuItem menuClose; // Value injected by FXMLLoader
 
@@ -70,14 +78,11 @@ public class MainWindow {
 	@FXML // fx:id="menuAccount"
 	private MenuItem menuAccount; // Value injected by FXMLLoader
 
-	@FXML
-	private MenuItem menuAccCategory;
+	@FXML // fx:id="menuAccCategory"
+	private MenuItem menuAccCategory; // Value injected by FXMLLoader
 
-	@FXML // ResourceBundle that was given to the FXMLLoader
-	private ResourceBundle resources;
-
-	@FXML // URL location of the FXML file that was given to the FXMLLoader
-	private URL location;
+	@FXML // fx:id="overviewTab"
+	private Tab overviewTab; // Value injected by FXMLLoader
 
 	@FXML // fx:id="tabPane"
 	private TabPane tabPane; // Value injected by FXMLLoader
@@ -140,9 +145,36 @@ public class MainWindow {
 	private CheckBox checkboxAccountlessTransactions; // Value injected by
 														// FXMLLoader
 
+	@FXML // fx:id="diagramTab"
+	private Tab diagramTab; // Value injected by FXMLLoader
+
+	@FXML // fx:id="comboBoxAccountDiagramm"
+	private ComboBox<Integer> comboBoxAccountDiagramm; // Value injected by
+														// FXMLLoader
+
+	@FXML // fx:id="dateFromSpinner"
+	private DatePicker dateFromSpinner; // Value injected by FXMLLoader
+
+	@FXML // fx:id="dateUntilSpinner"
+	private DatePicker dateUntilSpinner; // Value injected by FXMLLoader
+
+	@FXML // fx:id="monthbackButton"
+	private Button monthbackButton; // Value injected by FXMLLoader
+
+	@FXML // fx:id="monthforwardButton"
+	private Button monthforwardButton; // Value injected by FXMLLoader
+
+	@FXML // fx:id="diagramm"
+	private LineChart<Date, Integer> diagramm; // Value injected by FXMLLoader
+
 	@FXML // This method is called by the FXMLLoader when initialization is
 			// complete
 	void initialize() {
+		assert this.menuClose != null : "fx:id=\"menuClose\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert this.menuCategory != null : "fx:id=\"menuCategory\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert this.menuAccount != null : "fx:id=\"menuAccount\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert this.menuAccCategory != null : "fx:id=\"menuAccCategory\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert this.overviewTab != null : "fx:id=\"overviewTab\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert this.tabPane != null : "fx:id=\"tabPane\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert this.tabJanuary != null : "fx:id=\"tabJanuary\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert this.tabFebruary != null : "fx:id=\"tabFebruary\" was not injected: check your FXML file 'MainWindow.fxml'.";
@@ -162,6 +194,14 @@ public class MainWindow {
 		assert this.comboBoxAccount != null : "fx:id=\"comboBoxAccount\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert this.SpinnerYear != null : "fx:id=\"SpinnerYear\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert this.buttonAddTransaction != null : "fx:id=\"buttonAddTransaction\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert this.checkboxAccountlessTransactions != null : "fx:id=\"checkboxAccountlessTransactions\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert this.diagramTab != null : "fx:id=\"diagramTab\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert this.comboBoxAccountDiagramm != null : "fx:id=\"comboBoxAccountDiagramm\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert this.dateFromSpinner != null : "fx:id=\"dateFromSpinner\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert this.dateUntilSpinner != null : "fx:id=\"dateUntilSpinner\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert this.monthbackButton != null : "fx:id=\"monthbackButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert this.monthforwardButton != null : "fx:id=\"monthforwardButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
+		assert this.diagramm != null : "fx:id=\"diagramm\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		this.checkboxAccountlessTransactions.setSelected(true);
 		this.init();
@@ -245,6 +285,41 @@ public class MainWindow {
 		if (yearChange) {
 			this.SpinnerYear.getValueFactory().setValue(this.SpinnerYear.getValue() - 1);
 		}
+	}
+
+	@FXML
+	void onComboBoxAccountDiagramm(final ActionEvent event) {
+
+	}
+
+	@FXML
+	void onDateFromSpinner(final ActionEvent event) {
+
+	}
+
+	@FXML
+	void onDateUntilSpinner(final ActionEvent event) {
+
+	}
+
+	@FXML
+	void onDiagramTab(final ActionEvent event) {
+
+	}
+
+	@FXML
+	void onMonthbackButton(final ActionEvent event) {
+
+	}
+
+	@FXML
+	void onMonthforwardButton(final ActionEvent event) {
+
+	}
+
+	@FXML
+	void onOverviewTab(final ActionEvent event) {
+
 	}
 
 	@FXML
