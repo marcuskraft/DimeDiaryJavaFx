@@ -18,6 +18,12 @@
             <TextField fx:id="fieldDescription" layoutX="103.0" onAction="#onFieldDescription" />
          </children>
       </Pane>
+      <Pane layoutX="14.0" layoutY="43.0">
+         <children>
+            <Label layoutY="4.0" text="Betrag" />
+            <Spinner fx:id="spinnerAmount" layoutX="103.0" />
+         </children>
+      </Pane>
       <Pane layoutX="14.0" layoutY="77.0">
          <children>
             <Label layoutY="4.0" text="Datum" />
@@ -34,12 +40,6 @@
          <children>
             <Label layoutY="4.0" text="Konto" />
             <ComboBox fx:id="comboboxAccount" layoutX="102.0" onAction="#onComboboxAccount" prefWidth="150.0" />
-         </children>
-      </Pane>
-      <Pane layoutX="14.0" layoutY="43.0">
-         <children>
-            <Label layoutY="4.0" text="Betrag" />
-            <Spinner fx:id="spinnerAmount" layoutX="103.0" />
          </children>
       </Pane>
       <Button fx:id="buttonRecurrence" layoutX="114.0" layoutY="184.0" mnemonicParsing="false" onAction="#onButtonRecurrence" prefHeight="25.0" prefWidth="149.0" text="keine Wiederholung" />

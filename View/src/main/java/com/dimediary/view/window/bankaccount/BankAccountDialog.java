@@ -43,7 +43,7 @@ import javafx.stage.Stage;
 
 public class BankAccountDialog implements IWindowParameterInjection {
 
-	private final static Logger log = LogManager.getLogger(DBUtils.class);
+	private final static Logger log = LogManager.getLogger(BankAccountDialog.class);
 
 	private ObservableList<String> items;
 

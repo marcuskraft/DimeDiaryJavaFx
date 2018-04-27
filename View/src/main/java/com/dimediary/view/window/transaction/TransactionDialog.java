@@ -122,9 +122,6 @@ public class TransactionDialog implements IWindowParameterInjection {
 				this.createNewContinuousTransaction();
 			}
 		}
-
-		this.mainWindow.refresh();
-		this.close();
 	}
 
 	@FXML
@@ -363,7 +360,8 @@ public class TransactionDialog implements IWindowParameterInjection {
 		this.transaction = new Transaction();
 		this.setTransactionAttributes(this.transaction);
 		DBUtils.getInstance().persist(this.transaction);
-
+		this.mainWindow.refresh();
+		this.close();
 	}
 
 	private void createNewContinuousTransaction() {
@@ -372,6 +370,8 @@ public class TransactionDialog implements IWindowParameterInjection {
 		final List<Transaction> transactions = ContinuousTransactionManager
 				.generateTransactionsFromNewContinuousTransaction(this.continuousTransaction);
 		DBUtils.getInstance().persistContinuousTransaction(this.continuousTransaction, transactions);
+		this.mainWindow.refresh();
+		this.close();
 	}
 
 	private void setContinuousTransactionAttributtes(final ContinuousTransaction continuousTransaction) {
@@ -386,6 +386,8 @@ public class TransactionDialog implements IWindowParameterInjection {
 	private void changeNewContinuousTransactionFromTransaction() {
 		DBUtils.getInstance().delete(this.transaction);
 		this.createNewContinuousTransaction();
+		this.mainWindow.refresh();
+		this.close();
 	}
 
 	private void changeContinuesTransactionToTransaction() {
@@ -395,6 +397,8 @@ public class TransactionDialog implements IWindowParameterInjection {
 	private void changeTransaction() {
 		DBUtils.getInstance().delete(this.transaction);
 		this.createNewTransaction();
+		this.mainWindow.refresh();
+		this.close();
 	}
 
 	private void changeContinuousTransaction() {
@@ -433,6 +437,9 @@ public class TransactionDialog implements IWindowParameterInjection {
 		} else {
 			this.createNewTransaction();
 		}
+
+		this.mainWindow.refresh();
+		this.close();
 	}
 
 	private void setTransactionAttributes(final Transaction transactionPara) {

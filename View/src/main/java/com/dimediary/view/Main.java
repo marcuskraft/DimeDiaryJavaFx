@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	private final static Logger log = LogManager.getLogger(DBUtils.class);
+	private final static Logger log = LogManager.getLogger(Main.class);
 
 	public static void main(final String[] args) {
 		try {
@@ -35,14 +35,14 @@ public class Main extends Application {
 		try {
 			root = FXMLLoader.load(resource);
 		} catch (final Exception e) {
-			log.error(e);
+			Main.log.error(e);
 			e.printStackTrace();
 			throw e;
 		}
 
 		final Scene scene = new Scene(root);
 
-		stage.setTitle("FXML Welcome");
+		stage.setTitle("DimeDiary");
 		stage.setScene(scene);
 		stage.show();
 	}
