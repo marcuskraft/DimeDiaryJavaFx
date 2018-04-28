@@ -294,27 +294,35 @@ public class MainWindow {
 
 	@FXML
 	void onComboBoxAccountDiagramm(final ActionEvent event) {
-
+		this.refreshDiagram();
 	}
 
 	@FXML
 	void onDateFromSpinner(final ActionEvent event) {
-
+		this.refreshDiagram();
 	}
 
 	@FXML
 	void onDateUntilSpinner(final ActionEvent event) {
-
+		this.refreshDiagram();
 	}
 
 	@FXML
 	void onMonthbackButton(final ActionEvent event) {
-
+		final LocalDate actualDateFrom = this.dateFromSpinner.getValue();
+		final LocalDate actualDateUntil = this.dateUntilSpinner.getValue();
+		this.dateFromSpinner.setValue(actualDateFrom.minusMonths(1));
+		this.dateUntilSpinner.setValue(actualDateUntil.minusMonths(1));
+		this.refreshDiagram();
 	}
 
 	@FXML
 	void onMonthforwardButton(final ActionEvent event) {
-
+		final LocalDate actualDateFrom = this.dateFromSpinner.getValue();
+		final LocalDate actualDateUntil = this.dateUntilSpinner.getValue();
+		this.dateFromSpinner.setValue(actualDateFrom.plusMonths(1));
+		this.dateUntilSpinner.setValue(actualDateUntil.plusMonths(1));
+		this.refreshDiagram();
 	}
 
 	@FXML
@@ -347,6 +355,8 @@ public class MainWindow {
 	HashMap<Month, Tab> month2Tabs;
 	Month actualMonth;
 
+	private LineChart<Number, Number> lineChart;
+
 	private void init() {
 
 		this.createOnTabEvents();
@@ -362,7 +372,7 @@ public class MainWindow {
 		this.dateFromSpinner.setValue(DateUtils.firstDayOfMonth(this.actualMonth, DateUtils.getActualYear()));
 		this.dateUntilSpinner.setValue(DateUtils.lastDayOfMonth(this.actualMonth, DateUtils.getActualYear()));
 
-		this.refreshDiagramm();
+		this.initializeDiagramm();
 
 	}
 
@@ -528,7 +538,7 @@ public class MainWindow {
 
 	}
 
-	private void refreshDiagramm() {
+	private void initializeDiagramm() {
 
 		final NumberAxis xAxis = new NumberAxis();
 		final NumberAxis yAxis = new NumberAxis();
@@ -537,12 +547,20 @@ public class MainWindow {
 
 		xAxis.setTickLabelFormatter(new NumberToDateStringConverter());
 
-		// creating the chart
-		final LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
+		this.lineChart = new LineChart<Number, Number>(xAxis, yAxis);
 
+		this.refreshDiagram();
+
+		this.borderPaneDiagramm.setCenter(this.lineChart);
+
+	}
+
+	private void refreshDiagram() {
 		final Series<Number, Number> series = new Series<>();
 
 		final BankAccount bankAccount = DBUtils.getInstance().getBankAccount(this.comboBoxAccountDiagramm.getValue());
+
+		series.setName("Kontostand " + bankAccount.getName());
 
 		final List<LocalDate> localDates = DateUtils.getLocalDatesFromTo(this.dateFromSpinner.getValue(),
 				this.dateUntilSpinner.getValue());
@@ -553,14 +571,14 @@ public class MainWindow {
 			series.getData().add(new XYChart.Data<Number, Number>(Long.valueOf(localDate.toEpochDay()), balance));
 		}
 
-		lineChart.getData().add(series);
+		this.lineChart.getData().clear();
+		this.lineChart.getData().add(series);
+
+		final NumberAxis xAxis = (NumberAxis) this.lineChart.getXAxis();
 
 		xAxis.setAutoRanging(false);
 		xAxis.setLowerBound(localDates.get(0).toEpochDay());
 		xAxis.setUpperBound(localDates.get(localDates.size() - 1).toEpochDay());
-
-		this.borderPaneDiagramm.setCenter(lineChart);
-
 	}
 
 	private Pane getEmptyPane(final MainWindow mainWindow, final Date date) {
@@ -722,7 +740,7 @@ public class MainWindow {
 		});
 
 		this.diagramTab.setOnSelectionChanged((event) -> {
-			this.refreshDiagramm();
+			this.refreshDiagram();
 		});
 	}
 
