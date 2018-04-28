@@ -7,6 +7,7 @@ package com.dimediary.view.window.main;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,6 +28,7 @@ import com.dimediary.view.window.category.CategoryDialog;
 import com.dimediary.view.window.transaction.TransactionButton;
 import com.dimediary.view.window.transaction.TransactionButtonFactory;
 import com.dimediary.view.window.transaction.TransactionDialog;
+import com.dimediary.view.window.util.NumberToDateStringConverter;
 import com.dimediary.view.window.util.WindowCreater;
 import com.dimediary.view.window.util.WindowParameters;
 
@@ -40,6 +42,9 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
+import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -56,6 +61,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
@@ -149,7 +155,7 @@ public class MainWindow {
 	private Tab diagramTab; // Value injected by FXMLLoader
 
 	@FXML // fx:id="comboBoxAccountDiagramm"
-	private ComboBox<Integer> comboBoxAccountDiagramm; // Value injected by
+	private ComboBox<String> comboBoxAccountDiagramm; // Value injected by
 														// FXMLLoader
 
 	@FXML // fx:id="dateFromSpinner"
@@ -164,8 +170,8 @@ public class MainWindow {
 	@FXML // fx:id="monthforwardButton"
 	private Button monthforwardButton; // Value injected by FXMLLoader
 
-	@FXML // fx:id="diagramm"
-	private LineChart<Date, Integer> diagramm; // Value injected by FXMLLoader
+	@FXML // fx:id="borderPaneDiagramm"
+	private BorderPane borderPaneDiagramm; // Value injected by FXMLLoader
 
 	@FXML // This method is called by the FXMLLoader when initialization is
 			// complete
@@ -201,7 +207,6 @@ public class MainWindow {
 		assert this.dateUntilSpinner != null : "fx:id=\"dateUntilSpinner\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert this.monthbackButton != null : "fx:id=\"monthbackButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
 		assert this.monthforwardButton != null : "fx:id=\"monthforwardButton\" was not injected: check your FXML file 'MainWindow.fxml'.";
-		assert this.diagramm != null : "fx:id=\"diagramm\" was not injected: check your FXML file 'MainWindow.fxml'.";
 
 		this.checkboxAccountlessTransactions.setSelected(true);
 		this.init();
@@ -303,22 +308,12 @@ public class MainWindow {
 	}
 
 	@FXML
-	void onDiagramTab(final ActionEvent event) {
-
-	}
-
-	@FXML
 	void onMonthbackButton(final ActionEvent event) {
 
 	}
 
 	@FXML
 	void onMonthforwardButton(final ActionEvent event) {
-
-	}
-
-	@FXML
-	void onOverviewTab(final ActionEvent event) {
 
 	}
 
@@ -364,6 +359,11 @@ public class MainWindow {
 
 		this.refreshFirst();
 
+		this.dateFromSpinner.setValue(DateUtils.firstDayOfMonth(this.actualMonth, DateUtils.getActualYear()));
+		this.dateUntilSpinner.setValue(DateUtils.lastDayOfMonth(this.actualMonth, DateUtils.getActualYear()));
+
+		this.refreshDiagramm();
+
 	}
 
 	private void initSpinnerYear() {
@@ -401,11 +401,13 @@ public class MainWindow {
 			return;
 		}
 		this.comboBoxAccount.setItems(bankAccountNames);
+		this.comboBoxAccountDiagramm.setItems(bankAccountNames);
 
 		if (bankAccountNames.size() == 0) {
 			return;
 		}
 		this.comboBoxAccount.setValue(bankAccountNames.get(0));
+		this.comboBoxAccountDiagramm.setValue(bankAccountNames.get(0));
 	}
 
 	public void refresh() {
@@ -523,6 +525,41 @@ public class MainWindow {
 		this.month2Tabs.get(month).setContent(scrollPane);
 		gridPane.setMinSize(0, 0);
 		gridPane.setGridLinesVisible(true);
+
+	}
+
+	private void refreshDiagramm() {
+
+		final NumberAxis xAxis = new NumberAxis();
+		final NumberAxis yAxis = new NumberAxis();
+		xAxis.setLabel("Datum");
+		yAxis.setLabel("Kontostand");
+
+		xAxis.setTickLabelFormatter(new NumberToDateStringConverter());
+
+		// creating the chart
+		final LineChart<Number, Number> lineChart = new LineChart<Number, Number>(xAxis, yAxis);
+
+		final Series<Number, Number> series = new Series<>();
+
+		final BankAccount bankAccount = DBUtils.getInstance().getBankAccount(this.comboBoxAccountDiagramm.getValue());
+
+		final List<LocalDate> localDates = DateUtils.getLocalDatesFromTo(this.dateFromSpinner.getValue(),
+				this.dateUntilSpinner.getValue());
+
+		for (final LocalDate localDate : localDates) {
+			final Date date = DateUtils.localDateToDate(localDate);
+			final Double balance = AccountBalancer.getBalance(bankAccount, date);
+			series.getData().add(new XYChart.Data<Number, Number>(Long.valueOf(localDate.toEpochDay()), balance));
+		}
+
+		lineChart.getData().add(series);
+
+		xAxis.setAutoRanging(false);
+		xAxis.setLowerBound(localDates.get(0).toEpochDay());
+		xAxis.setUpperBound(localDates.get(localDates.size() - 1).toEpochDay());
+
+		this.borderPaneDiagramm.setCenter(lineChart);
 
 	}
 
@@ -678,6 +715,14 @@ public class MainWindow {
 
 		this.tabDecember.setOnSelectionChanged((event) -> {
 			this.refreshMonthOverview(Month.DECEMBER);
+		});
+
+		this.overviewTab.setOnSelectionChanged((event) -> {
+			this.refreshMonthOverview();
+		});
+
+		this.diagramTab.setOnSelectionChanged((event) -> {
+			this.refreshDiagramm();
 		});
 	}
 

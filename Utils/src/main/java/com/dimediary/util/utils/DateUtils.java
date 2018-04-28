@@ -7,9 +7,11 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import org.dmfs.rfc5545.DateTime;
+import org.junit.Assert;
 
 import com.dimediary.model.entities.BankAccount;
 
@@ -70,8 +72,8 @@ public class DateUtils {
 	/**
 	 *
 	 * @param date
-	 * @return next sunday corresponding to the given date. The next sunday will
-	 *         be returned even if the given date is already a sunday.
+	 * @return next sunday corresponding to the given date. The next sunday will be
+	 *         returned even if the given date is already a sunday.
 	 */
 	public static Date getNextSunday(final Date date) {
 		final Calendar calendar = Calendar.getInstance();
@@ -98,9 +100,9 @@ public class DateUtils {
 	 *
 	 * @param bankAccount
 	 * @param dateFrom
-	 * @return list of sundays from the dateFrom on or if this is null the
-	 *         creation date of the given bank account until 108 weeks in the
-	 *         future related to the actual date
+	 * @return list of sundays from the dateFrom on or if this is null the creation
+	 *         date of the given bank account until 108 weeks in the future related
+	 *         to the actual date
 	 */
 	public static ArrayList<Date> getAllSundaysForBalancing(final BankAccount bankAccount, final Date dateFrom) {
 		final ArrayList<Date> sundays = new ArrayList<>();
@@ -158,8 +160,7 @@ public class DateUtils {
 	/**
 	 *
 	 * @param date
-	 * @return date which is one day in the future corresponding to the given
-	 *         date
+	 * @return date which is one day in the future corresponding to the given date
 	 */
 	public static Date addOneDay(final Date date) {
 		final Calendar calendar = Calendar.getInstance();
@@ -171,8 +172,7 @@ public class DateUtils {
 	/**
 	 *
 	 * @param date
-	 * @return date which is one day in the future corresponding to the given
-	 *         date
+	 * @return date which is one day in the future corresponding to the given date
 	 */
 	public static Date minusOneDay(final Date date) {
 		final Calendar calendar = Calendar.getInstance();
@@ -308,6 +308,15 @@ public class DateUtils {
 		return dates;
 	}
 
+	public static LocalDate firstDayOfMonth(Month month, int year) {
+		return LocalDate.of(year, month, 1);
+	}
+
+	public static LocalDate lastDayOfMonth(Month month, int year) {
+		final LocalDate localDate = LocalDate.of(year, month, 1);
+		return localDate.withDayOfMonth(localDate.lengthOfMonth());
+	}
+
 	public static Date localDateToDate(final LocalDate localDate) {
 		return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 	}
@@ -330,6 +339,21 @@ public class DateUtils {
 
 	public static DateTime dateToDateTime(final Date date) {
 		return new DateTime(TimeZone.getDefault(), date.getTime());
+	}
+
+	public static List<LocalDate> getLocalDatesFromTo(LocalDate fromDate, LocalDate untilDate) {
+		Assert.assertTrue(fromDate.isBefore(untilDate));
+
+		final List<LocalDate> dates = new ArrayList<>();
+
+		LocalDate nextDate = fromDate;
+
+		do {
+			dates.add(nextDate);
+			nextDate = nextDate.plusDays(1);
+		} while (nextDate.isBefore(untilDate));
+
+		return dates;
 	}
 
 }
