@@ -560,6 +560,10 @@ public class MainWindow {
 
 		final BankAccount bankAccount = DBUtils.getInstance().getBankAccount(this.comboBoxAccountDiagramm.getValue());
 
+		if (bankAccount == null) {
+			return;
+		}
+
 		series.setName("Kontostand " + bankAccount.getName());
 
 		final List<LocalDate> localDates = DateUtils.getLocalDatesFromTo(this.dateFromSpinner.getValue(),
