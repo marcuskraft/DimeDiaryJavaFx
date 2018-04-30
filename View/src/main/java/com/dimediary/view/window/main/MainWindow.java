@@ -6,12 +6,10 @@ package com.dimediary.view.window.main;
 
 import java.io.IOException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Month;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -275,12 +273,7 @@ public class MainWindow {
 			month = Month.DECEMBER;
 			yearChange = true;
 		} else {
-			final Calendar calendar = Calendar.getInstance();
-			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			calendar.set(Calendar.MONTH, month.getValue() - 2);
-			// minus 1 because shift between month as value and enum and minus 1
-			// because we want to shift by one month
-			month = DateUtils.getMonth(calendar.getTime());
+			month = LocalDate.of(2018, month, 1).minusMonths(1).getMonth();
 		}
 
 		this.tabPane.getSelectionModel().select(this.month2Tabs.get(month));
@@ -335,12 +328,7 @@ public class MainWindow {
 			month = Month.JANUARY;
 			yearChange = true;
 		} else {
-			final Calendar calendar = Calendar.getInstance();
-			calendar.set(Calendar.DAY_OF_MONTH, 1);
-			calendar.set(Calendar.MONTH, month.getValue());
-			// minus 1 because shift between month as value and enum and plus 1
-			// because we want to shift by one month
-			month = DateUtils.getMonth(calendar.getTime());
+			month = LocalDate.of(2018, month, 1).minusMonths(1).getMonth();
 		}
 
 		this.tabPane.getSelectionModel().select(this.month2Tabs.get(month));
@@ -437,16 +425,16 @@ public class MainWindow {
 		}
 		this.actualMonth = month;
 
-		final ArrayList<Date> dates = DateUtils.getDatesForMonth(month, this.SpinnerYear.getValue());
+		final ArrayList<LocalDate> dates = DateUtils.getDatesForMonth(month, this.SpinnerYear.getValue());
 		final String bankaccountName = this.comboBoxAccount.getValue();
 		final BankAccount bankAccount = DBUtils.getInstance().getBankAccount(bankaccountName);
 
-		final HashMap<Date, Double> balances = AccountBalancer.getBalancesFollowingDays(bankAccount, dates);
+		final HashMap<LocalDate, Double> balances = AccountBalancer.getBalancesFollowingDays(bankAccount, dates);
 
-		final HashMap<Date, ArrayList<Transaction>> transactionsForDates = new HashMap<>();
+		final HashMap<LocalDate, ArrayList<Transaction>> transactionsForDates = new HashMap<>();
 
 		int maxTransaction = 0;
-		for (final Date date : dates) {
+		for (final LocalDate date : dates) {
 			List<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount, date);
 
 			if (transactions == null) {
@@ -490,8 +478,8 @@ public class MainWindow {
 
 		final MainWindow mainWindow = this;
 
-		final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.MM.yyyy");
-		final SimpleDateFormat simpleDateFormatDay = new SimpleDateFormat("E");
+		final DateTimeFormatter simpleDateFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+		final DateTimeFormatter simpleDateFormatDay = DateTimeFormatter.ofPattern("E");
 		for (int i = 1; i <= dates.size(); i++) {
 			final Double balance = balances.get(dates.get(i - 1));
 			String balanceString;
@@ -513,7 +501,7 @@ public class MainWindow {
 			gridPane.add(labelDate, 0, i);
 			gridPane.add(labelDay, 1, i);
 
-			final Date date = dates.get(i - 1);
+			final LocalDate date = dates.get(i - 1);
 			final ArrayList<Transaction> transactions = transactionsForDates.get(date);
 
 			for (int j = 0; j < transactions.size(); j++) {
@@ -570,8 +558,7 @@ public class MainWindow {
 				this.dateUntilSpinner.getValue());
 
 		for (final LocalDate localDate : localDates) {
-			final Date date = DateUtils.localDateToDate(localDate);
-			final Double balance = AccountBalancer.getBalance(bankAccount, date);
+			final Double balance = AccountBalancer.getBalance(bankAccount, localDate);
 			series.getData().add(new XYChart.Data<Number, Number>(Long.valueOf(localDate.toEpochDay()), balance));
 		}
 
@@ -585,7 +572,7 @@ public class MainWindow {
 		xAxis.setUpperBound(localDates.get(localDates.size() - 1).toEpochDay());
 	}
 
-	private Pane getEmptyPane(final MainWindow mainWindow, final Date date) {
+	private Pane getEmptyPane(final MainWindow mainWindow, final LocalDate date) {
 		final Pane pane = new Pane();
 
 		pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -597,7 +584,7 @@ public class MainWindow {
 				if (date != null) {
 					final WindowParameters parameters = new WindowParameters();
 					parameters.put(MainWindow.class, mainWindow);
-					parameters.put(Date.class, date);
+					parameters.put(LocalDate.class, date);
 					final WindowCreater<TransactionDialog> windowCreater = new WindowCreater<>();
 					windowCreater.createWindow(Main.class.getResource("design/window/TransactionDialog.fxml"),
 							"Transaktion erstellen / bearbeiten", parameters);
@@ -708,7 +695,10 @@ public class MainWindow {
 		});
 
 		this.tabMay.setOnSelectionChanged((event) -> {
-			this.refreshMonthOverview(Month.MAY);
+			if (event.getSource() == this.tabMay) {
+				this.refreshMonthOverview(Month.MAY);
+			}
+
 		});
 
 		this.tabJune.setOnSelectionChanged((event) -> {

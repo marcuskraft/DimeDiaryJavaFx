@@ -1,7 +1,7 @@
 package com.dimediary.util.utils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -222,10 +222,10 @@ public class DBUtils {
 	 *            bank account
 	 * @param date
 	 *            date
-	 * @return list of balance histories for this bank account after the given
-	 *         date (including the given date)
+	 * @return list of balance histories for this bank account after the given date
+	 *         (including the given date)
 	 */
-	public ArrayList<BalanceHistory> getBalanceHistoriesAfterDate(final BankAccount bankAccount, final Date date) {
+	public ArrayList<BalanceHistory> getBalanceHistoriesAfterDate(final BankAccount bankAccount, final LocalDate date) {
 		if (bankAccount == null || date == null) {
 			return null;
 		}
@@ -243,7 +243,7 @@ public class DBUtils {
 	 * @param date
 	 * @return balance history of this bank account at the given date
 	 */
-	public BalanceHistory getBalanceHistory(final BankAccount bankAccount, final Date date) {
+	public BalanceHistory getBalanceHistory(final BankAccount bankAccount, final LocalDate date) {
 		if (bankAccount == null || date == null) {
 			return null;
 		}
@@ -284,7 +284,8 @@ public class DBUtils {
 	 * @param bankAccountName
 	 * @return list of transactions
 	 */
-	public List<Transaction> getTransactions(final Date dateFrom, final Date dateUntil, final String bankAccountName) {
+	public List<Transaction> getTransactions(final LocalDate dateFrom, final LocalDate dateUntil,
+			final String bankAccountName) {
 		if (dateFrom == null || dateUntil == null || bankAccountName == null) {
 			return null;
 		}
@@ -298,10 +299,11 @@ public class DBUtils {
 	 * @param dateFrom
 	 * @param dateUntil
 	 * @param bankAccount
-	 * @return list of transactions belonging to the given bank account between
-	 *         the two dates (including both days)
+	 * @return list of transactions belonging to the given bank account between the
+	 *         two dates (including both days)
 	 */
-	public List<Transaction> getTransactions(final Date dateFrom, final Date dateUntil, final BankAccount bankAccount) {
+	public List<Transaction> getTransactions(final LocalDate dateFrom, final LocalDate dateUntil,
+			final BankAccount bankAccount) {
 		if (dateFrom == null || dateUntil == null || bankAccount == null) {
 			return null;
 		}
@@ -342,7 +344,7 @@ public class DBUtils {
 	 * @param date
 	 * @return list of transactions at the given date for the given bank account
 	 */
-	public ArrayList<Transaction> getTransactions(final BankAccount bankAccount, final Date date) {
+	public ArrayList<Transaction> getTransactions(final BankAccount bankAccount, final LocalDate date) {
 		if (bankAccount == null || date == null) {
 			return null;
 		}
@@ -358,11 +360,11 @@ public class DBUtils {
 	 *
 	 * @param continuousTransaction
 	 * @param date
-	 * @return list of transactions belonging to this continuous transaction
-	 *         after the given date (inclusive)
+	 * @return list of transactions belonging to this continuous transaction after
+	 *         the given date (inclusive)
 	 */
-	public ArrayList<Transaction> getTransactionsFromDate(final ContinuousTransaction continuousTransaction,
-			final Date date) {
+	public List<Transaction> getTransactionsFromDate(final ContinuousTransaction continuousTransaction,
+			final LocalDate date) {
 		if (continuousTransaction == null || date == null) {
 			return null;
 		}
@@ -374,7 +376,7 @@ public class DBUtils {
 				.createNamedQuery("ContinuousTransansactionFromDate", Transaction.class)
 				.setParameter("continuousTransaction", continuousTransaction).setParameter("date", date)
 				.getResultList();
-		return new ArrayList<Transaction>(transactions);
+		return transactions;
 	}
 
 	/**
@@ -403,7 +405,7 @@ public class DBUtils {
 	 * @return all transactions in the given date range (both inclusive) with no
 	 *         bank account
 	 */
-	public ArrayList<Transaction> getTransactionsWithoutAccount(final Date dateFrom, final Date dateUntil) {
+	public ArrayList<Transaction> getTransactionsWithoutAccount(final LocalDate dateFrom, final LocalDate dateUntil) {
 		if (dateFrom == null || dateUntil == null) {
 			return null;
 		}
@@ -421,7 +423,7 @@ public class DBUtils {
 	 * @param date
 	 * @return all transaction on the given date without a bank account
 	 */
-	public ArrayList<Transaction> getTrandactionsWithoutAccount(final Date date) {
+	public ArrayList<Transaction> getTrandactionsWithoutAccount(final LocalDate date) {
 		if (date == null) {
 			return null;
 		}
@@ -448,14 +450,14 @@ public class DBUtils {
 				ContinuousTransaction.class).setParameter("bankAccount", bankAccount).getResultList();
 	}
 
-	public Date getDateOfLastTransaction(final ContinuousTransaction continuousTransaction) {
+	public LocalDate getDateOfLastTransaction(final ContinuousTransaction continuousTransaction) {
 		if (continuousTransaction == null) {
 			return null;
 		}
 		this.entityManager.merge(continuousTransaction);
 		DBUtils.log.info("getDateOfLastTransaction for: " + continuousTransaction.getName());
 		return this.entityManager
-				.createNamedQuery(Transaction.DATE_OF_LAST_TRANSACTION_OF_CONTINUOUS_TRANSACTION, Date.class)
+				.createNamedQuery(Transaction.DATE_OF_LAST_TRANSACTION_OF_CONTINUOUS_TRANSACTION, LocalDate.class)
 				.setParameter("continuousTransaction", continuousTransaction).getSingleResult();
 	}
 

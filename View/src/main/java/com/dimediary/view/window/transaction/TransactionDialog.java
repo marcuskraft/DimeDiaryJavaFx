@@ -5,7 +5,7 @@ package com.dimediary.view.window.transaction;
  */
 
 import java.net.URL;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -185,7 +185,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 		this.refreshCategories(true);
 		this.refreshBankAccounts(true);
 
-		this.datepicker.setValue(DateUtils.date2LocalDate(new Date()));
+		this.datepicker.setValue(LocalDate.now());
 
 		this.fieldDescription.setText("");
 
@@ -314,9 +314,9 @@ public class TransactionDialog implements IWindowParameterInjection {
 			this.initContinuousTransaction();
 		}
 
-		object = parameters.getParameters().get(Date.class);
-		if (object != null && object instanceof Date) {
-			this.datepicker.setValue(DateUtils.date2LocalDate((Date) object));
+		object = parameters.getParameters().get(LocalDate.class);
+		if (object != null && object instanceof LocalDate) {
+			this.datepicker.setValue((LocalDate) object);
 		}
 
 	}
@@ -327,7 +327,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 		this.refreshCategories(true);
 		this.refreshBankAccounts(true);
 
-		this.datepicker.setValue(DateUtils.date2LocalDate(this.continuousTransaction.getDateBeginn()));
+		this.datepicker.setValue(this.continuousTransaction.getDateBeginn());
 
 		this.fieldDescription.setText(this.continuousTransaction.getName());
 
@@ -348,7 +348,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 		this.refreshCategories(true);
 		this.refreshBankAccounts(true);
 
-		this.datepicker.setValue(DateUtils.date2LocalDate(this.transaction.getDate()));
+		this.datepicker.setValue(this.transaction.getDate());
 		this.fieldDescription.setText(this.transaction.getName());
 
 		final Double amount = this.transaction.getAmount();
@@ -404,13 +404,13 @@ public class TransactionDialog implements IWindowParameterInjection {
 	private void changeContinuousTransaction() {
 		final WindowParameters parameters = new WindowParameters();
 		parameters.put(TransactionDialog.class, this);
-		parameters.put(Date.class, DateUtils.localDateToDate(this.datepicker.getValue()));
+		parameters.put(LocalDate.class, this.datepicker.getValue());
 		final WindowCreater<MergeContinuousTransactionDialog> windowCreater = new WindowCreater<>();
 		windowCreater.createWindow(Main.class.getResource("design/window/MergeContinuousTransactionDialog.fxml"),
 				"Ab wann?", parameters);
 	}
 
-	public void changeContinuosTransacationFrom(final Date dateFrom) {
+	public void changeContinuosTransacationFrom(final LocalDate dateFrom) {
 		if (this.continuousTransaction == null) {
 			throw new IllegalStateException("continuousTransaction should not be null");
 		}
@@ -418,7 +418,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 		if (dateFrom == null) {
 			DBUtils.getInstance().deleteAllContinuousTransactions(this.continuousTransaction);
 		} else {
-			this.datepicker.setValue(DateUtils.date2LocalDate(dateFrom));
+			this.datepicker.setValue(dateFrom);
 
 			final List<Transaction> transactionsAfter = DBUtils.getInstance()
 					.getTransactionsFromDate(this.continuousTransaction, dateFrom);
@@ -426,8 +426,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 			final RecurrenceRule recurrenceRuleOfOldContinuousTransaction = RecurrenceRuleUtils
 					.createRecurrenceRule(this.continuousTransaction.getRecurrenceRule());
-			recurrenceRuleOfOldContinuousTransaction
-					.setUntil(DateUtils.dateToDateTime(DateUtils.minusOneDay(dateFrom)));
+			recurrenceRuleOfOldContinuousTransaction.setUntil(DateUtils.localDateToDateTime(dateFrom.minusDays(1)));
 			this.continuousTransaction.setRecurrenceRule(this.recurrenceRule.toString());
 			DBUtils.getInstance().merge(this.continuousTransaction);
 		}
@@ -454,10 +453,8 @@ public class TransactionDialog implements IWindowParameterInjection {
 		return this.fieldDescription.getText();
 	}
 
-	private Date getDate() {
-		final Date startDate = DateUtils.localDateToDate(this.datepicker.getValue());
-
-		return startDate;
+	private LocalDate getDate() {
+		return this.datepicker.getValue();
 	}
 
 	private Category getCategory() {

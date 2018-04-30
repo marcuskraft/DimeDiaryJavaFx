@@ -1,7 +1,7 @@
 package com.dimediary.model.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,12 +11,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  * entity class for bank accounts
- * 
+ *
  * @author eyota
  *
  */
@@ -53,9 +51,8 @@ public class BankAccount implements Serializable {
 	@JoinColumn(name = "BANKACCOUNT_CATEGORY_NAME")
 	private BankAccountCategory bankAccountCategory;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "DATE_STARTBUDGET")
-	private Date dateStartBudget;
+	private LocalDate dateStartBudget;
 
 	@Column(name = "STARTBUDGET")
 	private Double startBudget;
@@ -138,7 +135,7 @@ public class BankAccount implements Serializable {
 
 	/**
 	 * BIC of the bank account
-	 * 
+	 *
 	 * @param bic
 	 */
 	public void setBic(final String bic) {
@@ -166,7 +163,7 @@ public class BankAccount implements Serializable {
 	 *
 	 * @return Date for which the start budget (getStartBudget) belongs to
 	 */
-	public Date getDateStartBudget() {
+	public LocalDate getDateStartBudget() {
 		return this.dateStartBudget;
 	}
 
@@ -175,7 +172,7 @@ public class BankAccount implements Serializable {
 	 * @param dateStartBudget
 	 *            Date for which the start budget (getStartBudget) belongs to
 	 */
-	public void setDateStartBudget(final Date dateStartBudget) {
+	public void setDateStartBudget(final LocalDate dateStartBudget) {
 		this.dateStartBudget = dateStartBudget;
 	}
 
@@ -189,7 +186,7 @@ public class BankAccount implements Serializable {
 
 	/**
 	 * start budget at the Date of dateStartBudget
-	 * 
+	 *
 	 * @param startBudget
 	 */
 	public void setStartBudget(final Double startBudget) {

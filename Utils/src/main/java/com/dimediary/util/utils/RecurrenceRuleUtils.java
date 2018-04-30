@@ -1,7 +1,7 @@
 package com.dimediary.util.utils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
@@ -16,23 +16,21 @@ public class RecurrenceRuleUtils {
 
 	private final static Logger log = LogManager.getLogger(RecurrenceRuleUtils.class);
 
-	public final static int numberOfMonthFutureTransactions = 120;
-
-	public static List<Date> getDatesForRecurrenceRule(final RecurrenceRule recurrenceRule, final DateTime beginOfRule,
-			final DateTime dateFrom) {
-		final List<Date> dates = new ArrayList<>();
+	public static List<LocalDate> getDatesForRecurrenceRule(final RecurrenceRule recurrenceRule,
+			final DateTime beginOfRule, final DateTime dateFrom) {
+		final List<LocalDate> dates = new ArrayList<>();
 		final RecurrenceRuleIterator recurrenceRuleIterator = recurrenceRule.iterator(beginOfRule);
 
 		if (dateFrom != null) {
 			recurrenceRuleIterator.fastForward(dateFrom);
 		}
 
-		final Date dateUntilMax = DateUtils.AddMonth(new Date(), RecurrenceRuleUtils.numberOfMonthFutureTransactions);
+		final LocalDate dateUntilMax = LocalDate.now().plusMonths(DateUtils.numberOfMonthFutureTransactions);
 
-		Date date = DateUtils.dateTimeToDate(beginOfRule);
-		while (recurrenceRuleIterator.hasNext() && date.before(dateUntilMax)) {
+		LocalDate date = DateUtils.dateTimeToLocalDate(beginOfRule);
+		while (recurrenceRuleIterator.hasNext() && date.isBefore(dateUntilMax)) {
 			final DateTime dateTime = recurrenceRuleIterator.nextDateTime();
-			date = DateUtils.dateTimeToDate(dateTime);
+			date = DateUtils.dateTimeToLocalDate(dateTime);
 			dates.add(date);
 		}
 		return dates;
@@ -47,24 +45,18 @@ public class RecurrenceRuleUtils {
 		}
 	}
 
-	public static Date getLastDateByCount(final RecurrenceRule recurrenceRule, final DateTime begin) {
+	public static LocalDate getLastDateByCount(final RecurrenceRule recurrenceRule, final DateTime begin) {
 		if (recurrenceRule.isInfinite()) {
 			return null;
 		}
 
 		final RecurrenceRuleIterator recurrenceRuleIterator = recurrenceRule.iterator(begin);
 		recurrenceRuleIterator.skipAllButLast();
-		Date date = null;
+		LocalDate date = null;
 		if (recurrenceRuleIterator.hasNext()) {
-			date = DateUtils.dateTimeToDate(recurrenceRuleIterator.nextDateTime());
+			date = DateUtils.dateTimeToLocalDate(recurrenceRuleIterator.nextDateTime());
 		}
 		return date;
 	}
-
-	// public static Date getFirstDateOfRuleAfter(final RecurrenceRule
-	// recurrenceRule, final DateTime startDate) {
-	// final RecurrenceRuleIterator recurrenceRuleIterator =
-	// recurrenceRule.iterator(startDate);
-	// }
 
 }

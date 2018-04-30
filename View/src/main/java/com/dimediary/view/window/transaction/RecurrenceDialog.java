@@ -2,8 +2,8 @@ package com.dimediary.view.window.transaction;
 
 import java.net.URL;
 import java.security.InvalidParameterException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -364,7 +364,7 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 
 		this.noEndRadioButton.setSelected(true);
 
-		this.untilDatepicker.setValue(DateUtils.date2LocalDate(new Date()));
+		this.untilDatepicker.setValue(LocalDate.now());
 
 		this.onFrequenceCombobox(null);
 

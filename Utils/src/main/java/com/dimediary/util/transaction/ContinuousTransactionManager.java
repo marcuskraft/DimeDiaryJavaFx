@@ -1,7 +1,7 @@
 package com.dimediary.util.transaction;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.dmfs.rfc5545.recur.RecurrenceRule;
@@ -16,7 +16,7 @@ public class ContinuousTransactionManager {
 
 	public static List<Transaction> generateTransactionsFromContinuousTransaction(
 			final ContinuousTransaction continuousTransaction) {
-		final Date currentMaxDate = DBUtils.getInstance().getDateOfLastTransaction(continuousTransaction);
+		final LocalDate currentMaxDate = DBUtils.getInstance().getDateOfLastTransaction(continuousTransaction);
 		return ContinuousTransactionManager.generateTransactionsFromContinuousTransaction(continuousTransaction,
 				currentMaxDate);
 	}
@@ -28,10 +28,10 @@ public class ContinuousTransactionManager {
 	}
 
 	private static List<Transaction> generateTransactionsFromContinuousTransaction(
-			final ContinuousTransaction continuousTransaction, final Date fromDate) {
+			final ContinuousTransaction continuousTransaction, final LocalDate fromDate) {
 		final RecurrenceRule recurrenceRule = RecurrenceRuleUtils
 				.createRecurrenceRule(continuousTransaction.getRecurrenceRule());
-		Date firstDate = fromDate;
+		LocalDate firstDate = fromDate;
 		boolean skipFirst = false;
 		if (firstDate == null) {
 			firstDate = continuousTransaction.getDateBeginn();
@@ -39,15 +39,16 @@ public class ContinuousTransactionManager {
 			skipFirst = true;
 		}
 
-		final List<Date> dates = RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule,
-				DateUtils.dateToDateTime(continuousTransaction.getDateBeginn()), DateUtils.dateToDateTime(firstDate));
+		final List<LocalDate> dates = RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule,
+				DateUtils.localDateToDateTime(continuousTransaction.getDateBeginn()),
+				DateUtils.localDateToDateTime(firstDate));
 
-		if (skipFirst) {
+		if (dates != null && !dates.isEmpty() && skipFirst) {
 			dates.remove(0);
 		}
 
 		final List<Transaction> transactions = new ArrayList<>();
-		for (final Date date : dates) {
+		for (final LocalDate date : dates) {
 			transactions.add(continuousTransaction.createTransaction(date));
 		}
 

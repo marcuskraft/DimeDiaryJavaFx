@@ -5,7 +5,7 @@
 package com.dimediary.view.window.transaction;
 
 import java.net.URL;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import com.dimediary.model.entities.ContinuousTransaction;
@@ -25,7 +25,7 @@ public class AllTransactionWindow implements IWindowParameterInjection {
 
 	private Transaction transaction;
 
-	private Date date;
+	private LocalDate date;
 
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -50,7 +50,7 @@ public class AllTransactionWindow implements IWindowParameterInjection {
 		parameters.put(ContinuousTransaction.class, this.transaction.getContinuousTransaction());
 		parameters.put(MainWindow.class, this.mainWindow);
 		if (this.date != null) {
-			parameters.put(Date.class, this.date);
+			parameters.put(LocalDate.class, this.date);
 		}
 
 		final WindowCreater<TransactionDialog> windowCreater = new WindowCreater<>();
@@ -112,9 +112,9 @@ public class AllTransactionWindow implements IWindowParameterInjection {
 		}
 		this.setTransaction((Transaction) object);
 
-		object = parameters.getParameters().get(Date.class);
-		if (object != null && object instanceof Date) {
-			this.date = (Date) object;
+		object = parameters.getParameters().get(LocalDate.class);
+		if (object != null && object instanceof LocalDate) {
+			this.date = (LocalDate) object;
 		}
 	}
 

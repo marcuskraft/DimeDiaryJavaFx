@@ -1,7 +1,7 @@
 package com.dimediary.model.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,8 +12,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.dimediary.model.utils.AmountUtils;
 
@@ -38,9 +36,8 @@ public class BalanceHistory implements Serializable {
 	private static final long serialVersionUID = -8067932338253105032L;
 
 	@Id
-	@Temporal(TemporalType.DATE)
 	@Column(name = "DATE")
-	private Date date;
+	private LocalDate date;
 
 	@Id
 	@ManyToOne
@@ -54,7 +51,7 @@ public class BalanceHistory implements Serializable {
 	 *
 	 * @return Date of this balance
 	 */
-	public Date getDate() {
+	public LocalDate getDate() {
 		return this.date;
 	}
 
@@ -63,7 +60,7 @@ public class BalanceHistory implements Serializable {
 	 * @param date
 	 *            Date of this balance
 	 */
-	public void setDate(final Date date) {
+	public void setDate(final LocalDate date) {
 		this.date = date;
 	}
 
@@ -102,8 +99,7 @@ public class BalanceHistory implements Serializable {
 	}
 
 	/**
-	 * adds an amount to this balance (e.g. if a transaction was added or
-	 * deleted)
+	 * adds an amount to this balance (e.g. if a transaction was added or deleted)
 	 *
 	 * @param amount
 	 *            amount to be added (can be negative)

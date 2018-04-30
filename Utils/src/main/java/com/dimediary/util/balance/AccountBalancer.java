@@ -1,7 +1,7 @@
 package com.dimediary.util.balance;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -45,12 +45,12 @@ public class AccountBalancer {
 	 *            the date
 	 * @return returns the balance for this bank account and date
 	 */
-	public static Double getBalance(final BankAccount bankAccount, final Date date) {
-		if (bankAccount == null || date == null || date.before(bankAccount.getDateStartBudget())) {
+	public static Double getBalance(final BankAccount bankAccount, final LocalDate date) {
+		if (bankAccount == null || date == null || date.isBefore(bankAccount.getDateStartBudget())) {
 			return null;
 		}
 
-		final Date lastSunday = DateUtils.getLastSunday(date);
+		final LocalDate lastSunday = DateUtils.getLastSunday(date);
 
 		BalanceHistory balanceHistory = DBUtils.getInstance().getBalanceHistory(bankAccount, lastSunday);
 
@@ -64,8 +64,8 @@ public class AccountBalancer {
 
 		Double result = balanceHistory.getAmount();
 
-		if (lastSunday.before(date)) {
-			final Date dateFrom = DateUtils.addOneDay(lastSunday);
+		if (lastSunday.isBefore(date)) {
+			final LocalDate dateFrom = lastSunday.plusDays(1);
 			final List<Transaction> transactions = DBUtils.getInstance().getTransactions(dateFrom, date, bankAccount);
 
 			for (final Transaction transaction : transactions) {
@@ -79,8 +79,9 @@ public class AccountBalancer {
 
 	// TODO write junit test for this method in comparison to the other
 	// getBalance() method
-	private static Double getBalance(final BankAccount bankAccount, final Date date, final Double balanceDayBefore) {
-		if (bankAccount == null || date == null || date.before(bankAccount.getDateStartBudget())) {
+	private static Double getBalance(final BankAccount bankAccount, final LocalDate date,
+			final Double balanceDayBefore) {
+		if (bankAccount == null || date == null || date.isBefore(bankAccount.getDateStartBudget())) {
 			return null;
 		}
 		final ArrayList<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount, date);
@@ -102,11 +103,11 @@ public class AccountBalancer {
 		return AmountUtils.round(result);
 	}
 
-	public static Double getBalance(final BalanceHistory lastBalanceHistory, final Date date) {
+	public static Double getBalance(final BalanceHistory lastBalanceHistory, final LocalDate date) {
 		Double amount = lastBalanceHistory.getAmount();
 
-		final List<Transaction> transactions = DBUtils.getInstance().getTransactions(
-				DateUtils.addOneDay(lastBalanceHistory.getDate()), date, lastBalanceHistory.getBankAccount());
+		final List<Transaction> transactions = DBUtils.getInstance()
+				.getTransactions(lastBalanceHistory.getDate().plusDays(1), date, lastBalanceHistory.getBankAccount());
 
 		for (final Transaction transaction : transactions) {
 			amount += transaction.getAmount();
@@ -120,14 +121,13 @@ public class AccountBalancer {
 	 * @param bankAccount
 	 *            bank account for which the balances are requested
 	 * @param dates
-	 *            sequence of following days for which the balances are
-	 *            requested
-	 * @return returns a HashMap with the given Dates and the corresponding
-	 *         balances for this bank account on this date
+	 *            sequence of following days for which the balances are requested
+	 * @return returns a HashMap with the given Dates and the corresponding balances
+	 *         for this bank account on this date
 	 */
-	public static HashMap<Date, Double> getBalancesFollowingDays(final BankAccount bankAccount,
-			final ArrayList<Date> dates) {
-		final HashMap<Date, Double> balances = new HashMap<>();
+	public static HashMap<LocalDate, Double> getBalancesFollowingDays(final BankAccount bankAccount,
+			final ArrayList<LocalDate> dates) {
+		final HashMap<LocalDate, Double> balances = new HashMap<>();
 
 		Double lastBalance = 0.0;
 
@@ -159,13 +159,8 @@ public class AccountBalancer {
 		if (transaction.getBankAccount() == null) {
 			return;
 		}
-		final Date date = transaction.getDate();
-		Date nextSunday;
-		if (!DateUtils.isSunday(date)) {
-			nextSunday = DateUtils.getNextSunday(date);
-		} else {
-			nextSunday = date;
-		}
+		final LocalDate date = transaction.getDate();
+		final LocalDate nextSunday = DateUtils.getNextSunday(date);
 
 		final ArrayList<BalanceHistory> balanceHistories = DBUtils.getInstance()
 				.getBalanceHistoriesAfterDate(transaction.getBankAccount(), nextSunday);
@@ -195,10 +190,10 @@ public class AccountBalancer {
 
 		final ArrayList<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount);
 
-		final ArrayList<Date> sundays = DateUtils.getAllSundaysForBalancing(bankAccount, null);
+		final ArrayList<LocalDate> sundays = DateUtils.getAllSundaysForBalancing(bankAccount, null);
 
 		final ArrayList<BalanceHistory> balanceHistories = new ArrayList<>();
-		for (final Date date : sundays) {
+		for (final LocalDate date : sundays) {
 			final BalanceHistory balanceHistory = new BalanceHistory();
 			balanceHistory.setBankAccount(bankAccount);
 			balanceHistory.setDate(date);
@@ -215,8 +210,8 @@ public class AccountBalancer {
 
 	/**
 	 * proofs the balance history of this bank account. Initialize the balance
-	 * history if no exists. Corrects wrong entries in the balance history if
-	 * there are some.
+	 * history if no exists. Corrects wrong entries in the balance history if there
+	 * are some.
 	 *
 	 * @param bankAccount
 	 *            bank account to proof
@@ -230,28 +225,28 @@ public class AccountBalancer {
 			return;
 		}
 
-		Date dateFrom = lastBalanceHistory.getDate();
-		final Date dateUntil = DateUtils.getLastSundayForBalancing();
+		LocalDate dateFrom = lastBalanceHistory.getDate();
+		final LocalDate dateUntil = DateUtils.getLastSundayForBalancing();
 
-		if (!lastBalanceHistory.getDate().before(dateUntil)) {
+		if (!lastBalanceHistory.getDate().isBefore(dateUntil)) {
 			return;
 		}
 
-		dateFrom = DateUtils.getNextSunday(dateFrom);
+		dateFrom = DateUtils.getNextSundayAlways(dateFrom);
 
-		final ArrayList<Date> sundays = DateUtils.getAllSundaysForBalancing(bankAccount, dateFrom);
+		final ArrayList<LocalDate> sundays = DateUtils.getAllSundaysForBalancing(bankAccount, dateFrom);
 
-		Date lastSunday;
+		LocalDate lastSunday;
 
 		Double lastAmount = lastBalanceHistory.getAmount();
 
 		final ArrayList<BalanceHistory> balanceHistories = new ArrayList<>();
-		for (final Date date : sundays) {
+		for (final LocalDate date : sundays) {
 			final BalanceHistory balanceHistory = new BalanceHistory();
 
 			lastSunday = DateUtils.getLastSundayAlways(date);
-			final List<Transaction> transactions = DBUtils.getInstance()
-					.getTransactions(DateUtils.addOneDay(lastSunday), date, bankAccount);
+			final List<Transaction> transactions = DBUtils.getInstance().getTransactions(lastSunday.plusDays(1), date,
+					bankAccount);
 
 			for (final Transaction transaction : transactions) {
 				lastAmount += transaction.getAmount();

@@ -1,7 +1,6 @@
 package com.dimediary.controller.test;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -13,7 +12,6 @@ import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.utils.AmountUtils;
 import com.dimediary.util.balance.AccountBalancer;
 import com.dimediary.util.utils.DBUtils;
-import com.dimediary.util.utils.DateUtils;
 
 public class TestAccountBalancer {
 
@@ -25,9 +23,7 @@ public class TestAccountBalancer {
 		this.bankAccount = new BankAccount();
 		this.bankAccount.setName("TestAccount");
 
-		final Calendar calendar = Calendar.getInstance();
-		calendar.set(2016, 5, 1);
-		final Date date = calendar.getTime();
+		final LocalDate date = LocalDate.of(2016, 5, 1);
 
 		this.bankAccount.setDateStartBudget(date);
 		this.bankAccount.setStartBudget(this.startBudget);
@@ -48,14 +44,14 @@ public class TestAccountBalancer {
 		final Double amount8 = 471.85;
 		final Double amountJuly2 = 412.47;
 
-		final Date date2 = DateUtils.getDate(2, 5, 2016);
-		final Date date3 = DateUtils.getDate(3, 5, 2016);
-		final Date date4 = DateUtils.getDate(4, 5, 2016);
-		final Date date5 = DateUtils.getDate(5, 5, 2016);
-		final Date date6 = DateUtils.getDate(6, 5, 2016);
-		final Date date7 = DateUtils.getDate(7, 5, 2016);
-		final Date date8 = DateUtils.getDate(8, 5, 2016);
-		final Date dateJuly2 = DateUtils.getDate(2, 6, 2016);
+		final LocalDate date2 = LocalDate.of(2016, 6, 2);
+		final LocalDate date3 = LocalDate.of(2016, 6, 3);
+		final LocalDate date4 = LocalDate.of(2016, 6, 4);
+		final LocalDate date5 = LocalDate.of(2016, 6, 5);
+		final LocalDate date6 = LocalDate.of(2016, 6, 6);
+		final LocalDate date7 = LocalDate.of(2016, 6, 7);
+		final LocalDate date8 = LocalDate.of(2016, 6, 8);
+		final LocalDate dateJuly2 = LocalDate.of(2016, 7, 2);
 
 		this.createTransaction(amount2, date2);
 		this.createTransaction(amount3, date3);
@@ -156,7 +152,7 @@ public class TestAccountBalancer {
 
 	}
 
-	private Transaction createTransaction(final Double amount, final Date date) {
+	private Transaction createTransaction(final Double amount, final LocalDate date) {
 		final Transaction transaction = new Transaction();
 
 		transaction.setBankAccount(this.bankAccount);

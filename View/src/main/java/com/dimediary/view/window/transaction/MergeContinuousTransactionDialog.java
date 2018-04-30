@@ -5,10 +5,9 @@
 package com.dimediary.view.window.transaction;
 
 import java.net.URL;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
-import com.dimediary.util.utils.DateUtils;
 import com.dimediary.view.window.util.IWindowParameterInjection;
 import com.dimediary.view.window.util.WindowParameters;
 
@@ -24,7 +23,7 @@ public class MergeContinuousTransactionDialog implements IWindowParameterInjecti
 
 	private TransactionDialog transactionDialog;
 
-	private Date date;
+	private LocalDate date;
 
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -62,8 +61,7 @@ public class MergeContinuousTransactionDialog implements IWindowParameterInjecti
 		if (this.radiobuttonAll.isSelected()) {
 			this.transactionDialog.changeContinuosTransacationFrom(null);
 		} else {
-			this.transactionDialog
-					.changeContinuosTransacationFrom(DateUtils.localDateToDate(this.dateUntil.getValue()));
+			this.transactionDialog.changeContinuosTransacationFrom(this.dateUntil.getValue());
 		}
 		this.close();
 	}
@@ -89,9 +87,9 @@ public class MergeContinuousTransactionDialog implements IWindowParameterInjecti
 
 	private void init() {
 		if (this.date != null) {
-			this.dateUntil.setValue(DateUtils.date2LocalDate(this.date));
+			this.dateUntil.setValue(this.date);
 		} else {
-			this.dateUntil.setValue(DateUtils.date2LocalDate(new Date()));
+			this.dateUntil.setValue(LocalDate.now());
 		}
 		this.radiobuttonUntil.setSelected(true);
 	}
@@ -105,9 +103,9 @@ public class MergeContinuousTransactionDialog implements IWindowParameterInjecti
 		}
 		this.transactionDialog = (TransactionDialog) object;
 
-		object = parameters.getParameters().get(Date.class);
-		if (object != null && object instanceof Date) {
-			this.date = (Date) object;
+		object = parameters.getParameters().get(LocalDate.class);
+		if (object != null && object instanceof LocalDate) {
+			this.date = (LocalDate) object;
 		}
 
 		this.init();
