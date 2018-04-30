@@ -6,6 +6,7 @@ import java.time.Month;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TimeZone;
 
 import org.dmfs.rfc5545.DateTime;
 import org.junit.Assert;
@@ -108,7 +109,7 @@ public class DateUtils {
 
 	private static LocalDate getLastSundayForBalancing(final int numberOfMonths) {
 		final LocalDate actualSunday = getLastSunday(LocalDate.now());
-		return actualSunday.plusMonths(numberOfMonths);
+		return getNextSunday(actualSunday.plusMonths(numberOfMonths));
 	}
 
 	/**
@@ -175,7 +176,8 @@ public class DateUtils {
 	}
 
 	public static DateTime localDateToDateTime(final LocalDate localDate) {
-		return new DateTime(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
+		return new DateTime(TimeZone.getDefault(),
+				localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
 	}
 
 	public static LocalDate dateTimeToLocalDate(final DateTime dateTime) {
