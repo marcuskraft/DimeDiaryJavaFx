@@ -18,12 +18,18 @@ import javax.persistence.Table;
  * @author eyota
  *
  */
-@NamedQueries({ @NamedQuery(name = "allBankAccounts", query = "from BankAccount"),
-		@NamedQuery(name = "findBankaccountsWithCategory", query = "from BankAccount b WHERE bankAccountCategory = :bankAccountCategory"),
-		@NamedQuery(name = "findBankAccounts", query = "from BankAccount b WHERE b.name IN :namesList") })
+@NamedQueries({ @NamedQuery(name = BankAccount.ALL_BANK_ACCOUNTS, query = "from BankAccount"),
+		@NamedQuery(name = BankAccount.FIND_BANKACCOUNTS_WITH_CATEGORY, query = "from BankAccount b WHERE bankAccountCategory = :bankAccountCategory"),
+		@NamedQuery(name = BankAccount.FIND_BANK_ACCOUNTS, query = "from BankAccount b WHERE b.name IN :namesList") })
 @Entity
 @Table(name = "BANKACCOUNT")
 public class BankAccount implements Serializable {
+
+	public static final String FIND_BANK_ACCOUNTS = "findBankAccounts";
+
+	public static final String FIND_BANKACCOUNTS_WITH_CATEGORY = "findBankaccountsWithCategory";
+
+	public static final String ALL_BANK_ACCOUNTS = "allBankAccounts";
 
 	/**
 	 *

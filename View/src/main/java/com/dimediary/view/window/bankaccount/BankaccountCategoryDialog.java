@@ -14,7 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.dimediary.model.entities.BankAccountCategory;
-import com.dimediary.util.utils.DBUtils;
+import com.dimediary.services.utils.DBUtils;
 import com.dimediary.view.window.util.IWindowParameterInjection;
 import com.dimediary.view.window.util.WindowParameters;
 

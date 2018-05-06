@@ -16,8 +16,8 @@ import java.util.ResourceBundle;
 
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
-import com.dimediary.util.balance.AccountBalancer;
-import com.dimediary.util.utils.DBUtils;
+import com.dimediary.services.AccountBalanceService;
+import com.dimediary.services.utils.DBUtils;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.view.Main;
 import com.dimediary.view.window.bankaccount.BankAccountDialog;
@@ -429,7 +429,7 @@ public class MainWindow {
 		final String bankaccountName = this.comboBoxAccount.getValue();
 		final BankAccount bankAccount = DBUtils.getInstance().getBankAccount(bankaccountName);
 
-		final HashMap<LocalDate, Double> balances = AccountBalancer.getBalancesFollowingDays(bankAccount, dates);
+		final HashMap<LocalDate, Double> balances = AccountBalanceService.getBalancesFollowingDays(bankAccount, dates);
 
 		final HashMap<LocalDate, ArrayList<Transaction>> transactionsForDates = new HashMap<>();
 
@@ -558,7 +558,7 @@ public class MainWindow {
 				this.dateUntilSpinner.getValue());
 
 		for (final LocalDate localDate : localDates) {
-			final Double balance = AccountBalancer.getBalance(bankAccount, localDate);
+			final Double balance = AccountBalanceService.getBalance(bankAccount, localDate);
 			series.getData().add(new XYChart.Data<Number, Number>(Long.valueOf(localDate.toEpochDay()), balance));
 		}
 

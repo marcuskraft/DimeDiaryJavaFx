@@ -18,8 +18,8 @@ import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Category;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
-import com.dimediary.util.transaction.ContinuousTransactionManager;
-import com.dimediary.util.utils.DBUtils;
+import com.dimediary.services.ContinuousTransactionService;
+import com.dimediary.services.utils.DBUtils;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.util.utils.RecurrenceRuleUtils;
 import com.dimediary.view.Main;
@@ -367,7 +367,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 	private void createNewContinuousTransaction() {
 		this.continuousTransaction = new ContinuousTransaction();
 		this.setContinuousTransactionAttributtes(this.continuousTransaction);
-		final List<Transaction> transactions = ContinuousTransactionManager
+		final List<Transaction> transactions = ContinuousTransactionService
 				.generateTransactionsFromNewContinuousTransaction(this.continuousTransaction);
 		DBUtils.getInstance().persistContinuousTransaction(this.continuousTransaction, transactions);
 		this.mainWindow.refresh();

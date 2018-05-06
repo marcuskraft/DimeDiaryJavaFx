@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.dimediary.model.entities.Category;
-import com.dimediary.util.utils.DBUtils;
+import com.dimediary.services.utils.DBUtils;
 import com.dimediary.view.window.util.IWindowParameterInjection;
 import com.dimediary.view.window.util.WindowParameters;
 

@@ -3,7 +3,7 @@ package com.dimediary.view.window.transaction;
 import java.time.LocalDate;
 
 import com.dimediary.model.entities.Transaction;
-import com.dimediary.util.utils.DBUtils;
+import com.dimediary.services.utils.DBUtils;
 import com.dimediary.view.Main;
 import com.dimediary.view.window.main.MainWindow;
 import com.dimediary.view.window.util.WindowCreater;

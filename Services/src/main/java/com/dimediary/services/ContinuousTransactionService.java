@@ -1,4 +1,4 @@
-package com.dimediary.util.transaction;
+package com.dimediary.services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -6,25 +6,40 @@ import java.util.List;
 
 import org.dmfs.rfc5545.recur.RecurrenceRule;
 
+import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
-import com.dimediary.util.utils.DBUtils;
+import com.dimediary.services.utils.DBUtils;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.util.utils.RecurrenceRuleUtils;
 
-public class ContinuousTransactionManager {
+public class ContinuousTransactionService {
 
 	public static List<Transaction> generateTransactionsFromContinuousTransaction(
 			final ContinuousTransaction continuousTransaction) {
 		final LocalDate currentMaxDate = DBUtils.getInstance().getDateOfLastTransaction(continuousTransaction);
-		return ContinuousTransactionManager.generateTransactionsFromContinuousTransaction(continuousTransaction,
+		return ContinuousTransactionService.generateTransactionsFromContinuousTransaction(continuousTransaction,
 				currentMaxDate);
 	}
 
 	public static List<Transaction> generateTransactionsFromNewContinuousTransaction(
 			final ContinuousTransaction continuousTransaction) {
-		return ContinuousTransactionManager.generateTransactionsFromContinuousTransaction(continuousTransaction, null);
+		return ContinuousTransactionService.generateTransactionsFromContinuousTransaction(continuousTransaction, null);
 
+	}
+
+	public static void proofContinuosTransactions(final BankAccount bankAccount) {
+		final List<ContinuousTransaction> continuousTransactions = DBUtils.getInstance()
+				.getContinuousTransactions(bankAccount);
+
+		for (final ContinuousTransaction continuousTransaction : continuousTransactions) {
+
+			final List<Transaction> transactions = ContinuousTransactionService
+					.generateTransactionsFromContinuousTransaction(continuousTransaction);
+
+			DBUtils.getInstance().persistTransactions(transactions);
+
+		}
 	}
 
 	private static List<Transaction> generateTransactionsFromContinuousTransaction(
