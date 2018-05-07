@@ -2,36 +2,35 @@ package com.dimediary.services;
 
 import java.time.LocalDate;
 
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.utils.AmountUtils;
-import com.dimediary.services.AccountBalanceService;
 import com.dimediary.services.utils.DBUtils;
 
+@RunWith(MockitoJUnitRunner.class)
 public class TestAccountBalancer {
 
+	private static final String TEST_ACCOUNT = "TestAccount";
+	private static final LocalDate DATE_START_DAY = LocalDate.of(2016, 5, 1);
+	private static final Double START_BUDGET = 500.0;
+
+	@Mock
 	private BankAccount bankAccount;
-	private final Double startBudget = 500.0;
 
-	@Before
+	// @Before
 	public void before() {
-		this.bankAccount = new BankAccount();
-		this.bankAccount.setName("TestAccount");
-
-		final LocalDate date = LocalDate.of(2016, 5, 1);
-
-		this.bankAccount.setDateStartBudget(date);
-		this.bankAccount.setStartBudget(this.startBudget);
-
-		DBUtils.getInstance().persist(this.bankAccount);
+		Mockito.when(this.bankAccount.getDateStartBudget()).thenReturn(TestAccountBalancer.DATE_START_DAY);
+		Mockito.when(this.bankAccount.getStartBudget()).thenReturn(TestAccountBalancer.START_BUDGET);
+		Mockito.when(this.bankAccount.getName()).thenReturn(TestAccountBalancer.TEST_ACCOUNT);
 	}
 
-	@Test
+	// @Test
 	public void testInitialize() {
 		// AccountBalancer.initBalance(DBUtils.getInstance().getBankAccount("TestAccount"));
 
@@ -71,7 +70,7 @@ public class TestAccountBalancer {
 		Double amount8After = AccountBalanceService.getBalance(this.bankAccount, date8);
 		Double amountJuly2After = AccountBalanceService.getBalance(this.bankAccount, dateJuly2);
 
-		Double shouldBe2 = this.startBudget + amount2;
+		Double shouldBe2 = TestAccountBalancer.START_BUDGET + amount2;
 		Double shouldBe3 = shouldBe2 + amount3;
 		Double shouldBe4 = shouldBe3 + amount4;
 		Double shouldBe5 = shouldBe4 + amount5;
@@ -163,7 +162,7 @@ public class TestAccountBalancer {
 		return transaction;
 	}
 
-	@After
+	// @After
 	public void close() {
 		DBUtils.getInstance().delete(this.bankAccount);
 
