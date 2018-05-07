@@ -1,7 +1,7 @@
 package com.dimediary.model.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "SUB_TRANSACTIONS")
@@ -32,9 +30,8 @@ public class SubTransaction implements Serializable {
 
 	private Double amount;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "TIMESTAMP", updatable = true)
-	private Date timestamp;
+	private LocalDateTime timestamp;
 
 	@ManyToOne
 	@JoinColumn(name = "CATEGORY_NAME")
@@ -70,11 +67,11 @@ public class SubTransaction implements Serializable {
 		this.amount = amount;
 	}
 
-	public Date getTimestamp() {
+	public LocalDateTime getTimestamp() {
 		return this.timestamp;
 	}
 
-	public void setTimestamp(final Date timestamp) {
+	public void setTimestamp(final LocalDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
 

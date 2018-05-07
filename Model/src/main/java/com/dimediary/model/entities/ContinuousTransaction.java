@@ -1,7 +1,8 @@
 package com.dimediary.model.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +15,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "CONTINUOUS_TRANSACTION")
@@ -35,9 +34,8 @@ public class ContinuousTransaction implements Serializable {
 	@Column(name = "ID")
 	private Integer id;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "TIMESTAMP", updatable = true)
-	private Date timestamp;
+	private LocalDateTime timestamp;
 
 	@Column(name = "NAME")
 	private String name;
@@ -45,9 +43,8 @@ public class ContinuousTransaction implements Serializable {
 	@Column(name = "AMOUNT")
 	private Double amount;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "DATE_BEGINN")
-	private Date dateBeginn;
+	private LocalDate dateBeginn;
 
 	@ManyToOne
 	@JoinColumn(name = "BANKACCOUNT_NAME")
@@ -65,7 +62,7 @@ public class ContinuousTransaction implements Serializable {
 
 	@PrePersist
 	private void setTimestamp() {
-		this.timestamp = new Date();
+		this.timestamp = LocalDateTime.now();
 	}
 
 	public Integer getId() {
@@ -76,11 +73,11 @@ public class ContinuousTransaction implements Serializable {
 		this.id = id;
 	}
 
-	public Date getTimestamp() {
+	public LocalDateTime getTimestamp() {
 		return this.timestamp;
 	}
 
-	public void setTimestamp(final Date timestamp) {
+	public void setTimestamp(final LocalDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
 
@@ -124,11 +121,11 @@ public class ContinuousTransaction implements Serializable {
 		this.category = category;
 	}
 
-	public Date getDateBeginn() {
+	public LocalDate getDateBeginn() {
 		return this.dateBeginn;
 	}
 
-	public void setDateBeginn(final Date dateBeginn) {
+	public void setDateBeginn(final LocalDate dateBeginn) {
 		this.dateBeginn = dateBeginn;
 	}
 
@@ -140,7 +137,7 @@ public class ContinuousTransaction implements Serializable {
 		this.recurrenceRule = recurrenceRule;
 	}
 
-	public Transaction createTransaction(Date date) {
+	public Transaction createTransaction(LocalDate date) {
 		final Transaction transaction = new Transaction();
 		transaction.setAmount(this.getAmount());
 		transaction.setBankAccount(this.getBankAccount());

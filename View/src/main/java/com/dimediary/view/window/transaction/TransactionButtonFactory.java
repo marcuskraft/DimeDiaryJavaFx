@@ -1,9 +1,9 @@
 package com.dimediary.view.window.transaction;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import com.dimediary.model.entities.Transaction;
-import com.dimediary.util.utils.DBUtils;
+import com.dimediary.services.utils.DBUtils;
 import com.dimediary.view.Main;
 import com.dimediary.view.window.main.MainWindow;
 import com.dimediary.view.window.util.WindowCreater;
@@ -35,7 +35,7 @@ public class TransactionButtonFactory {
 					parameters.put(MainWindow.class, mainWindow);
 					parameters.put(Transaction.class, transaction);
 					if (transaction.getContinuousTransaction() != null) {
-						parameters.put(Date.class, transaction.getDate());
+						parameters.put(LocalDate.class, transaction.getDate());
 						final WindowCreater<AllTransactionWindow> windowCreater = new WindowCreater<>();
 						windowCreater.createWindow(Main.class.getResource("design/window/AllTransactionMessage.fxml"),
 								"Dauertransaktion", parameters);

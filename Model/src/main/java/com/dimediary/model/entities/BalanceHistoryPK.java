@@ -1,11 +1,11 @@
 package com.dimediary.model.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 /**
  * primary key class for BalanceHistory
- * 
+ *
  * @author eyota
  *
  */
@@ -15,7 +15,7 @@ public class BalanceHistoryPK implements Serializable {
 	 *
 	 */
 	private static final long serialVersionUID = -4539881778212051537L;
-	private Date date;
+	private LocalDate date;
 	private BankAccount bankAccount;
 
 	/**
@@ -27,13 +27,13 @@ public class BalanceHistoryPK implements Serializable {
 
 	/**
 	 * constructor
-	 * 
+	 *
 	 * @param bankAccount
 	 *            bank account for which this balance key is for
 	 * @param date
 	 *            Date for which this balance history is for
 	 */
-	public BalanceHistoryPK(final BankAccount bankAccount, final Date date) {
+	public BalanceHistoryPK(final BankAccount bankAccount, final LocalDate date) {
 		super();
 		this.date = date;
 		this.bankAccount = bankAccount;
@@ -43,7 +43,7 @@ public class BalanceHistoryPK implements Serializable {
 	 *
 	 * @return Date for this balance history
 	 */
-	public Date getDate() {
+	public LocalDate getDate() {
 		return this.date;
 	}
 
@@ -52,7 +52,7 @@ public class BalanceHistoryPK implements Serializable {
 	 * @param date
 	 *            Date for this balance history
 	 */
-	public void setDate(final Date date) {
+	public void setDate(final LocalDate date) {
 		this.date = date;
 	}
 

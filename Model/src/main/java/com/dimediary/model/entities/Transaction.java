@@ -1,7 +1,8 @@
 package com.dimediary.model.entities;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,8 +15,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.dimediary.model.utils.AmountUtils;
 
@@ -65,20 +64,18 @@ public class Transaction implements Serializable {
 	@JoinColumn(name = "CATEGORY_NAME")
 	private Category category;
 
-	@Temporal(TemporalType.DATE)
 	@Column(name = "DATE")
-	private Date date;
+	private LocalDate date;
 
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "TIMESTAMP", updatable = true)
-	private Date timestamp;
+	private LocalDateTime timestamp;
 
 	@ManyToOne
 	private ContinuousTransaction continuousTransaction;
 
 	@PrePersist
 	private void setTimestamp() {
-		this.timestamp = new Date();
+		this.timestamp = LocalDateTime.now();
 	}
 
 	public Integer getId() {
@@ -129,19 +126,19 @@ public class Transaction implements Serializable {
 		this.category = category;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return this.date;
 	}
 
-	public void setDate(final Date date) {
+	public void setDate(final LocalDate date) {
 		this.date = date;
 	}
 
-	public Date getTimestamp() {
+	public LocalDateTime getTimestamp() {
 		return this.timestamp;
 	}
 
-	public void setTimestamp(final Date timestamp) {
+	public void setTimestamp(final LocalDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
 

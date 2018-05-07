@@ -5,7 +5,7 @@ import java.net.URL;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.dimediary.util.utils.DBUtils;
+import com.dimediary.services.utils.DBUtils;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

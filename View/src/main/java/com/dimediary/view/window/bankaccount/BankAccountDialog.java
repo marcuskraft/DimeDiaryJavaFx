@@ -5,8 +5,8 @@
 package com.dimediary.view.window.bankaccount;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 import javax.persistence.RollbackException;
@@ -15,8 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.dimediary.model.entities.BankAccount;
-import com.dimediary.util.utils.DBUtils;
-import com.dimediary.util.utils.DateUtils;
+import com.dimediary.services.utils.DBUtils;
 import com.dimediary.view.Main;
 import com.dimediary.view.window.category.CategoryDialog;
 import com.dimediary.view.window.transaction.TransactionDialog;
@@ -101,7 +100,7 @@ public class BankAccountDialog implements IWindowParameterInjection {
 		bankAccount.setIban(this.textFieldIBAN.getText());
 		bankAccount.setName(this.textFieldAccName.getText());
 		bankAccount.setStartBudget(this.spinnerStartBudget.getValue());
-		bankAccount.setDateStartBudget(DateUtils.localDateToDate(this.datePickerStartBudget.getValue()));
+		bankAccount.setDateStartBudget(this.datePickerStartBudget.getValue());
 
 		DBUtils.getInstance().persist(bankAccount);
 		this.items.add(bankAccount.getName());
@@ -185,7 +184,7 @@ public class BankAccountDialog implements IWindowParameterInjection {
 
 		this.refreshAccCategories();
 
-		this.datePickerStartBudget.setValue(DateUtils.date2LocalDate(new Date()));
+		this.datePickerStartBudget.setValue(LocalDate.now());
 
 		final SpinnerValueFactory<Double> spinnerValueFactory = new SpinnerValueFactory.DoubleSpinnerValueFactory(
 				-TransactionDialog.MAX_AMOUNT, TransactionDialog.MAX_AMOUNT, 0.0) {
@@ -197,8 +196,7 @@ public class BankAccountDialog implements IWindowParameterInjection {
 	}
 
 	/**
-	 * initializes the components of this dialog with the data of the bank
-	 * account
+	 * initializes the components of this dialog with the data of the bank account
 	 *
 	 * @param bankAccount
 	 *            bank account to be shown
@@ -211,7 +209,7 @@ public class BankAccountDialog implements IWindowParameterInjection {
 		this.textFieldBankName.setText(bankAccount.getBankName());
 		this.textFieldIBAN.setText(bankAccount.getIban());
 		this.textFieldBIC.setText(bankAccount.getBic());
-		this.datePickerStartBudget.setValue(DateUtils.date2LocalDate(bankAccount.getDateStartBudget()));
+		this.datePickerStartBudget.setValue(bankAccount.getDateStartBudget());
 		this.spinnerStartBudget.getValueFactory().setValue(bankAccount.getStartBudget());
 	}
 
