@@ -5,12 +5,12 @@
 
 	<groupId>com.dimediary.build</groupId>
 	<artifactId>DimeDiary</artifactId>
-	<version>0.2</version>
+	<version>0.4.0</version>
 
 	<parent>
 		<groupId>com.dimediary</groupId>
 		<artifactId>Dimediary</artifactId>
-		<version>0.0.2-SNAPSHOT</version>
+		<version>0.4.0-SNAPSHOT</version>
 		<relativePath>../Dimediary</relativePath>
 	</parent>
 
