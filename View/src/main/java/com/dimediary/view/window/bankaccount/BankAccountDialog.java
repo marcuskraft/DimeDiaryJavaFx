@@ -192,6 +192,12 @@ public class BankAccountDialog implements IWindowParameterInjection {
 		};
 		this.spinnerStartBudget.setEditable(true);
 		this.spinnerStartBudget.setValueFactory(spinnerValueFactory);
+		this.spinnerStartBudget.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			if (!newValue) {
+				this.spinnerStartBudget.increment(0); // won't change value, but will
+														// commit editor
+			}
+		});
 
 	}
 

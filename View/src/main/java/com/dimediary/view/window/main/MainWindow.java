@@ -560,7 +560,8 @@ public class MainWindow extends Window {
 
 		for (final LocalDate localDate : localDates) {
 			final Double balance = AccountBalanceService.getBalance(bankAccount, localDate);
-			series.getData().add(new XYChart.Data<Number, Number>(Long.valueOf(localDate.toEpochDay()), balance));
+			series.getData().add(new XYChart.Data<Number, Number>(Long.valueOf(localDate.toEpochDay()),
+					balance != null ? balance : 0.0));
 		}
 
 		this.lineChart.getData().clear();
