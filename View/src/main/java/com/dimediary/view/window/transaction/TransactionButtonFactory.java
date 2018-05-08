@@ -10,11 +10,17 @@ import com.dimediary.view.window.util.WindowCreater;
 import com.dimediary.view.window.util.WindowParameters;
 
 import javafx.event.EventHandler;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 
@@ -26,26 +32,40 @@ public class TransactionButtonFactory {
 			final MainWindow mainWindow) {
 		final TransactionButton transactionButton = new TransactionButton(text, transaction);
 
+		final ContextMenu contextMenu = new ContextMenu();
+
+		final MenuItem delete = new MenuItem("Löschen");
+		delete.setOnAction(event -> TransactionButtonFactory.deleteTransaction(mainWindow, transactionButton));
+
+		final MenuItem open = new MenuItem("Öffnen");
+		open.setOnAction(event -> TransactionButtonFactory.openTransaction(transaction, mainWindow));
+
+		final MenuItem copy = new MenuItem("Kopieren");
+		copy.setOnAction(
+				event -> TransactionButtonFactory.doCopyOrMoveTransaction(transaction, transactionButton, true));
+
+		final MenuItem move = new MenuItem("Ausschneiden");
+		move.setOnAction(
+				event -> TransactionButtonFactory.doCopyOrMoveTransaction(transaction, transactionButton, false));
+
+		contextMenu.getItems().add(open);
+		// contextMenu.getItems().add(copy);
+		// contextMenu.getItems().add(move);
+		contextMenu.getItems().add(delete);
+
 		transactionButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(final MouseEvent event) {
 				if (event.getClickCount() > 1) {
-					final WindowParameters parameters = new WindowParameters();
-					parameters.put(MainWindow.class, mainWindow);
-					parameters.put(Transaction.class, transaction);
-					if (transaction.getContinuousTransaction() != null) {
-						parameters.put(LocalDate.class, transaction.getDate());
-						final WindowCreater<AllTransactionWindow> windowCreater = new WindowCreater<>();
-						windowCreater.createWindow(Main.class.getResource("design/window/AllTransactionMessage.fxml"),
-								"Dauertransaktion", parameters);
-					} else {
-						final WindowCreater<TransactionDialog> windowCreater = new WindowCreater<>();
-						windowCreater.createWindow(Main.class.getResource("design/window/TransactionDialog.fxml"),
-								"Transaktion erstellen / bearbeiten", parameters);
-					}
+					TransactionButtonFactory.openTransaction(transaction, mainWindow);
+				}
+
+				if (event.getButton() == MouseButton.SECONDARY) {
+					contextMenu.show(transactionButton, event.getSceneX(), event.getSceneY());
 				}
 			}
+
 		});
 
 		transactionButton.setOnKeyReleased(new EventHandler<KeyEvent>() {
@@ -55,17 +75,7 @@ public class TransactionButtonFactory {
 
 				switch (event.getCode()) {
 				case DELETE:
-					final Transaction transaction = transactionButton.getTransaction();
-					if (transaction != null) {
-						if (transaction.getContinuousTransaction() != null) {
-							TransactionButtonFactory.deleteContinuousTransaction(transaction);
-						} else {
-							DBUtils.getInstance().delete(transaction);
-						}
-					}
-					if (mainWindow != null) {
-						mainWindow.refresh();
-					}
+					TransactionButtonFactory.deleteTransaction(mainWindow, transactionButton);
 					event.consume();
 					break;
 				case C: // TODO either implement the paste logic or delete this
@@ -83,29 +93,73 @@ public class TransactionButtonFactory {
 				}
 
 			}
+
 		});
 
 		transactionButton.setOnDragDetected(new EventHandler<MouseEvent>() {
 
 			@Override
 			public void handle(final MouseEvent event) {
-				final Dragboard db;
-				if (event.isControlDown()) {
-					db = transactionButton.startDragAndDrop(TransferMode.COPY);
-				} else {
-					db = transactionButton.startDragAndDrop(TransferMode.MOVE);
-				}
-
-				final ClipboardContent content = new ClipboardContent();
-				content.put(TransactionButtonFactory.KEY_TRANSACTION, transaction);
-
-				db.setContent(content);
-
+				final boolean copy = event.isControlDown();
+				TransactionButtonFactory.doCopyOrMoveTransaction(transaction, transactionButton, copy);
 				event.consume();
 			}
+
 		});
 
 		return transactionButton;
+	}
+
+	private static void openTransaction(final Transaction transaction, final MainWindow mainWindow) {
+		final WindowParameters parameters = new WindowParameters();
+		parameters.put(MainWindow.class, mainWindow);
+		parameters.put(Transaction.class, transaction);
+		if (transaction.getContinuousTransaction() != null) {
+			parameters.put(LocalDate.class, transaction.getDate());
+			final WindowCreater<AllTransactionWindow> windowCreater = new WindowCreater<>();
+			windowCreater.createWindow(Main.class.getResource("design/window/AllTransactionMessage.fxml"),
+					"Dauertransaktion", parameters);
+		} else {
+			final WindowCreater<TransactionDialog> windowCreater = new WindowCreater<>();
+			windowCreater.createWindow(Main.class.getResource("design/window/TransactionDialog.fxml"),
+					"Transaktion erstellen / bearbeiten", parameters);
+		}
+	}
+
+	private static void doCopyOrMoveTransaction(final Transaction transaction,
+			final TransactionButton transactionButton, final boolean copy) {
+		final Dragboard db;
+		if (copy) {
+			db = transactionButton.startDragAndDrop(TransferMode.COPY);
+		} else {
+			db = transactionButton.startDragAndDrop(TransferMode.MOVE);
+		}
+
+		final ClipboardContent content = new ClipboardContent();
+		content.put(TransactionButtonFactory.KEY_TRANSACTION, transaction);
+
+		db.setContent(content);
+	}
+
+	private static void deleteTransaction(final MainWindow mainWindow, final TransactionButton transactionButton) {
+		final Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setHeaderText(null);
+		alert.setTitle("Transaktion löschen?");
+		alert.setContentText("Sicher, dass Sie diese Transaktion löschen wollen?");
+
+		if (alert.showAndWait().get() == ButtonType.OK) {
+			final Transaction transaction = transactionButton.getTransaction();
+			if (transaction != null) {
+				if (transaction.getContinuousTransaction() != null) {
+					TransactionButtonFactory.deleteContinuousTransaction(transaction);
+				} else {
+					DBUtils.getInstance().delete(transaction);
+				}
+			}
+			if (mainWindow != null) {
+				mainWindow.refresh();
+			}
+		}
 	}
 
 	private static void deleteContinuousTransaction(final Transaction transaction) {
