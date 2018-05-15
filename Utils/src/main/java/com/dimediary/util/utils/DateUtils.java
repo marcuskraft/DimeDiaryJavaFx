@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.TimeZone;
 
 import org.dmfs.rfc5545.DateTime;
-import org.junit.Assert;
 
 import com.dimediary.model.entities.BankAccount;
 
@@ -24,15 +23,15 @@ public class DateUtils {
 	// TODO add the numberOfWeeksFutureBalancing in the options
 	public final static int numberOfMonthFutureTransactions = 120;
 
-	public static LocalDate getLastSunday(LocalDate localDate) {
+	public static LocalDate getLastSunday(final LocalDate localDate) {
 		return DateUtils.getLastSunday(localDate, false);
 	}
 
-	public static LocalDate getLastSundayAlways(LocalDate localDate) {
+	public static LocalDate getLastSundayAlways(final LocalDate localDate) {
 		return DateUtils.getLastSunday(localDate, true);
 	}
 
-	private static LocalDate getLastSunday(LocalDate localDate, boolean always) {
+	private static LocalDate getLastSunday(final LocalDate localDate, final boolean always) {
 		if (localDate == null) {
 			return null;
 		}
@@ -43,15 +42,15 @@ public class DateUtils {
 		return localDate;
 	}
 
-	public static LocalDate getNextSunday(LocalDate localDate) {
-		return getNextSunday(localDate, false);
+	public static LocalDate getNextSunday(final LocalDate localDate) {
+		return DateUtils.getNextSunday(localDate, false);
 	}
 
-	public static LocalDate getNextSundayAlways(LocalDate localDate) {
-		return getNextSunday(localDate, true);
+	public static LocalDate getNextSundayAlways(final LocalDate localDate) {
+		return DateUtils.getNextSunday(localDate, true);
 	}
 
-	private static LocalDate getNextSunday(LocalDate localDate, boolean always) {
+	private static LocalDate getNextSunday(final LocalDate localDate, final boolean always) {
 		if (localDate == null) {
 			return null;
 		}
@@ -70,9 +69,9 @@ public class DateUtils {
 	 *
 	 * @param bankAccount
 	 * @param dateFrom
-	 * @return list of sundays from the dateFrom on or if this is null the creation
-	 *         date of the given bank account until 108 weeks in the future related
-	 *         to the actual date
+	 * @return list of sundays from the dateFrom on or if this is null the
+	 *         creation date of the given bank account until 108 weeks in the
+	 *         future related to the actual date
 	 */
 	public static ArrayList<LocalDate> getAllSundaysForBalancing(final BankAccount bankAccount,
 			final LocalDate dateFrom) {
@@ -108,8 +107,8 @@ public class DateUtils {
 	}
 
 	private static LocalDate getLastSundayForBalancing(final int numberOfMonths) {
-		final LocalDate actualSunday = getLastSunday(LocalDate.now());
-		return getNextSunday(actualSunday.plusMonths(numberOfMonths));
+		final LocalDate actualSunday = DateUtils.getLastSunday(LocalDate.now());
+		return DateUtils.getNextSunday(actualSunday.plusMonths(numberOfMonths));
 	}
 
 	/**
@@ -166,11 +165,11 @@ public class DateUtils {
 		return dates;
 	}
 
-	public static LocalDate firstDayOfMonth(Month month, int year) {
+	public static LocalDate firstDayOfMonth(final Month month, final int year) {
 		return LocalDate.of(year, month, 1);
 	}
 
-	public static LocalDate lastDayOfMonth(Month month, int year) {
+	public static LocalDate lastDayOfMonth(final Month month, final int year) {
 		final LocalDate localDate = LocalDate.of(year, month, 1);
 		return localDate.withDayOfMonth(localDate.lengthOfMonth());
 	}
@@ -184,8 +183,10 @@ public class DateUtils {
 		return Instant.ofEpochMilli(dateTime.getTimestamp()).atZone(ZoneId.systemDefault()).toLocalDate();
 	}
 
-	public static List<LocalDate> getLocalDatesFromTo(LocalDate fromDate, LocalDate untilDate) {
-		Assert.assertTrue(fromDate.isBefore(untilDate));
+	public static List<LocalDate> getLocalDatesFromTo(final LocalDate fromDate, final LocalDate untilDate) {
+		if (!fromDate.isBefore(untilDate)) {
+			return new ArrayList<>();
+		}
 
 		final List<LocalDate> dates = new ArrayList<>();
 

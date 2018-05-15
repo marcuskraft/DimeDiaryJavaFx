@@ -3,24 +3,21 @@ package com.dimediary.services;
 import java.time.LocalDate;
 
 import org.junit.Assert;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
 
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.utils.AmountUtils;
 import com.dimediary.services.utils.DBUtils;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class TestAccountBalancer {
 
 	private static final String TEST_ACCOUNT = "TestAccount";
 	private static final LocalDate DATE_START_DAY = LocalDate.of(2016, 5, 1);
 	private static final Double START_BUDGET = 500.0;
 
-	@Mock
+	// @Mock
 	private BankAccount bankAccount;
 
 	// @Before
