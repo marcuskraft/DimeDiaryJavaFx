@@ -5,7 +5,7 @@ import java.net.URL;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.dimediary.services.utils.DBUtils;
+import com.dimediary.services.database.DatabaseService;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -21,7 +21,7 @@ public class Main extends Application {
 		try {
 			Application.launch(args);
 		} catch (final Exception e) {
-			DBUtils.getInstance().close();
+			DatabaseService.getInstance().close();
 			Main.log.error(e);
 		}
 	}
@@ -49,7 +49,7 @@ public class Main extends Application {
 
 	@Override
 	public void stop() {
-		DBUtils.getInstance().close();
+		DatabaseService.getInstance().close();
 	}
 
 }

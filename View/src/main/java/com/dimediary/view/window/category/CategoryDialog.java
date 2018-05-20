@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.dimediary.model.entities.Category;
-import com.dimediary.services.utils.DBUtils;
+import com.dimediary.services.database.DatabaseService;
 import com.dimediary.view.window.util.IWindowParameterInjection;
 import com.dimediary.view.window.util.WindowParameters;
 
@@ -52,7 +52,7 @@ public class CategoryDialog implements IWindowParameterInjection {
 		final Category category = new Category();
 		category.setName(this.textFieldName.getText());
 		this.items.add(category.getName());
-		DBUtils.getInstance().persist(category);
+		DatabaseService.getInstance().persist(category);
 		this.textFieldName.clear();
 	}
 
@@ -66,7 +66,7 @@ public class CategoryDialog implements IWindowParameterInjection {
 			categoryNames.add(string);
 		}
 
-		DBUtils.getInstance().deleteCategories(DBUtils.getInstance().getCategories(categoryNames));
+		DatabaseService.getInstance().deleteCategories(DatabaseService.getInstance().getCategories(categoryNames));
 
 		for (final String string : categoryNames) {
 			this.items.remove(string);
@@ -88,7 +88,7 @@ public class CategoryDialog implements IWindowParameterInjection {
 		assert this.deleteButton != null : "fx:id=\"deleteButton\" was not injected: check your FXML file 'CategoryDialog.fxml'.";
 
 		this.items = FXCollections.observableArrayList();
-		this.items.addAll(DBUtils.getInstance().getCategoryNames());
+		this.items.addAll(DatabaseService.getInstance().getCategoryNames());
 		this.listView.setItems(this.items);
 		this.listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		this.textFieldName.clear();

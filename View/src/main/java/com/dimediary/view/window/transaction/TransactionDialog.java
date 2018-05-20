@@ -19,7 +19,7 @@ import com.dimediary.model.entities.Category;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.services.ContinuousTransactionService;
-import com.dimediary.services.utils.DBUtils;
+import com.dimediary.services.database.DatabaseService;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.util.utils.RecurrenceRuleUtils;
 import com.dimediary.view.Main;
@@ -217,7 +217,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 	private void refreshCategories(final boolean refreshFirst) {
 		final ObservableList<String> categoryNames = FXCollections
-				.observableArrayList(DBUtils.getInstance().getCategoryNames());
+				.observableArrayList(DatabaseService.getInstance().getCategoryNames());
 
 		if (categoryNames == null) {
 			return;
@@ -250,7 +250,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 	private void refreshBankAccounts(final boolean refreshFirst) {
 		final ObservableList<String> bankAccountNames = FXCollections
-				.observableArrayList(DBUtils.getInstance().getBankAccountNames());
+				.observableArrayList(DatabaseService.getInstance().getBankAccountNames());
 
 		if (bankAccountNames == null) {
 			return;
@@ -359,7 +359,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 	private void createNewTransaction() {
 		this.transaction = new Transaction();
 		this.setTransactionAttributes(this.transaction);
-		DBUtils.getInstance().persist(this.transaction);
+		DatabaseService.getInstance().persist(this.transaction);
 		this.mainWindow.refresh();
 		this.close();
 	}
@@ -369,7 +369,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 		this.setContinuousTransactionAttributtes(this.continuousTransaction);
 		final List<Transaction> transactions = ContinuousTransactionService
 				.generateTransactionsFromNewContinuousTransaction(this.continuousTransaction);
-		DBUtils.getInstance().persistContinuousTransaction(this.continuousTransaction, transactions);
+		DatabaseService.getInstance().persistContinuousTransaction(this.continuousTransaction, transactions);
 		this.mainWindow.refresh();
 		this.close();
 	}
@@ -384,7 +384,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 	}
 
 	private void changeNewContinuousTransactionFromTransaction() {
-		DBUtils.getInstance().delete(this.transaction);
+		DatabaseService.getInstance().delete(this.transaction);
 		this.createNewContinuousTransaction();
 		this.mainWindow.refresh();
 		this.close();
@@ -395,7 +395,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 	}
 
 	private void changeTransaction() {
-		DBUtils.getInstance().delete(this.transaction);
+		DatabaseService.getInstance().delete(this.transaction);
 		this.createNewTransaction();
 		this.mainWindow.refresh();
 		this.close();
@@ -416,19 +416,19 @@ public class TransactionDialog implements IWindowParameterInjection {
 		}
 
 		if (dateFrom == null) {
-			DBUtils.getInstance().deleteAllContinuousTransactions(this.continuousTransaction);
+			DatabaseService.getInstance().deleteAllContinuousTransactions(this.continuousTransaction);
 		} else {
 			this.datepicker.setValue(dateFrom);
 
-			final List<Transaction> transactionsAfter = DBUtils.getInstance()
+			final List<Transaction> transactionsAfter = DatabaseService.getInstance()
 					.getTransactionsFromDate(this.continuousTransaction, dateFrom);
-			DBUtils.getInstance().deleteTransactions(transactionsAfter);
+			DatabaseService.getInstance().deleteTransactions(transactionsAfter);
 
 			final RecurrenceRule recurrenceRuleOfOldContinuousTransaction = RecurrenceRuleUtils
 					.createRecurrenceRule(this.continuousTransaction.getRecurrenceRule());
 			recurrenceRuleOfOldContinuousTransaction.setUntil(DateUtils.localDateToDateTime(dateFrom.minusDays(1)));
 			this.continuousTransaction.setRecurrenceRule(this.recurrenceRule.toString());
-			DBUtils.getInstance().merge(this.continuousTransaction);
+			DatabaseService.getInstance().merge(this.continuousTransaction);
 		}
 
 		if (this.recurrenceRule != null) {
@@ -458,11 +458,11 @@ public class TransactionDialog implements IWindowParameterInjection {
 	}
 
 	private Category getCategory() {
-		return DBUtils.getInstance().getCategory(this.comboboxCategory.getValue());
+		return DatabaseService.getInstance().getCategory(this.comboboxCategory.getValue());
 	}
 
 	private BankAccount getBankAccount() {
-		return DBUtils.getInstance().getBankAccount(this.comboboxAccount.getValue());
+		return DatabaseService.getInstance().getBankAccount(this.comboboxAccount.getValue());
 	}
 
 	private double getAmount() {

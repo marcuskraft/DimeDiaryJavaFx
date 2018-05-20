@@ -8,7 +8,7 @@ import org.mockito.Mockito;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.utils.AmountUtils;
-import com.dimediary.services.utils.DBUtils;
+import com.dimediary.services.database.DatabaseService;
 
 //@RunWith(MockitoJUnitRunner.class)
 public class TestAccountBalancer {
@@ -29,7 +29,7 @@ public class TestAccountBalancer {
 
 	// @Test
 	public void testInitialize() {
-		// AccountBalancer.initBalance(DBUtils.getInstance().getBankAccount("TestAccount"));
+		// AccountBalancer.initBalance(DatabaseService.getInstance().getBankAccount("TestAccount"));
 
 		final Double amount2 = 50.00;
 		final Double amount3 = -78.45;
@@ -104,7 +104,7 @@ public class TestAccountBalancer {
 
 		////////////////////////////////////////////
 
-		DBUtils.getInstance().delete(transaction);
+		DatabaseService.getInstance().delete(transaction);
 
 		amount2After = AccountBalanceService.getBalance(this.bankAccount, date2);
 		amount3After = AccountBalanceService.getBalance(this.bankAccount, date3);
@@ -155,15 +155,15 @@ public class TestAccountBalancer {
 		transaction.setAmount(amount);
 		transaction.setDate(date);
 
-		DBUtils.getInstance().persist(transaction);
+		DatabaseService.getInstance().persist(transaction);
 		return transaction;
 	}
 
 	// @After
 	public void close() {
-		DBUtils.getInstance().delete(this.bankAccount);
+		DatabaseService.getInstance().delete(this.bankAccount);
 
-		DBUtils.getInstance().close();
+		DatabaseService.getInstance().close();
 	}
 
 }

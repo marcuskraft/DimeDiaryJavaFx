@@ -9,7 +9,7 @@ import org.dmfs.rfc5545.recur.RecurrenceRule;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
-import com.dimediary.services.utils.DBUtils;
+import com.dimediary.services.database.DatabaseService;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.util.utils.RecurrenceRuleUtils;
 
@@ -17,7 +17,7 @@ public class ContinuousTransactionService {
 
 	public static List<Transaction> generateTransactionsFromContinuousTransaction(
 			final ContinuousTransaction continuousTransaction) {
-		final LocalDate currentMaxDate = DBUtils.getInstance().getDateOfLastTransaction(continuousTransaction);
+		final LocalDate currentMaxDate = DatabaseService.getInstance().getDateOfLastTransaction(continuousTransaction);
 		return ContinuousTransactionService.generateTransactionsFromContinuousTransaction(continuousTransaction,
 				currentMaxDate);
 	}
@@ -29,7 +29,7 @@ public class ContinuousTransactionService {
 	}
 
 	public static void proofContinuosTransactions(final BankAccount bankAccount) {
-		final List<ContinuousTransaction> continuousTransactions = DBUtils.getInstance()
+		final List<ContinuousTransaction> continuousTransactions = DatabaseService.getInstance()
 				.getContinuousTransactions(bankAccount);
 
 		for (final ContinuousTransaction continuousTransaction : continuousTransactions) {
@@ -37,7 +37,7 @@ public class ContinuousTransactionService {
 			final List<Transaction> transactions = ContinuousTransactionService
 					.generateTransactionsFromContinuousTransaction(continuousTransaction);
 
-			DBUtils.getInstance().persistTransactions(transactions);
+			DatabaseService.getInstance().persistTransactions(transactions);
 
 		}
 	}

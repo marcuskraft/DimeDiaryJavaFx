@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.services.AccountBalanceService;
-import com.dimediary.services.utils.DBUtils;
+import com.dimediary.services.database.DatabaseService;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.view.Main;
 import com.dimediary.view.window.bankaccount.BankAccountDialog;
@@ -394,7 +394,7 @@ public class MainWindow extends Window {
 
 	public void refreshComboBoxAccounts() {
 		final ObservableList<String> bankAccountNames = FXCollections
-				.observableArrayList(DBUtils.getInstance().getBankAccountNames());
+				.observableArrayList(DatabaseService.getInstance().getBankAccountNames());
 
 		if (bankAccountNames == null) {
 			return;
@@ -428,7 +428,7 @@ public class MainWindow extends Window {
 
 		final ArrayList<LocalDate> dates = DateUtils.getDatesForMonth(month, this.SpinnerYear.getValue());
 		final String bankaccountName = this.comboBoxAccount.getValue();
-		final BankAccount bankAccount = DBUtils.getInstance().getBankAccount(bankaccountName);
+		final BankAccount bankAccount = DatabaseService.getInstance().getBankAccount(bankaccountName);
 
 		final HashMap<LocalDate, Double> balances = AccountBalanceService.getBalancesFollowingDays(bankAccount, dates);
 
@@ -436,14 +436,14 @@ public class MainWindow extends Window {
 
 		int maxTransaction = 0;
 		for (final LocalDate date : dates) {
-			List<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount, date);
+			List<Transaction> transactions = DatabaseService.getInstance().getTransactions(bankAccount, date);
 
 			if (transactions == null) {
 				transactions = new ArrayList<>();
 			}
 
 			if (this.checkboxAccountlessTransactions.isSelected()) {
-				transactions.addAll(DBUtils.getInstance().getTrandactionsWithoutAccount(date));
+				transactions.addAll(DatabaseService.getInstance().getTrandactionsWithoutAccount(date));
 			}
 			transactionsForDates.put(date, new ArrayList<Transaction>(transactions));
 			if (transactions.size() > maxTransaction) {
@@ -547,7 +547,7 @@ public class MainWindow extends Window {
 	private void refreshDiagram() {
 		final Series<Number, Number> series = new Series<>();
 
-		final BankAccount bankAccount = DBUtils.getInstance().getBankAccount(this.comboBoxAccountDiagramm.getValue());
+		final BankAccount bankAccount = DatabaseService.getInstance().getBankAccount(this.comboBoxAccountDiagramm.getValue());
 
 		if (bankAccount == null) {
 			return;
@@ -613,10 +613,10 @@ public class MainWindow extends Window {
 				if (transaction.getContinuousTransaction() == null) {
 					final Transaction transactionNew = transaction.getCopy();
 					if (dragboard.getTransferModes().contains(TransferMode.MOVE)) {
-						DBUtils.getInstance().delete(transaction);
+						DatabaseService.getInstance().delete(transaction);
 					}
 					transactionNew.setDate(date);
-					DBUtils.getInstance().persist(transactionNew);
+					DatabaseService.getInstance().persist(transactionNew);
 					mainWindow.refresh();
 				}
 				event.setDropCompleted(true);

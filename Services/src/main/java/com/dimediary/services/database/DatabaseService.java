@@ -1,5 +1,6 @@
-package com.dimediary.services.utils;
+package com.dimediary.services.database;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,32 +30,28 @@ import com.dimediary.services.AccountBalanceService.BalanceAction;
  * @author eyota
  *
  */
-public class DBUtils {
+public class DatabaseService {
 
-	private final static Logger log = LogManager.getLogger(DBUtils.class);
+	private final static Logger log = LogManager.getLogger(DatabaseService.class);
 
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
 
-	private DBUtils() {
-		this.initialize();
+	private DatabaseService() {
+		DatabaseService.log.info("DatabaseService initialized");
+		this.entityManager = EntityManagerHelper.getEntityManager();
 	}
 
-	private static DBUtils instance = null;
+	private static DatabaseService instance = null;
 
 	/**
 	 *
-	 * @return gives back the instance of DBUtils
+	 * @return gives back the instance of DatabaseService
 	 */
-	public static DBUtils getInstance() {
-		if (DBUtils.instance == null) {
-			DBUtils.instance = new DBUtils();
+	public static DatabaseService getInstance() {
+		if (DatabaseService.instance == null) {
+			DatabaseService.instance = new DatabaseService();
 		}
-		return DBUtils.instance;
-	}
-
-	private void initialize() {
-		DBUtils.log.info("initialize");
-		this.entityManager = EntityManagerHelper.getEntityManager();
+		return DatabaseService.instance;
 	}
 
 	/**
@@ -62,6 +59,31 @@ public class DBUtils {
 	 */
 	public void close() {
 		EntityManagerHelper.closeEntityManager();
+		DatabaseService.log.info("DatabaseService closed");
+	}
+
+	public boolean beginTransaction() {
+		if (!this.entityManager.getTransaction().isActive()) {
+			this.entityManager.getTransaction().begin();
+			return true;
+		}
+		return false;
+	}
+
+	public boolean commitTransaction() {
+		if (this.entityManager.getTransaction().isActive()) {
+			this.entityManager.getTransaction().commit();
+			return true;
+		}
+		return false;
+	}
+
+	public boolean rollbackTransaction() {
+		if (this.entityManager.getTransaction().isActive()) {
+			this.entityManager.getTransaction().rollback();
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -69,11 +91,11 @@ public class DBUtils {
 	 * @return names of all bank accounts
 	 */
 	public List<String> getBankAccountNames() {
-		DBUtils.log.info("getBankAccountNames");
+		DatabaseService.log.info("getBankAccountNames");
 		final List<String> names = new ArrayList<>();
 
-		final List<BankAccount> bankAccounts = this.entityManager.createNamedQuery("allBankAccounts", BankAccount.class)
-				.getResultList();
+		final List<BankAccount> bankAccounts = this.entityManager
+				.createNamedQuery(BankAccount.ALL_BANK_ACCOUNTS, BankAccount.class).getResultList();
 
 		for (final BankAccount bankAccount : bankAccounts) {
 			names.add(bankAccount.getName());
@@ -92,7 +114,7 @@ public class DBUtils {
 		if (bankAccountName == null) {
 			return null;
 		}
-		DBUtils.log.info("getBankAccount: " + bankAccountName);
+		DatabaseService.log.info("getBankAccount: " + bankAccountName);
 		final BankAccount bankAccount = this.entityManager.find(BankAccount.class, bankAccountName);
 
 		return bankAccount;
@@ -111,7 +133,7 @@ public class DBUtils {
 		}
 
 		for (final String string : bankAccountsNames) {
-			DBUtils.log.info("getBankAccounts: " + string);
+			DatabaseService.log.info("getBankAccounts: " + string);
 		}
 
 		final List<BankAccount> bankAccounts = this.entityManager
@@ -131,7 +153,7 @@ public class DBUtils {
 		if (bankAccountCategory == null) {
 			return null;
 		}
-		DBUtils.log.info("getBankAccounts by Category: " + bankAccountCategory);
+		DatabaseService.log.info("getBankAccounts by Category: " + bankAccountCategory);
 
 		final List<BankAccount> bankAccounts = this.entityManager
 				.createNamedQuery(BankAccount.FIND_BANKACCOUNTS_WITH_CATEGORY, BankAccount.class)
@@ -145,7 +167,7 @@ public class DBUtils {
 	 * @return list of all names of the bank account categories
 	 */
 	public ArrayList<String> getBankAccountCategoryNames() {
-		DBUtils.log.info("getBankAccountCategoryNames");
+		DatabaseService.log.info("getBankAccountCategoryNames");
 		final ArrayList<String> names = new ArrayList<>();
 
 		final List<BankAccountCategory> bankAccountCategories = this.entityManager
@@ -169,7 +191,7 @@ public class DBUtils {
 			return null;
 		}
 
-		DBUtils.log.info("getBankAccountCategory: " + bankAccountCategoryName);
+		DatabaseService.log.info("getBankAccountCategory: " + bankAccountCategoryName);
 		final BankAccountCategory bankAccountCategory = this.entityManager.find(BankAccountCategory.class,
 				bankAccountCategoryName);
 
@@ -188,7 +210,7 @@ public class DBUtils {
 		}
 
 		for (final String string : bankAccountCategoryNames) {
-			DBUtils.log.info("getBankAccountCategory: " + string);
+			DatabaseService.log.info("getBankAccountCategory: " + string);
 		}
 
 		final List<BankAccountCategory> bankAccountCategories = this.entityManager
@@ -208,7 +230,7 @@ public class DBUtils {
 		if (bankAccount == null) {
 			return null;
 		}
-		DBUtils.log.info("getBalanceHistories for bank account: " + bankAccount.getName());
+		DatabaseService.log.info("getBalanceHistories for bank account: " + bankAccount.getName());
 		final List<BalanceHistory> balanceHistories = this.entityManager
 				.createNamedQuery("accountBalance", BalanceHistory.class).setParameter("bankAccount", bankAccount)
 				.getResultList();
@@ -222,15 +244,15 @@ public class DBUtils {
 	 *            bank account
 	 * @param date
 	 *            date
-	 * @return list of balance histories for this bank account after the given date
-	 *         (including the given date)
+	 * @return list of balance histories for this bank account after the given
+	 *         date (including the given date)
 	 */
 	public ArrayList<BalanceHistory> getBalanceHistoriesAfterDate(final BankAccount bankAccount, final LocalDate date) {
 		if (bankAccount == null || date == null) {
 			return null;
 		}
-		DBUtils.log.info("getBalanceHistoriesAfterDate for bank account: " + bankAccount.getName() + " and after date: "
-				+ date.toString());
+		DatabaseService.log.info("getBalanceHistoriesAfterDate for bank account: " + bankAccount.getName()
+				+ " and after date: " + date.toString());
 		final List<BalanceHistory> balanceHistories = this.entityManager
 				.createNamedQuery("accountBalanceDate", BalanceHistory.class).setParameter("date", date)
 				.setParameter("bankAccount", bankAccount).getResultList();
@@ -247,7 +269,7 @@ public class DBUtils {
 		if (bankAccount == null || date == null) {
 			return null;
 		}
-		DBUtils.log.info(
+		DatabaseService.log.info(
 				"getBalanceHistory for bank account: " + bankAccount.getName() + " and on date: " + date.toString());
 		final BalanceHistoryPK balanceHistoryPK = new BalanceHistoryPK(bankAccount, date);
 		return this.entityManager.find(BalanceHistory.class, balanceHistoryPK);
@@ -258,12 +280,13 @@ public class DBUtils {
 			return null;
 		}
 
-		DBUtils.log.info("getLastBalanceHistory for bank account: " + bankAccount.getName());
+		DatabaseService.log.info("getLastBalanceHistory for bank account: " + bankAccount.getName());
 		try {
 			return this.entityManager.createNamedQuery("lastAccountBalance", BalanceHistory.class)
 					.setParameter("bankAccount", bankAccount).getSingleResult();
 		} catch (final NoResultException e) {
-			DBUtils.log.warn("no balance history in database for the bank account: " + bankAccount.getName(), e);
+			DatabaseService.log.warn("no balance history in database for the bank account: " + bankAccount.getName(),
+					e);
 			return null;
 		}
 	}
@@ -273,7 +296,7 @@ public class DBUtils {
 			return null;
 		}
 
-		DBUtils.log.info("getTransaction: " + id);
+		DatabaseService.log.info("getTransaction: " + id);
 		return this.entityManager.find(Transaction.class, id);
 	}
 
@@ -299,8 +322,8 @@ public class DBUtils {
 	 * @param dateFrom
 	 * @param dateUntil
 	 * @param bankAccount
-	 * @return list of transactions belonging to the given bank account between the
-	 *         two dates (including both days)
+	 * @return list of transactions belonging to the given bank account between
+	 *         the two dates (including both days)
 	 */
 	public List<Transaction> getTransactions(final LocalDate dateFrom, final LocalDate dateUntil,
 			final BankAccount bankAccount) {
@@ -308,8 +331,8 @@ public class DBUtils {
 			return null;
 		}
 
-		DBUtils.log.info("getTransactions from date: " + dateFrom.toString() + " until date: " + dateUntil.toString()
-				+ " for bank account: " + bankAccount.getName());
+		DatabaseService.log.info("getTransactions from date: " + dateFrom.toString() + " until date: "
+				+ dateUntil.toString() + " for bank account: " + bankAccount.getName());
 		List<Transaction> transactions;
 
 		final TypedQuery<Transaction> query = this.entityManager
@@ -331,7 +354,7 @@ public class DBUtils {
 			return null;
 		}
 
-		DBUtils.log.info("getTransactions for bank account: " + bankAccount.getName());
+		DatabaseService.log.info("getTransactions for bank account: " + bankAccount.getName());
 		final List<Transaction> transactions = this.entityManager
 				.createNamedQuery("allAccountTransactions", Transaction.class).setParameter("bankAccount", bankAccount)
 				.getResultList();
@@ -349,7 +372,8 @@ public class DBUtils {
 			return null;
 		}
 
-		DBUtils.log.info("getTransactions for bank account: " + bankAccount.getName() + " at date: " + date.toString());
+		DatabaseService.log
+				.info("getTransactions for bank account: " + bankAccount.getName() + " at date: " + date.toString());
 		final List<Transaction> transactions = this.entityManager
 				.createNamedQuery("TransactionsAtDay", Transaction.class).setParameter("bankAccount", bankAccount)
 				.setParameter("date", date).getResultList();
@@ -360,8 +384,8 @@ public class DBUtils {
 	 *
 	 * @param continuousTransaction
 	 * @param date
-	 * @return list of transactions belonging to this continuous transaction after
-	 *         the given date (inclusive)
+	 * @return list of transactions belonging to this continuous transaction
+	 *         after the given date (inclusive)
 	 */
 	public List<Transaction> getTransactionsFromDate(final ContinuousTransaction continuousTransaction,
 			final LocalDate date) {
@@ -369,8 +393,9 @@ public class DBUtils {
 			return null;
 		}
 
-		DBUtils.log.info("getTransactionsFromDate for continuous transaction: " + continuousTransaction.getName() + " ("
-				+ continuousTransaction.getId() + ") " + " at date: " + date.toString());
+		DatabaseService.log
+				.info("getTransactionsFromDate for continuous transaction: " + continuousTransaction.getName() + " ("
+						+ continuousTransaction.getId() + ") " + " at date: " + date.toString());
 
 		final List<Transaction> transactions = this.entityManager
 				.createNamedQuery("ContinuousTransansactionFromDate", Transaction.class)
@@ -389,7 +414,7 @@ public class DBUtils {
 		if (continuousTransaction == null) {
 			return null;
 		}
-		DBUtils.log.info("getTransactions for continuous transaction: " + continuousTransaction.getName() + " ("
+		DatabaseService.log.info("getTransactions for continuous transaction: " + continuousTransaction.getName() + " ("
 				+ continuousTransaction.getId() + ") ");
 
 		final List<Transaction> transactions = this.entityManager
@@ -410,7 +435,7 @@ public class DBUtils {
 			return null;
 		}
 
-		DBUtils.log.info("getTransactionsWithoutAccount from date: " + dateFrom.toString() + " until date: "
+		DatabaseService.log.info("getTransactionsWithoutAccount from date: " + dateFrom.toString() + " until date: "
 				+ dateUntil.toString());
 		final List<Transaction> transactions = this.entityManager
 				.createNamedQuery("TransactionsWithoutAccountBetween", Transaction.class)
@@ -428,7 +453,7 @@ public class DBUtils {
 			return null;
 		}
 
-		DBUtils.log.info("getTransactionsWithoutAccount at date: " + date.toString());
+		DatabaseService.log.info("getTransactionsWithoutAccount at date: " + date.toString());
 		final List<Transaction> transactions = this.entityManager
 				.createNamedQuery("TransactionsWithoutAccount", Transaction.class).setParameter("date", date)
 				.getResultList();
@@ -445,7 +470,7 @@ public class DBUtils {
 			return null;
 		}
 
-		DBUtils.log.info("geContinuousTransactions for: " + bankAccount.getName());
+		DatabaseService.log.info("geContinuousTransactions for: " + bankAccount.getName());
 		return this.entityManager.createNamedQuery(ContinuousTransaction.CONTINUOUS_TRANSACTION_FOR_BANK_ACCOUNT,
 				ContinuousTransaction.class).setParameter("bankAccount", bankAccount).getResultList();
 	}
@@ -455,7 +480,7 @@ public class DBUtils {
 			return null;
 		}
 		this.entityManager.merge(continuousTransaction);
-		DBUtils.log.info("getDateOfLastTransaction for: " + continuousTransaction.getName());
+		DatabaseService.log.info("getDateOfLastTransaction for: " + continuousTransaction.getName());
 		return this.entityManager
 				.createNamedQuery(Transaction.DATE_OF_LAST_TRANSACTION_OF_CONTINUOUS_TRANSACTION, LocalDate.class)
 				.setParameter("continuousTransaction", continuousTransaction).getSingleResult();
@@ -471,7 +496,7 @@ public class DBUtils {
 			return null;
 		}
 
-		DBUtils.log.info("getCategory: " + categoryName);
+		DatabaseService.log.info("getCategory: " + categoryName);
 		final Category category = this.entityManager.find(Category.class, categoryName);
 
 		return category;
@@ -488,7 +513,7 @@ public class DBUtils {
 		}
 
 		for (final String string : categoryNames) {
-			DBUtils.log.info("getCategories: " + string);
+			DatabaseService.log.info("getCategories: " + string);
 		}
 
 		final List<Category> categories = this.entityManager.createNamedQuery("findCategories", Category.class)
@@ -501,7 +526,7 @@ public class DBUtils {
 	 * @return list of all category names
 	 */
 	public ArrayList<String> getCategoryNames() {
-		DBUtils.log.info("getCategoryNames");
+		DatabaseService.log.info("getCategoryNames");
 		final ArrayList<String> categoryNames = new ArrayList<>();
 
 		final List<Category> categories = this.entityManager.createNamedQuery("allCategories", Category.class)
@@ -521,20 +546,17 @@ public class DBUtils {
 	 */
 	public void persist(final Transaction transaction) {
 		if (transaction == null) {
-			return;
+			throw new InvalidParameterException("Transaction must not be null");
 		}
-		DBUtils.log.info("persist transaction: " + transaction.getId());
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		DatabaseService.log.info("persist transaction: " + transaction.getId());
+		final boolean ownTransaction = this.beginTransaction();
 
 		this.entityManager.persist(transaction);
 
 		AccountBalanceService.updateBalance(transaction, AccountBalanceService.BalanceAction.adding);
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -547,17 +569,14 @@ public class DBUtils {
 		if (transactions == null || transactions.isEmpty()) {
 			return;
 		}
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		final boolean ownTransaction = this.beginTransaction();
 
 		for (final Transaction transaction : transactions) {
 			this.persist(transaction);
 		}
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -570,16 +589,13 @@ public class DBUtils {
 		if (continuousTransaction == null) {
 			return;
 		}
-		DBUtils.log.info("persist ContinuousTransaction: " + continuousTransaction.getId());
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		DatabaseService.log.info("persist ContinuousTransaction: " + continuousTransaction.getId());
+		final boolean ownTransaction = this.beginTransaction();
 
 		this.entityManager.persist(continuousTransaction);
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -594,10 +610,7 @@ public class DBUtils {
 		if (continuousTransaction == null || transactions == null || transactions.isEmpty()) {
 			return;
 		}
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		final boolean ownTransaction = this.beginTransaction();
 
 		this.persist(continuousTransaction);
 		for (final Transaction transaction : transactions) {
@@ -605,7 +618,7 @@ public class DBUtils {
 		}
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -618,16 +631,13 @@ public class DBUtils {
 		if (category == null) {
 			return;
 		}
-		DBUtils.log.info("persist Category: " + category.getName());
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		DatabaseService.log.info("persist Category: " + category.getName());
+		final boolean ownTransaction = this.beginTransaction();
 
 		this.entityManager.persist(category);
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 
 	}
@@ -641,16 +651,13 @@ public class DBUtils {
 		if (bankAccount == null) {
 			return;
 		}
-		DBUtils.log.info("persist BankAccount: " + bankAccount.getName());
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		DatabaseService.log.info("persist BankAccount: " + bankAccount.getName());
+		final boolean ownTransaction = this.beginTransaction();
 
 		this.entityManager.persist(bankAccount);
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -663,16 +670,13 @@ public class DBUtils {
 		if (bankAccountCategory == null) {
 			return;
 		}
-		DBUtils.log.info("persist BankAccountCategory: " + bankAccountCategory.getName());
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		DatabaseService.log.info("persist BankAccountCategory: " + bankAccountCategory.getName());
+		final boolean ownTransaction = this.beginTransaction();
 
 		this.entityManager.persist(bankAccountCategory);
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -685,17 +689,14 @@ public class DBUtils {
 		if (balanceHistory == null) {
 			return;
 		}
-		DBUtils.log.info("persist BalanceHistory for bank account: " + balanceHistory.getBankAccount() + " and date: "
-				+ balanceHistory.getDate().toString());
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		DatabaseService.log.info("persist BalanceHistory for bank account: " + balanceHistory.getBankAccount()
+				+ " and date: " + balanceHistory.getDate().toString());
+		final boolean ownTransaction = this.beginTransaction();
 
 		this.entityManager.persist(balanceHistory);
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -708,17 +709,14 @@ public class DBUtils {
 		if (balanceHistories == null || balanceHistories.isEmpty()) {
 			return;
 		}
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		final boolean ownTransaction = this.beginTransaction();
 
 		for (final BalanceHistory balanceHistory : balanceHistories) {
 			this.persist(balanceHistory);
 		}
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -731,17 +729,14 @@ public class DBUtils {
 		if (balanceHistory == null) {
 			return;
 		}
-		DBUtils.log.info("merge BalanceHistory for bank account: " + balanceHistory.getBankAccount() + " and date: "
-				+ balanceHistory.getDate().toString());
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		DatabaseService.log.info("merge BalanceHistory for bank account: " + balanceHistory.getBankAccount()
+				+ " and date: " + balanceHistory.getDate().toString());
+		final boolean ownTransaction = this.beginTransaction();
 
 		this.entityManager.merge(balanceHistory);
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -749,16 +744,13 @@ public class DBUtils {
 		if (continuousTransaction == null) {
 			return;
 		}
-		DBUtils.log.info("merge ContinuousTransaction: " + continuousTransaction.getId());
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		DatabaseService.log.info("merge ContinuousTransaction: " + continuousTransaction.getId());
+		final boolean ownTransaction = this.beginTransaction();
 
 		this.entityManager.merge(continuousTransaction);
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -766,18 +758,15 @@ public class DBUtils {
 		if (transactions == null) {
 			return;
 		}
-		DBUtils.log.info("merge Transactions");
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		DatabaseService.log.info("merge Transactions");
+		final boolean ownTransaction = this.beginTransaction();
 
 		for (final Transaction transaction : transactions) {
 			this.entityManager.merge(transaction);
 		}
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -790,17 +779,14 @@ public class DBUtils {
 		if (balanceHistories == null || balanceHistories.isEmpty()) {
 			return;
 		}
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		final boolean ownTransaction = this.beginTransaction();
 
 		for (final BalanceHistory balanceHistory : balanceHistories) {
 			this.merge(balanceHistory);
 		}
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -815,17 +801,13 @@ public class DBUtils {
 			return;
 		}
 		try {
-			DBUtils.log.info("delete BankAccountCategory: " + bankAccountCategory.getName());
-			final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-
-			if (ownTransaction) {
-				this.entityManager.getTransaction().begin();
-			}
+			DatabaseService.log.info("delete BankAccountCategory: " + bankAccountCategory.getName());
+			final boolean ownTransaction = this.beginTransaction();
 
 			this.entityManager.remove(bankAccountCategory);
 
 			if (ownTransaction) {
-				this.entityManager.getTransaction().commit();
+				this.commitTransaction();
 			}
 		} catch (final RollbackException e) {
 			throw new RollbackException("can't delete bank account category: " + bankAccountCategory.getName(), e);
@@ -843,17 +825,14 @@ public class DBUtils {
 			return;
 		}
 		try {
-			DBUtils.log.info("delete BankAccount: " + bankAccount.getName());
-			final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+			DatabaseService.log.info("delete BankAccount: " + bankAccount.getName());
+			final boolean ownTransaction = this.beginTransaction();
 
-			if (ownTransaction) {
-				this.entityManager.getTransaction().begin();
-			}
 			this.deleteBalanceHistories(bankAccount);
 			this.entityManager.remove(bankAccount);
 
 			if (ownTransaction) {
-				this.entityManager.getTransaction().commit();
+				this.commitTransaction();
 			}
 		} catch (final RollbackException e) {
 			throw new RollbackException("can't delete bank account: " + bankAccount.getName(), e);
@@ -870,12 +849,8 @@ public class DBUtils {
 			return;
 		}
 		try {
-			DBUtils.log.info("delete Transaction: " + transaction.getId());
-			final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-
-			if (ownTransaction) {
-				this.entityManager.getTransaction().begin();
-			}
+			DatabaseService.log.info("delete Transaction: " + transaction.getId());
+			final boolean ownTransaction = this.beginTransaction();
 
 			AccountBalanceService.updateBalance(transaction, BalanceAction.deleting);
 			if (!this.entityManager.contains(transaction)) {
@@ -886,10 +861,10 @@ public class DBUtils {
 			}
 
 			if (ownTransaction) {
-				this.entityManager.getTransaction().commit();
+				this.commitTransaction();
 			}
 		} catch (final Exception e) {
-			DBUtils.log.error("can't delete transaction: " + transaction.getId(), e);
+			DatabaseService.log.error("can't delete transaction: " + transaction.getId(), e);
 			throw e;
 		}
 	}
@@ -904,20 +879,16 @@ public class DBUtils {
 			return;
 		}
 		try {
-			DBUtils.log.info("delete Category: " + category.getName());
-			final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-
-			if (ownTransaction) {
-				this.entityManager.getTransaction().begin();
-			}
+			DatabaseService.log.info("delete Category: " + category.getName());
+			final boolean ownTransaction = this.beginTransaction();
 
 			this.entityManager.remove(category);
 
 			if (ownTransaction) {
-				this.entityManager.getTransaction().commit();
+				this.commitTransaction();
 			}
 		} catch (final Exception e) {
-			DBUtils.log.error("can't delete category: " + category.getName(), e);
+			DatabaseService.log.error("can't delete category: " + category.getName(), e);
 			throw e;
 		}
 	}
@@ -932,21 +903,18 @@ public class DBUtils {
 			return;
 		}
 		try {
-			DBUtils.log.info("delete BalanceHistory for bank account: " + balanceHistory.getBankAccount().getBankName()
-					+ " and date: " + balanceHistory.getDate().toString());
-			final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-
-			if (ownTransaction) {
-				this.entityManager.getTransaction().begin();
-			}
+			DatabaseService.log
+					.info("delete BalanceHistory for bank account: " + balanceHistory.getBankAccount().getBankName()
+							+ " and date: " + balanceHistory.getDate().toString());
+			final boolean ownTransaction = this.beginTransaction();
 
 			this.entityManager.remove(balanceHistory);
 
 			if (ownTransaction) {
-				this.entityManager.getTransaction().commit();
+				this.commitTransaction();
 			}
 		} catch (final Exception e) {
-			DBUtils.log.error(
+			DatabaseService.log.error(
 					"can't delete BalanceHistory for bank account: " + balanceHistory.getBankAccount().getBankName()
 							+ " and date: " + balanceHistory.getDate().toString(),
 					e);
@@ -965,11 +933,7 @@ public class DBUtils {
 			return;
 		}
 		try {
-			final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-
-			if (ownTransaction) {
-				this.entityManager.getTransaction().begin();
-			}
+			final boolean ownTransaction = this.beginTransaction();
 
 			final List<BankAccountCategory> bankAccountCategories = this
 					.getBankAccountCategories(bankAccountCategoryNames);
@@ -978,7 +942,7 @@ public class DBUtils {
 			}
 
 			if (ownTransaction) {
-				this.entityManager.getTransaction().commit();
+				this.commitTransaction();
 			}
 		} catch (final RollbackException e) {
 			throw e;
@@ -996,11 +960,7 @@ public class DBUtils {
 			return;
 		}
 		try {
-			final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-
-			if (ownTransaction) {
-				this.entityManager.getTransaction().begin();
-			}
+			final boolean ownTransaction = this.beginTransaction();
 
 			final List<BankAccount> bankAccounts = this.getBankAccounts(bankAccountNames);
 			for (final BankAccount bankAccount : bankAccounts) {
@@ -1008,7 +968,7 @@ public class DBUtils {
 			}
 
 			if (ownTransaction) {
-				this.entityManager.getTransaction().commit();
+				this.commitTransaction();
 			}
 		} catch (final RollbackException e) {
 			throw e;
@@ -1024,18 +984,14 @@ public class DBUtils {
 		if (transactions == null || transactions.isEmpty()) {
 			return;
 		}
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		final boolean ownTransaction = this.beginTransaction();
 
 		for (final Transaction transaction : transactions) {
 			this.delete(transaction);
 		}
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -1048,11 +1004,7 @@ public class DBUtils {
 		if (bankAccount == null) {
 			return;
 		}
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		final boolean ownTransaction = this.beginTransaction();
 
 		final List<Transaction> transactions = this.getTransactions(bankAccount);
 		for (final Transaction transaction : transactions) {
@@ -1060,7 +1012,7 @@ public class DBUtils {
 		}
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -1073,18 +1025,14 @@ public class DBUtils {
 		if (categories == null || categories.isEmpty()) {
 			return;
 		}
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		final boolean ownTransaction = this.beginTransaction();
 
 		for (final Category category : categories) {
 			this.delete(category);
 		}
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -1097,18 +1045,14 @@ public class DBUtils {
 		if (balanceHistories == null || balanceHistories.isEmpty()) {
 			return;
 		}
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		final boolean ownTransaction = this.beginTransaction();
 
 		for (final BalanceHistory balanceHistory : balanceHistories) {
 			this.delete(balanceHistory);
 		}
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -1121,19 +1065,16 @@ public class DBUtils {
 		if (bankAccount == null) {
 			return;
 		}
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
+		final boolean ownTransaction = this.beginTransaction();
 
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
-
-		final ArrayList<BalanceHistory> balanceHistories = DBUtils.getInstance().getBalanceHistories(bankAccount);
+		final ArrayList<BalanceHistory> balanceHistories = DatabaseService.getInstance()
+				.getBalanceHistories(bankAccount);
 		if (!balanceHistories.isEmpty()) {
-			DBUtils.getInstance().deleteBalanceHistories(balanceHistories);
+			DatabaseService.getInstance().deleteBalanceHistories(balanceHistories);
 		}
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 
@@ -1141,19 +1082,15 @@ public class DBUtils {
 		if (continuousTransaction == null) {
 			return;
 		}
-		DBUtils.log.info("deleteAllContinuousTransactions : " + continuousTransaction.getId());
-		final boolean ownTransaction = this.entityManager.getTransaction().isActive() ? false : true;
-
-		if (ownTransaction) {
-			this.entityManager.getTransaction().begin();
-		}
+		DatabaseService.log.info("deleteAllContinuousTransactions : " + continuousTransaction.getId());
+		final boolean ownTransaction = this.beginTransaction();
 
 		final ArrayList<Transaction> transactions = this.getTransactions(continuousTransaction);
 		this.deleteTransactions(transactions);
 		this.entityManager.remove(continuousTransaction);
 
 		if (ownTransaction) {
-			this.entityManager.getTransaction().commit();
+			this.commitTransaction();
 		}
 	}
 

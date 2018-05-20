@@ -21,6 +21,9 @@ public class EntityManagerHelper {
 
 	public static void closeEntityManager() {
 		if (EntityManagerHelper.entityManager != null) {
+			if (EntityManagerHelper.entityManager.getTransaction().isActive()) {
+				EntityManagerHelper.entityManager.getTransaction().commit();
+			}
 			EntityManagerHelper.entityManager.close();
 			EntityManagerHelper.entityManager = null;
 		}

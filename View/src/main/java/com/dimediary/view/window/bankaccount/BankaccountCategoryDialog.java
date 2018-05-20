@@ -14,7 +14,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.dimediary.model.entities.BankAccountCategory;
-import com.dimediary.services.utils.DBUtils;
+import com.dimediary.services.database.DatabaseService;
 import com.dimediary.view.window.util.IWindowParameterInjection;
 import com.dimediary.view.window.util.WindowParameters;
 
@@ -63,7 +63,7 @@ public class BankaccountCategoryDialog implements IWindowParameterInjection {
 		final BankAccountCategory bankAccountCategory = new BankAccountCategory();
 		bankAccountCategory.setName(this.textFieldName.getText());
 
-		DBUtils.getInstance().persist(bankAccountCategory);
+		DatabaseService.getInstance().persist(bankAccountCategory);
 		this.textFieldName.clear();
 		this.items.add(bankAccountCategory.getName());
 	}
@@ -77,7 +77,7 @@ public class BankaccountCategoryDialog implements IWindowParameterInjection {
 		}
 
 		try {
-			DBUtils.getInstance().deleteBankAccountCategories(bankAccountCategoryNames);
+			DatabaseService.getInstance().deleteBankAccountCategories(bankAccountCategoryNames);
 		} catch (final RollbackException e) {
 			BankaccountCategoryDialog.log.warn(e);
 			final Alert alert = new Alert(AlertType.ERROR);
@@ -105,7 +105,7 @@ public class BankaccountCategoryDialog implements IWindowParameterInjection {
 		assert this.deleteButton != null : "fx:id=\"deleteButton\" was not injected: check your FXML file 'BankaccountCategoryDialog.fxml'.";
 
 		this.items = FXCollections.observableArrayList();
-		this.items.addAll(DBUtils.getInstance().getBankAccountCategoryNames());
+		this.items.addAll(DatabaseService.getInstance().getBankAccountCategoryNames());
 		this.listView.setItems(this.items);
 		this.listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		this.textFieldName.clear();

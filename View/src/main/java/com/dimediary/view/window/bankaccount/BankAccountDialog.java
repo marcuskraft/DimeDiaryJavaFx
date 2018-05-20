@@ -15,7 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.dimediary.model.entities.BankAccount;
-import com.dimediary.services.utils.DBUtils;
+import com.dimediary.services.database.DatabaseService;
 import com.dimediary.view.Main;
 import com.dimediary.view.window.category.CategoryDialog;
 import com.dimediary.view.window.transaction.TransactionDialog;
@@ -94,7 +94,7 @@ public class BankAccountDialog implements IWindowParameterInjection {
 		final BankAccount bankAccount = new BankAccount();
 
 		bankAccount.setBankAccountCategory(
-				DBUtils.getInstance().getBankAccountCategory(this.comboBoxAccountCategory.getValue()));
+				DatabaseService.getInstance().getBankAccountCategory(this.comboBoxAccountCategory.getValue()));
 		bankAccount.setBankName(this.textFieldBankName.getText());
 		bankAccount.setBic(this.textFieldBIC.getText());
 		bankAccount.setIban(this.textFieldIBAN.getText());
@@ -102,7 +102,7 @@ public class BankAccountDialog implements IWindowParameterInjection {
 		bankAccount.setStartBudget(this.spinnerStartBudget.getValue());
 		bankAccount.setDateStartBudget(this.datePickerStartBudget.getValue());
 
-		DBUtils.getInstance().persist(bankAccount);
+		DatabaseService.getInstance().persist(bankAccount);
 		this.items.add(bankAccount.getName());
 
 		this.initialize();
@@ -126,7 +126,7 @@ public class BankAccountDialog implements IWindowParameterInjection {
 		}
 
 		try {
-			DBUtils.getInstance().deleteBankAccounts(bankAccountNames);
+			DatabaseService.getInstance().deleteBankAccounts(bankAccountNames);
 		} catch (final RollbackException e) {
 			BankAccountDialog.log.warn(e);
 			final Alert alert = new Alert(AlertType.ERROR);
@@ -152,7 +152,7 @@ public class BankAccountDialog implements IWindowParameterInjection {
 	@FXML
 	void onClickListView(final MouseEvent event) {
 		if (event.getClickCount() > 1) {
-			final BankAccount bankAccount = DBUtils.getInstance()
+			final BankAccount bankAccount = DatabaseService.getInstance()
 					.getBankAccount(this.listView.getSelectionModel().getSelectedItem());
 			this.initialize(bankAccount);
 		}
@@ -174,7 +174,7 @@ public class BankAccountDialog implements IWindowParameterInjection {
 		assert this.buttonAdd != null : "fx:id=\"buttonAdd\" was not injected: check your FXML file 'AccountDialog.fxml'.";
 
 		this.items = FXCollections.observableArrayList();
-		this.items.addAll(DBUtils.getInstance().getBankAccountNames());
+		this.items.addAll(DatabaseService.getInstance().getBankAccountNames());
 		this.listView.setItems(this.items);
 		this.listView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 		this.textFieldAccName.clear();
@@ -221,7 +221,7 @@ public class BankAccountDialog implements IWindowParameterInjection {
 
 	public void refreshAccCategories() {
 		final ObservableList<String> accountCategories = FXCollections.observableArrayList();
-		accountCategories.addAll(DBUtils.getInstance().getBankAccountCategoryNames());
+		accountCategories.addAll(DatabaseService.getInstance().getBankAccountCategoryNames());
 		this.comboBoxAccountCategory.setItems(accountCategories);
 	}
 

@@ -9,7 +9,7 @@ import com.dimediary.model.entities.BalanceHistory;
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.utils.AmountUtils;
-import com.dimediary.services.utils.DBUtils;
+import com.dimediary.services.database.DatabaseService;
 import com.dimediary.util.utils.DateUtils;
 
 /**
@@ -43,13 +43,13 @@ public class AccountBalanceService {
 
 		final LocalDate lastSunday = DateUtils.getLastSunday(date);
 
-		BalanceHistory balanceHistory = DBUtils.getInstance().getBalanceHistory(bankAccount, lastSunday);
+		BalanceHistory balanceHistory = DatabaseService.getInstance().getBalanceHistory(bankAccount, lastSunday);
 
 		if (balanceHistory == null) {
 			AccountBalanceService.proofBalance(bankAccount);
-			balanceHistory = DBUtils.getInstance().getBalanceHistory(bankAccount, lastSunday);
+			balanceHistory = DatabaseService.getInstance().getBalanceHistory(bankAccount, lastSunday);
 			if (balanceHistory == null) {
-				return AccountBalanceService.getBalance(DBUtils.getInstance().getLastBalanceHistory(bankAccount), date);
+				return AccountBalanceService.getBalance(DatabaseService.getInstance().getLastBalanceHistory(bankAccount), date);
 			}
 		}
 
@@ -57,7 +57,7 @@ public class AccountBalanceService {
 
 		if (lastSunday.isBefore(date)) {
 			final LocalDate dateFrom = lastSunday.plusDays(1);
-			final List<Transaction> transactions = DBUtils.getInstance().getTransactions(dateFrom, date, bankAccount);
+			final List<Transaction> transactions = DatabaseService.getInstance().getTransactions(dateFrom, date, bankAccount);
 
 			for (final Transaction transaction : transactions) {
 				result += transaction.getAmount();
@@ -114,7 +114,7 @@ public class AccountBalanceService {
 		final LocalDate date = transaction.getDate();
 		final LocalDate nextSunday = DateUtils.getNextSunday(date);
 
-		final ArrayList<BalanceHistory> balanceHistories = DBUtils.getInstance()
+		final ArrayList<BalanceHistory> balanceHistories = DatabaseService.getInstance()
 				.getBalanceHistoriesAfterDate(transaction.getBankAccount(), nextSunday);
 
 		if (action == BalanceAction.adding) {
@@ -126,7 +126,7 @@ public class AccountBalanceService {
 				balanceHistory.addAmount(-transaction.getAmount());
 			}
 		}
-		DBUtils.getInstance().mergeBalanceHistories(balanceHistories);
+		DatabaseService.getInstance().mergeBalanceHistories(balanceHistories);
 
 	}
 
@@ -137,7 +137,7 @@ public class AccountBalanceService {
 		if (bankAccount == null || date == null || date.isBefore(bankAccount.getDateStartBudget())) {
 			return null;
 		}
-		final ArrayList<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount, date);
+		final ArrayList<Transaction> transactions = DatabaseService.getInstance().getTransactions(bankAccount, date);
 
 		Double result;
 		if (balanceDayBefore == null) {
@@ -159,7 +159,7 @@ public class AccountBalanceService {
 	private static Double getBalance(final BalanceHistory lastBalanceHistory, final LocalDate date) {
 		Double amount = lastBalanceHistory.getAmount();
 
-		final List<Transaction> transactions = DBUtils.getInstance()
+		final List<Transaction> transactions = DatabaseService.getInstance()
 				.getTransactions(lastBalanceHistory.getDate().plusDays(1), date, lastBalanceHistory.getBankAccount());
 
 		for (final Transaction transaction : transactions) {
@@ -177,9 +177,9 @@ public class AccountBalanceService {
 	 *            bank account to initialize
 	 */
 	private static void initBalance(final BankAccount bankAccount) {
-		DBUtils.getInstance().deleteBalanceHistories(bankAccount);
+		DatabaseService.getInstance().deleteBalanceHistories(bankAccount);
 
-		final List<Transaction> transactions = DBUtils.getInstance().getTransactions(bankAccount);
+		final List<Transaction> transactions = DatabaseService.getInstance().getTransactions(bankAccount);
 
 		final List<LocalDate> sundays = DateUtils.getAllSundaysForBalancing(bankAccount, null);
 
@@ -191,7 +191,7 @@ public class AccountBalanceService {
 			balanceHistory.setAmount(bankAccount.getStartBudget());
 			balanceHistories.add(balanceHistory);
 		}
-		DBUtils.getInstance().persistBalanceHistories(balanceHistories);
+		DatabaseService.getInstance().persistBalanceHistories(balanceHistories);
 
 		for (final Transaction transaction : transactions) {
 			AccountBalanceService.updateBalance(transaction, BalanceAction.adding);
@@ -209,7 +209,7 @@ public class AccountBalanceService {
 	 */
 	private static void proofBalance(final BankAccount bankAccount) {
 		ContinuousTransactionService.proofContinuosTransactions(bankAccount);
-		final BalanceHistory lastBalanceHistory = DBUtils.getInstance().getLastBalanceHistory(bankAccount);
+		final BalanceHistory lastBalanceHistory = DatabaseService.getInstance().getLastBalanceHistory(bankAccount);
 
 		if (lastBalanceHistory == null) {
 			AccountBalanceService.initBalance(bankAccount);
@@ -236,7 +236,7 @@ public class AccountBalanceService {
 			final BalanceHistory balanceHistory = new BalanceHistory();
 
 			lastSunday = DateUtils.getLastSundayAlways(date);
-			final List<Transaction> transactions = DBUtils.getInstance().getTransactions(lastSunday.plusDays(1), date,
+			final List<Transaction> transactions = DatabaseService.getInstance().getTransactions(lastSunday.plusDays(1), date,
 					bankAccount);
 
 			for (final Transaction transaction : transactions) {
@@ -250,7 +250,7 @@ public class AccountBalanceService {
 			balanceHistories.add(balanceHistory);
 		}
 
-		DBUtils.getInstance().persistBalanceHistories(balanceHistories);
+		DatabaseService.getInstance().persistBalanceHistories(balanceHistories);
 
 	}
 
