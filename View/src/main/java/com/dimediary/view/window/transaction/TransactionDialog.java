@@ -105,9 +105,9 @@ public class TransactionDialog implements IWindowParameterInjection {
 	void onButtonOk(final ActionEvent event) {
 		if (this.transaction != null) {
 			if (this.recurrenceRule == null) {
-				this.changeTransaction();
+				this.changeTransaction(true);
 			} else {
-				this.changeNewContinuousTransactionFromTransaction();
+				this.changeNewContinuousTransactionFromTransaction(true);
 			}
 		} else if (this.continuousTransaction != null) {
 			if (this.recurrenceRule == null) {
@@ -117,9 +117,9 @@ public class TransactionDialog implements IWindowParameterInjection {
 			}
 		} else {
 			if (this.recurrenceRule == null) {
-				this.createNewTransaction();
+				this.createNewTransaction(true);
 			} else {
-				this.createNewContinuousTransaction();
+				this.createNewContinuousTransaction(true);
 			}
 		}
 	}
@@ -356,21 +356,43 @@ public class TransactionDialog implements IWindowParameterInjection {
 		this.spinnerAmount.getValueFactory().setValue(Math.abs(amount));
 	}
 
-	private void createNewTransaction() {
-		this.transaction = new Transaction();
-		this.setTransactionAttributes(this.transaction);
-		DatabaseService.getInstance().persist(this.transaction);
-		this.mainWindow.refresh();
+	private void createNewTransaction(final boolean ownTransaction) {
+		if (ownTransaction) {
+			this.beginTransaction();
+		}
+		try {
+			this.transaction = new Transaction();
+			this.setTransactionAttributes(this.transaction);
+			DatabaseService.getInstance().persist(this.transaction);
+			this.mainWindow.refresh();
+		} catch (final Exception e) {
+			this.rollbackTransaction();
+			throw e;
+		}
+		if (ownTransaction) {
+			this.commitTransaction();
+		}
 		this.close();
 	}
 
-	private void createNewContinuousTransaction() {
-		this.continuousTransaction = new ContinuousTransaction();
-		this.setContinuousTransactionAttributtes(this.continuousTransaction);
-		final List<Transaction> transactions = ContinuousTransactionService
-				.generateTransactionsFromNewContinuousTransaction(this.continuousTransaction);
-		DatabaseService.getInstance().persistContinuousTransaction(this.continuousTransaction, transactions);
-		this.mainWindow.refresh();
+	private void createNewContinuousTransaction(final boolean ownTransaction) {
+		if (ownTransaction) {
+			this.beginTransaction();
+		}
+		try {
+			this.continuousTransaction = new ContinuousTransaction();
+			this.setContinuousTransactionAttributtes(this.continuousTransaction);
+			final List<Transaction> transactions = ContinuousTransactionService
+					.generateTransactionsFromNewContinuousTransaction(this.continuousTransaction);
+			DatabaseService.getInstance().persistContinuousTransaction(this.continuousTransaction, transactions);
+			this.mainWindow.refresh();
+		} catch (final Exception e) {
+			this.rollbackTransaction();
+			throw e;
+		}
+		if (ownTransaction) {
+			this.commitTransaction();
+		}
 		this.close();
 	}
 
@@ -383,10 +405,21 @@ public class TransactionDialog implements IWindowParameterInjection {
 		continuousTransaction.setRecurrenceRule(this.recurrenceRule.toString());
 	}
 
-	private void changeNewContinuousTransactionFromTransaction() {
-		DatabaseService.getInstance().delete(this.transaction);
-		this.createNewContinuousTransaction();
-		this.mainWindow.refresh();
+	private void changeNewContinuousTransactionFromTransaction(final boolean ownTransaction) {
+		if (ownTransaction) {
+			this.beginTransaction();
+		}
+		try {
+			DatabaseService.getInstance().delete(this.transaction);
+			this.createNewContinuousTransaction(false);
+			this.mainWindow.refresh();
+		} catch (final Exception e) {
+			this.rollbackTransaction();
+			throw e;
+		}
+		if (ownTransaction) {
+			this.commitTransaction();
+		}
 		this.close();
 	}
 
@@ -394,10 +427,21 @@ public class TransactionDialog implements IWindowParameterInjection {
 		this.changeContinuousTransaction();
 	}
 
-	private void changeTransaction() {
-		DatabaseService.getInstance().delete(this.transaction);
-		this.createNewTransaction();
-		this.mainWindow.refresh();
+	private void changeTransaction(final boolean ownTransaction) {
+		if (ownTransaction) {
+			this.beginTransaction();
+		}
+		try {
+			DatabaseService.getInstance().delete(this.transaction);
+			this.createNewTransaction(false);
+			this.mainWindow.refresh();
+		} catch (final Exception e) {
+			this.rollbackTransaction();
+			throw e;
+		}
+		if (ownTransaction) {
+			this.commitTransaction();
+		}
 		this.close();
 	}
 
@@ -415,29 +459,36 @@ public class TransactionDialog implements IWindowParameterInjection {
 			throw new IllegalStateException("continuousTransaction should not be null");
 		}
 
-		if (dateFrom == null) {
-			DatabaseService.getInstance().deleteAllContinuousTransactions(this.continuousTransaction);
-		} else {
-			this.datepicker.setValue(dateFrom);
+		this.beginTransaction();
+		try {
+			if (dateFrom == null) {
+				DatabaseService.getInstance().deleteAllContinuousTransactions(this.continuousTransaction);
+			} else {
+				this.datepicker.setValue(dateFrom);
 
-			final List<Transaction> transactionsAfter = DatabaseService.getInstance()
-					.getTransactionsFromDate(this.continuousTransaction, dateFrom);
-			DatabaseService.getInstance().deleteTransactions(transactionsAfter);
+				final List<Transaction> transactionsAfter = DatabaseService.getInstance()
+						.getTransactionsFromDate(this.continuousTransaction, dateFrom);
+				DatabaseService.getInstance().deleteTransactions(transactionsAfter);
 
-			final RecurrenceRule recurrenceRuleOfOldContinuousTransaction = RecurrenceRuleUtils
-					.createRecurrenceRule(this.continuousTransaction.getRecurrenceRule());
-			recurrenceRuleOfOldContinuousTransaction.setUntil(DateUtils.localDateToDateTime(dateFrom.minusDays(1)));
-			this.continuousTransaction.setRecurrenceRule(this.recurrenceRule.toString());
-			DatabaseService.getInstance().merge(this.continuousTransaction);
+				final RecurrenceRule recurrenceRuleOfOldContinuousTransaction = RecurrenceRuleUtils
+						.createRecurrenceRule(this.continuousTransaction.getRecurrenceRule());
+				recurrenceRuleOfOldContinuousTransaction.setUntil(DateUtils.localDateToDateTime(dateFrom.minusDays(1)));
+				this.continuousTransaction.setRecurrenceRule(this.recurrenceRule.toString());
+				DatabaseService.getInstance().merge(this.continuousTransaction);
+			}
+
+			if (this.recurrenceRule != null) {
+				this.createNewContinuousTransaction(false);
+			} else {
+				this.createNewTransaction(false);
+			}
+
+			this.mainWindow.refresh();
+		} catch (final Exception e) {
+			this.rollbackTransaction();
+			throw e;
 		}
-
-		if (this.recurrenceRule != null) {
-			this.createNewContinuousTransaction();
-		} else {
-			this.createNewTransaction();
-		}
-
-		this.mainWindow.refresh();
+		this.commitTransaction();
 		this.close();
 	}
 
@@ -499,4 +550,17 @@ public class TransactionDialog implements IWindowParameterInjection {
 		final Stage stage = (Stage) this.fieldDescription.getScene().getWindow();
 		stage.close();
 	}
+
+	private void beginTransaction() {
+		DatabaseService.getInstance().beginTransaction();
+	}
+
+	private void commitTransaction() {
+		DatabaseService.getInstance().commitTransaction();
+	}
+
+	private void rollbackTransaction() {
+		DatabaseService.getInstance().rollbackTransaction();
+	}
+
 }
