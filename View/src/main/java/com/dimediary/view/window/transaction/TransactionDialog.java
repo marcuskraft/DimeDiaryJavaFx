@@ -473,7 +473,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 				final RecurrenceRule recurrenceRuleOfOldContinuousTransaction = RecurrenceRuleUtils
 						.createRecurrenceRule(this.continuousTransaction.getRecurrenceRule());
 				recurrenceRuleOfOldContinuousTransaction.setUntil(DateUtils.localDateToDateTime(dateFrom.minusDays(1)));
-				this.continuousTransaction.setRecurrenceRule(this.recurrenceRule.toString());
+				this.continuousTransaction.setRecurrenceRule(recurrenceRuleOfOldContinuousTransaction.toString());
 				DatabaseService.getInstance().merge(this.continuousTransaction);
 			}
 
