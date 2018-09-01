@@ -22,9 +22,7 @@
 					%msg%n</Pattern>
 			</PatternLayout>
 			<Policies>
-				<TimeBasedTriggeringPolicy
-					interval="2"
-					modulate="true" />
+				<SizeBasedTriggeringPolicy size="20 MB" />
 			</Policies>
 			<DefaultRolloverStrategy max="5" />
 		</RollingFile>

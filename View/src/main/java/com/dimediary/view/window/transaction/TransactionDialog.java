@@ -432,7 +432,58 @@ public class TransactionDialog implements IWindowParameterInjection {
 			this.beginTransaction();
 		}
 		try {
-			DatabaseService.getInstance().delete(this.transaction);
+			if (this.transaction.getContinuousTransaction() != null) {
+				final RecurrenceRule recurrenceRuleOriginal = RecurrenceRuleUtils
+						.createRecurrenceRule(this.transaction.getContinuousTransaction().getRecurrenceRule());
+
+				// Generate continuous transactions before this single transaction if needed
+				final ContinuousTransaction continuousTransactionBefore = this.transaction.getContinuousTransaction()
+						.getCopy();
+				final RecurrenceRule recurrenceRuleBefore = RecurrenceRuleUtils
+						.createRecurrenceRule(continuousTransactionBefore.getRecurrenceRule());
+				recurrenceRuleBefore.setUntil(DateUtils.localDateToDateTime(this.transaction.getDate().minusDays(1)));
+				continuousTransactionBefore.setRecurrenceRule(recurrenceRuleBefore.toString());
+				final List<Transaction> transactionsBefore = ContinuousTransactionService
+						.generateTransactionsFromNewContinuousTransaction(continuousTransactionBefore);
+				if (transactionsBefore != null && !transactionsBefore.isEmpty()) {
+					DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionBefore,
+							transactionsBefore);
+				}
+
+				// generate continuous transactions after this single transaction if needed
+				final ContinuousTransaction continuousTransactionAfter = this.transaction.getContinuousTransaction()
+						.getCopy();
+				continuousTransactionAfter.setDateBeginn(this.transaction.getDate().plusDays(1));
+				final RecurrenceRule recurrenceRuleAfter = RecurrenceRuleUtils
+						.createRecurrenceRule(continuousTransactionAfter.getRecurrenceRule());
+
+				boolean continuousTransactionsAfterIsNeeded = true;
+				if (recurrenceRuleOriginal.getCount() != null) {
+					final int numberOfTransactionsBefore = transactionsBefore != null ? transactionsBefore.size() : 0;
+
+					final int numberOfTransactionsAfter = recurrenceRuleOriginal.getCount() - numberOfTransactionsBefore
+							- 1; // minus one because of the one which is changed here
+					if (numberOfTransactionsAfter > 0) {
+						recurrenceRuleAfter.setCount(numberOfTransactionsAfter);
+					} else {
+						continuousTransactionsAfterIsNeeded = false;
+					}
+				}
+
+				if (continuousTransactionsAfterIsNeeded) {
+					continuousTransactionAfter.setRecurrenceRule(recurrenceRuleAfter.toString());
+					final List<Transaction> transactionsAfter = ContinuousTransactionService
+							.generateTransactionsFromNewContinuousTransaction(continuousTransactionAfter);
+					DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionAfter,
+							transactionsAfter);
+				}
+
+				DatabaseService.getInstance()
+						.deleteAllContinuousTransactions(this.transaction.getContinuousTransaction());
+			} else {
+				DatabaseService.getInstance().delete(this.transaction);
+			}
+
 			this.createNewTransaction(false);
 			this.mainWindow.refresh();
 		} catch (final Exception e) {

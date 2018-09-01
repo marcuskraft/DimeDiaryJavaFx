@@ -137,7 +137,7 @@ public class ContinuousTransaction implements Serializable {
 		this.recurrenceRule = recurrenceRule;
 	}
 
-	public Transaction createTransaction(LocalDate date) {
+	public Transaction createTransaction(final LocalDate date) {
 		final Transaction transaction = new Transaction();
 		transaction.setAmount(this.getAmount());
 		transaction.setBankAccount(this.getBankAccount());
@@ -146,6 +146,20 @@ public class ContinuousTransaction implements Serializable {
 		transaction.setDate(date);
 		transaction.setName(this.getName());
 		return transaction;
+	}
+
+	public ContinuousTransaction getCopy() {
+		final ContinuousTransaction continuousTransactionCopy = new ContinuousTransaction();
+
+		continuousTransactionCopy.setAmount(this.getAmount());
+		continuousTransactionCopy.setBankAccount(this.getBankAccount());
+		continuousTransactionCopy.setCategory(this.getCategory());
+		continuousTransactionCopy.setDateBeginn(this.getDateBeginn());
+		continuousTransactionCopy.setName(this.getName());
+		continuousTransactionCopy.setRecurrenceRule(this.getRecurrenceRule());
+		continuousTransactionCopy.setUser(this.getUser());
+
+		return continuousTransactionCopy;
 	}
 
 }
