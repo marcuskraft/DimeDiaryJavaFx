@@ -58,7 +58,7 @@ public class BalanceHistory implements Serializable {
 	/**
 	 *
 	 * @param date
-	 *            Date of this balance
+	 *                 Date of this balance
 	 */
 	public void setDate(final LocalDate date) {
 		this.date = date;
@@ -75,7 +75,7 @@ public class BalanceHistory implements Serializable {
 	/**
 	 *
 	 * @param bankAccount
-	 *            bank account for this balance
+	 *                        bank account for this balance
 	 */
 	public void setBankAccount(final BankAccount bankAccount) {
 		this.bankAccount = bankAccount;
@@ -92,7 +92,7 @@ public class BalanceHistory implements Serializable {
 	/**
 	 *
 	 * @param amount
-	 *            amount of this balance
+	 *                   amount of this balance
 	 */
 	public void setAmount(final Double amount) {
 		this.amount = AmountUtils.round(amount);
@@ -102,7 +102,7 @@ public class BalanceHistory implements Serializable {
 	 * adds an amount to this balance (e.g. if a transaction was added or deleted)
 	 *
 	 * @param amount
-	 *            amount to be added (can be negative)
+	 *                   amount to be added (can be negative)
 	 */
 	public void addAmount(final Double amount) {
 		this.amount = this.amount + amount;
