@@ -3,6 +3,7 @@ package com.dimediary.view.window.transaction;
 import java.time.LocalDate;
 
 import com.dimediary.model.entities.Transaction;
+import com.dimediary.services.ContinuousTransactionService;
 import com.dimediary.services.database.DatabaseService;
 import com.dimediary.view.Main;
 import com.dimediary.view.window.main.MainWindow;
@@ -142,28 +143,45 @@ public class TransactionButtonFactory {
 	}
 
 	private static void deleteTransaction(final MainWindow mainWindow, final TransactionButton transactionButton) {
+		final Transaction transaction = transactionButton.getTransaction();
+		if (transaction != null) {
+			if (transaction.getContinuousTransaction() != null) {
+				TransactionButtonFactory.deleteContinuousTransaction(transaction);
+			} else {
+				TransactionButtonFactory.deleteSingeTransaction(transaction);
+			}
+		}
+		if (mainWindow != null) {
+			mainWindow.refresh();
+		}
+
+	}
+
+	private static void deleteSingeTransaction(final Transaction transaction) {
 		final Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setHeaderText(null);
 		alert.setTitle("Transaktion löschen?");
 		alert.setContentText("Sicher, dass Sie diese Transaktion löschen wollen?");
-
 		if (alert.showAndWait().get() == ButtonType.OK) {
-			final Transaction transaction = transactionButton.getTransaction();
-			if (transaction != null) {
-				if (transaction.getContinuousTransaction() != null) {
-					TransactionButtonFactory.deleteContinuousTransaction(transaction);
-				} else {
-					DatabaseService.getInstance().delete(transaction);
-				}
-			}
-			if (mainWindow != null) {
-				mainWindow.refresh();
-			}
+			DatabaseService.getInstance().delete(transaction);
 		}
 	}
 
 	private static void deleteContinuousTransaction(final Transaction transaction) {
-		// TODO Auto-generated method stub
+		final Alert alert = new Alert(AlertType.CONFIRMATION,
+				"Diese Transaktion wiederholt sich. Sollen alle zugehörigen Transaktionen gelösch werden?",
+				ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
+		alert.setHeaderText(null);
+		alert.setTitle("Sich wiederholende Transaktion löschen?");
+
+		final ButtonType pressedButton = alert.showAndWait().get();
+
+		if (pressedButton == ButtonType.YES) {
+			DatabaseService.getInstance().deleteAllContinuousTransactions(transaction.getContinuousTransaction());
+		} else if (pressedButton == ButtonType.NO) {
+			ContinuousTransactionService.splitContinuousTransaction(transaction);
+			DatabaseService.getInstance().delete(transaction);
+		}
 
 	}
 

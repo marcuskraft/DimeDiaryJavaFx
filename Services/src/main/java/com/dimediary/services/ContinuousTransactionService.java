@@ -71,4 +71,71 @@ public class ContinuousTransactionService {
 
 	}
 
+	public static void splitContinuousTransaction(final Transaction transaction) {
+
+		final boolean ownTransaction = DatabaseService.getInstance().beginTransaction();
+
+		try {
+			final RecurrenceRule recurrenceRuleOriginal = RecurrenceRuleUtils
+					.createRecurrenceRule(transaction.getContinuousTransaction().getRecurrenceRule());
+
+			// Generate continuous transactions before this single transaction if needed
+			final ContinuousTransaction continuousTransactionBefore = transaction.getContinuousTransaction().getCopy();
+			final RecurrenceRule recurrenceRuleBefore = RecurrenceRuleUtils
+					.createRecurrenceRule(continuousTransactionBefore.getRecurrenceRule());
+			recurrenceRuleBefore.setUntil(DateUtils.localDateToDateTime(transaction.getDate().minusDays(1)));
+			continuousTransactionBefore.setRecurrenceRule(recurrenceRuleBefore.toString());
+			final List<Transaction> transactionsBefore = ContinuousTransactionService
+					.generateTransactionsFromNewContinuousTransaction(continuousTransactionBefore);
+			if (transactionsBefore != null && !transactionsBefore.isEmpty()) {
+				DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionBefore,
+						transactionsBefore);
+			}
+
+			// generate continuous transactions after this single transaction if needed
+			final ContinuousTransaction continuousTransactionAfter = transaction.getContinuousTransaction().getCopy();
+			continuousTransactionAfter.setDateBeginn(transaction.getDate().plusDays(1));
+			final RecurrenceRule recurrenceRuleAfter = RecurrenceRuleUtils
+					.createRecurrenceRule(continuousTransactionAfter.getRecurrenceRule());
+
+			boolean continuousTransactionsAfterIsNeeded = true;
+			if (recurrenceRuleOriginal.getCount() != null) {
+				final int numberOfTransactionsBefore = transactionsBefore != null ? transactionsBefore.size() : 0;
+
+				final int numberOfTransactionsAfter = recurrenceRuleOriginal.getCount() - numberOfTransactionsBefore
+						- 1; // minus
+								// one
+								// because
+								// of
+								// the
+								// one
+								// which
+								// is
+								// changed
+								// here
+				if (numberOfTransactionsAfter > 0) {
+					recurrenceRuleAfter.setCount(numberOfTransactionsAfter);
+				} else {
+					continuousTransactionsAfterIsNeeded = false;
+				}
+			}
+
+			if (continuousTransactionsAfterIsNeeded) {
+				continuousTransactionAfter.setRecurrenceRule(recurrenceRuleAfter.toString());
+				final List<Transaction> transactionsAfter = ContinuousTransactionService
+						.generateTransactionsFromNewContinuousTransaction(continuousTransactionAfter);
+				DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionAfter,
+						transactionsAfter);
+			}
+
+			DatabaseService.getInstance().deleteAllContinuousTransactions(transaction.getContinuousTransaction());
+		} catch (final Exception e) {
+			DatabaseService.getInstance().rollbackTransaction();
+			throw e;
+		}
+		if (ownTransaction) {
+			DatabaseService.getInstance().commitTransaction();
+		}
+	}
+
 }
