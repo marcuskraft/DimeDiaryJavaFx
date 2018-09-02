@@ -5,6 +5,7 @@ package com.dimediary.view.window.transaction;
  */
 
 import java.net.URL;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -229,6 +230,18 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 	public void setRecurrenceRule(final RecurrenceRule recurrenceRule) {
 		this.recurrenceRule = recurrenceRule;
+	}
+
+	public int getActualDayOfMonth() {
+		return this.datepicker.getValue().getDayOfMonth();
+	}
+
+	public int getActualDayOfYear() {
+		return this.datepicker.getValue().getDayOfYear();
+	}
+
+	public DayOfWeek getDayOfWeek() {
+		return this.datepicker.getValue().getDayOfWeek();
 	}
 
 	private void refreshCategories() {
