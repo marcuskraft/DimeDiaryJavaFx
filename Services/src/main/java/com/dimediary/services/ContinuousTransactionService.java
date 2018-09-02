@@ -81,12 +81,20 @@ public class ContinuousTransactionService {
 
 			// Generate continuous transactions before this single transaction if needed
 			final ContinuousTransaction continuousTransactionBefore = transaction.getContinuousTransaction().getCopy();
+
 			final RecurrenceRule recurrenceRuleBefore = RecurrenceRuleUtils
 					.createRecurrenceRule(continuousTransactionBefore.getRecurrenceRule());
-			recurrenceRuleBefore.setUntil(DateUtils.localDateToDateTime(transaction.getDate().minusDays(1)));
+
+			final LocalDate lastDateBefore = RecurrenceRuleUtils.getLastRecurrenceDateBefore(recurrenceRuleBefore,
+					continuousTransactionBefore.getDateBeginn(), transaction.getDate());
+
+			recurrenceRuleBefore.setUntil(DateUtils.localDateToDateTime(lastDateBefore));
+
 			continuousTransactionBefore.setRecurrenceRule(recurrenceRuleBefore.toString());
+
 			final List<Transaction> transactionsBefore = ContinuousTransactionService
 					.generateTransactionsFromNewContinuousTransaction(continuousTransactionBefore);
+
 			if (transactionsBefore != null && !transactionsBefore.isEmpty()) {
 				DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionBefore,
 						transactionsBefore);
@@ -94,25 +102,21 @@ public class ContinuousTransactionService {
 
 			// generate continuous transactions after this single transaction if needed
 			final ContinuousTransaction continuousTransactionAfter = transaction.getContinuousTransaction().getCopy();
-			continuousTransactionAfter.setDateBeginn(transaction.getDate().plusDays(1));
+
 			final RecurrenceRule recurrenceRuleAfter = RecurrenceRuleUtils
 					.createRecurrenceRule(continuousTransactionAfter.getRecurrenceRule());
+
+			final LocalDate firstDateAfter = RecurrenceRuleUtils.getFirstRecurrenceDateAfter(recurrenceRuleAfter,
+					continuousTransactionAfter.getDateBeginn(), transaction.getDate());
+
+			continuousTransactionAfter.setDateBeginn(firstDateAfter);
 
 			boolean continuousTransactionsAfterIsNeeded = true;
 			if (recurrenceRuleOriginal.getCount() != null) {
 				final int numberOfTransactionsBefore = transactionsBefore != null ? transactionsBefore.size() : 0;
 
 				final int numberOfTransactionsAfter = recurrenceRuleOriginal.getCount() - numberOfTransactionsBefore
-						- 1; // minus
-								// one
-								// because
-								// of
-								// the
-								// one
-								// which
-								// is
-								// changed
-								// here
+						- 1;
 				if (numberOfTransactionsAfter > 0) {
 					recurrenceRuleAfter.setCount(numberOfTransactionsAfter);
 				} else {

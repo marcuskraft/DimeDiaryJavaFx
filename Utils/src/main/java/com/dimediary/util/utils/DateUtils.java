@@ -69,9 +69,9 @@ public class DateUtils {
 	 *
 	 * @param bankAccount
 	 * @param dateFrom
-	 * @return list of sundays from the dateFrom on or if this is null the
-	 *         creation date of the given bank account until 108 weeks in the
-	 *         future related to the actual date
+	 * @return list of sundays from the dateFrom on or if this is null the creation
+	 *         date of the given bank account until 108 weeks in the future related
+	 *         to the actual date
 	 */
 	public static ArrayList<LocalDate> getAllSundaysForBalancing(final BankAccount bankAccount,
 			final LocalDate dateFrom) {
@@ -175,6 +175,9 @@ public class DateUtils {
 	}
 
 	public static DateTime localDateToDateTime(final LocalDate localDate) {
+		if (localDate == null) {
+			return null;
+		}
 		return new DateTime(TimeZone.getDefault(),
 				localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
 	}
@@ -198,6 +201,28 @@ public class DateUtils {
 		} while (nextDate.isBefore(untilDate));
 
 		return dates;
+	}
+
+	public static LocalDate getLastDateBefore(final LocalDate date, final List<LocalDate> localDates) {
+		LocalDate retDate = null;
+		localDates.sort(null);
+		for (final LocalDate localDate : localDates) {
+			if (!localDate.isBefore(date)) {
+				return retDate;
+			}
+			retDate = localDate;
+		}
+		return retDate;
+	}
+
+	public static LocalDate getFirstDateAfter(final LocalDate date, final List<LocalDate> localDates) {
+		localDates.sort(null);
+		for (final LocalDate localDate : localDates) {
+			if (localDate.isAfter(date)) {
+				return localDate;
+			}
+		}
+		return null;
 	}
 
 }

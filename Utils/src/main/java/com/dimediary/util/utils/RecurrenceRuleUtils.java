@@ -66,4 +66,22 @@ public class RecurrenceRuleUtils {
 		return date;
 	}
 
+	public static LocalDate getLastRecurrenceDateBefore(final RecurrenceRule recurrenceRule,
+			final LocalDate beginOfRule, final LocalDate date) {
+		final List<LocalDate> localDates = RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule, beginOfRule,
+				null);
+
+		return DateUtils.getLastDateBefore(date, localDates);
+
+	}
+
+	public static LocalDate getFirstRecurrenceDateAfter(final RecurrenceRule recurrenceRule,
+			final LocalDate beginOfRule, final LocalDate date) {
+		final List<LocalDate> localDates = RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule, beginOfRule,
+				date);
+
+		return DateUtils.getFirstDateAfter(date, localDates);
+
+	}
+
 }
