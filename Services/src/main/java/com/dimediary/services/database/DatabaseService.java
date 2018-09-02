@@ -770,22 +770,6 @@ public class DatabaseService {
 		}
 	}
 
-	public void merge(final List<Transaction> transactions) {
-		if (transactions == null) {
-			return;
-		}
-		DatabaseService.log.info("merge Transactions");
-		final boolean ownTransaction = this.beginTransaction();
-
-		for (final Transaction transaction : transactions) {
-			this.entityManager.merge(transaction);
-		}
-
-		if (ownTransaction) {
-			this.commitTransaction();
-		}
-	}
-
 	/**
 	 *
 	 * @param balanceHistories

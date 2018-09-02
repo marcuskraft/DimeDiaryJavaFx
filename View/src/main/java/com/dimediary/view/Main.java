@@ -1,9 +1,11 @@
 package com.dimediary.view;
 
+import java.io.File;
 import java.net.URL;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.LoggerContext;
 
 import com.dimediary.services.database.DatabaseService;
 
@@ -19,6 +21,10 @@ public class Main extends Application {
 
 	public static void main(final String[] args) {
 		try {
+			final File file = new File("..\\", "log4j2.xml");
+			// System.setProperty("log4j.configuration", string);
+			final LoggerContext context = (org.apache.logging.log4j.core.LoggerContext) LogManager.getContext(false);
+			context.setConfigLocation(file.toURI());
 			Application.launch(args);
 		} catch (final Exception e) {
 			DatabaseService.getInstance().close();
