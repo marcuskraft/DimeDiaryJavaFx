@@ -268,18 +268,18 @@ public class MainWindow extends Window {
 	void onBackwards(final ActionEvent event) {
 		boolean yearChange = false;
 
-		Month month = this.findMonth(this.tabPane.getSelectionModel().getSelectedItem());
+		Month actualMonth = this.findMonth(this.tabPane.getSelectionModel().getSelectedItem());
 
-		if (month == Month.JANUARY) {
-			month = Month.DECEMBER;
+		if (actualMonth == Month.JANUARY) {
+			actualMonth = Month.DECEMBER;
 			yearChange = true;
 		} else {
-			month = LocalDate.of(2018, month, 1).minusMonths(1).getMonth();
+			actualMonth = LocalDate.of(2018, actualMonth, 1).minusMonths(1).getMonth();
 		}
 
-		this.tabPane.getSelectionModel().select(this.month2Tabs.get(month));
+		this.tabPane.getSelectionModel().select(this.month2Tabs.get(actualMonth));
 
-		this.refreshMonthOverview(month);
+		this.refreshMonthOverview(actualMonth);
 
 		if (yearChange) {
 			this.SpinnerYear.getValueFactory().setValue(this.SpinnerYear.getValue() - 1);
@@ -329,7 +329,7 @@ public class MainWindow extends Window {
 			month = Month.JANUARY;
 			yearChange = true;
 		} else {
-			month = LocalDate.of(2018, month, 1).minusMonths(1).getMonth();
+			month = LocalDate.of(2018, month, 1).plusMonths(1).getMonth();
 		}
 
 		this.tabPane.getSelectionModel().select(this.month2Tabs.get(month));
@@ -547,7 +547,8 @@ public class MainWindow extends Window {
 	private void refreshDiagram() {
 		final Series<Number, Number> series = new Series<>();
 
-		final BankAccount bankAccount = DatabaseService.getInstance().getBankAccount(this.comboBoxAccountDiagramm.getValue());
+		final BankAccount bankAccount = DatabaseService.getInstance()
+				.getBankAccount(this.comboBoxAccountDiagramm.getValue());
 
 		if (bankAccount == null) {
 			return;
