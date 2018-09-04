@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -31,7 +32,7 @@ import com.dimediary.model.utils.AmountUtils;
 		@NamedQuery(name = "TransactionsWithoutAccount", query = "from Transaction t where t.bankAccount is null and t.date = :date"),
 		@NamedQuery(name = Transaction.DATE_OF_LAST_TRANSACTION_OF_CONTINUOUS_TRANSACTION, query = "SELECT MAX(date) from Transaction t WHERE t.continuousTransaction = :continuousTransaction") })
 @Entity
-@Table(name = "TRANSACTIONS")
+@Table(name = "TRANSACTIONS", indexes = { @Index(columnList = "date", name = "transaction_date_hidx") })
 public class Transaction implements Serializable {
 
 	public static final String DATE_OF_LAST_TRANSACTION_OF_CONTINUOUS_TRANSACTION = "dateOfLastTransactionOfContinuousTransaction";

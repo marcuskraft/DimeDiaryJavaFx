@@ -37,7 +37,8 @@ public class AccountBalanceService {
 	 * @return returns the balance for this bank account and date
 	 */
 	public static Double getBalance(final BankAccount bankAccount, final LocalDate date) {
-		if (bankAccount == null || date == null || date.isBefore(bankAccount.getDateStartBudget())) {
+		if (bankAccount == null || date == null
+				|| date.isBefore(DateUtils.getLastSunday(bankAccount.getDateStartBudget()))) {
 			return null;
 		}
 

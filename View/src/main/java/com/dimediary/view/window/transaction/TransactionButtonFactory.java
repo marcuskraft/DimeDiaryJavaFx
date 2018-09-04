@@ -179,8 +179,17 @@ public class TransactionButtonFactory {
 		if (pressedButton == ButtonType.YES) {
 			DatabaseService.getInstance().deleteAllContinuousTransactions(transaction.getContinuousTransaction());
 		} else if (pressedButton == ButtonType.NO) {
-			ContinuousTransactionService.splitContinuousTransaction(transaction);
-			DatabaseService.getInstance().delete(transaction);
+			final boolean ownTransaction = DatabaseService.getInstance().beginTransaction();
+
+			try {
+				ContinuousTransactionService.splitContinuousTransaction(transaction);
+			} catch (final Exception e) {
+				DatabaseService.getInstance().rollbackTransaction();
+			}
+
+			if (ownTransaction) {
+				DatabaseService.getInstance().commitTransaction();
+			}
 		}
 
 	}

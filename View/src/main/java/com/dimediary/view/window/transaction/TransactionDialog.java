@@ -334,7 +334,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 				this.checkboxAccount.setSelected(false);
 			}
 		} else if (this.continuousTransaction != null) {
-			if (this.continuousTransaction.getCategory() == null) {
+			if (this.continuousTransaction.getBankAccount() == null) {
 				this.comboboxAccount.setEditable(false);
 				if (!this.comboboxAccount.getItems().contains(TransactionDialog.HYPHEN)) {
 					this.comboboxAccount.getItems().add(TransactionDialog.HYPHEN);
@@ -554,14 +554,18 @@ public class TransactionDialog implements IWindowParameterInjection {
 			} else {
 				this.datepicker.setValue(dateFrom);
 
-				// TODO: split the continuous transaction
 				final List<Transaction> transactionsAfter = DatabaseService.getInstance()
 						.getTransactionsFromDate(this.continuousTransaction, dateFrom);
 				DatabaseService.getInstance().deleteTransactions(transactionsAfter);
 
 				final RecurrenceRule recurrenceRuleOfOldContinuousTransaction = RecurrenceRuleUtils
 						.createRecurrenceRule(this.continuousTransaction.getRecurrenceRule());
-				recurrenceRuleOfOldContinuousTransaction.setUntil(DateUtils.localDateToDateTime(dateFrom.minusDays(1)));
+
+				final LocalDate lastDateBeforeRecurrence = RecurrenceRuleUtils.getLastRecurrenceDateBefore(
+						recurrenceRuleOfOldContinuousTransaction, this.continuousTransaction.getDateBeginn(), dateFrom);
+
+				recurrenceRuleOfOldContinuousTransaction
+						.setUntil(DateUtils.localDateToDateTime(lastDateBeforeRecurrence));
 				this.continuousTransaction.setRecurrenceRule(recurrenceRuleOfOldContinuousTransaction.toString());
 				DatabaseService.getInstance().merge(this.continuousTransaction);
 			}
