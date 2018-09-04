@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.dmfs.rfc5545.recur.RecurrenceRule;
 
-import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.services.database.DatabaseService;
@@ -26,20 +25,6 @@ public class ContinuousTransactionService {
 			final ContinuousTransaction continuousTransaction) {
 		return ContinuousTransactionService.generateTransactionsFromContinuousTransaction(continuousTransaction, null);
 
-	}
-
-	public static void proofContinuosTransactions(final BankAccount bankAccount) {
-		final List<ContinuousTransaction> continuousTransactions = DatabaseService.getInstance()
-				.getContinuousTransactions(bankAccount);
-
-		for (final ContinuousTransaction continuousTransaction : continuousTransactions) {
-
-			final List<Transaction> transactions = ContinuousTransactionService
-					.generateTransactionsFromContinuousTransaction(continuousTransaction);
-
-			DatabaseService.getInstance().persistTransactions(transactions);
-
-		}
 	}
 
 	private static List<Transaction> generateTransactionsFromContinuousTransaction(

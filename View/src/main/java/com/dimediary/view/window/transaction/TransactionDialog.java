@@ -140,12 +140,12 @@ public class TransactionDialog implements IWindowParameterInjection {
 	void onCheckboxAccount(final ActionEvent event) {
 		if (this.checkboxAccount.isSelected()) {
 			this.comboboxAccount.setEditable(false);
-			if (!this.comboboxAccount.getItems().contains(HYPHEN)) {
-				this.comboboxAccount.getItems().add(HYPHEN);
+			if (!this.comboboxAccount.getItems().contains(TransactionDialog.HYPHEN)) {
+				this.comboboxAccount.getItems().add(TransactionDialog.HYPHEN);
 			}
-			this.comboboxAccount.setValue(HYPHEN);
+			this.comboboxAccount.setValue(TransactionDialog.HYPHEN);
 		} else {
-			this.comboboxAccount.getItems().remove(HYPHEN);
+			this.comboboxAccount.getItems().remove(TransactionDialog.HYPHEN);
 			this.refreshBankAccounts();
 		}
 	}
@@ -154,12 +154,12 @@ public class TransactionDialog implements IWindowParameterInjection {
 	void onCheckboxCategory(final ActionEvent event) {
 		if (this.checkboxCategory.isSelected()) {
 			this.comboboxCategory.setEditable(false);
-			if (!this.comboboxCategory.getItems().contains(HYPHEN)) {
-				this.comboboxCategory.getItems().add(HYPHEN);
+			if (!this.comboboxCategory.getItems().contains(TransactionDialog.HYPHEN)) {
+				this.comboboxCategory.getItems().add(TransactionDialog.HYPHEN);
 			}
-			this.comboboxCategory.setValue(HYPHEN);
+			this.comboboxCategory.setValue(TransactionDialog.HYPHEN);
 		} else {
-			this.comboboxCategory.getItems().remove(HYPHEN);
+			this.comboboxCategory.getItems().remove(TransactionDialog.HYPHEN);
 			this.refreshCategories();
 		}
 	}
@@ -262,42 +262,42 @@ public class TransactionDialog implements IWindowParameterInjection {
 		if (this.transaction != null) {
 			if (this.transaction.getCategory() == null) {
 				this.comboboxCategory.setEditable(false);
-				if (!this.comboboxCategory.getItems().contains(HYPHEN)) {
-					this.comboboxCategory.getItems().add(HYPHEN);
+				if (!this.comboboxCategory.getItems().contains(TransactionDialog.HYPHEN)) {
+					this.comboboxCategory.getItems().add(TransactionDialog.HYPHEN);
 				}
-				this.comboboxCategory.setValue(HYPHEN);
+				this.comboboxCategory.setValue(TransactionDialog.HYPHEN);
 				this.checkboxCategory.setSelected(true);
 			} else {
 				this.comboboxCategory.setEditable(true);
-				this.comboboxCategory.getItems().remove(HYPHEN);
+				this.comboboxCategory.getItems().remove(TransactionDialog.HYPHEN);
 				this.comboboxCategory.setValue(this.transaction.getCategory().getName());
 				this.checkboxCategory.setSelected(false);
 			}
 		} else if (this.continuousTransaction != null) {
 			if (this.continuousTransaction.getCategory() == null) {
 				this.comboboxCategory.setEditable(false);
-				if (!this.comboboxCategory.getItems().contains(HYPHEN)) {
-					this.comboboxCategory.getItems().add(HYPHEN);
+				if (!this.comboboxCategory.getItems().contains(TransactionDialog.HYPHEN)) {
+					this.comboboxCategory.getItems().add(TransactionDialog.HYPHEN);
 				}
-				this.comboboxCategory.setValue(HYPHEN);
+				this.comboboxCategory.setValue(TransactionDialog.HYPHEN);
 				this.checkboxCategory.setSelected(true);
 			} else {
 				this.comboboxCategory.setEditable(true);
-				this.comboboxCategory.getItems().remove(HYPHEN);
+				this.comboboxCategory.getItems().remove(TransactionDialog.HYPHEN);
 				this.comboboxCategory.setValue(this.continuousTransaction.getCategory().getName());
 				this.checkboxCategory.setSelected(false);
 			}
 		} else {
 			if (categoryNames.size() == 0) {
 				this.comboboxCategory.setEditable(false);
-				if (!this.comboboxCategory.getItems().contains(HYPHEN)) {
-					this.comboboxCategory.getItems().add(HYPHEN);
+				if (!this.comboboxCategory.getItems().contains(TransactionDialog.HYPHEN)) {
+					this.comboboxCategory.getItems().add(TransactionDialog.HYPHEN);
 				}
-				this.comboboxCategory.setValue(HYPHEN);
+				this.comboboxCategory.setValue(TransactionDialog.HYPHEN);
 				this.checkboxCategory.setSelected(true);
 			} else {
 				this.comboboxCategory.setEditable(true);
-				this.comboboxCategory.getItems().remove(HYPHEN);
+				this.comboboxCategory.getItems().remove(TransactionDialog.HYPHEN);
 				this.comboboxCategory.setValue(categoryNames.get(0));
 				this.checkboxCategory.setSelected(false);
 			}
@@ -312,7 +312,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 		if (bankAccountNames == null) {
 			return;
 		}
-		bankAccountNames.add(HYPHEN);
+		bankAccountNames.add(TransactionDialog.HYPHEN);
 		this.comboboxAccount.setItems(bankAccountNames);
 
 		if (bankAccountNames.size() == 0) {
@@ -322,42 +322,42 @@ public class TransactionDialog implements IWindowParameterInjection {
 		if (this.transaction != null) {
 			if (this.transaction.getBankAccount() == null) {
 				this.comboboxAccount.setEditable(false);
-				if (!this.comboboxAccount.getItems().contains(HYPHEN)) {
-					this.comboboxAccount.getItems().add(HYPHEN);
+				if (!this.comboboxAccount.getItems().contains(TransactionDialog.HYPHEN)) {
+					this.comboboxAccount.getItems().add(TransactionDialog.HYPHEN);
 				}
-				this.comboboxAccount.setValue(HYPHEN);
+				this.comboboxAccount.setValue(TransactionDialog.HYPHEN);
 				this.checkboxAccount.setSelected(true);
 			} else {
 				this.comboboxAccount.setEditable(true);
-				this.comboboxAccount.getItems().remove(HYPHEN);
+				this.comboboxAccount.getItems().remove(TransactionDialog.HYPHEN);
 				this.comboboxAccount.setValue(this.transaction.getBankAccount().getName());
 				this.checkboxAccount.setSelected(false);
 			}
 		} else if (this.continuousTransaction != null) {
 			if (this.continuousTransaction.getCategory() == null) {
 				this.comboboxAccount.setEditable(false);
-				if (!this.comboboxAccount.getItems().contains(HYPHEN)) {
-					this.comboboxAccount.getItems().add(HYPHEN);
+				if (!this.comboboxAccount.getItems().contains(TransactionDialog.HYPHEN)) {
+					this.comboboxAccount.getItems().add(TransactionDialog.HYPHEN);
 				}
-				this.comboboxAccount.setValue(HYPHEN);
+				this.comboboxAccount.setValue(TransactionDialog.HYPHEN);
 				this.checkboxAccount.setSelected(true);
 			} else {
 				this.comboboxAccount.setEditable(true);
-				this.comboboxAccount.getItems().remove(HYPHEN);
+				this.comboboxAccount.getItems().remove(TransactionDialog.HYPHEN);
 				this.comboboxAccount.setValue(this.continuousTransaction.getBankAccount().getName());
 				this.checkboxAccount.setSelected(false);
 			}
 		} else {
 			if (bankAccountNames.size() == 0) {
 				this.comboboxAccount.setEditable(false);
-				if (!this.comboboxAccount.getItems().contains(HYPHEN)) {
-					this.comboboxAccount.getItems().add(HYPHEN);
+				if (!this.comboboxAccount.getItems().contains(TransactionDialog.HYPHEN)) {
+					this.comboboxAccount.getItems().add(TransactionDialog.HYPHEN);
 				}
-				this.comboboxAccount.setValue(HYPHEN);
+				this.comboboxAccount.setValue(TransactionDialog.HYPHEN);
 				this.checkboxAccount.setSelected(true);
 			} else {
 				this.comboboxAccount.setEditable(true);
-				this.comboboxAccount.getItems().remove(HYPHEN);
+				this.comboboxAccount.getItems().remove(TransactionDialog.HYPHEN);
 				this.comboboxAccount.setValue(bankAccountNames.get(0));
 				this.checkboxAccount.setSelected(false);
 			}
@@ -549,10 +549,12 @@ public class TransactionDialog implements IWindowParameterInjection {
 		this.beginTransaction();
 		try {
 			if (dateFrom == null) {
+				this.datepicker.setValue(this.continuousTransaction.getDateBeginn());
 				DatabaseService.getInstance().deleteAllContinuousTransactions(this.continuousTransaction);
 			} else {
 				this.datepicker.setValue(dateFrom);
 
+				// TODO: split the continuous transaction
 				final List<Transaction> transactionsAfter = DatabaseService.getInstance()
 						.getTransactionsFromDate(this.continuousTransaction, dateFrom);
 				DatabaseService.getInstance().deleteTransactions(transactionsAfter);

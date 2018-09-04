@@ -1,7 +1,5 @@
 package com.dimediary.controller.utils;
 
-import static org.mockito.Mockito.when;
-
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.Month;
@@ -14,6 +12,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import com.dimediary.model.entities.BankAccount;
@@ -107,10 +106,11 @@ public class DateUtilsTest {
 
 	@Test
 	public void getAllSundaysForBalancingTest() {
-		when(this.BankAccount.getDateStartBudget()).thenReturn(START_DAY);
-		final List<LocalDate> localDates = DateUtils.getAllSundaysForBalancing(this.BankAccount, FROM_DATE);
+		Mockito.when(this.BankAccount.getDateStartBudget()).thenReturn(DateUtilsTest.START_DAY);
+		final List<LocalDate> localDates = DateUtils.getAllSundaysForBalancing(this.BankAccount,
+				DateUtilsTest.FROM_DATE);
 
-		LocalDate lastDate = FROM_DATE;
+		LocalDate lastDate = DateUtilsTest.FROM_DATE;
 		for (final LocalDate localDate : localDates) {
 			Assert.assertTrue(localDate.getDayOfWeek() == DayOfWeek.SUNDAY);
 			Assert.assertTrue(lastDate.isBefore(localDate));
@@ -118,10 +118,10 @@ public class DateUtilsTest {
 		}
 
 		final List<LocalDate> localDates2 = DateUtils.getAllSundaysForBalancing(this.BankAccount, null);
-		final LocalDate lastSunday = DateUtils.getLastSunday(START_DAY);
+		final LocalDate lastSunday = DateUtils.getLastSunday(DateUtilsTest.START_DAY);
 
 		Assert.assertTrue(lastSunday.equals(localDates2.get(0)));
-		lastDate = START_DAY;
+		lastDate = DateUtilsTest.START_DAY;
 		for (final LocalDate localDate : localDates) {
 			Assert.assertTrue(localDate.getDayOfWeek() == DayOfWeek.SUNDAY);
 			Assert.assertTrue(lastDate.isBefore(localDate));
@@ -130,17 +130,9 @@ public class DateUtilsTest {
 	}
 
 	@Test
-	public void getLastSundayForBalancngTest() {
-		final LocalDate localDate = DateUtils.getLastSundayForBalancing();
-
-		Assert.assertTrue(localDate.isAfter(LocalDate.now()));
-		Assert.assertTrue(localDate.getDayOfWeek() == DayOfWeek.SUNDAY);
-	}
-
-	@Test
 	public void getDatesForMonthTest() {
 		final List<LocalDate> localDates = DateUtils.getDatesForMonth(Month.DECEMBER, 2018);
-		final Set<LocalDate> set = new HashSet<LocalDate>(localDates);
+		final Set<LocalDate> set = new HashSet<>(localDates);
 
 		LocalDate lastDate = localDates.get(0).minusDays(1);
 
@@ -181,8 +173,9 @@ public class DateUtilsTest {
 
 	@Test
 	public void getDatesFromToTest() {
-		final List<LocalDate> localDates = DateUtils.getLocalDatesFromTo(FROM_DATE, UNTIL_DATE);
-		final Set<LocalDate> set = new HashSet<LocalDate>(localDates);
+		final List<LocalDate> localDates = DateUtils.getLocalDatesFromTo(DateUtilsTest.FROM_DATE,
+				DateUtilsTest.UNTIL_DATE);
+		final Set<LocalDate> set = new HashSet<>(localDates);
 
 		Assert.assertTrue(localDates.size() == set.size());
 
