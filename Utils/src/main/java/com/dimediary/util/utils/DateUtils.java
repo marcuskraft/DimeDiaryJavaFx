@@ -21,7 +21,7 @@ import com.dimediary.model.entities.BankAccount;
 public class DateUtils {
 
 	// TODO add the numberOfWeeksFutureBalancing in the options
-	public final static int numberOfMonthFutureTransactions = 120;
+	public final static int numberOfMonthFutureTransactions = 1200;
 
 	public static LocalDate getLastSunday(final LocalDate localDate) {
 		return DateUtils.getLastSunday(localDate, false);
@@ -69,15 +69,18 @@ public class DateUtils {
 	 *
 	 * @param bankAccount
 	 * @param dateFrom
-	 * @return list of sundays from the dateFrom on or if this is null the
-	 *         creation date of the given bank account until 108 weeks in the
-	 *         future related to the actual date
+	 * @return list of sundays from the dateFrom on or if this is null the creation
+	 *         date of the given bank account until 108 weeks in the future related
+	 *         to the actual date
 	 */
 	public static ArrayList<LocalDate> getAllSundaysForBalancing(final BankAccount bankAccount,
 			final LocalDate dateFrom) {
 		final ArrayList<LocalDate> sundays = new ArrayList<>();
+		if (dateFrom != null && dateFrom.isAfter(LocalDate.now())) {
+			return sundays;
+		}
 
-		final LocalDate lastSunday = DateUtils.getLastSundayForBalancing(DateUtils.numberOfMonthFutureTransactions);
+		final LocalDate lastSunday = DateUtils.getLastSunday(LocalDate.now());
 
 		LocalDate sunday;
 		if (dateFrom != null) {
@@ -95,20 +98,6 @@ public class DateUtils {
 
 		return sundays;
 
-	}
-
-	/**
-	 *
-	 * @param numberOfWeeks
-	 * @return gives back the sunday for numberOfWeeks weeks in the future
-	 */
-	public static LocalDate getLastSundayForBalancing() {
-		return DateUtils.getLastSundayForBalancing(DateUtils.numberOfMonthFutureTransactions);
-	}
-
-	private static LocalDate getLastSundayForBalancing(final int numberOfMonths) {
-		final LocalDate actualSunday = DateUtils.getLastSunday(LocalDate.now());
-		return DateUtils.getNextSunday(actualSunday.plusMonths(numberOfMonths));
 	}
 
 	/**
@@ -175,6 +164,9 @@ public class DateUtils {
 	}
 
 	public static DateTime localDateToDateTime(final LocalDate localDate) {
+		if (localDate == null) {
+			return null;
+		}
 		return new DateTime(TimeZone.getDefault(),
 				localDate.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli());
 	}
@@ -198,6 +190,28 @@ public class DateUtils {
 		} while (nextDate.isBefore(untilDate));
 
 		return dates;
+	}
+
+	public static LocalDate getLastDateBefore(final LocalDate date, final List<LocalDate> localDates) {
+		LocalDate retDate = null;
+		localDates.sort(null);
+		for (final LocalDate localDate : localDates) {
+			if (!localDate.isBefore(date)) {
+				return retDate;
+			}
+			retDate = localDate;
+		}
+		return retDate;
+	}
+
+	public static LocalDate getFirstDateAfter(final LocalDate date, final List<LocalDate> localDates) {
+		localDates.sort(null);
+		for (final LocalDate localDate : localDates) {
+			if (localDate.isAfter(date)) {
+				return localDate;
+			}
+		}
+		return null;
 	}
 
 }

@@ -14,6 +14,7 @@ import org.dmfs.rfc5545.recur.RecurrenceRuleIterator;
 
 public class RecurrenceRuleUtils {
 
+	// TODO: write junit tests
 	private final static Logger log = LogManager.getLogger(RecurrenceRuleUtils.class);
 
 	public static List<LocalDate> getDatesForRecurrenceRule(final RecurrenceRule recurrenceRule,
@@ -34,6 +35,12 @@ public class RecurrenceRuleUtils {
 			dates.add(date);
 		}
 		return dates;
+	}
+
+	public static List<LocalDate> getDatesForRecurrenceRule(final RecurrenceRule recurrenceRule,
+			final LocalDate beginOfRule, final LocalDate dateFrom) {
+		return RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule, DateUtils.localDateToDateTime(beginOfRule),
+				DateUtils.localDateToDateTime(dateFrom));
 	}
 
 	public static RecurrenceRule createRecurrenceRule(final String ruleString) {
@@ -57,6 +64,24 @@ public class RecurrenceRuleUtils {
 			date = DateUtils.dateTimeToLocalDate(recurrenceRuleIterator.nextDateTime());
 		}
 		return date;
+	}
+
+	public static LocalDate getLastRecurrenceDateBefore(final RecurrenceRule recurrenceRule,
+			final LocalDate beginOfRule, final LocalDate date) {
+		final List<LocalDate> localDates = RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule, beginOfRule,
+				null);
+
+		return DateUtils.getLastDateBefore(date, localDates);
+
+	}
+
+	public static LocalDate getFirstRecurrenceDateAfter(final RecurrenceRule recurrenceRule,
+			final LocalDate beginOfRule, final LocalDate date) {
+		final List<LocalDate> localDates = RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule, beginOfRule,
+				date);
+
+		return DateUtils.getFirstDateAfter(date, localDates);
+
 	}
 
 }

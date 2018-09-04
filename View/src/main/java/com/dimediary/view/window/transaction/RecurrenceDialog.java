@@ -186,6 +186,31 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 			dayOf = "";
 			disableFromEndOf = false;
 			fromEndOfString = "";
+			switch (this.transactionDialog.getDayOfWeek()) {
+			case FRIDAY:
+				this.freitagComboBox.setSelected(true);
+				break;
+			case MONDAY:
+				this.montagComboBox.setSelected(true);
+				break;
+			case SATURDAY:
+				this.samstagComboBox.setSelected(true);
+				break;
+			case SUNDAY:
+				this.sonntagComboBox.setSelected(true);
+				break;
+			case THURSDAY:
+				this.donnerstagComboBox.setSelected(true);
+				break;
+			case TUESDAY:
+				this.dienstagComboBox.setSelected(true);
+				break;
+			case WEDNESDAY:
+				this.mittwochComboBox.setSelected(true);
+				break;
+			default:
+				break;
+			}
 			break;
 		case WEEKLY:
 			disableDayOfWeek = false;
@@ -194,6 +219,31 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 			dayOf = "";
 			disableFromEndOf = false;
 			fromEndOfString = "";
+			switch (this.transactionDialog.getDayOfWeek()) {
+			case FRIDAY:
+				this.freitagComboBox.setSelected(true);
+				break;
+			case MONDAY:
+				this.montagComboBox.setSelected(true);
+				break;
+			case SATURDAY:
+				this.samstagComboBox.setSelected(true);
+				break;
+			case SUNDAY:
+				this.sonntagComboBox.setSelected(true);
+				break;
+			case THURSDAY:
+				this.donnerstagComboBox.setSelected(true);
+				break;
+			case TUESDAY:
+				this.dienstagComboBox.setSelected(true);
+				break;
+			case WEDNESDAY:
+				this.mittwochComboBox.setSelected(true);
+				break;
+			default:
+				break;
+			}
 			break;
 		case MONTHLY:
 			disableDayOfWeek = true;
@@ -203,6 +253,7 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 			disableFromEndOf = true;
 			fromEndOfString = "vom Ende des Monats aus";
 			helpStringForFromEnd = "Wenn aktiviert, dann werden die Tage vom Ende des Monats aus betrachtet. Das heißt eine 1 steht für den letzten und eine 2 für den vorletzten Tag des Monats und so weiter.";
+			this.dayOfMonthSpinner.getValueFactory().setValue(this.transactionDialog.getActualDayOfMonth());
 			break;
 		case YEARLY:
 			disableDayOfWeek = true;
@@ -212,6 +263,7 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 			disableFromEndOf = true;
 			fromEndOfString = "vom Ende des Jahres aus";
 			helpStringForFromEnd = "Wenn aktiviert, dann werden die Tage vom Ende des Jahres aus betrachtet. Das heißt eine 1 steht für den letzten und eine 2 für den vorletzten Tag des Jahres und so weiter.";
+			this.dayOfMonthSpinner.getValueFactory().setValue(this.transactionDialog.getActualDayOfYear());
 			break;
 		case NONE:
 		default:

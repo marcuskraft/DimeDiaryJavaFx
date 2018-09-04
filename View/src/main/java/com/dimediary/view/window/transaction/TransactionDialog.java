@@ -5,6 +5,7 @@ package com.dimediary.view.window.transaction;
  */
 
 import java.net.URL;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -43,6 +44,8 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class TransactionDialog implements IWindowParameterInjection {
+
+	private static final String HYPHEN = "-";
 
 	private final static Logger log = LogManager.getLogger(TransactionDialog.class);
 
@@ -135,12 +138,30 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 	@FXML
 	void onCheckboxAccount(final ActionEvent event) {
-
+		if (this.checkboxAccount.isSelected()) {
+			this.comboboxAccount.setEditable(false);
+			if (!this.comboboxAccount.getItems().contains(TransactionDialog.HYPHEN)) {
+				this.comboboxAccount.getItems().add(TransactionDialog.HYPHEN);
+			}
+			this.comboboxAccount.setValue(TransactionDialog.HYPHEN);
+		} else {
+			this.comboboxAccount.getItems().remove(TransactionDialog.HYPHEN);
+			this.refreshBankAccounts();
+		}
 	}
 
 	@FXML
 	void onCheckboxCategory(final ActionEvent event) {
-
+		if (this.checkboxCategory.isSelected()) {
+			this.comboboxCategory.setEditable(false);
+			if (!this.comboboxCategory.getItems().contains(TransactionDialog.HYPHEN)) {
+				this.comboboxCategory.getItems().add(TransactionDialog.HYPHEN);
+			}
+			this.comboboxCategory.setValue(TransactionDialog.HYPHEN);
+		} else {
+			this.comboboxCategory.getItems().remove(TransactionDialog.HYPHEN);
+			this.refreshCategories();
+		}
 	}
 
 	@FXML
@@ -182,8 +203,8 @@ public class TransactionDialog implements IWindowParameterInjection {
 		assert this.buttonOk != null : "fx:id=\"buttonOk\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
 		assert this.buttonCancel != null : "fx:id=\"buttonCancel\" was not injected: check your FXML file 'TransactionDialog.fxml'.";
 
-		this.refreshCategories(true);
-		this.refreshBankAccounts(true);
+		this.refreshCategories();
+		this.refreshBankAccounts();
 
 		this.datepicker.setValue(LocalDate.now());
 
@@ -211,76 +232,136 @@ public class TransactionDialog implements IWindowParameterInjection {
 		this.recurrenceRule = recurrenceRule;
 	}
 
-	public void refreshCategories() {
-		this.refreshCategories(false);
+	public int getActualDayOfMonth() {
+		return this.datepicker.getValue().getDayOfMonth();
 	}
 
-	private void refreshCategories(final boolean refreshFirst) {
+	public int getActualDayOfYear() {
+		return this.datepicker.getValue().getDayOfYear();
+	}
+
+	public DayOfWeek getDayOfWeek() {
+		return this.datepicker.getValue().getDayOfWeek();
+	}
+
+	private void refreshCategories() {
 		final ObservableList<String> categoryNames = FXCollections
 				.observableArrayList(DatabaseService.getInstance().getCategoryNames());
 
 		if (categoryNames == null) {
 			return;
 		}
+
 		this.comboboxCategory.setItems(categoryNames);
 
 		if (categoryNames.size() == 0) {
-			this.comboboxCategory.setValue("-");
+			this.comboboxCategory.setValue(TransactionDialog.HYPHEN);
 			return;
 		}
 
-		if (this.transaction != null || this.continuousTransaction != null) {
-			if (this.transaction != null && this.transaction.getCategory() != null) {
-				this.comboboxCategory.setValue(this.transaction.getCategory().getName());
-			} else if (this.continuousTransaction != null && this.continuousTransaction.getCategory() != null) {
-				this.comboboxCategory.setValue(this.continuousTransaction.getCategory().getName());
-			} else {
-				this.comboboxCategory.setValue("-");
-				if (refreshFirst) {
-					this.comboboxCategory.setEditable(false);
-					this.checkboxCategory.setSelected(true);
-				} else {
-					this.comboboxCategory.setEditable(true);
+		if (this.transaction != null) {
+			if (this.transaction.getCategory() == null) {
+				this.comboboxCategory.setEditable(false);
+				if (!this.comboboxCategory.getItems().contains(TransactionDialog.HYPHEN)) {
+					this.comboboxCategory.getItems().add(TransactionDialog.HYPHEN);
 				}
+				this.comboboxCategory.setValue(TransactionDialog.HYPHEN);
+				this.checkboxCategory.setSelected(true);
+			} else {
+				this.comboboxCategory.setEditable(true);
+				this.comboboxCategory.getItems().remove(TransactionDialog.HYPHEN);
+				this.comboboxCategory.setValue(this.transaction.getCategory().getName());
+				this.checkboxCategory.setSelected(false);
+			}
+		} else if (this.continuousTransaction != null) {
+			if (this.continuousTransaction.getCategory() == null) {
+				this.comboboxCategory.setEditable(false);
+				if (!this.comboboxCategory.getItems().contains(TransactionDialog.HYPHEN)) {
+					this.comboboxCategory.getItems().add(TransactionDialog.HYPHEN);
+				}
+				this.comboboxCategory.setValue(TransactionDialog.HYPHEN);
+				this.checkboxCategory.setSelected(true);
+			} else {
+				this.comboboxCategory.setEditable(true);
+				this.comboboxCategory.getItems().remove(TransactionDialog.HYPHEN);
+				this.comboboxCategory.setValue(this.continuousTransaction.getCategory().getName());
+				this.checkboxCategory.setSelected(false);
 			}
 		} else {
-			this.comboboxCategory.setValue(categoryNames.get(0));
+			if (categoryNames.size() == 0) {
+				this.comboboxCategory.setEditable(false);
+				if (!this.comboboxCategory.getItems().contains(TransactionDialog.HYPHEN)) {
+					this.comboboxCategory.getItems().add(TransactionDialog.HYPHEN);
+				}
+				this.comboboxCategory.setValue(TransactionDialog.HYPHEN);
+				this.checkboxCategory.setSelected(true);
+			} else {
+				this.comboboxCategory.setEditable(true);
+				this.comboboxCategory.getItems().remove(TransactionDialog.HYPHEN);
+				this.comboboxCategory.setValue(categoryNames.get(0));
+				this.checkboxCategory.setSelected(false);
+			}
 		}
+
 	}
 
-	private void refreshBankAccounts(final boolean refreshFirst) {
+	private void refreshBankAccounts() {
 		final ObservableList<String> bankAccountNames = FXCollections
 				.observableArrayList(DatabaseService.getInstance().getBankAccountNames());
 
 		if (bankAccountNames == null) {
 			return;
 		}
+		bankAccountNames.add(TransactionDialog.HYPHEN);
 		this.comboboxAccount.setItems(bankAccountNames);
 
 		if (bankAccountNames.size() == 0) {
 			return;
 		}
-		if (this.transaction != null || this.continuousTransaction != null) {
-			if (this.transaction != null && this.transaction.getBankAccount() != null) {
-				this.comboboxAccount.setValue(this.transaction.getBankAccount().getName());
-			} else if (this.continuousTransaction != null && this.continuousTransaction.getBankAccount() != null) {
-				this.comboboxAccount.setValue(this.continuousTransaction.getBankAccount().getName());
-			} else {
-				this.comboboxAccount.setValue("-");
-				if (refreshFirst) {
-					this.comboboxAccount.setEditable(false);
-					this.checkboxAccount.setSelected(true);
-				} else {
-					this.comboboxAccount.setEditable(true);
+
+		if (this.transaction != null) {
+			if (this.transaction.getBankAccount() == null) {
+				this.comboboxAccount.setEditable(false);
+				if (!this.comboboxAccount.getItems().contains(TransactionDialog.HYPHEN)) {
+					this.comboboxAccount.getItems().add(TransactionDialog.HYPHEN);
 				}
+				this.comboboxAccount.setValue(TransactionDialog.HYPHEN);
+				this.checkboxAccount.setSelected(true);
+			} else {
+				this.comboboxAccount.setEditable(true);
+				this.comboboxAccount.getItems().remove(TransactionDialog.HYPHEN);
+				this.comboboxAccount.setValue(this.transaction.getBankAccount().getName());
+				this.checkboxAccount.setSelected(false);
+			}
+		} else if (this.continuousTransaction != null) {
+			if (this.continuousTransaction.getBankAccount() == null) {
+				this.comboboxAccount.setEditable(false);
+				if (!this.comboboxAccount.getItems().contains(TransactionDialog.HYPHEN)) {
+					this.comboboxAccount.getItems().add(TransactionDialog.HYPHEN);
+				}
+				this.comboboxAccount.setValue(TransactionDialog.HYPHEN);
+				this.checkboxAccount.setSelected(true);
+			} else {
+				this.comboboxAccount.setEditable(true);
+				this.comboboxAccount.getItems().remove(TransactionDialog.HYPHEN);
+				this.comboboxAccount.setValue(this.continuousTransaction.getBankAccount().getName());
+				this.checkboxAccount.setSelected(false);
 			}
 		} else {
-			this.comboboxAccount.setValue(bankAccountNames.get(0));
+			if (bankAccountNames.size() == 0) {
+				this.comboboxAccount.setEditable(false);
+				if (!this.comboboxAccount.getItems().contains(TransactionDialog.HYPHEN)) {
+					this.comboboxAccount.getItems().add(TransactionDialog.HYPHEN);
+				}
+				this.comboboxAccount.setValue(TransactionDialog.HYPHEN);
+				this.checkboxAccount.setSelected(true);
+			} else {
+				this.comboboxAccount.setEditable(true);
+				this.comboboxAccount.getItems().remove(TransactionDialog.HYPHEN);
+				this.comboboxAccount.setValue(bankAccountNames.get(0));
+				this.checkboxAccount.setSelected(false);
+			}
 		}
-	}
-
-	public void refreshBankAccounts() {
-		this.refreshBankAccounts(false);
 	}
 
 	@Override
@@ -324,8 +405,8 @@ public class TransactionDialog implements IWindowParameterInjection {
 	private void initContinuousTransaction() {
 		this.transaction = null;
 
-		this.refreshCategories(true);
-		this.refreshBankAccounts(true);
+		this.refreshCategories();
+		this.refreshBankAccounts();
 
 		this.datepicker.setValue(this.continuousTransaction.getDateBeginn());
 
@@ -345,8 +426,8 @@ public class TransactionDialog implements IWindowParameterInjection {
 		if (this.transaction == null) {
 			throw new IllegalStateException("transaction is not set to an instance!");
 		}
-		this.refreshCategories(true);
-		this.refreshBankAccounts(true);
+		this.refreshCategories();
+		this.refreshBankAccounts();
 
 		this.datepicker.setValue(this.transaction.getDate());
 		this.fieldDescription.setText(this.transaction.getName());
@@ -354,6 +435,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 		final Double amount = this.transaction.getAmount();
 		this.checkboxIncome.setSelected(amount > 0.0);
 		this.spinnerAmount.getValueFactory().setValue(Math.abs(amount));
+
 	}
 
 	private void createNewTransaction(final boolean ownTransaction) {
@@ -432,7 +514,12 @@ public class TransactionDialog implements IWindowParameterInjection {
 			this.beginTransaction();
 		}
 		try {
-			DatabaseService.getInstance().delete(this.transaction);
+			if (this.transaction.getContinuousTransaction() != null) {
+				ContinuousTransactionService.splitContinuousTransaction(this.transaction);
+			} else {
+				DatabaseService.getInstance().delete(this.transaction);
+			}
+
 			this.createNewTransaction(false);
 			this.mainWindow.refresh();
 		} catch (final Exception e) {
@@ -462,6 +549,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 		this.beginTransaction();
 		try {
 			if (dateFrom == null) {
+				this.datepicker.setValue(this.continuousTransaction.getDateBeginn());
 				DatabaseService.getInstance().deleteAllContinuousTransactions(this.continuousTransaction);
 			} else {
 				this.datepicker.setValue(dateFrom);
@@ -472,7 +560,12 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 				final RecurrenceRule recurrenceRuleOfOldContinuousTransaction = RecurrenceRuleUtils
 						.createRecurrenceRule(this.continuousTransaction.getRecurrenceRule());
-				recurrenceRuleOfOldContinuousTransaction.setUntil(DateUtils.localDateToDateTime(dateFrom.minusDays(1)));
+
+				final LocalDate lastDateBeforeRecurrence = RecurrenceRuleUtils.getLastRecurrenceDateBefore(
+						recurrenceRuleOfOldContinuousTransaction, this.continuousTransaction.getDateBeginn(), dateFrom);
+
+				recurrenceRuleOfOldContinuousTransaction
+						.setUntil(DateUtils.localDateToDateTime(lastDateBeforeRecurrence));
 				this.continuousTransaction.setRecurrenceRule(recurrenceRuleOfOldContinuousTransaction.toString());
 				DatabaseService.getInstance().merge(this.continuousTransaction);
 			}

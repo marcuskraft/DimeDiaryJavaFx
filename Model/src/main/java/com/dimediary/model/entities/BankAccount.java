@@ -20,10 +20,13 @@ import javax.persistence.Table;
  */
 @NamedQueries({ @NamedQuery(name = BankAccount.ALL_BANK_ACCOUNTS, query = "from BankAccount"),
 		@NamedQuery(name = BankAccount.FIND_BANKACCOUNTS_WITH_CATEGORY, query = "from BankAccount b WHERE bankAccountCategory = :bankAccountCategory"),
-		@NamedQuery(name = BankAccount.FIND_BANK_ACCOUNTS, query = "from BankAccount b WHERE b.name IN :namesList") })
+		@NamedQuery(name = BankAccount.FIND_BANK_ACCOUNTS, query = "from BankAccount b WHERE b.name IN :namesList"),
+		@NamedQuery(name = BankAccount.DELETE_ALL_BANKACCOUNT, query = "DELETE FROM BankAccount") })
 @Entity
 @Table(name = "BANKACCOUNT")
 public class BankAccount implements Serializable {
+
+	public static final String DELETE_ALL_BANKACCOUNT = "deleteAllBankaccount";
 
 	public static final String FIND_BANK_ACCOUNTS = "findBankAccounts";
 
@@ -74,7 +77,7 @@ public class BankAccount implements Serializable {
 	/**
 	 *
 	 * @param bankAccountCategory
-	 *            bank account category
+	 *                                bank account category
 	 */
 	public void setBankAccountCategory(final BankAccountCategory bankAccountCategory) {
 		this.bankAccountCategory = bankAccountCategory;
@@ -91,7 +94,7 @@ public class BankAccount implements Serializable {
 	/**
 	 *
 	 * @param name
-	 *            name of the bank account
+	 *                 name of the bank account
 	 */
 	public void setName(final String name) {
 		this.name = name;
@@ -108,7 +111,7 @@ public class BankAccount implements Serializable {
 	/**
 	 *
 	 * @param bankName
-	 *            name of the bank
+	 *                     name of the bank
 	 */
 	public void setBankName(final String bankName) {
 		this.bankName = bankName;
@@ -125,7 +128,7 @@ public class BankAccount implements Serializable {
 	/**
 	 *
 	 * @param iban
-	 *            IBAN of the bank account
+	 *                 IBAN of the bank account
 	 */
 	public void setIban(final String iban) {
 		this.iban = iban;
@@ -159,7 +162,7 @@ public class BankAccount implements Serializable {
 	/**
 	 *
 	 * @param user
-	 *            user who own this bank account
+	 *                 user who own this bank account
 	 */
 	public void setUser(final User user) {
 		this.user = user;
@@ -176,7 +179,8 @@ public class BankAccount implements Serializable {
 	/**
 	 *
 	 * @param dateStartBudget
-	 *            Date for which the start budget (getStartBudget) belongs to
+	 *                            Date for which the start budget (getStartBudget)
+	 *                            belongs to
 	 */
 	public void setDateStartBudget(final LocalDate dateStartBudget) {
 		this.dateStartBudget = dateStartBudget;
