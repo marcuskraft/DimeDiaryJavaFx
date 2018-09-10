@@ -14,9 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.dimediary.model.entities.BankAccount;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.services.AccountBalanceService;
+import com.dimediary.services.ContinuousTransactionService;
 import com.dimediary.services.database.DatabaseService;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.view.Main;
@@ -43,7 +47,10 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
@@ -67,6 +74,8 @@ import javafx.scene.layout.RowConstraints;
 import javafx.stage.Window;
 
 public class MainWindow extends Window {
+
+	private final static Logger log = LogManager.getLogger(MainWindow.class);
 
 	@FXML // ResourceBundle that was given to the FXMLLoader
 	private ResourceBundle resources;
@@ -445,7 +454,7 @@ public class MainWindow extends Window {
 			if (this.checkboxAccountlessTransactions.isSelected()) {
 				transactions.addAll(DatabaseService.getInstance().getTrandactionsWithoutAccount(date));
 			}
-			transactionsForDates.put(date, new ArrayList<Transaction>(transactions));
+			transactionsForDates.put(date, new ArrayList<>(transactions));
 			if (transactions.size() > maxTransaction) {
 				maxTransaction = transactions.size();
 			}
@@ -536,7 +545,7 @@ public class MainWindow extends Window {
 
 		xAxis.setTickLabelFormatter(new NumberToDateStringConverter());
 
-		this.lineChart = new LineChart<Number, Number>(xAxis, yAxis);
+		this.lineChart = new LineChart<>(xAxis, yAxis);
 
 		this.refreshDiagram();
 
@@ -611,15 +620,40 @@ public class MainWindow extends Window {
 					return;
 				}
 
-				if (transaction.getContinuousTransaction() == null) {
+				DatabaseService.getInstance().beginTransaction();
+				try {
+
 					final Transaction transactionNew = transaction.getCopy();
+
+					if (transaction.getContinuousTransaction() != null) {
+						final Alert alert = new Alert(AlertType.CONFIRMATION,
+								"Diese Transaktion wiederholt sich. Sind Sie sicher, dass diese Transaktion verschoben werden soll? Es wird nur diese Instanz der Serie verschoben.",
+								ButtonType.YES, ButtonType.NO);
+						alert.setHeaderText(null);
+						alert.setTitle("Sich wiederholende Transaktion verschieben?");
+
+						final ButtonType pressedButton = alert.showAndWait().get();
+
+						if (pressedButton == ButtonType.YES) {
+							ContinuousTransactionService.splitContinuousTransaction(transaction);
+							transactionNew.setContinuousTransaction(null);
+						} else {
+							DatabaseService.getInstance().rollbackTransaction();
+							return;
+						}
+					}
 					if (dragboard.getTransferModes().contains(TransferMode.MOVE)) {
 						DatabaseService.getInstance().delete(transaction);
 					}
 					transactionNew.setDate(date);
 					DatabaseService.getInstance().persist(transactionNew);
-					mainWindow.refresh();
+				} catch (final Exception e) {
+					DatabaseService.getInstance().rollbackTransaction();
+					MainWindow.log.error("Error by Moving Transaction to another date", e);
 				}
+				DatabaseService.getInstance().commitTransaction();
+				mainWindow.refresh();
+
 				event.setDropCompleted(true);
 				event.consume();
 			}

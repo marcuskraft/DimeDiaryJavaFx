@@ -804,7 +804,12 @@ public class DatabaseService {
 			DatabaseService.log.info("delete BankAccountCategory: " + bankAccountCategory.getName());
 			final boolean ownTransaction = this.beginTransaction();
 
-			this.entityManager.remove(bankAccountCategory);
+			if (this.entityManager.contains(bankAccountCategory)) {
+				this.entityManager.remove(bankAccountCategory);
+			} else {
+				final BankAccountCategory bankAccountCategoryLocal = this.entityManager.merge(bankAccountCategory);
+				this.entityManager.remove(bankAccountCategoryLocal);
+			}
 
 			if (ownTransaction) {
 				this.commitTransaction();
@@ -829,7 +834,13 @@ public class DatabaseService {
 			final boolean ownTransaction = this.beginTransaction();
 
 			this.deleteBalanceHistories(bankAccount);
-			this.entityManager.remove(bankAccount);
+
+			if (this.entityManager.contains(bankAccount)) {
+				this.entityManager.remove(bankAccount);
+			} else {
+				final BankAccount bankAccountLocal = this.entityManager.merge(bankAccount);
+				this.entityManager.remove(bankAccountLocal);
+			}
 
 			if (ownTransaction) {
 				this.commitTransaction();
@@ -882,7 +893,12 @@ public class DatabaseService {
 			DatabaseService.log.info("delete Category: " + category.getName());
 			final boolean ownTransaction = this.beginTransaction();
 
-			this.entityManager.remove(category);
+			if (this.entityManager.contains(category)) {
+				this.entityManager.remove(category);
+			} else {
+				final Category categoryLocal = this.entityManager.merge(category);
+				this.entityManager.remove(categoryLocal);
+			}
 
 			if (ownTransaction) {
 				this.commitTransaction();
@@ -908,7 +924,12 @@ public class DatabaseService {
 							+ " and date: " + balanceHistory.getDate().toString());
 			final boolean ownTransaction = this.beginTransaction();
 
-			this.entityManager.remove(balanceHistory);
+			if (this.entityManager.contains(balanceHistory)) {
+				this.entityManager.remove(balanceHistory);
+			} else {
+				final BalanceHistory balanceHistoryLocal = this.entityManager.merge(balanceHistory);
+				this.entityManager.remove(balanceHistoryLocal);
+			}
 
 			if (ownTransaction) {
 				this.commitTransaction();
@@ -1090,7 +1111,12 @@ public class DatabaseService {
 
 		final ArrayList<Transaction> transactions = this.getTransactions(continuousTransaction);
 		this.deleteTransactions(transactions);
-		this.entityManager.remove(continuousTransaction);
+		if (!this.entityManager.contains(continuousTransaction)) {
+			final ContinuousTransaction continuousTransactionLocal = this.entityManager.merge(continuousTransaction);
+			this.entityManager.remove(continuousTransactionLocal);
+		} else {
+			this.entityManager.remove(continuousTransaction);
+		}
 
 		if (ownTransaction) {
 			this.commitTransaction();
