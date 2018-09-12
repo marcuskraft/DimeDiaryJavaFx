@@ -1,7 +1,11 @@
 package com.dimediary.services;
 
 import java.time.LocalDate;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.TreeMap;
 
 import org.junit.After;
 import org.junit.Assert;
@@ -13,11 +17,15 @@ import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.utils.AmountUtils;
 import com.dimediary.services.database.DatabaseService;
 
-//@RunWith(MockitoJUnitRunner.class)
 public class TestAccountBalancer {
 
+	private static final long SEED_FOR_RANDOM_INT = 64754L;
+	private static final long SEED_FOR_RANDOM_BOOL = 417854L;
+	private static final long SEED_FOR_RANDOM_DOUBLE = 142754L;
 	private static DatabaseService DB_INSTANCE;
 	private BankAccount bankAccount;
+
+	private static final Double RANGE_MAX = 350.00;
 
 	@Before
 	public void before() {
@@ -32,121 +40,48 @@ public class TestAccountBalancer {
 	}
 
 	@Test
-	public void testSimpleTransactionAddingAndDeleting() {
-		final Double amount2 = 50.00;
-		final Double amount3 = -78.45;
-		final Double amount4 = 457.47;
-		final Double amount5 = -45.74;
-		final Double amount6 = 47.12;
-		final Double amount7 = -4.14;
-		final Double amount8 = 471.85;
-		final Double amountJuly2 = 412.47;
+	public void testSimpleTransactionAdding() {
 
-		final LocalDate date2 = LocalDate.of(2018, 9, 2);
-		final LocalDate date3 = LocalDate.of(2018, 9, 3);
-		final LocalDate date4 = LocalDate.of(2018, 9, 4);
-		final LocalDate date5 = LocalDate.of(2018, 9, 5);
-		final LocalDate date6 = LocalDate.of(2018, 9, 6);
-		final LocalDate date7 = LocalDate.of(2018, 9, 7);
-		final LocalDate date8 = LocalDate.of(2018, 9, 8);
-		final LocalDate dateOctobre = LocalDate.of(2018, 10, 2);
+		final Map<LocalDate, Double> amountDatas = new TreeMap<>();
 
-		this.createTransaction(amount2, date2);
-		this.createTransaction(amount3, date3);
-		this.createTransaction(amount4, date4);
-		this.createTransaction(amount5, date5);
-		final Transaction transaction = this.createTransaction(amount6, date6);
-		this.createTransaction(amount7, date7);
-		this.createTransaction(amount8, date8);
-		this.createTransaction(amountJuly2, dateOctobre);
+		Double amount;
+		LocalDate date = this.bankAccount.getDateStartBudget();
+		final Random randomDouble = new Random(TestAccountBalancer.SEED_FOR_RANDOM_DOUBLE);
+		final Random randomBool = new Random(TestAccountBalancer.SEED_FOR_RANDOM_BOOL);
+		final Random randomInt = new Random(TestAccountBalancer.SEED_FOR_RANDOM_INT);
+		for (int i = 0; i < 100; i++) {
+			amount = TestAccountBalancer.RANGE_MAX * randomDouble.nextDouble();
+			if (randomBool.nextBoolean()) {
+				amount = -amount;
+			}
+			date = date.plusDays(randomInt.nextInt(i + 1));
 
-		Double amount2After = AccountBalanceService.getBalance(this.bankAccount, date2);
-		Double amount3After = AccountBalanceService.getBalance(this.bankAccount, date3);
-		Double amount4After = AccountBalanceService.getBalance(this.bankAccount, date4);
-		Double amount5After = AccountBalanceService.getBalance(this.bankAccount, date5);
-		Double amount6After = AccountBalanceService.getBalance(this.bankAccount, date6);
-		Double amount7After = AccountBalanceService.getBalance(this.bankAccount, date7);
-		Double amount8After = AccountBalanceService.getBalance(this.bankAccount, date8);
-		Double amountJuly2After = AccountBalanceService.getBalance(this.bankAccount, dateOctobre);
+			amountDatas.put(date, AmountUtils.round(amount));
 
-		Double shouldBe2 = this.bankAccount.getStartBudget() + amount2;
-		Double shouldBe3 = shouldBe2 + amount3;
-		Double shouldBe4 = shouldBe3 + amount4;
-		Double shouldBe5 = shouldBe4 + amount5;
-		Double shouldBe6 = shouldBe5 + amount6;
-		Double shouldBe7 = shouldBe6 + amount7;
-		Double shouldBe8 = shouldBe7 + amount8;
-		Double shouldBeJuly2 = shouldBe8 + amountJuly2;
+		}
 
-		shouldBe2 = AmountUtils.round(shouldBe2);
-		shouldBe3 = AmountUtils.round(shouldBe3);
-		shouldBe4 = AmountUtils.round(shouldBe4);
-		shouldBe5 = AmountUtils.round(shouldBe5);
-		shouldBe6 = AmountUtils.round(shouldBe6);
-		shouldBe7 = AmountUtils.round(shouldBe7);
-		shouldBe8 = AmountUtils.round(shouldBe8);
-		shouldBeJuly2 = AmountUtils.round(shouldBeJuly2);
-		amount2After = AmountUtils.round(amount2After);
-		amount3After = AmountUtils.round(amount3After);
-		amount4After = AmountUtils.round(amount4After);
-		amount5After = AmountUtils.round(amount5After);
-		amount6After = AmountUtils.round(amount6After);
-		amount7After = AmountUtils.round(amount7After);
-		amount8After = AmountUtils.round(amount8After);
-		amountJuly2After = AmountUtils.round(amountJuly2After);
+		// generate transactions
+		Iterator<Map.Entry<LocalDate, Double>> iterator = amountDatas.entrySet().iterator();
+		while (iterator.hasNext()) {
+			final Map.Entry<LocalDate, Double> amounData = iterator.next();
+			this.createTransaction(amounData.getValue(), amounData.getKey());
 
-		Assert.assertTrue(amount2After.equals(shouldBe2));
-		Assert.assertTrue(amount3After.equals(shouldBe3));
-		Assert.assertTrue(amount4After.equals(shouldBe4));
-		Assert.assertTrue(amount5After.equals(shouldBe5));
-		Assert.assertTrue(amount6After.equals(shouldBe6));
-		Assert.assertTrue(amount7After.equals(shouldBe7));
-		Assert.assertTrue(amount8After.equals(shouldBe8));
-		Assert.assertTrue(amountJuly2After.equals(shouldBeJuly2));
+		}
 
-		////////////////////////////////////////////
+		Double balanceShould = this.bankAccount.getStartBudget();
+		Double balance;
 
-		DatabaseService.getInstance().delete(transaction);
+		iterator = amountDatas.entrySet().iterator();
+		while (iterator.hasNext()) {
+			final Map.Entry<LocalDate, Double> amounData = iterator.next();
 
-		amount2After = AccountBalanceService.getBalance(this.bankAccount, date2);
-		amount3After = AccountBalanceService.getBalance(this.bankAccount, date3);
-		amount4After = AccountBalanceService.getBalance(this.bankAccount, date4);
-		amount5After = AccountBalanceService.getBalance(this.bankAccount, date5);
-		amount6After = AccountBalanceService.getBalance(this.bankAccount, date6);
-		amount7After = AccountBalanceService.getBalance(this.bankAccount, date7);
-		amount8After = AccountBalanceService.getBalance(this.bankAccount, date8);
-		amountJuly2After = AccountBalanceService.getBalance(this.bankAccount, dateOctobre);
+			balance = AccountBalanceService.getBalance(this.bankAccount, amounData.getKey());
+			balanceShould += AmountUtils.round(amounData.getValue());
 
-		shouldBe6 -= amount6;
-		shouldBe7 -= amount6;
-		shouldBe8 -= amount6;
-		shouldBeJuly2 -= amount6;
-
-		shouldBe2 = AmountUtils.round(shouldBe2);
-		shouldBe3 = AmountUtils.round(shouldBe3);
-		shouldBe4 = AmountUtils.round(shouldBe4);
-		shouldBe5 = AmountUtils.round(shouldBe5);
-		shouldBe6 = AmountUtils.round(shouldBe6);
-		shouldBe7 = AmountUtils.round(shouldBe7);
-		shouldBe8 = AmountUtils.round(shouldBe8);
-		shouldBeJuly2 = AmountUtils.round(shouldBeJuly2);
-		amount2After = AmountUtils.round(amount2After);
-		amount3After = AmountUtils.round(amount3After);
-		amount4After = AmountUtils.round(amount4After);
-		amount5After = AmountUtils.round(amount5After);
-		amount6After = AmountUtils.round(amount6After);
-		amount7After = AmountUtils.round(amount7After);
-		amount8After = AmountUtils.round(amount8After);
-		amountJuly2After = AmountUtils.round(amountJuly2After);
-
-		Assert.assertTrue(amount2After.equals(shouldBe2));
-		Assert.assertTrue(amount3After.equals(shouldBe3));
-		Assert.assertTrue(amount4After.equals(shouldBe4));
-		Assert.assertTrue(amount5After.equals(shouldBe5));
-		Assert.assertTrue(amount6After.equals(shouldBe6));
-		Assert.assertTrue(amount7After.equals(shouldBe7));
-		Assert.assertTrue(amount8After.equals(shouldBe8));
-		Assert.assertTrue(amountJuly2After.equals(shouldBeJuly2));
+			Assert.assertNotNull(balance);
+			Assert.assertNotNull(balanceShould);
+			Assert.assertEquals(balance, AmountUtils.round(balanceShould));
+		}
 
 	}
 
@@ -154,7 +89,7 @@ public class TestAccountBalancer {
 		final Transaction transaction = new Transaction();
 
 		transaction.setBankAccount(this.bankAccount);
-		transaction.setAmount(amount);
+		transaction.setAmount(AmountUtils.round(amount));
 		transaction.setDate(date);
 
 		TestAccountBalancer.DB_INSTANCE.persist(transaction);

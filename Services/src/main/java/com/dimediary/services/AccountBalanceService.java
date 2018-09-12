@@ -166,7 +166,7 @@ public class AccountBalanceService {
 			amount += transaction.getAmount();
 		}
 
-		return amount;
+		return AmountUtils.round(amount);
 	}
 
 	/**
