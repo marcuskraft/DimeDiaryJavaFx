@@ -21,6 +21,7 @@ import com.dimediary.model.entities.BankAccountCategory;
 import com.dimediary.model.entities.Category;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
+import com.dimediary.model.entities.User;
 import com.dimediary.services.AccountBalanceService;
 import com.dimediary.services.AccountBalanceService.BalanceAction;
 
@@ -62,9 +63,9 @@ public class DatabaseService {
 	 *
 	 * @return gives back the instance of DatabaseService
 	 */
-	public static DatabaseService getInstance(final String persitenceUnit) {
+	public static DatabaseService getInstance(final String persistenceUnit) {
 		if (DatabaseService.instance == null) {
-			DatabaseService.instance = new DatabaseService(persitenceUnit);
+			DatabaseService.instance = new DatabaseService(persistenceUnit);
 		}
 		return DatabaseService.instance;
 	}
@@ -1127,6 +1128,34 @@ public class DatabaseService {
 		final boolean ownTransaction = this.beginTransaction();
 
 		this.entityManager.createNamedQuery(BankAccount.DELETE_ALL_BANKACCOUNT).executeUpdate();
+		this.entityManager.createNamedQuery(Transaction.DELETE_ALL_TRANSACTIONS).executeUpdate();
+		this.entityManager.createNamedQuery(BalanceHistory.DELETE_ALL_BALANCE_HISTORIES).executeUpdate();
+		this.entityManager.createNamedQuery(ContinuousTransaction.DELETE_ALL_CONTINUOUS_TRANSACTIONS).executeUpdate();
+		this.entityManager.createNamedQuery(User.DELETE_ALL_USERS).executeUpdate();
+		this.entityManager.createNamedQuery(Category.DELETE_ALL_CATEGORIES).executeUpdate();
+		this.entityManager.createNamedQuery(BankAccountCategory.DELETE_ALL_BANKACCOUNT_CATEGORIES).executeUpdate();
+
+		if (ownTransaction) {
+			this.commitTransaction();
+		}
+	}
+
+	public void clearBalanceHistory() {
+		final boolean ownTransaction = this.beginTransaction();
+
+		this.entityManager.createNamedQuery(BalanceHistory.DELETE_ALL_BALANCE_HISTORIES).executeUpdate();
+
+		if (ownTransaction) {
+			this.commitTransaction();
+		}
+	}
+
+	public void clearAllTransactions() {
+		final boolean ownTransaction = this.beginTransaction();
+
+		this.entityManager.createNamedQuery(Transaction.DELETE_ALL_TRANSACTIONS).executeUpdate();
+		this.entityManager.createNamedQuery(BalanceHistory.DELETE_ALL_BALANCE_HISTORIES).executeUpdate();
+		this.entityManager.createNamedQuery(ContinuousTransaction.DELETE_ALL_CONTINUOUS_TRANSACTIONS).executeUpdate();
 
 		if (ownTransaction) {
 			this.commitTransaction();
