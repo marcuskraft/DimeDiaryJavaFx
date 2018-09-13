@@ -14,19 +14,6 @@ import com.dimediary.util.utils.RecurrenceRuleUtils;
 
 public class ContinuousTransactionService {
 
-	public static List<Transaction> generateTransactionsFromContinuousTransaction(
-			final ContinuousTransaction continuousTransaction) {
-		final LocalDate currentMaxDate = DatabaseService.getInstance().getDateOfLastTransaction(continuousTransaction);
-		return ContinuousTransactionService.generateTransactionsFromContinuousTransaction(continuousTransaction,
-				currentMaxDate);
-	}
-
-	public static List<Transaction> generateTransactionsFromNewContinuousTransaction(
-			final ContinuousTransaction continuousTransaction) {
-		return ContinuousTransactionService.generateTransactionsFromContinuousTransaction(continuousTransaction, null);
-
-	}
-
 	/**
 	 * splits the continuous transaction into two continuous transactions. The first
 	 * one will start at the same date as the old continuous transaction and will
@@ -78,25 +65,20 @@ public class ContinuousTransactionService {
 				transaction.getDate().minusDays(1), transaction.getDate().plusDays(1));
 	}
 
-	private static List<Transaction> generateTransactionsFromContinuousTransaction(
-			final ContinuousTransaction continuousTransaction, final LocalDate fromDate) {
+	/**
+	 * generates all transactions belonging to this continuous transaction
+	 * 
+	 * @param continuousTransaction
+	 * @return
+	 */
+	public static List<Transaction> generateTransactionsForContinuousTransaction(
+			final ContinuousTransaction continuousTransaction) {
 		final RecurrenceRule recurrenceRule = RecurrenceRuleUtils
 				.createRecurrenceRule(continuousTransaction.getRecurrenceRule());
-		LocalDate firstDate = fromDate;
-		boolean skipFirst = false;
-		if (firstDate == null) {
-			firstDate = continuousTransaction.getDateBeginn();
-		} else {
-			skipFirst = true;
-		}
-
+		final LocalDate firstDate = continuousTransaction.getDateBeginn();
 		final List<LocalDate> dates = RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule,
 				DateUtils.localDateToDateTime(continuousTransaction.getDateBeginn()),
 				DateUtils.localDateToDateTime(firstDate));
-
-		if (dates != null && !dates.isEmpty() && skipFirst) {
-			dates.remove(0);
-		}
 
 		final List<Transaction> transactions = new ArrayList<>();
 		for (final LocalDate date : dates) {
@@ -134,7 +116,7 @@ public class ContinuousTransactionService {
 		if (continuousTransactionsAfterIsNeeded) {
 			continuousTransactionAfter.setRecurrenceRule(recurrenceRuleAfter.toString());
 			final List<Transaction> transactionsAfter = ContinuousTransactionService
-					.generateTransactionsFromNewContinuousTransaction(continuousTransactionAfter);
+					.generateTransactionsForContinuousTransaction(continuousTransactionAfter);
 			DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionAfter, transactionsAfter);
 		}
 	}
@@ -158,7 +140,7 @@ public class ContinuousTransactionService {
 		continuousTransactionBefore.setRecurrenceRule(recurrenceRuleBefore.toString());
 
 		final List<Transaction> transactionsBefore = ContinuousTransactionService
-				.generateTransactionsFromNewContinuousTransaction(continuousTransactionBefore);
+				.generateTransactionsForContinuousTransaction(continuousTransactionBefore);
 
 		if (transactionsBefore != null && !transactionsBefore.isEmpty()) {
 			DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionBefore, transactionsBefore);

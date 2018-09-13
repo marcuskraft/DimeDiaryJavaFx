@@ -42,16 +42,16 @@ public class AccountBalanceService {
 			return null;
 		}
 
-		BalanceHistory balanceHistory = AccountBalanceService.getLastBalanceHistory(bankAccount, date);
+		BalanceHistory lastBalanceHistoryBeforeRequestedDate = AccountBalanceService.getLastBalanceHistory(bankAccount, date);
 
-		balanceHistory = AccountBalanceService.generateMissingBalanceHistoriesIfNeeded(bankAccount, date,
-				balanceHistory);
+		lastBalanceHistoryBeforeRequestedDate = AccountBalanceService.generateMissingBalanceHistoriesIfNeeded(bankAccount, date,
+				lastBalanceHistoryBeforeRequestedDate);
 
-		if (balanceHistory == null) {
+		if (lastBalanceHistoryBeforeRequestedDate == null) {
 			return AccountBalanceService.getBalanceWithAllTransactions(bankAccount, date);
 		}
 
-		final Double result = AccountBalanceService.sumAllTransactionsBetween(bankAccount, date, balanceHistory);
+		final Double result = AccountBalanceService.sumAllTransactionsBetween(bankAccount, date, lastBalanceHistoryBeforeRequestedDate);
 
 		return AmountUtils.round(result);
 
@@ -275,10 +275,10 @@ public class AccountBalanceService {
 
 	private static BalanceHistory generateMissingBalanceHistoriesIfNeeded(final BankAccount bankAccount,
 			final LocalDate date, BalanceHistory balanceHistory) {
-		final LocalDate lastSundayFromDate = DateUtils.getLastSunday(date);
-		final LocalDate nextSundayFromToday = DateUtils.getNextSunday(LocalDate.now());
+		final LocalDate lastSundayBeforeRequestedDate = DateUtils.getLastSunday(date);
+		final LocalDate nextSundayAfterToday = DateUtils.getNextSunday(LocalDate.now());
 		if (balanceHistory == null
-				|| date.isBefore(nextSundayFromToday) && !balanceHistory.getDate().equals(lastSundayFromDate)) {
+				|| date.isBefore(nextSundayAfterToday) && !balanceHistory.getDate().equals(lastSundayBeforeRequestedDate)) {
 			AccountBalanceService.generateMissingBalanceHistories(bankAccount);
 			balanceHistory = AccountBalanceService.getLastBalanceHistory(bankAccount, date);
 		}

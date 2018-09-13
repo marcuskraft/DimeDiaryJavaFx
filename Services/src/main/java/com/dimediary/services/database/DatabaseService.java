@@ -74,6 +74,7 @@ public class DatabaseService {
 	 * closes the data base connection
 	 */
 	public void close() {
+		DatabaseService.instance = null;
 		EntityManagerHelperImpl.closeEntityManager();
 		DatabaseService.log.info("DatabaseService closed");
 	}
@@ -1154,8 +1155,8 @@ public class DatabaseService {
 		final boolean ownTransaction = this.beginTransaction();
 
 		this.entityManager.createNamedQuery(Transaction.DELETE_ALL_TRANSACTIONS).executeUpdate();
-		this.entityManager.createNamedQuery(BalanceHistory.DELETE_ALL_BALANCE_HISTORIES).executeUpdate();
 		this.entityManager.createNamedQuery(ContinuousTransaction.DELETE_ALL_CONTINUOUS_TRANSACTIONS).executeUpdate();
+		this.entityManager.createNamedQuery(BalanceHistory.DELETE_ALL_BALANCE_HISTORIES).executeUpdate();
 
 		if (ownTransaction) {
 			this.commitTransaction();

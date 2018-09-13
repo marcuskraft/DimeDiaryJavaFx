@@ -7,15 +7,21 @@ import java.util.Map;
 import java.util.Random;
 import java.util.TreeMap;
 
+import org.dmfs.rfc5545.recur.Freq;
+import org.dmfs.rfc5545.recur.InvalidRecurrenceRuleException;
+import org.dmfs.rfc5545.recur.RecurrenceRule;
+import org.dmfs.rfc5545.recur.RecurrenceRule.Part;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import com.dimediary.model.entities.BankAccount;
+import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.utils.AmountUtils;
 import com.dimediary.services.database.DatabaseService;
+import com.dimediary.util.utils.RecurrenceRuleUtils;
 
 public class TestAccountBalancer {
 
@@ -30,6 +36,7 @@ public class TestAccountBalancer {
 	@Before
 	public void before() {
 		TestAccountBalancer.DB_INSTANCE = DatabaseService.getInstance(DatabaseService.PERSISTENCE_DERBY_TEST);
+		TestAccountBalancer.DB_INSTANCE.beginTransaction();
 		TestAccountBalancer.DB_INSTANCE.clearAllTransactions();
 		final List<String> bankaccountNames = TestAccountBalancer.DB_INSTANCE.getBankAccountNames();
 		if (bankaccountNames != null && bankaccountNames.size() == 1) {
@@ -37,6 +44,7 @@ public class TestAccountBalancer {
 		} else {
 			throw new IllegalStateException("There must be exact one bank account in the tast database");
 		}
+		TestAccountBalancer.DB_INSTANCE.commitTransaction();
 	}
 
 	@Test
@@ -85,6 +93,53 @@ public class TestAccountBalancer {
 
 	}
 
+	@Test
+	public void testContinuousTransaction() throws InvalidRecurrenceRuleException {
+
+		LocalDate testDate = this.bankAccount.getDateStartBudget();
+		Double balance;
+		for (int i = 0; i < 20; i++) {
+			testDate = testDate.plusDays(i * i * 30);
+			balance = AccountBalanceService.getBalance(this.bankAccount, testDate);
+			Assert.assertEquals(balance, this.bankAccount.getStartBudget());
+		}
+
+		final LocalDate dateBeginnContinuousTransaction = this.bankAccount.getDateStartBudget().plusDays(50);
+
+		final RecurrenceRule recurrenceRule = new RecurrenceRule(Freq.MONTHLY);
+		recurrenceRule.setByPart(Part.BYMONTHDAY, 1);
+		recurrenceRule.setCount(10);
+
+		final ContinuousTransaction continuousTransaction = new ContinuousTransaction();
+		continuousTransaction.setBankAccount(this.bankAccount);
+		continuousTransaction.setAmount(50.0);
+		continuousTransaction.setDateBeginn(dateBeginnContinuousTransaction);
+		continuousTransaction.setRecurrenceRule(recurrenceRule.toString());
+
+		final List<Transaction> transactions = ContinuousTransactionService
+				.generateTransactionsForContinuousTransaction(continuousTransaction);
+
+		TestAccountBalancer.DB_INSTANCE.persistContinuousTransaction(continuousTransaction, transactions);
+
+		testDate = this.bankAccount.getDateStartBudget();
+		balance = AccountBalanceService.getBalance(this.bankAccount, testDate);
+		Assert.assertEquals(balance, this.bankAccount.getStartBudget());
+
+		final List<LocalDate> recurrenceDates = RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule,
+				dateBeginnContinuousTransaction, dateBeginnContinuousTransaction);
+
+		Double balanceShould = this.bankAccount.getStartBudget();
+		for (final LocalDate localDate : recurrenceDates) {
+			balanceShould = AmountUtils.round(balanceShould + continuousTransaction.getAmount());
+			for (int i = 0; i < localDate.getMonth().length(localDate.isLeapYear()); i++) {
+				testDate = localDate.plusDays(i);
+				balance = AccountBalanceService.getBalance(this.bankAccount, testDate);
+				Assert.assertEquals(balance, balanceShould);
+			}
+		}
+
+	}
+
 	private Transaction createTransaction(final Double amount, final LocalDate date) {
 		final Transaction transaction = new Transaction();
 
@@ -98,7 +153,6 @@ public class TestAccountBalancer {
 
 	@After
 	public void close() {
-		TestAccountBalancer.DB_INSTANCE.clearAllTransactions();
 		TestAccountBalancer.DB_INSTANCE.close();
 	}
 
