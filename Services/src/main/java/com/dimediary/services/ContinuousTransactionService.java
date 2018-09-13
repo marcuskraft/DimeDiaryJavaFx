@@ -27,6 +27,57 @@ public class ContinuousTransactionService {
 
 	}
 
+	/**
+	 * splits the continuous transaction into two continuous transactions. The first
+	 * one will start at the same date as the old continuous transaction and will
+	 * end not later than lastDateBefore. The second one will start not earlier than
+	 * firstDateAfter and end at the same date as the old one. The old continuous
+	 * transaction with all his transactions will be deleted. The recurrence rule
+	 * itself is still the same for both new continuous transactions.
+	 *
+	 * @param continuousTransaction
+	 * @param lastDateBefore
+	 * @param firstDateAfter
+	 */
+	public static void splitContinuousTransaction(final ContinuousTransaction continuousTransaction,
+			final LocalDate lastDateBefore, final LocalDate firstDateAfter) {
+		final boolean ownTransaction = DatabaseService.getInstance().beginTransaction();
+
+		try {
+			final RecurrenceRule recurrenceRuleOriginal = RecurrenceRuleUtils
+					.createRecurrenceRule(continuousTransaction.getRecurrenceRule());
+
+			final List<Transaction> transactionsBefore = ContinuousTransactionService
+					.generateContinuousTransactionBefore(continuousTransaction, lastDateBefore);
+
+			ContinuousTransactionService.generateContinuousTransactionAfter(continuousTransaction, firstDateAfter,
+					recurrenceRuleOriginal, transactionsBefore);
+
+			DatabaseService.getInstance().deleteAllContinuousTransactions(continuousTransaction);
+		} catch (final Exception e) {
+			DatabaseService.getInstance().rollbackTransaction();
+			throw e;
+		}
+		if (ownTransaction) {
+			DatabaseService.getInstance().commitTransaction();
+		}
+	}
+
+	/**
+	 * splits the continuous transaction around the given transaction. Two new
+	 * continuous transactions are created and the old one with all his transactions
+	 * will be deleted. The given transaction will be deleted and there will be no
+	 * new transaction at this date whether in the continuous transaction before nor
+	 * in the the one after this transaction. The recurrence rule itself is still
+	 * the same for both new continuous transactions.
+	 *
+	 * @param transaction
+	 */
+	public static void splitContinuousTransaction(final Transaction transaction) {
+		ContinuousTransactionService.splitContinuousTransaction(transaction.getContinuousTransaction(),
+				transaction.getDate().minusDays(1), transaction.getDate().plusDays(1));
+	}
+
 	private static List<Transaction> generateTransactionsFromContinuousTransaction(
 			final ContinuousTransaction continuousTransaction, final LocalDate fromDate) {
 		final RecurrenceRule recurrenceRule = RecurrenceRuleUtils
@@ -53,105 +104,66 @@ public class ContinuousTransactionService {
 		}
 
 		return transactions;
-
 	}
 
-	/**
-	 * splits the continuous transaction into two continuous transactions. The first
-	 * one will start at the same date as the old continuous transaction and will
-	 * end not later than lastDateBefore. The second one will start not earlier than
-	 * firstDateAfter and end at the same date as the old one. The old continuous
-	 * transaction with all his transactions will be deleted. The recurrence rule
-	 * itself is still the same for both new continuous transactions.
-	 *
-	 * @param continuousTransaction
-	 * @param lastDateBefore
-	 * @param firstDateAfter
-	 */
-	public static void splitContinuousTransaction(final ContinuousTransaction continuousTransaction,
-			final LocalDate lastDateBefore, final LocalDate firstDateAfter) {
-		final boolean ownTransaction = DatabaseService.getInstance().beginTransaction();
+	private static void generateContinuousTransactionAfter(final ContinuousTransaction continuousTransaction,
+			final LocalDate firstDateAfter, final RecurrenceRule recurrenceRuleOriginal,
+			final List<Transaction> transactionsBefore) {
+		final ContinuousTransaction continuousTransactionAfter = continuousTransaction.getCopy();
 
-		try {
-			final RecurrenceRule recurrenceRuleOriginal = RecurrenceRuleUtils
-					.createRecurrenceRule(continuousTransaction.getRecurrenceRule());
+		final RecurrenceRule recurrenceRuleAfter = RecurrenceRuleUtils
+				.createRecurrenceRule(continuousTransactionAfter.getRecurrenceRule());
 
-			// Generate continuous transactions before this single transaction if needed
-			final ContinuousTransaction continuousTransactionBefore = continuousTransaction.getCopy();
+		final LocalDate firstDateAfterRecurrence = RecurrenceRuleUtils.getFirstRecurrenceDateAfter(recurrenceRuleAfter,
+				continuousTransactionAfter.getDateBeginn(), firstDateAfter.minusDays(1));
 
-			final RecurrenceRule recurrenceRuleBefore = RecurrenceRuleUtils
-					.createRecurrenceRule(continuousTransactionBefore.getRecurrenceRule());
+		continuousTransactionAfter.setDateBeginn(firstDateAfterRecurrence);
 
-			final LocalDate lastDateBeforeRecurrence = RecurrenceRuleUtils.getLastRecurrenceDateBefore(
-					recurrenceRuleBefore, continuousTransactionBefore.getDateBeginn(), lastDateBefore.plusDays(1));
+		boolean continuousTransactionsAfterIsNeeded = true;
+		if (recurrenceRuleOriginal.getCount() != null) {
+			final int numberOfTransactionsBefore = transactionsBefore != null ? transactionsBefore.size() : 0;
 
-			recurrenceRuleBefore.setUntil(DateUtils.localDateToDateTime(lastDateBeforeRecurrence));
-
-			continuousTransactionBefore.setRecurrenceRule(recurrenceRuleBefore.toString());
-
-			final List<Transaction> transactionsBefore = ContinuousTransactionService
-					.generateTransactionsFromNewContinuousTransaction(continuousTransactionBefore);
-
-			if (transactionsBefore != null && !transactionsBefore.isEmpty()) {
-				DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionBefore,
-						transactionsBefore);
+			final int numberOfTransactionsAfter = recurrenceRuleOriginal.getCount() - numberOfTransactionsBefore - 1;
+			if (numberOfTransactionsAfter > 0) {
+				recurrenceRuleAfter.setCount(numberOfTransactionsAfter);
+			} else {
+				continuousTransactionsAfterIsNeeded = false;
 			}
-
-			// generate continuous transactions after this single transaction if needed
-			final ContinuousTransaction continuousTransactionAfter = continuousTransaction.getCopy();
-
-			final RecurrenceRule recurrenceRuleAfter = RecurrenceRuleUtils
-					.createRecurrenceRule(continuousTransactionAfter.getRecurrenceRule());
-
-			final LocalDate firstDateAfterRecurrence = RecurrenceRuleUtils.getFirstRecurrenceDateAfter(
-					recurrenceRuleAfter, continuousTransactionAfter.getDateBeginn(), firstDateAfter.minusDays(1));
-
-			continuousTransactionAfter.setDateBeginn(firstDateAfterRecurrence);
-
-			boolean continuousTransactionsAfterIsNeeded = true;
-			if (recurrenceRuleOriginal.getCount() != null) {
-				final int numberOfTransactionsBefore = transactionsBefore != null ? transactionsBefore.size() : 0;
-
-				final int numberOfTransactionsAfter = recurrenceRuleOriginal.getCount() - numberOfTransactionsBefore
-						- 1;
-				if (numberOfTransactionsAfter > 0) {
-					recurrenceRuleAfter.setCount(numberOfTransactionsAfter);
-				} else {
-					continuousTransactionsAfterIsNeeded = false;
-				}
-			}
-
-			if (continuousTransactionsAfterIsNeeded) {
-				continuousTransactionAfter.setRecurrenceRule(recurrenceRuleAfter.toString());
-				final List<Transaction> transactionsAfter = ContinuousTransactionService
-						.generateTransactionsFromNewContinuousTransaction(continuousTransactionAfter);
-				DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionAfter,
-						transactionsAfter);
-			}
-
-			DatabaseService.getInstance().deleteAllContinuousTransactions(continuousTransaction);
-		} catch (final Exception e) {
-			DatabaseService.getInstance().rollbackTransaction();
-			throw e;
 		}
-		if (ownTransaction) {
-			DatabaseService.getInstance().commitTransaction();
+
+		if (continuousTransactionsAfterIsNeeded) {
+			continuousTransactionAfter.setRecurrenceRule(recurrenceRuleAfter.toString());
+			final List<Transaction> transactionsAfter = ContinuousTransactionService
+					.generateTransactionsFromNewContinuousTransaction(continuousTransactionAfter);
+			DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionAfter, transactionsAfter);
 		}
 	}
 
-	/**
-	 * splits the continuous transaction around the given transaction. Two new
-	 * continuous transactions are created and the old one with all his transactions
-	 * will be deleted. The given transaction will be deleted and there will be no
-	 * new transaction at this date whether in the continuous transaction before nor
-	 * in the the one after this transaction. The recurrence rule itself is still
-	 * the same for both new continuous transactions.
-	 *
-	 * @param transaction
-	 */
-	public static void splitContinuousTransaction(final Transaction transaction) {
-		ContinuousTransactionService.splitContinuousTransaction(transaction.getContinuousTransaction(),
-				transaction.getDate().minusDays(1), transaction.getDate().plusDays(1));
+	private static List<Transaction> generateContinuousTransactionBefore(
+			final ContinuousTransaction continuousTransaction, final LocalDate lastDateBefore) {
+		final ContinuousTransaction continuousTransactionBefore = continuousTransaction.getCopy();
+
+		final RecurrenceRule recurrenceRuleBefore = RecurrenceRuleUtils
+				.createRecurrenceRule(continuousTransactionBefore.getRecurrenceRule());
+
+		final LocalDate lastDateBeforeRecurrence = RecurrenceRuleUtils.getLastRecurrenceDateBefore(recurrenceRuleBefore,
+				continuousTransactionBefore.getDateBeginn(), lastDateBefore.plusDays(1));
+
+		if (lastDateBeforeRecurrence == null) {
+			return null;
+		}
+
+		recurrenceRuleBefore.setUntil(DateUtils.localDateToDateTime(lastDateBeforeRecurrence));
+
+		continuousTransactionBefore.setRecurrenceRule(recurrenceRuleBefore.toString());
+
+		final List<Transaction> transactionsBefore = ContinuousTransactionService
+				.generateTransactionsFromNewContinuousTransaction(continuousTransactionBefore);
+
+		if (transactionsBefore != null && !transactionsBefore.isEmpty()) {
+			DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionBefore, transactionsBefore);
+		}
+		return transactionsBefore;
 	}
 
 }

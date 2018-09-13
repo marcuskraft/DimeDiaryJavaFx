@@ -3,6 +3,7 @@
 *.jpg
 .recommenders/*
 */DB/
+DB*/
 *.log
 ui2jui/*
 
