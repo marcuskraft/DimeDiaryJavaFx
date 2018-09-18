@@ -1,6 +1,8 @@
 package com.dimediary.services;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,27 @@ public class TestAccountBalancer {
 	@Test
 	public void testSimpleTransactionAdding() {
 
+		Iterator<Map.Entry<LocalDate, Double>> iterator;
+		final Map<LocalDate, Double> amountDatas = this.generateRandomTransactions();
+
+		Double balanceShould = this.bankAccount.getStartBudget();
+		Double balance;
+
+		iterator = amountDatas.entrySet().iterator();
+		while (iterator.hasNext()) {
+			final Map.Entry<LocalDate, Double> amounData = iterator.next();
+
+			balance = AccountBalanceService.getBalance(this.bankAccount, amounData.getKey());
+			balanceShould += AmountUtils.round(amounData.getValue());
+
+			Assert.assertNotNull(balance);
+			Assert.assertNotNull(balanceShould);
+			Assert.assertEquals(balance, AmountUtils.round(balanceShould));
+		}
+
+	}
+
+	private Map<LocalDate, Double> generateRandomTransactions() {
 		final Map<LocalDate, Double> amountDatas = new TreeMap<>();
 
 		Double amount;
@@ -69,32 +92,24 @@ public class TestAccountBalancer {
 		}
 
 		// generate transactions
-		Iterator<Map.Entry<LocalDate, Double>> iterator = amountDatas.entrySet().iterator();
+		final Iterator<Map.Entry<LocalDate, Double>> iterator = amountDatas.entrySet().iterator();
 		while (iterator.hasNext()) {
 			final Map.Entry<LocalDate, Double> amounData = iterator.next();
 			this.createTransaction(amounData.getValue(), amounData.getKey());
 
 		}
-
-		Double balanceShould = this.bankAccount.getStartBudget();
-		Double balance;
-
-		iterator = amountDatas.entrySet().iterator();
-		while (iterator.hasNext()) {
-			final Map.Entry<LocalDate, Double> amounData = iterator.next();
-
-			balance = AccountBalanceService.getBalance(this.bankAccount, amounData.getKey());
-			balanceShould += AmountUtils.round(amounData.getValue());
-
-			Assert.assertNotNull(balance);
-			Assert.assertNotNull(balanceShould);
-			Assert.assertEquals(balance, AmountUtils.round(balanceShould));
-		}
-
+		return amountDatas;
 	}
 
 	@Test
 	public void testContinuousTransaction() throws InvalidRecurrenceRuleException {
+
+		final ContinuousTransaction continuousTransaction = new ContinuousTransaction();
+		final LocalDate dateBeginnContinuousTransaction = this.bankAccount.getDateStartBudget().plusDays(50);
+
+		final RecurrenceRule recurrenceRule = new RecurrenceRule(Freq.MONTHLY);
+		recurrenceRule.setByPart(Part.BYMONTHDAY, 1);
+		recurrenceRule.setCount(10);
 
 		LocalDate testDate = this.bankAccount.getDateStartBudget();
 		Double balance;
@@ -104,26 +119,11 @@ public class TestAccountBalancer {
 			Assert.assertEquals(balance, this.bankAccount.getStartBudget());
 		}
 
-		final LocalDate dateBeginnContinuousTransaction = this.bankAccount.getDateStartBudget().plusDays(50);
-
-		final RecurrenceRule recurrenceRule = new RecurrenceRule(Freq.MONTHLY);
-		recurrenceRule.setByPart(Part.BYMONTHDAY, 1);
-		recurrenceRule.setCount(10);
-
-		final ContinuousTransaction continuousTransaction = new ContinuousTransaction();
-		continuousTransaction.setBankAccount(this.bankAccount);
-		continuousTransaction.setAmount(50.0);
-		continuousTransaction.setDateBeginn(dateBeginnContinuousTransaction);
-		continuousTransaction.setRecurrenceRule(recurrenceRule.toString());
-
-		final List<Transaction> transactions = ContinuousTransactionService
-				.generateTransactionsForContinuousTransaction(continuousTransaction);
-
-		TestAccountBalancer.DB_INSTANCE.persistContinuousTransaction(continuousTransaction, transactions);
+		this.generateContinuousTransaction(continuousTransaction, dateBeginnContinuousTransaction, recurrenceRule);
 
 		testDate = this.bankAccount.getDateStartBudget();
-		balance = AccountBalanceService.getBalance(this.bankAccount, testDate);
-		Assert.assertEquals(balance, this.bankAccount.getStartBudget());
+		Double balanceIs = AccountBalanceService.getBalance(this.bankAccount, testDate);
+		Assert.assertEquals(balanceIs, this.bankAccount.getStartBudget());
 
 		final List<LocalDate> recurrenceDates = RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule,
 				dateBeginnContinuousTransaction, dateBeginnContinuousTransaction);
@@ -133,11 +133,56 @@ public class TestAccountBalancer {
 			balanceShould = AmountUtils.round(balanceShould + continuousTransaction.getAmount());
 			for (int i = 0; i < localDate.getMonth().length(localDate.isLeapYear()); i++) {
 				testDate = localDate.plusDays(i);
-				balance = AccountBalanceService.getBalance(this.bankAccount, testDate);
-				Assert.assertEquals(balance, balanceShould);
+				balanceIs = AccountBalanceService.getBalance(this.bankAccount, testDate);
+				Assert.assertEquals(balanceIs, balanceShould);
 			}
 		}
 
+	}
+
+	@Test
+	public void TestGetBalanceFollowingDays() throws InvalidRecurrenceRuleException {
+		this.generateRandomTransactions();
+
+		final ContinuousTransaction continuousTransaction = new ContinuousTransaction();
+		final RecurrenceRule recurrenceRule = new RecurrenceRule(Freq.MONTHLY);
+		recurrenceRule.setByPart(Part.BYMONTHDAY, 1);
+		recurrenceRule.setCount(100);
+
+		this.generateContinuousTransaction(continuousTransaction, this.bankAccount.getDateStartBudget().plusMonths(2),
+				recurrenceRule);
+
+		final List<LocalDate> dates = new ArrayList<>();
+		LocalDate lastDate = this.bankAccount.getDateStartBudget().plusDays(10);
+		for (int i = 0; i < 400; i++) {
+			dates.add(lastDate);
+			lastDate = lastDate.plusDays(1);
+		}
+
+		final HashMap<LocalDate, Double> balancesFollowingDays = AccountBalanceService
+				.getBalancesFollowingDays(this.bankAccount, dates);
+
+		Double balanceFollowing;
+		Double balance;
+		for (final LocalDate localDate : dates) {
+			balance = AccountBalanceService.getBalance(this.bankAccount, localDate);
+			balanceFollowing = balancesFollowingDays.get(localDate);
+			Assert.assertEquals(balance, balanceFollowing);
+		}
+
+	}
+
+	private void generateContinuousTransaction(final ContinuousTransaction continuousTransaction,
+			final LocalDate dateBeginnContinuousTransaction, final RecurrenceRule recurrenceRule) {
+		continuousTransaction.setBankAccount(this.bankAccount);
+		continuousTransaction.setAmount(50.0);
+		continuousTransaction.setDateBeginn(dateBeginnContinuousTransaction);
+		continuousTransaction.setRecurrenceRule(recurrenceRule.toString());
+
+		final List<Transaction> transactions = ContinuousTransactionService
+				.generateTransactionsForContinuousTransaction(continuousTransaction);
+
+		TestAccountBalancer.DB_INSTANCE.persistContinuousTransaction(continuousTransaction, transactions);
 	}
 
 	private Transaction createTransaction(final Double amount, final LocalDate date) {

@@ -42,16 +42,18 @@ public class AccountBalanceService {
 			return null;
 		}
 
-		BalanceHistory lastBalanceHistoryBeforeRequestedDate = AccountBalanceService.getLastBalanceHistory(bankAccount, date);
+		BalanceHistory lastBalanceHistoryBeforeRequestedDate = AccountBalanceService.getLastBalanceHistory(bankAccount,
+				date);
 
-		lastBalanceHistoryBeforeRequestedDate = AccountBalanceService.generateMissingBalanceHistoriesIfNeeded(bankAccount, date,
-				lastBalanceHistoryBeforeRequestedDate);
+		lastBalanceHistoryBeforeRequestedDate = AccountBalanceService
+				.generateMissingBalanceHistoriesIfNeeded(bankAccount, date, lastBalanceHistoryBeforeRequestedDate);
 
 		if (lastBalanceHistoryBeforeRequestedDate == null) {
 			return AccountBalanceService.getBalanceWithAllTransactions(bankAccount, date);
 		}
 
-		final Double result = AccountBalanceService.sumAllTransactionsBetween(bankAccount, date, lastBalanceHistoryBeforeRequestedDate);
+		final Double result = AccountBalanceService.sumAllTransactionsBetween(bankAccount, date,
+				lastBalanceHistoryBeforeRequestedDate);
 
 		return AmountUtils.round(result);
 
@@ -68,7 +70,7 @@ public class AccountBalanceService {
 	 *         for this bank account on this date
 	 */
 	public static HashMap<LocalDate, Double> getBalancesFollowingDays(final BankAccount bankAccount,
-			final ArrayList<LocalDate> dates) {
+			final List<LocalDate> dates) {
 		final HashMap<LocalDate, Double> balances = new HashMap<>();
 
 		Double lastBalance = 0.0;
@@ -277,8 +279,8 @@ public class AccountBalanceService {
 			final LocalDate date, BalanceHistory balanceHistory) {
 		final LocalDate lastSundayBeforeRequestedDate = DateUtils.getLastSunday(date);
 		final LocalDate nextSundayAfterToday = DateUtils.getNextSunday(LocalDate.now());
-		if (balanceHistory == null
-				|| date.isBefore(nextSundayAfterToday) && !balanceHistory.getDate().equals(lastSundayBeforeRequestedDate)) {
+		if (balanceHistory == null || date.isBefore(nextSundayAfterToday)
+				&& !balanceHistory.getDate().equals(lastSundayBeforeRequestedDate)) {
 			AccountBalanceService.generateMissingBalanceHistories(bankAccount);
 			balanceHistory = AccountBalanceService.getLastBalanceHistory(bankAccount, date);
 		}
