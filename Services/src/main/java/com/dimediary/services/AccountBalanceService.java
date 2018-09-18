@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.dimediary.model.entities.BalanceHistory;
 import com.dimediary.model.entities.BankAccount;
@@ -69,7 +70,7 @@ public class AccountBalanceService {
 	 * @return returns a HashMap with the given Dates and the corresponding balances
 	 *         for this bank account on this date
 	 */
-	public static HashMap<LocalDate, Double> getBalancesFollowingDays(final BankAccount bankAccount,
+	public static Map<LocalDate, Double> getBalancesFollowingDays(final BankAccount bankAccount,
 			final List<LocalDate> dates) {
 		final HashMap<LocalDate, Double> balances = new HashMap<>();
 

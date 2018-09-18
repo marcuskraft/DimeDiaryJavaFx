@@ -2,10 +2,10 @@ package com.dimediary.services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.TreeMap;
 
@@ -23,6 +23,7 @@ import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.model.utils.AmountUtils;
 import com.dimediary.services.database.DatabaseService;
+import com.dimediary.util.utils.DateUtils;
 import com.dimediary.util.utils.RecurrenceRuleUtils;
 
 public class TestAccountBalancer {
@@ -49,6 +50,11 @@ public class TestAccountBalancer {
 		TestAccountBalancer.DB_INSTANCE.commitTransaction();
 	}
 
+	@After
+	public void close() {
+		TestAccountBalancer.DB_INSTANCE.close();
+	}
+
 	@Test
 	public void testSimpleTransactionAdding() {
 
@@ -70,35 +76,6 @@ public class TestAccountBalancer {
 			Assert.assertEquals(balance, AmountUtils.round(balanceShould));
 		}
 
-	}
-
-	private Map<LocalDate, Double> generateRandomTransactions() {
-		final Map<LocalDate, Double> amountDatas = new TreeMap<>();
-
-		Double amount;
-		LocalDate date = this.bankAccount.getDateStartBudget();
-		final Random randomDouble = new Random(TestAccountBalancer.SEED_FOR_RANDOM_DOUBLE);
-		final Random randomBool = new Random(TestAccountBalancer.SEED_FOR_RANDOM_BOOL);
-		final Random randomInt = new Random(TestAccountBalancer.SEED_FOR_RANDOM_INT);
-		for (int i = 0; i < 100; i++) {
-			amount = TestAccountBalancer.RANGE_MAX * randomDouble.nextDouble();
-			if (randomBool.nextBoolean()) {
-				amount = -amount;
-			}
-			date = date.plusDays(randomInt.nextInt(i + 1));
-
-			amountDatas.put(date, AmountUtils.round(amount));
-
-		}
-
-		// generate transactions
-		final Iterator<Map.Entry<LocalDate, Double>> iterator = amountDatas.entrySet().iterator();
-		while (iterator.hasNext()) {
-			final Map.Entry<LocalDate, Double> amounData = iterator.next();
-			this.createTransaction(amounData.getValue(), amounData.getKey());
-
-		}
-		return amountDatas;
 	}
 
 	@Test
@@ -159,7 +136,7 @@ public class TestAccountBalancer {
 			lastDate = lastDate.plusDays(1);
 		}
 
-		final HashMap<LocalDate, Double> balancesFollowingDays = AccountBalanceService
+		final Map<LocalDate, Double> balancesFollowingDays = AccountBalanceService
 				.getBalancesFollowingDays(this.bankAccount, dates);
 
 		Double balanceFollowing;
@@ -168,6 +145,56 @@ public class TestAccountBalancer {
 			balance = AccountBalanceService.getBalance(this.bankAccount, localDate);
 			balanceFollowing = balancesFollowingDays.get(localDate);
 			Assert.assertEquals(balance, balanceFollowing);
+		}
+
+	}
+
+	@Test
+	public void testDeleteTransaction() {
+		final Map<LocalDate, Double> transactions = this.generateRandomTransactions();
+
+		LocalDate firstDate = null;
+		LocalDate lastDate = null;
+		final Transaction transactionToDelete;
+		LocalDate localDateToDelete = null;
+		int i = 0;
+		final int iMax = transactions.size() - 1;
+		for (final Entry<LocalDate, Double> element : transactions.entrySet()) {
+			final Entry<LocalDate, Double> transactionSet = element;
+			if (i == 0) {
+				firstDate = transactionSet.getKey();
+			} else if (i == 15) {
+				localDateToDelete = element.getKey();
+			} else if (i == iMax) {
+				lastDate = transactionSet.getKey();
+			}
+			i++;
+		}
+
+		final List<LocalDate> dates = DateUtils.getLocalDatesFromTo(firstDate, lastDate);
+		final Map<LocalDate, Double> balancesFollowingDays = AccountBalanceService
+				.getBalancesFollowingDays(this.bankAccount, dates);
+
+		final ArrayList<Transaction> transactionsAtThisDate = TestAccountBalancer.DB_INSTANCE
+				.getTransactions(this.bankAccount, localDateToDelete);
+
+		Assert.assertNotNull(transactionsAtThisDate);
+		Assert.assertTrue(transactionsAtThisDate.size() == 1);
+
+		transactionToDelete = transactionsAtThisDate.get(0);
+		final Double balanceForThisTransaction = transactionToDelete.getAmount();
+		final LocalDate dateForThisTransaction = transactionToDelete.getDate();
+
+		TestAccountBalancer.DB_INSTANCE.delete(transactionToDelete);
+
+		Double balance;
+		for (final LocalDate localDate : dates) {
+			balance = AccountBalanceService.getBalance(this.bankAccount, localDate);
+			if (!localDate.isBefore(dateForThisTransaction)) {
+				balance = AmountUtils.round(balance + balanceForThisTransaction);
+			}
+			final Double actual = balancesFollowingDays.get(localDate);
+			Assert.assertEquals(balance, actual);
 		}
 
 	}
@@ -185,6 +212,35 @@ public class TestAccountBalancer {
 		TestAccountBalancer.DB_INSTANCE.persistContinuousTransaction(continuousTransaction, transactions);
 	}
 
+	private Map<LocalDate, Double> generateRandomTransactions() {
+		final Map<LocalDate, Double> amountDatas = new TreeMap<>();
+
+		Double amount;
+		LocalDate date = this.bankAccount.getDateStartBudget();
+		final Random randomDouble = new Random(TestAccountBalancer.SEED_FOR_RANDOM_DOUBLE);
+		final Random randomBool = new Random(TestAccountBalancer.SEED_FOR_RANDOM_BOOL);
+		final Random randomInt = new Random(TestAccountBalancer.SEED_FOR_RANDOM_INT);
+		for (int i = 0; i < 100; i++) {
+			amount = TestAccountBalancer.RANGE_MAX * randomDouble.nextDouble();
+			if (randomBool.nextBoolean()) {
+				amount = -amount;
+			}
+			date = date.plusDays(randomInt.nextInt(i + 1));
+
+			amountDatas.put(date, AmountUtils.round(amount));
+
+		}
+
+		// generate transactions
+		final Iterator<Map.Entry<LocalDate, Double>> iterator = amountDatas.entrySet().iterator();
+		while (iterator.hasNext()) {
+			final Map.Entry<LocalDate, Double> amounData = iterator.next();
+			this.createTransaction(amounData.getValue(), amounData.getKey());
+
+		}
+		return amountDatas;
+	}
+
 	private Transaction createTransaction(final Double amount, final LocalDate date) {
 		final Transaction transaction = new Transaction();
 
@@ -194,11 +250,6 @@ public class TestAccountBalancer {
 
 		TestAccountBalancer.DB_INSTANCE.persist(transaction);
 		return transaction;
-	}
-
-	@After
-	public void close() {
-		TestAccountBalancer.DB_INSTANCE.close();
 	}
 
 }
