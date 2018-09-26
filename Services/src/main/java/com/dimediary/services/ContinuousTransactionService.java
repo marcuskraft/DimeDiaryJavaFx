@@ -15,6 +15,44 @@ import com.dimediary.util.utils.RecurrenceRuleUtils;
 public class ContinuousTransactionService {
 
 	/**
+	 * splits the continuous transaction around the given transaction. Two new
+	 * continuous transactions are created and the old one with all his transactions
+	 * will be deleted. The given transaction will be deleted and there will be no
+	 * new transaction at this date whether in the continuous transaction before nor
+	 * in the the one after this transaction. The recurrence rule itself is still
+	 * the same for both new continuous transactions.
+	 *
+	 * @param transaction
+	 */
+	public static void splitContinuousTransaction(final Transaction transaction) {
+		ContinuousTransactionService.splitContinuousTransaction(transaction.getContinuousTransaction(),
+				transaction.getDate().minusDays(1), transaction.getDate().plusDays(1));
+	}
+
+	/**
+	 * generates all transactions belonging to this continuous transaction
+	 *
+	 * @param continuousTransaction
+	 * @return
+	 */
+	public static List<Transaction> generateTransactionsForContinuousTransaction(
+			final ContinuousTransaction continuousTransaction) {
+		final RecurrenceRule recurrenceRule = RecurrenceRuleUtils
+				.createRecurrenceRule(continuousTransaction.getRecurrenceRule());
+		final LocalDate firstDate = continuousTransaction.getDateBeginn();
+		final List<LocalDate> dates = RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule,
+				DateUtils.localDateToDateTime(continuousTransaction.getDateBeginn()),
+				DateUtils.localDateToDateTime(firstDate));
+
+		final List<Transaction> transactions = new ArrayList<>();
+		for (final LocalDate date : dates) {
+			transactions.add(continuousTransaction.createTransaction(date));
+		}
+
+		return transactions;
+	}
+
+	/**
 	 * splits the continuous transaction into two continuous transactions. The first
 	 * one will start at the same date as the old continuous transaction and will
 	 * end not later than lastDateBefore. The second one will start not earlier than
@@ -26,8 +64,10 @@ public class ContinuousTransactionService {
 	 * @param lastDateBefore
 	 * @param firstDateAfter
 	 */
-	public static void splitContinuousTransaction(final ContinuousTransaction continuousTransaction,
+	private static void splitContinuousTransaction(final ContinuousTransaction continuousTransaction,
 			final LocalDate lastDateBefore, final LocalDate firstDateAfter) {
+		// TODO: don't delete all transactions, only reorganize the continuous
+		// transaction into two
 		final boolean ownTransaction = DatabaseService.getInstance().beginTransaction();
 
 		try {
@@ -48,44 +88,6 @@ public class ContinuousTransactionService {
 		if (ownTransaction) {
 			DatabaseService.getInstance().commitTransaction();
 		}
-	}
-
-	/**
-	 * splits the continuous transaction around the given transaction. Two new
-	 * continuous transactions are created and the old one with all his transactions
-	 * will be deleted. The given transaction will be deleted and there will be no
-	 * new transaction at this date whether in the continuous transaction before nor
-	 * in the the one after this transaction. The recurrence rule itself is still
-	 * the same for both new continuous transactions.
-	 *
-	 * @param transaction
-	 */
-	public static void splitContinuousTransaction(final Transaction transaction) {
-		ContinuousTransactionService.splitContinuousTransaction(transaction.getContinuousTransaction(),
-				transaction.getDate().minusDays(1), transaction.getDate().plusDays(1));
-	}
-
-	/**
-	 * generates all transactions belonging to this continuous transaction
-	 * 
-	 * @param continuousTransaction
-	 * @return
-	 */
-	public static List<Transaction> generateTransactionsForContinuousTransaction(
-			final ContinuousTransaction continuousTransaction) {
-		final RecurrenceRule recurrenceRule = RecurrenceRuleUtils
-				.createRecurrenceRule(continuousTransaction.getRecurrenceRule());
-		final LocalDate firstDate = continuousTransaction.getDateBeginn();
-		final List<LocalDate> dates = RecurrenceRuleUtils.getDatesForRecurrenceRule(recurrenceRule,
-				DateUtils.localDateToDateTime(continuousTransaction.getDateBeginn()),
-				DateUtils.localDateToDateTime(firstDate));
-
-		final List<Transaction> transactions = new ArrayList<>();
-		for (final LocalDate date : dates) {
-			transactions.add(continuousTransaction.createTransaction(date));
-		}
-
-		return transactions;
 	}
 
 	private static void generateContinuousTransactionAfter(final ContinuousTransaction continuousTransaction,
