@@ -111,7 +111,7 @@ public class AccountBalanceService {
 			return;
 		}
 
-		final ArrayList<BalanceHistory> balanceHistories = DatabaseService.getInstance()
+		final List<BalanceHistory> balanceHistories = DatabaseService.getInstance()
 				.getBalanceHistoriesAfterDate(transaction.getBankAccount(), nextSundayFromTransaction);
 
 		switch (action) {
@@ -138,7 +138,7 @@ public class AccountBalanceService {
 		if (bankAccount == null || date == null || date.isBefore(bankAccount.getDateStartBudget())) {
 			return null;
 		}
-		final ArrayList<Transaction> transactions = DatabaseService.getInstance().getTransactions(bankAccount, date);
+		final List<Transaction> transactions = DatabaseService.getInstance().getTransactions(bankAccount, date);
 
 		Double result;
 		if (balanceDayBefore == null) {

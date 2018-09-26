@@ -156,7 +156,7 @@ public class DatabaseService {
 		final List<BankAccount> bankAccounts = this.entityManager
 				.createNamedQuery(BankAccount.FIND_BANK_ACCOUNTS, BankAccount.class)
 				.setParameter("namesList", bankAccountsNames).getResultList();
-		return new ArrayList<>(bankAccounts);
+		return bankAccounts;
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class DatabaseService {
 	 * @return list of bank accounts which belongs to the given bank account
 	 *         categories
 	 */
-	public ArrayList<BankAccount> getBankAccounts(final BankAccountCategory bankAccountCategory) {
+	public List<BankAccount> getBankAccounts(final BankAccountCategory bankAccountCategory) {
 		if (bankAccountCategory == null) {
 			return null;
 		}
@@ -176,14 +176,14 @@ public class DatabaseService {
 				.createNamedQuery(BankAccount.FIND_BANKACCOUNTS_WITH_CATEGORY, BankAccount.class)
 				.setParameter("bankAccountCategory", bankAccountCategory).getResultList();
 
-		return new ArrayList<>(bankAccounts);
+		return bankAccounts;
 	}
 
 	/**
 	 *
 	 * @return list of all names of the bank account categories
 	 */
-	public ArrayList<String> getBankAccountCategoryNames() {
+	public List<String> getBankAccountCategoryNames() {
 		DatabaseService.log.info("getBankAccountCategoryNames");
 		final ArrayList<String> names = new ArrayList<>();
 
@@ -222,7 +222,7 @@ public class DatabaseService {
 	 *                                     names
 	 * @return list of bank account categories
 	 */
-	public ArrayList<BankAccountCategory> getBankAccountCategories(final ArrayList<String> bankAccountCategoryNames) {
+	public List<BankAccountCategory> getBankAccountCategories(final ArrayList<String> bankAccountCategoryNames) {
 		if (bankAccountCategoryNames.isEmpty()) {
 			return null;
 		}
@@ -235,7 +235,7 @@ public class DatabaseService {
 				.createNamedQuery("findAccountCategories", BankAccountCategory.class)
 				.setParameter("nameList", bankAccountCategoryNames).getResultList();
 
-		return new ArrayList<>(bankAccountCategories);
+		return bankAccountCategories;
 	}
 
 	/**
@@ -244,7 +244,7 @@ public class DatabaseService {
 	 *                        bank account
 	 * @return list of all balance histories of the given bank account
 	 */
-	public ArrayList<BalanceHistory> getBalanceHistories(final BankAccount bankAccount) {
+	public List<BalanceHistory> getBalanceHistories(final BankAccount bankAccount) {
 		if (bankAccount == null) {
 			return null;
 		}
@@ -252,7 +252,7 @@ public class DatabaseService {
 		final List<BalanceHistory> balanceHistories = this.entityManager
 				.createNamedQuery("accountBalance", BalanceHistory.class).setParameter("bankAccount", bankAccount)
 				.getResultList();
-		return new ArrayList<>(balanceHistories);
+		return balanceHistories;
 
 	}
 
@@ -265,7 +265,7 @@ public class DatabaseService {
 	 * @return list of balance histories for this bank account after the given date
 	 *         (including the given date)
 	 */
-	public ArrayList<BalanceHistory> getBalanceHistoriesAfterDate(final BankAccount bankAccount, final LocalDate date) {
+	public List<BalanceHistory> getBalanceHistoriesAfterDate(final BankAccount bankAccount, final LocalDate date) {
 		if (bankAccount == null || date == null) {
 			return null;
 		}
@@ -274,7 +274,7 @@ public class DatabaseService {
 		final List<BalanceHistory> balanceHistories = this.entityManager
 				.createNamedQuery("accountBalanceDate", BalanceHistory.class).setParameter("date", date)
 				.setParameter("bankAccount", bankAccount).getResultList();
-		return new ArrayList<>(balanceHistories);
+		return balanceHistories;
 	}
 
 	/**
@@ -367,7 +367,7 @@ public class DatabaseService {
 	 * @param bankAccount
 	 * @return list of all transactions of the given bank account
 	 */
-	public ArrayList<Transaction> getTransactions(final BankAccount bankAccount) {
+	public List<Transaction> getTransactions(final BankAccount bankAccount) {
 		if (bankAccount == null) {
 			return null;
 		}
@@ -376,7 +376,7 @@ public class DatabaseService {
 		final List<Transaction> transactions = this.entityManager
 				.createNamedQuery("allAccountTransactions", Transaction.class).setParameter("bankAccount", bankAccount)
 				.getResultList();
-		return new ArrayList<>(transactions);
+		return transactions;
 	}
 
 	/**
@@ -385,7 +385,7 @@ public class DatabaseService {
 	 * @param date
 	 * @return list of transactions at the given date for the given bank account
 	 */
-	public ArrayList<Transaction> getTransactions(final BankAccount bankAccount, final LocalDate date) {
+	public List<Transaction> getTransactions(final BankAccount bankAccount, final LocalDate date) {
 		if (bankAccount == null || date == null) {
 			return null;
 		}
@@ -395,7 +395,7 @@ public class DatabaseService {
 		final List<Transaction> transactions = this.entityManager
 				.createNamedQuery("TransactionsAtDay", Transaction.class).setParameter("bankAccount", bankAccount)
 				.setParameter("date", date).getResultList();
-		return new ArrayList<>(transactions);
+		return transactions;
 	}
 
 	/**
@@ -428,7 +428,7 @@ public class DatabaseService {
 	 * @return list of all transactions belonging to the given continuous
 	 *         transaction
 	 */
-	public ArrayList<Transaction> getTransactions(final ContinuousTransaction continuousTransaction) {
+	public List<Transaction> getTransactions(final ContinuousTransaction continuousTransaction) {
 		if (continuousTransaction == null) {
 			return null;
 		}
@@ -438,7 +438,7 @@ public class DatabaseService {
 		final List<Transaction> transactions = this.entityManager
 				.createNamedQuery("ContinuousTransactions", Transaction.class)
 				.setParameter("continuousTransaction", continuousTransaction).getResultList();
-		return new ArrayList<>(transactions);
+		return transactions;
 	}
 
 	/**
@@ -448,7 +448,7 @@ public class DatabaseService {
 	 * @return all transactions in the given date range (both inclusive) with no
 	 *         bank account
 	 */
-	public ArrayList<Transaction> getTransactionsWithoutAccount(final LocalDate dateFrom, final LocalDate dateUntil) {
+	public List<Transaction> getTransactionsWithoutAccount(final LocalDate dateFrom, final LocalDate dateUntil) {
 		if (dateFrom == null || dateUntil == null) {
 			return null;
 		}
@@ -458,7 +458,7 @@ public class DatabaseService {
 		final List<Transaction> transactions = this.entityManager
 				.createNamedQuery("TransactionsWithoutAccountBetween", Transaction.class)
 				.setParameter("dateFrom", dateFrom).setParameter("dateUntil", dateUntil).getResultList();
-		return new ArrayList<>(transactions);
+		return transactions;
 	}
 
 	/**
@@ -466,7 +466,7 @@ public class DatabaseService {
 	 * @param date
 	 * @return all transaction on the given date without a bank account
 	 */
-	public ArrayList<Transaction> getTrandactionsWithoutAccount(final LocalDate date) {
+	public List<Transaction> getTrandactionsWithoutAccount(final LocalDate date) {
 		if (date == null) {
 			return null;
 		}
@@ -475,7 +475,7 @@ public class DatabaseService {
 		final List<Transaction> transactions = this.entityManager
 				.createNamedQuery("TransactionsWithoutAccount", Transaction.class).setParameter("date", date)
 				.getResultList();
-		return new ArrayList<>(transactions);
+		return transactions;
 	}
 
 	/**
@@ -525,7 +525,7 @@ public class DatabaseService {
 	 * @param categoryNames
 	 * @return list of categories belonging to this category names
 	 */
-	public ArrayList<Category> getCategories(final ArrayList<String> categoryNames) {
+	public List<Category> getCategories(final ArrayList<String> categoryNames) {
 		if (categoryNames == null || categoryNames.isEmpty()) {
 			return null;
 		}
@@ -536,16 +536,16 @@ public class DatabaseService {
 
 		final List<Category> categories = this.entityManager.createNamedQuery("findCategories", Category.class)
 				.setParameter("namesList", categoryNames).getResultList();
-		return new ArrayList<>(categories);
+		return categories;
 	}
 
 	/**
 	 *
 	 * @return list of all category names
 	 */
-	public ArrayList<String> getCategoryNames() {
+	public List<String> getCategoryNames() {
 		DatabaseService.log.info("getCategoryNames");
-		final ArrayList<String> categoryNames = new ArrayList<>();
+		final List<String> categoryNames = new ArrayList<>();
 
 		final List<Category> categories = this.entityManager.createNamedQuery("allCategories", Category.class)
 				.getResultList();
@@ -1046,7 +1046,7 @@ public class DatabaseService {
 	 * @param categories
 	 *                       list of categories to delete
 	 */
-	public void deleteCategories(final ArrayList<Category> categories) {
+	public void deleteCategories(final List<Category> categories) {
 		if (categories == null || categories.isEmpty()) {
 			return;
 		}
@@ -1066,7 +1066,7 @@ public class DatabaseService {
 	 * @param balanceHistories
 	 *                             list of balance histories to delete
 	 */
-	public void deleteBalanceHistories(final ArrayList<BalanceHistory> balanceHistories) {
+	public void deleteBalanceHistories(final List<BalanceHistory> balanceHistories) {
 		if (balanceHistories == null || balanceHistories.isEmpty()) {
 			return;
 		}
@@ -1093,8 +1093,7 @@ public class DatabaseService {
 		}
 		final boolean ownTransaction = this.beginTransaction();
 
-		final ArrayList<BalanceHistory> balanceHistories = DatabaseService.getInstance()
-				.getBalanceHistories(bankAccount);
+		final List<BalanceHistory> balanceHistories = DatabaseService.getInstance().getBalanceHistories(bankAccount);
 		if (!balanceHistories.isEmpty()) {
 			DatabaseService.getInstance().deleteBalanceHistories(balanceHistories);
 		}
@@ -1111,7 +1110,7 @@ public class DatabaseService {
 		DatabaseService.log.info("deleteAllContinuousTransactions : " + continuousTransaction.getId());
 		final boolean ownTransaction = this.beginTransaction();
 
-		final ArrayList<Transaction> transactions = this.getTransactions(continuousTransaction);
+		final List<Transaction> transactions = this.getTransactions(continuousTransaction);
 		this.deleteTransactions(transactions);
 		if (!this.entityManager.contains(continuousTransaction)) {
 			final ContinuousTransaction continuousTransactionLocal = this.entityManager.merge(continuousTransaction);
