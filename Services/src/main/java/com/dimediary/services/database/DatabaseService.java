@@ -422,6 +422,23 @@ public class DatabaseService {
 		return transactions;
 	}
 
+	public List<Transaction> getTransactionsUntil(final ContinuousTransaction continuousTransaction,
+			final LocalDate dateUntil) {
+		if (continuousTransaction == null || dateUntil == null) {
+			return null;
+		}
+
+		DatabaseService.log
+				.info("getTransactionsFromDate for continuous transaction: " + continuousTransaction.getName() + " ("
+						+ continuousTransaction.getId() + ") " + " until at date: " + dateUntil.toString());
+
+		final List<Transaction> transactions = this.entityManager
+				.createNamedQuery(Transaction.CONTINUOUS_TRANSANSACTION_UNTIL_DATE, Transaction.class)
+				.setParameter("continuousTransaction", continuousTransaction).setParameter("date", dateUntil)
+				.getResultList();
+		return transactions;
+	}
+
 	/**
 	 *
 	 * @param continuousTransaction
@@ -603,7 +620,7 @@ public class DatabaseService {
 	 *
 	 * @param continuousTransaction
 	 */
-	private void persist(final ContinuousTransaction continuousTransaction) {
+	public void persist(final ContinuousTransaction continuousTransaction) {
 		if (continuousTransaction == null) {
 			return;
 		}
@@ -634,6 +651,21 @@ public class DatabaseService {
 		for (final Transaction transaction : transactions) {
 			this.persist(transaction);
 		}
+
+		if (ownTransaction) {
+			this.commitTransaction();
+		}
+	}
+
+	public void persistContinuousTransactionMergeTransactions(final ContinuousTransaction continuousTransaction,
+			final List<Transaction> transactions) {
+		if (continuousTransaction == null || transactions == null || transactions.isEmpty()) {
+			return;
+		}
+		final boolean ownTransaction = this.beginTransaction();
+
+		this.persist(continuousTransaction);
+		this.merge(transactions);
 
 		if (ownTransaction) {
 			this.commitTransaction();
@@ -770,6 +802,34 @@ public class DatabaseService {
 		if (ownTransaction) {
 			this.commitTransaction();
 		}
+	}
+
+	private void merge(final Transaction transaction) {
+		if (transaction == null) {
+			return;
+		}
+
+		DatabaseService.log.info("merge Transaction: " + transaction.getId());
+
+		final boolean ownTransaction = this.beginTransaction();
+
+		this.entityManager.merge(transaction);
+
+		if (ownTransaction) {
+			this.commitTransaction();
+		}
+
+	}
+
+	private void merge(final List<Transaction> transactions) {
+		if (transactions == null) {
+			return;
+		}
+
+		for (final Transaction transaction : transactions) {
+			this.merge(transaction);
+		}
+
 	}
 
 	/**

@@ -11,6 +11,7 @@ import com.dimediary.services.database.DatabaseService;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -18,6 +19,8 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
 	private final static Logger log = LogManager.getLogger(Main.class);
+
+	private static Stage stage;
 
 	public static void main(final String[] args) {
 		try {
@@ -34,6 +37,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(final Stage stage) throws Exception {
+		Main.stage = stage;
 		stage.setMaximized(true);
 		final URL resource = this.getClass().getResource("design/window/MainWindow.fxml");
 
@@ -56,6 +60,18 @@ public class Main extends Application {
 	@Override
 	public void stop() {
 		DatabaseService.getInstance().close();
+	}
+
+	public static Stage getStage() {
+		return Main.stage;
+	}
+
+	public static Scene getScene() {
+		return Main.stage.getScene();
+	}
+
+	public static void setCursor(final Cursor cursor) {
+		Main.stage.getScene().setCursor(cursor);
 	}
 
 }

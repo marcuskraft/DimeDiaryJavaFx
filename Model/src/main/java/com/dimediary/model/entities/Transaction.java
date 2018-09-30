@@ -24,8 +24,10 @@ import com.dimediary.model.utils.AmountUtils;
 				+ " AND t.date BETWEEN :dateFrom AND :dateUntil ORDER BY t.date"),
 		@NamedQuery(name = "allAccountTransactions", query = "from Transaction t WHERE t.bankAccount = :bankAccount"),
 		@NamedQuery(name = "TransactionsAtDay", query = "from Transaction t WHERE t.bankAccount = :bankAccount AND t.date = :date order by t.timestamp"),
-		@NamedQuery(name = "ContinuousTransansactionFromDate", query = "from Transaction t WHERE t.continuousTransaction = :continuousTransaction "
+		@NamedQuery(name = Transaction.CONTINUOUS_TRANSANSACTION_FROM_DATE, query = "from Transaction t WHERE t.continuousTransaction = :continuousTransaction "
 				+ "AND t.date >= :date"),
+		@NamedQuery(name = Transaction.CONTINUOUS_TRANSANSACTION_UNTIL_DATE, query = "from Transaction t WHERE t.continuousTransaction = :continuousTransaction "
+				+ "AND t.date <= :date"),
 		@NamedQuery(name = "ContinuousTransactions", query = "from Transaction t WHERE t.continuousTransaction = :continuousTransaction"),
 		@NamedQuery(name = "TransactionsWithoutAccountBetween", query = "from Transaction t where t.bankAccount is null and t.date BETWEEN :dateFrom"
 				+ " AND :dateUntil ORDER BY t.date"),
@@ -35,6 +37,10 @@ import com.dimediary.model.utils.AmountUtils;
 @Entity
 @Table(name = "TRANSACTIONS", indexes = { @Index(columnList = "date", name = "transaction_date_hidx") })
 public class Transaction implements Serializable {
+
+	public static final String CONTINUOUS_TRANSANSACTION_UNTIL_DATE = "ContinuousTransansactionUntilDate";
+
+	public static final String CONTINUOUS_TRANSANSACTION_FROM_DATE = "ContinuousTransansactionFromDate";
 
 	public static final String DELETE_ALL_TRANSACTIONS = "DELETE_ALL_TRANSACTIONS";
 

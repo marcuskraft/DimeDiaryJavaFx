@@ -117,9 +117,18 @@ public class ContinuousTransactionService {
 
 		if (continuousTransactionsAfterIsNeeded) {
 			continuousTransactionAfter.setRecurrenceRule(recurrenceRuleAfter.toString());
-			final List<Transaction> transactionsAfter = ContinuousTransactionService
-					.generateTransactionsForContinuousTransaction(continuousTransactionAfter);
-			DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionAfter, transactionsAfter);
+			final List<Transaction> transactionsAfter = DatabaseService.getInstance()
+					.getTransactionsFromDate(continuousTransaction, firstDateAfterRecurrence);
+			if (transactionsAfter == null) {
+				return;
+			}
+
+			for (final Transaction transaction : transactionsAfter) {
+				transaction.setContinuousTransaction(continuousTransactionAfter);
+			}
+
+			DatabaseService.getInstance().persistContinuousTransactionMergeTransactions(continuousTransactionAfter,
+					transactionsAfter);
 		}
 	}
 
@@ -141,11 +150,15 @@ public class ContinuousTransactionService {
 
 		continuousTransactionBefore.setRecurrenceRule(recurrenceRuleBefore.toString());
 
-		final List<Transaction> transactionsBefore = ContinuousTransactionService
-				.generateTransactionsForContinuousTransaction(continuousTransactionBefore);
+		final List<Transaction> transactionsBefore = DatabaseService.getInstance()
+				.getTransactionsUntil(continuousTransaction, lastDateBeforeRecurrence);
 
 		if (transactionsBefore != null && !transactionsBefore.isEmpty()) {
-			DatabaseService.getInstance().persistContinuousTransaction(continuousTransactionBefore, transactionsBefore);
+			for (final Transaction transaction : transactionsBefore) {
+				transaction.setContinuousTransaction(continuousTransactionBefore);
+			}
+			DatabaseService.getInstance().persistContinuousTransactionMergeTransactions(continuousTransactionBefore,
+					transactionsBefore);
 		}
 		return transactionsBefore;
 	}
