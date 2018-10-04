@@ -5,7 +5,7 @@
 
 	<groupId>com.dimediary</groupId>
 	<artifactId>Dimediary</artifactId>
-	<version>0.4.0-SNAPSHOT</version>
+	<version>0.4.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<build>
@@ -27,23 +27,23 @@
 			<dependency>
 				<groupId>com.dimediary.util</groupId>
 				<artifactId>Utils</artifactId>
-				<version>0.4.0-SNAPSHOT</version>
+				<version>0.4.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.dimediary.services</groupId>
 				<artifactId>services</artifactId>
-				<version>0.4.0-SNAPSHOT</version>
+				<version>0.4.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>com.dimediary.model</groupId>
 				<artifactId>Model</artifactId>
-				<version>0.4.0-SNAPSHOT</version>
+				<version>0.4.1-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.dimediary.view</groupId>
 				<artifactId>View</artifactId>
-				<version>0.4.0-SNAPSHOT</version>
+				<version>0.4.1-SNAPSHOT</version>
 			</dependency>
 
 			<!-- https://mvnrepository.com/artifact/org.dmfs/lib-recur -->
