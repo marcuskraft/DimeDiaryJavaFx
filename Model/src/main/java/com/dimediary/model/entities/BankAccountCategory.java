@@ -11,15 +11,18 @@ import javax.persistence.Table;
 
 /**
  * entity for the bank account categories
- * 
+ *
  * @author eyota
  *
  */
 @NamedQueries({ @NamedQuery(name = "allAccountCategories", query = "from BankAccountCategory"),
-		@NamedQuery(name = "findAccountCategories", query = "from BankAccountCategory b WHERE b.name IN :nameList") })
+		@NamedQuery(name = "findAccountCategories", query = "from BankAccountCategory b WHERE b.name IN :nameList"),
+		@NamedQuery(name = BankAccountCategory.DELETE_ALL_BANKACCOUNT_CATEGORIES, query = "DELETE FROM BankAccountCategory") })
 @Entity
 @Table(name = "BANKACCOUNT_CATEGORY")
 public class BankAccountCategory implements Serializable {
+
+	public static final String DELETE_ALL_BANKACCOUNT_CATEGORIES = "DELETE_ALL_BANKACCOUNT_CATEGORIES";
 
 	/**
 	 *
@@ -44,7 +47,7 @@ public class BankAccountCategory implements Serializable {
 	/**
 	 *
 	 * @param name
-	 *            name of the bank account category
+	 *                 name of the bank account category
 	 */
 	public void setName(final String name) {
 		this.name = name;
@@ -61,7 +64,7 @@ public class BankAccountCategory implements Serializable {
 	/**
 	 *
 	 * @param isRealAccount
-	 *            set if this is a real account or not
+	 *                          set if this is a real account or not
 	 */
 	public void setIsRealAccount(final Boolean isRealAccount) {
 		this.isRealAccount = isRealAccount;

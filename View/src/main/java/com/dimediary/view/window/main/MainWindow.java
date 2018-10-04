@@ -12,6 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
@@ -439,9 +440,9 @@ public class MainWindow extends Window {
 		final String bankaccountName = this.comboBoxAccount.getValue();
 		final BankAccount bankAccount = DatabaseService.getInstance().getBankAccount(bankaccountName);
 
-		final HashMap<LocalDate, Double> balances = AccountBalanceService.getBalancesFollowingDays(bankAccount, dates);
+		final Map<LocalDate, Double> balances = AccountBalanceService.getBalancesFollowingDays(bankAccount, dates);
 
-		final HashMap<LocalDate, ArrayList<Transaction>> transactionsForDates = new HashMap<>();
+		final Map<LocalDate, ArrayList<Transaction>> transactionsForDates = new HashMap<>();
 
 		int maxTransaction = 0;
 		for (final LocalDate date : dates) {

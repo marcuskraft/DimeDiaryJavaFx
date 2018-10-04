@@ -24,11 +24,14 @@ import com.dimediary.model.utils.AmountUtils;
 @NamedQueries({
 		@NamedQuery(name = "accountBalance", query = "from BalanceHistory b WHERE b.bankAccount = :bankAccount"),
 		@NamedQuery(name = "accountBalanceDate", query = "from BalanceHistory b WHERE b.bankAccount = :bankAccount AND b.date >= :date"),
-		@NamedQuery(name = "lastAccountBalance", query = "FROM BalanceHistory b1 WHERE b1.bankAccount = :bankAccount AND b1.date = (SELECT max(date) FROM BalanceHistory b2 WHERE b2.bankAccount = :bankAccount)") })
+		@NamedQuery(name = "lastAccountBalance", query = "FROM BalanceHistory b1 WHERE b1.bankAccount = :bankAccount AND b1.date = (SELECT max(date) FROM BalanceHistory b2 WHERE b2.bankAccount = :bankAccount)"),
+		@NamedQuery(name = BalanceHistory.DELETE_ALL_BALANCE_HISTORIES, query = "DELETE FROM BalanceHistory") })
 @Entity
 @Table(name = "BALANCE_HISTORY")
 @IdClass(BalanceHistoryPK.class)
 public class BalanceHistory implements Serializable {
+
+	public static final String DELETE_ALL_BALANCE_HISTORIES = "DELETE_ALL_BALANCE_HISTORIES";
 
 	/**
 	 *

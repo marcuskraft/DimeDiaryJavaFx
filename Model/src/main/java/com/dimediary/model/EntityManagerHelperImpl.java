@@ -31,7 +31,6 @@ public class EntityManagerHelperImpl {
 			EntityManagerHelperImpl.emf.close();
 			EntityManagerHelperImpl.emf = null;
 		}
-
 	}
 
 }

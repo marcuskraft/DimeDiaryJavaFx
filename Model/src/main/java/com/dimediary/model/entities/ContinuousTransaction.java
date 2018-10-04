@@ -19,8 +19,11 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "CONTINUOUS_TRANSACTION")
 @NamedQueries({
-		@NamedQuery(name = ContinuousTransaction.CONTINUOUS_TRANSACTION_FOR_BANK_ACCOUNT, query = "from ContinuousTransaction WHERE bankAccount = :bankAccount") })
-public class ContinuousTransaction implements Serializable {
+		@NamedQuery(name = ContinuousTransaction.CONTINUOUS_TRANSACTION_FOR_BANK_ACCOUNT, query = "from ContinuousTransaction WHERE bankAccount = :bankAccount"),
+		@NamedQuery(name = ContinuousTransaction.DELETE_ALL_CONTINUOUS_TRANSACTIONS, query = "DELETE FROM ContinuousTransaction") })
+public class ContinuousTransaction implements Serializable, Comparable<ContinuousTransaction> {
+
+	public static final String DELETE_ALL_CONTINUOUS_TRANSACTIONS = "DELETE_ALL_CONTINUOUS_TRANSACTIONS";
 
 	public static final String CONTINUOUS_TRANSACTION_FOR_BANK_ACCOUNT = "continuousTransactionForBankAccount";
 
@@ -160,6 +163,14 @@ public class ContinuousTransaction implements Serializable {
 		continuousTransactionCopy.setUser(this.getUser());
 
 		return continuousTransactionCopy;
+	}
+
+	@Override
+	public int compareTo(final ContinuousTransaction other) {
+		if (other == null) {
+			return -1;
+		}
+		return this.dateBeginn.compareTo(other.getDateBeginn());
 	}
 
 }

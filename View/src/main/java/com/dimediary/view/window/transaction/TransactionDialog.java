@@ -465,7 +465,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 			this.continuousTransaction = new ContinuousTransaction();
 			this.setContinuousTransactionAttributtes(this.continuousTransaction);
 			final List<Transaction> transactions = ContinuousTransactionService
-					.generateTransactionsFromNewContinuousTransaction(this.continuousTransaction);
+					.generateTransactionsForContinuousTransaction(this.continuousTransaction);
 			DatabaseService.getInstance().persistContinuousTransaction(this.continuousTransaction, transactions);
 			this.mainWindow.refresh();
 		} catch (final Exception e) {
@@ -521,7 +521,6 @@ public class TransactionDialog implements IWindowParameterInjection {
 			}
 
 			this.createNewTransaction(false);
-			this.mainWindow.refresh();
 		} catch (final Exception e) {
 			this.rollbackTransaction();
 			throw e;
@@ -529,6 +528,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 		if (ownTransaction) {
 			this.commitTransaction();
 		}
+		this.mainWindow.refresh();
 		this.close();
 	}
 

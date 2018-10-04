@@ -11,15 +11,18 @@ import javax.persistence.Table;
 
 /**
  * entity class for the categories
- * 
+ *
  * @author eyota
  *
  */
 @NamedQueries({ @NamedQuery(name = "allCategories", query = "from Category"),
-		@NamedQuery(name = "findCategories", query = "from Category c WHERE c.name IN :namesList") })
+		@NamedQuery(name = "findCategories", query = "from Category c WHERE c.name IN :namesList"),
+		@NamedQuery(name = Category.DELETE_ALL_CATEGORIES, query = "DELETE FROM Category") })
 @Entity
 @Table(name = "CATEGORY")
 public class Category implements Serializable {
+
+	public static final String DELETE_ALL_CATEGORIES = "DELETE_ALL_CATEGORIES";
 
 	/**
 	 *
@@ -41,7 +44,7 @@ public class Category implements Serializable {
 	/**
 	 *
 	 * @param name
-	 *            name of the entity class
+	 *                 name of the entity class
 	 */
 	public void setName(final String name) {
 		this.name = name;
