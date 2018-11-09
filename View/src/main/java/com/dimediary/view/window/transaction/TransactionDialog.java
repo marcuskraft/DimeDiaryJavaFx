@@ -144,8 +144,10 @@ public class TransactionDialog implements IWindowParameterInjection {
 				this.comboboxAccount.getItems().add(TransactionDialog.HYPHEN);
 			}
 			this.comboboxAccount.setValue(TransactionDialog.HYPHEN);
+			this.comboboxAccount.setDisable(true);
 		} else {
 			this.comboboxAccount.getItems().remove(TransactionDialog.HYPHEN);
+			this.comboboxAccount.setDisable(false);
 			this.refreshBankAccounts();
 		}
 	}
@@ -158,8 +160,10 @@ public class TransactionDialog implements IWindowParameterInjection {
 				this.comboboxCategory.getItems().add(TransactionDialog.HYPHEN);
 			}
 			this.comboboxCategory.setValue(TransactionDialog.HYPHEN);
+			this.comboboxCategory.setDisable(true);
 		} else {
 			this.comboboxCategory.getItems().remove(TransactionDialog.HYPHEN);
+			this.comboboxCategory.setDisable(false);
 			this.refreshCategories();
 		}
 	}

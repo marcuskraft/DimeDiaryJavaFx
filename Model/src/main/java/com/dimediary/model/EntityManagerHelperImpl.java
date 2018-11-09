@@ -12,7 +12,9 @@ public class EntityManagerHelperImpl {
 	public static EntityManager getEntityManager(final String persistenceUnit) {
 		if (EntityManagerHelperImpl.entityManager == null) {
 			if (EntityManagerHelperImpl.emf == null) {
-				EntityManagerHelperImpl.emf = Persistence.createEntityManagerFactory(persistenceUnit);
+				EntityManagerHelperImpl.emf = Persistence.createEntityManagerFactory(persistenceUnit); // TODO: fix
+																										// performance
+																										// issue
 			}
 			EntityManagerHelperImpl.entityManager = EntityManagerHelperImpl.emf.createEntityManager();
 		}
