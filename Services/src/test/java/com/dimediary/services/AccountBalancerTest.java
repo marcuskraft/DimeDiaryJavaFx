@@ -1,8 +1,13 @@
 package com.dimediary.services;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -39,8 +44,21 @@ public class AccountBalancerTest {
 	private static final Double RANGE_MAX = 350.00;
 
 	@Before
-	public void before() {
-		AccountBalancerTest.DB_INSTANCE = DatabaseService.getInstance(DatabaseService.PERSISTENCE_DERBY_TEST);
+	public void before() throws IOException, URISyntaxException {
+
+		final URL testDatabaseFolderURL = this.getClass().getClassLoader().getResource("DBUnitTest");
+		final String testDatabaseFolder = new File(testDatabaseFolderURL.toURI()).getAbsolutePath();
+
+		final Map<String, String> properties = new HashMap<>();
+		properties.put("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
+		properties.put("hibernate.connection.driver_class", "org.apache.derby.jdbc.EmbeddedDriver");
+		properties.put("hibernate.connection.url", "jdbc:derby:" + testDatabaseFolder + ";create=true");
+		properties.put("javax.persistence.jdbc.user", "");
+		properties.put("javax.persistence.jdbc.password", "");
+		properties.put("hibernate.hbm2ddl.auto", "update");
+
+		AccountBalancerTest.DB_INSTANCE = DatabaseService.getInstance(DatabaseService.PERSISTENCE_DERBY_TEST,
+				properties);
 		AccountBalancerTest.DB_INSTANCE.beginTransaction();
 		AccountBalancerTest.DB_INSTANCE.clearAllTransactions();
 		final List<String> bankaccountNames = AccountBalancerTest.DB_INSTANCE.getBankAccountNames();
