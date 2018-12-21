@@ -4,6 +4,7 @@ import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -46,6 +47,11 @@ public class DatabaseService {
 
 	}
 
+	private DatabaseService(final String persistenceUnit, final Map<String, String> properties) {
+		DatabaseService.log.info("DatabaseService initialized");
+		this.entityManager = EntityManagerHelperImpl.getEntityManager(persistenceUnit, properties);
+	}
+
 	private static DatabaseService instance = null;
 
 	/**
@@ -63,9 +69,9 @@ public class DatabaseService {
 	 *
 	 * @return gives back the instance of DatabaseService
 	 */
-	public static DatabaseService getInstance(final String persistenceUnit) {
+	public static DatabaseService getInstance(final String persistenceUnit, final Map<String, String> properties) {
 		if (DatabaseService.instance == null) {
-			DatabaseService.instance = new DatabaseService(persistenceUnit);
+			DatabaseService.instance = new DatabaseService(persistenceUnit, properties);
 		}
 		return DatabaseService.instance;
 	}
