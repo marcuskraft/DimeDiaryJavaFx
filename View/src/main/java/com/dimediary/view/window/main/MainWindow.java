@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.dimediary.view.Main;
+import com.dimediary.view.scene.OverviewScene;
 import com.dimediary.view.window.bankaccount.BankAccountDialog;
 import com.dimediary.view.window.bankaccount.BankaccountCategoryDialog;
 import com.dimediary.view.window.category.CategoryDialog;
@@ -106,6 +107,7 @@ public class MainWindow extends Window {
 		} catch (final IOException e) {
 			throw new IllegalStateException("fxml file could not be found", e);
 		}
+		final OverviewScene overviewScene = loader.getController();
 		this.overviewTab.setContent(node);
 	}
 

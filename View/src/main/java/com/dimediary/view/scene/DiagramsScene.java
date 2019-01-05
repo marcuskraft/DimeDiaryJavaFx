@@ -8,10 +8,14 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
 import com.dimediary.model.entities.BankAccount;
+import com.dimediary.model.entities.Category;
 import com.dimediary.services.AccountBalanceService;
+import com.dimediary.services.CategoryService;
 import com.dimediary.services.database.DatabaseService;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.view.window.util.NumberToDateStringConverter;
@@ -22,6 +26,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.PieChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Series;
 import javafx.scene.control.Button;
@@ -55,23 +60,37 @@ public class DiagramsScene {
 	@FXML // fx:id="monthforwardButton"
 	private Button monthforwardButton; // Value injected by FXMLLoader
 
+	@FXML // fx:id="paneTopLeft"
+	private BorderPane paneTopLeft; // Value injected by FXMLLoader
+
+	@FXML // fx:id="paneBottomLeft"
+	private BorderPane paneBottomLeft; // Value injected by FXMLLoader
+
+	@FXML // fx:id="paneTopRight"
+	private BorderPane paneTopRight; // Value injected by FXMLLoader
+
+	@FXML // fx:id="paneBottomRight"
+	private BorderPane paneBottomRight; // Value injected by FXMLLoader
+
 	private Month actualMonth;
 
 	private LineChart<Number, Number> lineChart;
 
+	private PieChart pieChart;
+
 	@FXML
 	void onComboBoxAccountDiagramm(final ActionEvent event) {
-		this.refreshDiagram();
+		this.refresh();
 	}
 
 	@FXML
 	void onDateFromSpinner(final ActionEvent event) {
-		this.refreshDiagram();
+		this.refresh();
 	}
 
 	@FXML
 	void onDateUntilSpinner(final ActionEvent event) {
-		this.refreshDiagram();
+		this.refresh();
 	}
 
 	@FXML
@@ -80,7 +99,7 @@ public class DiagramsScene {
 		final LocalDate actualDateUntil = this.dateUntilSpinner.getValue();
 		this.dateFromSpinner.setValue(actualDateFrom.minusMonths(1));
 		this.dateUntilSpinner.setValue(actualDateUntil.minusMonths(1));
-		this.refreshDiagram();
+		this.refresh();
 	}
 
 	@FXML
@@ -89,17 +108,21 @@ public class DiagramsScene {
 		final LocalDate actualDateUntil = this.dateUntilSpinner.getValue();
 		this.dateFromSpinner.setValue(actualDateFrom.plusMonths(1));
 		this.dateUntilSpinner.setValue(actualDateUntil.plusMonths(1));
-		this.refreshDiagram();
+		this.refresh();
 	}
 
 	@FXML // This method is called by the FXMLLoader when initialization is complete
 	void initialize() {
-		assert this.borderPaneDiagramm != null : "fx:id=\"borderPaneDiagramm\" was not injected: check your FXML file 'DiagramsScene.fxml'.";
-		assert this.comboBoxAccountDiagramm != null : "fx:id=\"comboBoxAccountDiagramm\" was not injected: check your FXML file 'DiagramsScene.fxml'.";
-		assert this.dateFromSpinner != null : "fx:id=\"dateFromSpinner\" was not injected: check your FXML file 'DiagramsScene.fxml'.";
-		assert this.dateUntilSpinner != null : "fx:id=\"dateUntilSpinner\" was not injected: check your FXML file 'DiagramsScene.fxml'.";
-		assert this.monthbackButton != null : "fx:id=\"monthbackButton\" was not injected: check your FXML file 'DiagramsScene.fxml'.";
-		assert this.monthforwardButton != null : "fx:id=\"monthforwardButton\" was not injected: check your FXML file 'DiagramsScene.fxml'.";
+		assert this.borderPaneDiagramm != null : "fx:id=\"borderPaneDiagramm\" was not injected: check your FXML file 'Diagrams.fxml'.";
+		assert this.comboBoxAccountDiagramm != null : "fx:id=\"comboBoxAccountDiagramm\" was not injected: check your FXML file 'Diagrams.fxml'.";
+		assert this.dateFromSpinner != null : "fx:id=\"dateFromSpinner\" was not injected: check your FXML file 'Diagrams.fxml'.";
+		assert this.dateUntilSpinner != null : "fx:id=\"dateUntilSpinner\" was not injected: check your FXML file 'Diagrams.fxml'.";
+		assert this.monthbackButton != null : "fx:id=\"monthbackButton\" was not injected: check your FXML file 'Diagrams.fxml'.";
+		assert this.monthforwardButton != null : "fx:id=\"monthforwardButton\" was not injected: check your FXML file 'Diagrams.fxml'.";
+		assert this.paneTopLeft != null : "fx:id=\"paneTopLeft\" was not injected: check your FXML file 'Diagrams.fxml'.";
+		assert this.paneBottomLeft != null : "fx:id=\"paneBottomLeft\" was not injected: check your FXML file 'Diagrams.fxml'.";
+		assert this.paneTopRight != null : "fx:id=\"paneTopRight\" was not injected: check your FXML file 'Diagrams.fxml'.";
+		assert this.paneBottomRight != null : "fx:id=\"paneBottomRight\" was not injected: check your FXML file 'Diagrams.fxml'.";
 
 		this.init();
 
@@ -114,24 +137,33 @@ public class DiagramsScene {
 		this.dateFromSpinner.setValue(DateUtils.firstDayOfMonth(this.actualMonth, DateUtils.getActualYear()));
 		this.dateUntilSpinner.setValue(DateUtils.lastDayOfMonth(this.actualMonth, DateUtils.getActualYear()));
 
-		this.initializeDiagramm();
+		this.initializeBalanceDiagramm();
+
+		this.initializeCategoryPieChart();
 
 	}
 
-	private void initializeDiagramm() {
+	private void initializeCategoryPieChart() {
+
+		this.pieChart = new PieChart();
+
+		this.pieChart.setTitle("Kategorien");
+
+		this.refreshPieChart();
+
+		this.paneTopRight.setCenter(this.pieChart);
+
+	}
+
+	private void initializeBalanceDiagramm() {
 		final NumberAxis xAxis = new NumberAxis();
 		final NumberAxis yAxis = new NumberAxis();
 		xAxis.setLabel("Datum");
 		yAxis.setLabel("Kontostand");
-
 		xAxis.setTickLabelFormatter(new NumberToDateStringConverter());
-
 		this.lineChart = new LineChart<>(xAxis, yAxis);
-
-		this.refreshDiagram();
-
-		this.borderPaneDiagramm.setCenter(this.lineChart);
-
+		this.refreshBalanceDiagram();
+		this.paneBottomRight.setCenter(this.lineChart);
 	}
 
 	private void refreshComboBoxAccounts() {
@@ -152,7 +184,28 @@ public class DiagramsScene {
 
 	}
 
-	private void refreshDiagram() {
+	private void refresh() {
+		this.refreshBalanceDiagram();
+		this.refreshPieChart();
+	}
+
+	private void refreshPieChart() {
+		final BankAccount bankAccount = DatabaseService.getInstance()
+				.getBankAccount(this.comboBoxAccountDiagramm.getValue());
+
+		final Map<Category, Double> calculatePercentageFromTo = CategoryService.calculatePercentageFromTo(bankAccount,
+				this.dateFromSpinner.getValue(), this.dateUntilSpinner.getValue());
+
+		final ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
+
+		for (final Entry<Category, Double> entry : calculatePercentageFromTo.entrySet()) {
+			pieChartData.add(new PieChart.Data(entry.getKey().getName(), entry.getValue()));
+		}
+
+		this.pieChart.setData(pieChartData);
+	}
+
+	private void refreshBalanceDiagram() {
 		final Series<Number, Number> series = new Series<>();
 
 		final BankAccount bankAccount = DatabaseService.getInstance()
