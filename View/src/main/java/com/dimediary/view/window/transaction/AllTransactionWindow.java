@@ -11,7 +11,7 @@ import java.util.ResourceBundle;
 import com.dimediary.model.entities.ContinuousTransaction;
 import com.dimediary.model.entities.Transaction;
 import com.dimediary.view.Main;
-import com.dimediary.view.window.main.MainWindow;
+import com.dimediary.view.scene.OverviewScene;
 import com.dimediary.view.window.util.IWindowParameterInjection;
 import com.dimediary.view.window.util.WindowCreater;
 import com.dimediary.view.window.util.WindowParameters;
@@ -42,13 +42,13 @@ public class AllTransactionWindow implements IWindowParameterInjection {
 	@FXML // fx:id="buttonCancel"
 	private Button buttonCancel; // Value injected by FXMLLoader
 
-	private MainWindow mainWindow;
+	private OverviewScene overviewScene;
 
 	@FXML
 	void onAll(final ActionEvent event) {
 		final WindowParameters parameters = new WindowParameters();
 		parameters.put(ContinuousTransaction.class, this.transaction.getContinuousTransaction());
-		parameters.put(MainWindow.class, this.mainWindow);
+		parameters.put(OverviewScene.class, this.overviewScene);
 		if (this.date != null) {
 			parameters.put(LocalDate.class, this.date);
 		}
@@ -69,7 +69,7 @@ public class AllTransactionWindow implements IWindowParameterInjection {
 
 		final WindowParameters parameters = new WindowParameters();
 		parameters.put(Transaction.class, this.transaction);
-		parameters.put(MainWindow.class, this.mainWindow);
+		parameters.put(OverviewScene.class, this.overviewScene);
 
 		final WindowCreater<TransactionDialog> windowCreater = new WindowCreater<>();
 		windowCreater.createWindow(Main.class.getResource("design/window/TransactionDialog.fxml"),
@@ -100,11 +100,11 @@ public class AllTransactionWindow implements IWindowParameterInjection {
 
 	@Override
 	public void inject(final WindowParameters parameters) {
-		Object object = parameters.getParameters().get(MainWindow.class);
-		if (object == null || !(object instanceof MainWindow)) {
+		Object object = parameters.getParameters().get(OverviewScene.class);
+		if (object == null || !(object instanceof OverviewScene)) {
 			throw new IllegalArgumentException("mainwindow must be set to create a all transaction dialog");
 		}
-		this.mainWindow = (MainWindow) object;
+		this.overviewScene = (OverviewScene) object;
 
 		object = parameters.getParameters().get(Transaction.class);
 		if (object == null || !(object instanceof Transaction)) {

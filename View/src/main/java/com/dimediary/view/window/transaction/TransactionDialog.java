@@ -24,7 +24,7 @@ import com.dimediary.services.database.DatabaseService;
 import com.dimediary.util.utils.DateUtils;
 import com.dimediary.util.utils.RecurrenceRuleUtils;
 import com.dimediary.view.Main;
-import com.dimediary.view.window.main.MainWindow;
+import com.dimediary.view.scene.OverviewScene;
 import com.dimediary.view.window.transaction.RecurrenceDialog.Frequences;
 import com.dimediary.view.window.util.IWindowParameterInjection;
 import com.dimediary.view.window.util.WindowCreater;
@@ -51,7 +51,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 	public static final Double MAX_AMOUNT = 999999999.99;
 
-	private MainWindow mainWindow;
+	private OverviewScene overviewScene;
 
 	private Transaction transaction;
 
@@ -370,11 +370,11 @@ public class TransactionDialog implements IWindowParameterInjection {
 
 	@Override
 	public void inject(final WindowParameters parameters) {
-		Object object = parameters.getParameters().get(MainWindow.class);
-		if (object == null || !(object instanceof MainWindow)) {
+		Object object = parameters.getParameters().get(OverviewScene.class);
+		if (object == null || !(object instanceof OverviewScene)) {
 			throw new IllegalArgumentException("mainwindow must be set to create a transaction dialog");
 		}
-		this.mainWindow = (MainWindow) object;
+		this.overviewScene = (OverviewScene) object;
 
 		object = parameters.getParameters().get(Transaction.class);
 		if (object != null && object instanceof Transaction) {
@@ -450,7 +450,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 			this.transaction = new Transaction();
 			this.setTransactionAttributes(this.transaction);
 			DatabaseService.getInstance().persist(this.transaction);
-			this.mainWindow.refresh();
+			this.overviewScene.refresh();
 		} catch (final Exception e) {
 			this.rollbackTransaction();
 			throw e;
@@ -471,7 +471,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 			final List<Transaction> transactions = ContinuousTransactionService
 					.generateTransactionsForContinuousTransaction(this.continuousTransaction);
 			DatabaseService.getInstance().persistContinuousTransaction(this.continuousTransaction, transactions);
-			this.mainWindow.refresh();
+			this.overviewScene.refresh();
 		} catch (final Exception e) {
 			this.rollbackTransaction();
 			throw e;
@@ -498,7 +498,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 		try {
 			DatabaseService.getInstance().delete(this.transaction);
 			this.createNewContinuousTransaction(false);
-			this.mainWindow.refresh();
+			this.overviewScene.refresh();
 		} catch (final Exception e) {
 			this.rollbackTransaction();
 			throw e;
@@ -532,7 +532,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 		if (ownTransaction) {
 			this.commitTransaction();
 		}
-		this.mainWindow.refresh();
+		this.overviewScene.refresh();
 		this.close();
 	}
 
@@ -580,7 +580,7 @@ public class TransactionDialog implements IWindowParameterInjection {
 				this.createNewTransaction(false);
 			}
 
-			this.mainWindow.refresh();
+			this.overviewScene.refresh();
 		} catch (final Exception e) {
 			this.rollbackTransaction();
 			throw e;

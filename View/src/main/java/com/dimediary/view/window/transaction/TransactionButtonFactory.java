@@ -6,7 +6,7 @@ import com.dimediary.model.entities.Transaction;
 import com.dimediary.services.ContinuousTransactionService;
 import com.dimediary.services.database.DatabaseService;
 import com.dimediary.view.Main;
-import com.dimediary.view.window.main.MainWindow;
+import com.dimediary.view.scene.OverviewScene;
 import com.dimediary.view.window.util.WindowCreater;
 import com.dimediary.view.window.util.WindowParameters;
 
@@ -30,7 +30,7 @@ public class TransactionButtonFactory {
 	public static final DataFormat KEY_TRANSACTION = new DataFormat("transaction");
 
 	public static TransactionButton createTransactionButton(final String text, final Transaction transaction,
-			final MainWindow mainWindow) {
+			final OverviewScene mainWindow) {
 		final TransactionButton transactionButton = new TransactionButton(text, transaction);
 
 		final ContextMenu contextMenu = new ContextMenu();
@@ -111,9 +111,9 @@ public class TransactionButtonFactory {
 		return transactionButton;
 	}
 
-	private static void openTransaction(final Transaction transaction, final MainWindow mainWindow) {
+	private static void openTransaction(final Transaction transaction, final OverviewScene overviewScene) {
 		final WindowParameters parameters = new WindowParameters();
-		parameters.put(MainWindow.class, mainWindow);
+		parameters.put(OverviewScene.class, overviewScene);
 		parameters.put(Transaction.class, transaction);
 		if (transaction.getContinuousTransaction() != null) {
 			parameters.put(LocalDate.class, transaction.getDate());
@@ -142,7 +142,7 @@ public class TransactionButtonFactory {
 		db.setContent(content);
 	}
 
-	private static void deleteTransaction(final MainWindow mainWindow, final TransactionButton transactionButton) {
+	private static void deleteTransaction(final OverviewScene overviewScene, final TransactionButton transactionButton) {
 		final Transaction transaction = transactionButton.getTransaction();
 		if (transaction != null) {
 			if (transaction.getContinuousTransaction() != null) {
@@ -151,8 +151,8 @@ public class TransactionButtonFactory {
 				TransactionButtonFactory.deleteSingeTransaction(transaction);
 			}
 		}
-		if (mainWindow != null) {
-			mainWindow.refresh();
+		if (overviewScene != null) {
+			overviewScene.refresh();
 		}
 
 	}
