@@ -43,7 +43,7 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 	private final static Logger log = LogManager.getLogger(RecurrenceDialog.class);
 
 	public enum Frequences {
-		MONTHLY("monatlich"), WEEKLY("wˆchentlich"), DAILY("t‰glich"), YEARLY("j‰hrlich"), NONE("keine Wiederholung");
+		MONTHLY("monatlich"), WEEKLY("w√∂chentlich"), DAILY("t√§glich"), YEARLY("j√§hrlich"), NONE("keine Wiederholung");
 
 		private final String text;
 
@@ -252,7 +252,7 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 			dayOf = "Tag des Monats";
 			disableFromEndOf = true;
 			fromEndOfString = "vom Ende des Monats aus";
-			helpStringForFromEnd = "Wenn aktiviert, dann werden die Tage vom Ende des Monats aus betrachtet. Das heiﬂt eine 1 steht f¸r den letzten und eine 2 f¸r den vorletzten Tag des Monats und so weiter.";
+			helpStringForFromEnd = "Wenn aktiviert, dann werden die Tage vom Ende des Monats aus betrachtet. Das hei√üt eine 1 steht f√ºr den letzten und eine 2 f√ºr den vorletzten Tag des Monats und so weiter.";
 			this.dayOfMonthSpinner.getValueFactory().setValue(this.transactionDialog.getActualDayOfMonth());
 			break;
 		case YEARLY:
@@ -262,7 +262,7 @@ public class RecurrenceDialog implements IWindowParameterInjection {
 			dayOf = "Tag im Jahr";
 			disableFromEndOf = true;
 			fromEndOfString = "vom Ende des Jahres aus";
-			helpStringForFromEnd = "Wenn aktiviert, dann werden die Tage vom Ende des Jahres aus betrachtet. Das heiﬂt eine 1 steht f¸r den letzten und eine 2 f¸r den vorletzten Tag des Jahres und so weiter.";
+			helpStringForFromEnd = "Wenn aktiviert, dann werden die Tage vom Ende des Jahres aus betrachtet. Das hei√üt eine 1 steht f√ºr den letzten und eine 2 f√ºr den vorletzten Tag des Jahres und so weiter.";
 			this.dayOfMonthSpinner.getValueFactory().setValue(this.transactionDialog.getActualDayOfYear());
 			break;
 		case NONE:

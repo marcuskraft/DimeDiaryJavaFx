@@ -15,12 +15,12 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>com.zenjava</groupId>
-				<artifactId>javafx-maven-plugin</artifactId>
-				<version>2.0</version>
-				<configuration>
-					<mainClass>com.javafxtest.main.Main</mainClass>
-				</configuration>
+                <groupId>org.openjfx</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>0.0.8</version>
+                <configuration>
+                    <mainClass>com.javafxtest.main.Main</mainClass>
+                </configuration>
 			</plugin>
 		</plugins>
 	</build>
@@ -39,5 +39,15 @@
 			<groupId>com.dimediary.services</groupId>
 			<artifactId>services</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>24.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>24.0.2</version>
+        </dependency>
 	</dependencies>
 </project>

@@ -50,7 +50,7 @@ public class AccountBalancerTest {
 		final String testDatabaseFolder = new File(testDatabaseFolderURL.toURI()).getAbsolutePath();
 
 		final Map<String, String> properties = new HashMap<>();
-		properties.put("hibernate.dialect", "org.hibernate.dialect.DerbyDialect");
+		properties.put("hibernate.dialect", "org.hibernate.community.dialect.DerbyDialect");
 		properties.put("hibernate.connection.driver_class", "org.apache.derby.jdbc.EmbeddedDriver");
 		properties.put("hibernate.connection.url", "jdbc:derby:" + testDatabaseFolder + ";create=true");
 		properties.put("javax.persistence.jdbc.user", "");

@@ -16,7 +16,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
     <class>com.dimediary.model.entities.RecurrenceRule</class>
        
 	<properties>
-		<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect" />
+		<property name="hibernate.dialect" value="org.hibernate.community.dialect.DerbyDialect" />
 		<property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.EmbeddedDriver" />
 		<property name="hibernate.connection.url" value="jdbc:derby:..\DB;create=true" />
 		<property name="javax.persistence.jdbc.user" value=""/>
@@ -38,7 +38,7 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/x
     <class>com.dimediary.model.entities.RecurrenceRule</class>
        
 	<properties>
-		<property name="hibernate.dialect" value="org.hibernate.dialect.DerbyDialect" />
+		<property name="hibernate.dialect" value="org.hibernate.community.dialect.DerbyDialect" />
 		<property name="hibernate.connection.driver_class" value="org.apache.derby.jdbc.EmbeddedDriver" />
 		<property name="hibernate.connection.url" value="jdbc:derby:..\DBUnitTest;create=true" />
 		<property name="javax.persistence.jdbc.user" value=""/>

@@ -35,10 +35,10 @@ public class TransactionButtonFactory {
 
 		final ContextMenu contextMenu = new ContextMenu();
 
-		final MenuItem delete = new MenuItem("Löschen");
+		final MenuItem delete = new MenuItem("LÃ¶schen");
 		delete.setOnAction(event -> TransactionButtonFactory.deleteTransaction(mainWindow, transactionButton));
 
-		final MenuItem open = new MenuItem("Öffnen");
+		final MenuItem open = new MenuItem("Ã–ffnen");
 		open.setOnAction(event -> TransactionButtonFactory.openTransaction(transaction, mainWindow));
 
 		final MenuItem copy = new MenuItem("Kopieren");
@@ -160,8 +160,8 @@ public class TransactionButtonFactory {
 	private static void deleteSingeTransaction(final Transaction transaction) {
 		final Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setHeaderText(null);
-		alert.setTitle("Transaktion löschen?");
-		alert.setContentText("Sicher, dass Sie diese Transaktion löschen wollen?");
+		alert.setTitle("Transaktion lÃ¶schen?");
+		alert.setContentText("Sicher, dass Sie diese Transaktion lÃ¶schen wollen?");
 		if (alert.showAndWait().get() == ButtonType.OK) {
 			DatabaseService.getInstance().delete(transaction);
 		}
@@ -169,10 +169,10 @@ public class TransactionButtonFactory {
 
 	private static void deleteContinuousTransaction(final Transaction transaction) {
 		final Alert alert = new Alert(AlertType.CONFIRMATION,
-				"Diese Transaktion wiederholt sich. Sollen alle zugehörigen Transaktionen gelösch werden?",
+				"Diese Transaktion wiederholt sich. Sollen alle zugehÃ¶rigen Transaktionen gelÃ¶scht werden?",
 				ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
 		alert.setHeaderText(null);
-		alert.setTitle("Sich wiederholende Transaktion löschen?");
+		alert.setTitle("Sich wiederholende Transaktion lÃ¶schen?");
 
 		final ButtonType pressedButton = alert.showAndWait().get();
 

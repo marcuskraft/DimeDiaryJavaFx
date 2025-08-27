@@ -47,8 +47,8 @@ public class RecurrenceRuleUtils {
 		try {
 			return new RecurrenceRule(ruleString, RfcMode.RFC5545_STRICT);
 		} catch (final InvalidRecurrenceRuleException e) {
-			RecurrenceRuleUtils.log.error("RuleString ist keine gültige RecurrenceRule", e);
-			throw new IllegalStateException("RuleString ist keine gültige RecurrenceRule", e);
+			RecurrenceRuleUtils.log.error("RuleString ist keine gÃ¼ltige RecurrenceRule", e);
+			throw new IllegalStateException("RuleString ist keine gÃ¼ltige RecurrenceRule", e);
 		}
 	}
 

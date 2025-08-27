@@ -8,8 +8,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javax.persistence.RollbackException;
 
+import jakarta.persistence.RollbackException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -82,9 +82,9 @@ public class BankaccountCategoryDialog implements IWindowParameterInjection {
 			BankaccountCategoryDialog.log.warn(e);
 			final Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Fehler");
-			alert.setHeaderText("Konto verknüpft!");
+			alert.setHeaderText("Konto verknÃ¼pft!");
 			alert.setContentText(
-					"Es gibt noch mindestens ein Konto, welches diesen Typ hat. Bitte ändern die bei den betroffenen Konten die Kontoart.");
+					"Es gibt noch mindestens ein Konto, welches diesen Typ hat. Bitte Ã¤ndern die bei den betroffenen Konten die Kontoart.");
 			alert.showAndWait();
 		}
 		this.initialize();

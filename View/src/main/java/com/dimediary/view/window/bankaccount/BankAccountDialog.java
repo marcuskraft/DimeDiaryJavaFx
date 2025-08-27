@@ -9,8 +9,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import javax.persistence.RollbackException;
 
+import jakarta.persistence.RollbackException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -131,7 +131,7 @@ public class BankAccountDialog implements IWindowParameterInjection {
 			BankAccountDialog.log.warn(e);
 			final Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Fehler");
-			alert.setHeaderText("Transaktion verknüpft!");
+			alert.setHeaderText("Transaktion verknÃ¼pft!");
 			alert.setContentText("Es gibt noch mindestens eine Transaktion, welche dieses Konto referenziert.");
 			alert.showAndWait();
 		}
